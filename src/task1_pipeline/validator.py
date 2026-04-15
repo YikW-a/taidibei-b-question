@@ -124,6 +124,28 @@ class DataValidator:
                     tolerance = max(100.0, abs(net_cash) * 0.05)
                     if abs(derived_net - net_cash) > tolerance:
                         issues.append(self._issue("warning", "cash_flow_equation_precheck", "cash_flow_sheet", cash_flow.source_name, record_key, f"net_cash_flow mismatch: stored={net_cash:.2f}, derived={derived_net:.2f}"))
+                if net_cash not in (None, 0):
+                    for amount_field, ratio_field in [
+                        ("operating_cf_net_amount", "operating_cf_ratio_of_net_cf"),
+                        ("investing_cf_net_amount", "investing_cf_ratio_of_net_cf"),
+                        ("financing_cf_net_amount", "financing_cf_ratio_of_net_cf"),
+                    ]:
+                        amount = self._safe_float(cash_flow.values.get(amount_field))
+                        ratio = self._safe_float(cash_flow.values.get(ratio_field))
+                        if amount is None or ratio is None:
+                            continue
+                        derived_ratio = amount / net_cash * 100
+                        if abs(derived_ratio - ratio) > 10:
+                            issues.append(
+                                self._issue(
+                                    "warning",
+                                    f"{ratio_field}_consistency_precheck",
+                                    "cash_flow_sheet",
+                                    cash_flow.source_name,
+                                    record_key,
+                                    f"{ratio_field} mismatch: stored={ratio:.2f}, derived={derived_ratio:.2f}",
+                                )
+                            )
 
             if income is not None and kpi is not None:
                 revenue = self._safe_float(income.values.get("total_operating_revenue"))
@@ -133,6 +155,7 @@ class DataValidator:
                 kpi_net_margin = self._safe_float(kpi.values.get("net_profit_margin"))
                 kpi_roe = self._safe_float(kpi.values.get("roe"))
                 equity = self._safe_float(balance.values.get("equity_total_equity")) if balance is not None else None
+                report_period = str(kpi.values.get("report_period", ""))
 
                 if revenue not in (None, 0) and cost is not None and kpi_gross_margin is not None:
                     derived = (revenue - cost) / revenue * 100
@@ -142,10 +165,44 @@ class DataValidator:
                     derived = net_profit / revenue * 100
                     if abs(derived - kpi_net_margin) > 5:
                         issues.append(self._issue("warning", "net_profit_margin_consistency_precheck", "core_performance_indicators_sheet", kpi.source_name, record_key, f"net_profit_margin mismatch: stored={kpi_net_margin:.2f}, derived={derived:.2f}"))
-                if equity not in (None, 0) and net_profit is not None and kpi_roe is not None:
+                if self._is_fy_period(report_period) and equity not in (None, 0) and net_profit is not None and kpi_roe is not None:
                     derived = net_profit / equity * 100
-                    if abs(derived - kpi_roe) > 5:
+                    tolerance = max(8.0, abs(derived) * 0.8, abs(kpi_roe) * 0.8)
+                    if not self._same_sign_or_zero(derived, kpi_roe) or abs(derived - kpi_roe) > tolerance:
                         issues.append(self._issue("warning", "roe_consistency_precheck", "core_performance_indicators_sheet", kpi.source_name, record_key, f"roe mismatch: stored={kpi_roe:.2f}, derived={derived:.2f}"))
+                if self._is_fy_period(report_period):
+                    eps = self._safe_float(kpi.values.get("eps"))
+                    shares = self._infer_share_count_proxy(net_profit, eps)
+                    if shares not in (None, 0):
+                        kpi_net_asset_per_share = self._safe_float(kpi.values.get("net_asset_per_share"))
+                        if equity is not None and kpi_net_asset_per_share is not None:
+                            derived = (equity * 10000) / shares
+                            if self._material_per_share_mismatch(kpi_net_asset_per_share, derived):
+                                issues.append(
+                                    self._issue(
+                                        "warning",
+                                        "net_asset_per_share_consistency_precheck",
+                                        "core_performance_indicators_sheet",
+                                        kpi.source_name,
+                                        record_key,
+                                        f"net_asset_per_share mismatch: stored={kpi_net_asset_per_share:.4f}, derived={derived:.4f}",
+                                    )
+                                )
+                        operating_cf = self._safe_float(cash_flow.values.get("operating_cf_net_amount")) if cash_flow is not None else None
+                        kpi_operating_cf_per_share = self._safe_float(kpi.values.get("operating_cf_per_share"))
+                        if operating_cf is not None and kpi_operating_cf_per_share is not None:
+                            derived = (operating_cf * 10000) / shares
+                            if self._material_per_share_mismatch(kpi_operating_cf_per_share, derived):
+                                issues.append(
+                                    self._issue(
+                                        "warning",
+                                        "operating_cf_per_share_consistency_precheck",
+                                        "core_performance_indicators_sheet",
+                                        kpi.source_name,
+                                        record_key,
+                                        f"operating_cf_per_share mismatch: stored={kpi_operating_cf_per_share:.4f}, derived={derived:.4f}",
+                                    )
+                                )
         return issues
 
     def issues_to_dataframe(self, issues: list[ValidationIssue]) -> pd.DataFrame:
@@ -188,3 +245,25 @@ class DataValidator:
         if math.isnan(numeric):
             return None
         return numeric
+
+    def _is_fy_period(self, report_period: str) -> bool:
+        return str(report_period).endswith("FY")
+
+    def _infer_share_count_proxy(self, net_profit_10k_yuan: float | None, eps: float | None) -> float | None:
+        if net_profit_10k_yuan in (None, 0) or eps in (None, 0):
+            return None
+        shares = (net_profit_10k_yuan * 10000) / eps
+        if shares <= 0 or shares < 1_000_000 or shares > 1_000_000_000_000:
+            return None
+        return shares
+
+    def _material_per_share_mismatch(self, stored: float, derived: float) -> bool:
+        if not self._same_sign_or_zero(stored, derived):
+            return True
+        tolerance = max(2.0, abs(stored) * 0.8, abs(derived) * 0.8)
+        return abs(stored - derived) > tolerance
+
+    def _same_sign_or_zero(self, left: float, right: float) -> bool:
+        if left == 0 or right == 0:
+            return True
+        return left * right > 0

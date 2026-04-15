@@ -63,6 +63,7 @@ class TableTransformer:
     ) -> int:
         effective_unit = unit_hint or "元"
         mapped_count = 0
+        field_scores: dict[str, float] = {}
         for label, numeric_texts in self._iter_row_labels_and_numeric_texts(dataframe):
             normalized_label = clean_label(label)
             if not normalized_label:
@@ -76,9 +77,13 @@ class TableTransformer:
                 if clean_label(alias) in normalized_label:
                     current_value = self._first_numeric(numeric_texts, effective_unit, field_name)
                     if current_value is not None:
-                        record_values[field_name] = current_value
-                        mapped_count += 1
-                        self._apply_statement_derivations(field_name, current_value, previous_value, record_values)
+                        candidate_score = _field_candidate_score(field_name, alias, normalized_label, numeric_texts, current_value)
+                        if field_name not in field_scores or candidate_score > field_scores[field_name]:
+                            if field_name not in field_scores:
+                                mapped_count += 1
+                            field_scores[field_name] = candidate_score
+                            record_values[field_name] = current_value
+                            self._apply_statement_derivations(field_name, current_value, previous_value, record_values)
                     break
         self._finalize_statement_derivations(record_values)
         return mapped_count
@@ -92,6 +97,7 @@ class TableTransformer:
     ) -> int:
         effective_unit = unit_hint or "元"
         mapped_count = 0
+        field_scores: dict[str, float] = {}
         pending_label = ""
         for label, numeric_texts in self._iter_row_labels_and_numeric_texts(dataframe):
             normalized_label = clean_label(label)
@@ -108,9 +114,13 @@ class TableTransformer:
             for alias, field_name in mapping.items():
                 if clean_label(alias) in normalized_label:
                     current_value = self._first_numeric(numeric_texts, effective_unit, field_name)
-                    if current_value is not None and field_name not in record_values:
-                        record_values[field_name] = current_value
-                        mapped_count += 1
+                    if current_value is not None:
+                        candidate_score = _field_candidate_score(field_name, alias, normalized_label, numeric_texts, current_value)
+                        if field_name not in field_scores or candidate_score > field_scores[field_name]:
+                            if field_name not in field_scores:
+                                mapped_count += 1
+                            field_scores[field_name] = candidate_score
+                            record_values[field_name] = current_value
                     break
 
             if "营业收入" in normalized_label and yoy_value is not None:
@@ -335,6 +345,7 @@ def enrich_consolidated_records(records: list[StandardizedRecord]) -> list[Stand
 def sanitize_consolidated_records(records: list[StandardizedRecord]) -> list[StandardizedRecord]:
     grouped: dict[tuple[str, str, str], dict[str, StandardizedRecord]] = defaultdict(dict)
     grouped_by_company_year: dict[tuple[str, str], dict[str, dict[str, StandardizedRecord]]] = defaultdict(dict)
+    grouped_by_company_period: dict[tuple[str, str], dict[str, dict[str, StandardizedRecord]]] = defaultdict(dict)
     for record in records:
         values = record.values
         key = (
@@ -360,21 +371,28 @@ def sanitize_consolidated_records(records: list[StandardizedRecord]) -> list[Sta
             _sanitize_record_values(income.values)
         _apply_field_rule_constraints(tables)
         grouped_by_company_year[(key[0], key[2])][key[1]] = tables
+        period_suffix = _period_suffix(key[1])
+        if period_suffix:
+            grouped_by_company_period[(key[0], period_suffix)][key[2]] = tables
 
     for period_tables in grouped_by_company_year.values():
         _derive_company_year_qoq_fields(period_tables)
-        for tables in period_tables.values():
-            kpi = tables.get("core_performance_indicators_sheet")
-            income = tables.get("income_sheet")
-            balance = tables.get("balance_sheet")
-            cash_flow = tables.get("cash_flow_sheet")
-            if kpi is not None:
-                _sanitize_kpi_values(
-                    kpi.values,
-                    income.values if income else {},
-                    balance.values if balance else {},
-                    cash_flow.values if cash_flow else {},
-                )
+
+    for year_tables in grouped_by_company_period.values():
+        _derive_company_period_yoy_fields(year_tables)
+
+    for tables in grouped.values():
+        kpi = tables.get("core_performance_indicators_sheet")
+        income = tables.get("income_sheet")
+        balance = tables.get("balance_sheet")
+        cash_flow = tables.get("cash_flow_sheet")
+        if kpi is not None:
+            _sanitize_kpi_values(
+                kpi.values,
+                income.values if income else {},
+                balance.values if balance else {},
+                cash_flow.values if cash_flow else {},
+            )
 
     return records
 
@@ -492,9 +510,19 @@ def _enforce_field_rule(
     if "source" in rule:
         source_value = _resolve_field_source(values_by_table, str(rule["source"]))
 
+    if mode == "prefer_reuse" and source_value not in (None, ""):
+        target_values[field_name] = source_value
+        return
+
     if mode in {"reuse", "direct_or_reuse"} and source_value not in (None, ""):
         if target_values.get(field_name) in (None, ""):
             target_values[field_name] = source_value
+        return
+
+    if mode == "prefer_derive":
+        derived_value = _derive_rule_value(table_name, field_name, values_by_table)
+        if derived_value is not None:
+            target_values[field_name] = derived_value
         return
 
     if mode in {"derive", "direct_or_derive"}:
@@ -612,6 +640,25 @@ def _derive_company_year_qoq_fields(period_tables: dict[str, dict[str, Standardi
             previous_single = current_single
 
 
+def _derive_company_period_yoy_fields(year_tables: dict[str, dict[str, StandardizedRecord]]) -> None:
+    ordered_years = sorted((year for year in year_tables.keys() if str(year).isdigit()), key=lambda item: int(item))
+    if not ordered_years:
+        return
+    previous_excl_non_recurring = None
+    for year in ordered_years:
+        tables = year_tables[year]
+        kpi_record = tables.get("core_performance_indicators_sheet")
+        if kpi_record is None:
+            continue
+        current_value = _safe_float(kpi_record.values.get("net_profit_excl_non_recurring"))
+        if current_value is None:
+            continue
+        if previous_excl_non_recurring not in (None, 0):
+            growth = (current_value - previous_excl_non_recurring) / abs(previous_excl_non_recurring) * 100
+            kpi_record.values["net_profit_excl_non_recurring_yoy"] = growth
+        previous_excl_non_recurring = current_value
+
+
 def _build_single_quarter_values(cumulative_values: dict[str, float]) -> dict[str, float]:
     singles: dict[str, float] = {}
     q1 = cumulative_values.get("Q1")
@@ -662,21 +709,15 @@ def _enrich_kpi_from_related_tables(
         ("gross_profit_margin", gross_profit_margin),
         ("net_profit_margin", net_profit_margin),
     ]:
-        current_value = _safe_float(kpi_values.get(field_name))
-        if (kpi_values.get(field_name) in (None, "") or _is_suspicious_percentage(current_value)) and value not in (None, ""):
+        if value not in (None, ""):
             kpi_values[field_name] = value
 
     equity = _safe_float(balance_values.get("equity_total_equity"))
-    current_roe = _safe_float(kpi_values.get("roe"))
-    if (kpi_values.get("roe") in (None, "") or _is_suspicious_percentage(current_roe)) and equity not in (None, 0) and net_profit is not None:
+    if equity not in (None, 0) and net_profit is not None:
         kpi_values["roe"] = net_profit / equity * 100
 
     net_profit_excl = _safe_float(kpi_values.get("net_profit_excl_non_recurring"))
-    current_excl_roe = _safe_float(kpi_values.get("roe_weighted_excl_non_recurring"))
-    if (
-        kpi_values.get("roe_weighted_excl_non_recurring") in (None, "")
-        or _is_suspicious_percentage(current_excl_roe)
-    ) and equity not in (None, 0) and net_profit_excl is not None:
+    if equity not in (None, 0) and net_profit_excl is not None:
         kpi_values["roe_weighted_excl_non_recurring"] = net_profit_excl / equity * 100
 
     eps = _safe_float(kpi_values.get("eps"))
@@ -684,11 +725,11 @@ def _enrich_kpi_from_related_tables(
     if shares in (None, 0):
         return
 
-    if kpi_values.get("net_asset_per_share") in (None, "") and equity is not None:
+    if equity is not None:
         kpi_values["net_asset_per_share"] = (equity * 10000) / shares
 
     operating_cf = _safe_float(cash_flow_values.get("operating_cf_net_amount"))
-    if kpi_values.get("operating_cf_per_share") in (None, "") and operating_cf is not None:
+    if operating_cf is not None:
         kpi_values["operating_cf_per_share"] = (operating_cf * 10000) / shares
 
 
@@ -747,7 +788,10 @@ def _looks_like_percentage_field(field_name: str) -> bool:
 def _infer_share_count(net_profit_10k_yuan: float | None, eps: float | None) -> float | None:
     if net_profit_10k_yuan in (None, 0) or eps in (None, 0):
         return None
-    return (net_profit_10k_yuan * 10000) / eps
+    shares = (net_profit_10k_yuan * 10000) / eps
+    if abs(shares) < 1_000_000 or abs(shares) > 1_000_000_000_000:
+        return None
+    return shares
 
 
 def _safe_float(value: Any) -> float | None:
@@ -763,6 +807,77 @@ def _is_suspicious_percentage(value: float | None) -> bool:
     if value is None:
         return False
     return abs(value) > PERCENTAGE_SANITY_THRESHOLD
+
+
+def _field_candidate_score(
+    field_name: str,
+    alias: str,
+    normalized_label: str,
+    numeric_texts: list[str],
+    value: float,
+) -> float:
+    alias_clean = clean_label(alias)
+    label_core = _strip_label_prefix(normalized_label)
+
+    score = 0.0
+    if label_core == alias_clean:
+        score += 100
+    elif label_core.startswith(alias_clean):
+        score += 80
+    elif alias_clean in label_core:
+        score += 55
+    else:
+        score += 20
+
+    score += min(len(alias_clean), 20)
+    score += min(len(numeric_texts), 3) * 6
+    score += min(math.log10(abs(value) + 1), 12)
+
+    if _is_probable_note_marker(numeric_texts):
+        score -= 90
+
+    score -= _field_label_penalty(field_name, normalized_label)
+    return score
+
+
+def _strip_label_prefix(label: str) -> str:
+    cleaned = label
+    for _ in range(4):
+        updated = re.sub(r"^[（(]?[一二三四五六七八九十\d]+[）).、\.]*", "", cleaned)
+        updated = re.sub(r"^[\.·:：\-]+", "", updated)
+        if updated == cleaned:
+            break
+        cleaned = updated
+    return cleaned
+
+
+def _is_probable_note_marker(numeric_texts: list[str]) -> bool:
+    if len(numeric_texts) != 1:
+        return False
+    raw = str(numeric_texts[0]).strip()
+    if "." in raw or "%" in raw or any(unit in raw for unit in ("亿", "万", "元", "百分点")):
+        return False
+    parsed = parse_numeric(raw, None)
+    if parsed is None:
+        return False
+    return float(parsed).is_integer() and 0 <= parsed <= 20
+
+
+def _field_label_penalty(field_name: str, normalized_label: str) -> float:
+    penalty = 0.0
+    if field_name == "net_profit":
+        for keyword in [
+            "持续经营",
+            "终止经营",
+            "归属于母公司股东",
+            "归属于上市公司股东",
+            "少数股东损益",
+        ]:
+            if keyword in normalized_label:
+                penalty += 35
+    if field_name == "eps" and "稀释" in normalized_label and "基本" not in normalized_label:
+        penalty += 20
+    return penalty
 
 
 def _split_inline_numeric_texts(cell: str) -> tuple[str, list[str]]:
