@@ -1,0 +1,35 @@
+# macOS / editor
+.DS_Store
+.vscode/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+
+# Local environments / caches
+.conda/
+.runtime_cache/
+.env
+.venv/
+venv/
+
+# Secrets / local model config
+configs/task2_llm.env
+
+# Build / runtime outputs
+outputs/
+
+# Competition raw data
+正式数据/
+
+# Local databases / temporary artifacts
+*.db
+*.sqlite
+*.sqlite3
+
+# Office / temporary files
+~$*.xlsx
+~$*.docx
