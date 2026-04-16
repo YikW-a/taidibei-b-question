@@ -140,6 +140,9 @@ class Task3LangGraphPrototype:
                 "rerank_preview": state.get("rerank_preview", ""),
                 "fused_context": state.get("fused_context", {}),
                 "self_check": state.get("self_check", {}),
+                "current_answer": state.get("current_answer", ""),
+                "current_references": state.get("current_references", []),
+                "answer_rewritten": state.get("answer_rewritten", False),
                 "turn_answers": state.get("turn_answers", []),
                 "answer_json": state.get("answer_json", "[]"),
                 "references_json": state.get("references_json", "[]"),
@@ -160,14 +163,13 @@ class Task3LangGraphPrototype:
                     "编号": question_id,
                     "问题": state.get("raw_question_json", "[]"),
                     "SQL 查询语句": "\n\n".join(state.get("sql_history", []) or ([state.get("sql", "")] if state.get("sql") else [])),
-                    "参考依据": state.get("references_json", "[]"),
                     "回答": state.get("answer_json", "[]"),
                     "状态": state.get("final_status", "ok"),
                     "备注": "；".join(state.get("notes", [])),
                 }
             )
         df = pd.DataFrame(rows)
-        export_df = df[["编号", "问题", "SQL 查询语句", "参考依据", "回答"]]
+        export_df = df[["编号", "问题", "SQL 查询语句", "回答"]]
         export_df.to_excel(result_xlsx, index=False)
         df.to_csv(artifacts_dir / "task3_langgraph_results.csv", index=False, encoding="utf-8-sig")
         summary = {

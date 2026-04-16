@@ -77,6 +77,22 @@ def resolve_config(
         or file_values.get("TASK2_LLM_API_KEY")
         or fallback_file_values.get("TASK2_LLM_API_KEY"),
         embedding_model=env.get("TASK3_EMBEDDING_MODEL") or file_values.get("TASK3_EMBEDDING_MODEL"),
+        rerank_base_url=env.get("TASK3_RERANK_BASE_URL")
+        or file_values.get("TASK3_RERANK_BASE_URL")
+        or env.get("TASK3_EMBEDDING_BASE_URL")
+        or file_values.get("TASK3_EMBEDDING_BASE_URL")
+        or env.get("TASK2_LLM_BASE_URL")
+        or file_values.get("TASK2_LLM_BASE_URL")
+        or fallback_file_values.get("TASK2_LLM_BASE_URL"),
+        rerank_api_key=env.get("TASK3_RERANK_API_KEY")
+        or file_values.get("TASK3_RERANK_API_KEY")
+        or env.get("TASK3_EMBEDDING_API_KEY")
+        or file_values.get("TASK3_EMBEDDING_API_KEY")
+        or env.get("TASK2_LLM_API_KEY")
+        or file_values.get("TASK2_LLM_API_KEY")
+        or fallback_file_values.get("TASK2_LLM_API_KEY"),
+        rerank_model=env.get("TASK3_RERANK_MODEL")
+        or file_values.get("TASK3_RERANK_MODEL"),
         index_limit=index_limit,
         embedding_batch_size=embedding_batch_size or base_config.embedding_batch_size,
         embedding_batch_pause_seconds=embedding_batch_pause_seconds

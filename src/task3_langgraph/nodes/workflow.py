@@ -88,6 +88,7 @@ def parse_question_node(state: Task3GraphState, ctx: Task3NodeContext) -> Task3G
         "self_check": {},
         "current_answer": "",
         "current_references": [],
+        "answer_rewritten": False,
     }
 
 
@@ -123,19 +124,17 @@ def clarify_or_continue_node(state: Task3GraphState, ctx: Task3NodeContext) -> T
 
 def build_query_plan_node(state: Task3GraphState, ctx: Task3NodeContext) -> Task3GraphState:
     question_text = _current_turn_question(state, ctx)
-    plan = ctx.runtime.build_query_plan(
+    query_plan, retrieval_plan = ctx.runtime.build_plans(
         question_text,
         state.get("parsed_slots", {}),
         context_companies=state.get("context_companies", []),
         context_rows=state.get("context_rows", []),
     )
-    return {**state, "query_plan": plan}
+    return {**state, "query_plan": query_plan, "retrieval_plan": retrieval_plan}
 
 
 def build_retrieval_plan_node(state: Task3GraphState, ctx: Task3NodeContext) -> Task3GraphState:
-    question_text = _current_turn_question(state, ctx)
-    plan = ctx.runtime.build_retrieval_plan(question_text, state.get("parsed_slots", {}))
-    return {**state, "retrieval_plan": plan}
+    return state
 
 
 def generate_sql_node(state: Task3GraphState, ctx: Task3NodeContext) -> Task3GraphState:
@@ -200,10 +199,19 @@ def retrieve_reports_node(state: Task3GraphState, ctx: Task3NodeContext) -> Task
 
 
 def rerank_evidence_node(state: Task3GraphState, ctx: Task3NodeContext) -> Task3GraphState:
+    evidences = state.get("retrieved_evidence", [])
+    if not ctx.runtime.should_rerank(_current_turn_question(state, ctx), state.get("retrieval_plan", {}), evidences):
+        kept = ctx.runtime._deduplicate_evidences(list(evidences))[: int(state.get("retrieval_plan", {}).get("top_k", 5) or 5)]
+        return {
+            **state,
+            "reranked_evidence": kept,
+            "rerank_preview": json.dumps({"strategy": "skipped_fast_path", "kept_count": len(kept)}, ensure_ascii=False),
+            "notes": state.get("notes", []) + ["rerank_strategy=skipped_fast_path", f"rerank_kept={len(kept)}"],
+        }
     reranked, rerank_meta = ctx.runtime.rerank_evidence(
         question=_current_turn_question(state, ctx),
         retrieval_plan=state.get("retrieval_plan", {}),
-        evidences=state.get("retrieved_evidence", []),
+        evidences=evidences,
     )
     return {
         **state,
@@ -229,12 +237,60 @@ def fuse_sql_and_evidence_node(state: Task3GraphState, ctx: Task3NodeContext) ->
 def self_check_node(state: Task3GraphState, ctx: Task3NodeContext) -> Task3GraphState:
     if state.get("needs_clarification"):
         return state
+    evidences = state.get("reranked_evidence", []) or state.get("retrieved_evidence", [])
+    answer_query_result = ctx.runtime.sanitize_query_result_for_answer(
+        _current_turn_question(state, ctx),
+        _result_dataframe(state),
+    )
+    if not ctx.runtime.should_run_self_check(
+        _current_turn_question(state, ctx),
+        state.get("query_plan", {}),
+        answer_query_result,
+        evidences,
+    ):
+        return {
+            **state,
+            "self_check": {"pass": True, "notes": ["self_check_skipped_fast_path"]},
+        }
     check = ctx.runtime.self_check(
         question=_current_turn_question(state, ctx),
         answer=state.get("current_answer", ""),
-        sql_rows=state.get("result_rows", []),
-        evidences=state.get("reranked_evidence", []) or state.get("retrieved_evidence", []),
+        sql_rows=answer_query_result.to_dict(orient="records"),
+        evidences=evidences,
     )
+    if (
+        ctx.runtime.should_rewrite_after_self_check(
+            _current_turn_question(state, ctx),
+            state.get("query_plan", {}),
+            answer_query_result,
+            evidences,
+            check,
+        )
+        and not state.get("answer_rewritten", False)
+        and state.get("current_answer", "").strip()
+    ):
+        rewritten = ctx.runtime.rewrite_answer(
+            question=_current_turn_question(state, ctx),
+            sql=state.get("sql", ""),
+            query_plan=state.get("query_plan", {}),
+            query_result=answer_query_result,
+            evidences=evidences,
+            previous_answer=state.get("current_answer", ""),
+            self_check=check,
+        )
+        rewritten_check = ctx.runtime.self_check(
+            question=_current_turn_question(state, ctx),
+            answer=rewritten,
+            sql_rows=answer_query_result.to_dict(orient="records"),
+            evidences=evidences,
+        )
+        return {
+            **state,
+            "current_answer": rewritten,
+            "self_check": rewritten_check,
+            "answer_rewritten": True,
+            "notes": state.get("notes", []) + ["answer_rewritten_after_self_check"],
+        }
     return {**state, "self_check": check}
 
 
@@ -243,7 +299,10 @@ def generate_answer_node(state: Task3GraphState, ctx: Task3NodeContext) -> Task3
     if state.get("needs_clarification"):
         answer = ctx.runtime.generate_clarification(question_text, state.get("missing_slots", []))
         return {**state, "current_answer": answer, "current_references": []}
-    query_result = _result_dataframe(state)
+    query_result = ctx.runtime.sanitize_query_result_for_answer(
+        question_text,
+        _result_dataframe(state),
+    )
     answer = ctx.runtime.generate_answer(
         question=question_text,
         sql=state.get("sql", ""),
@@ -265,8 +324,8 @@ def append_turn_result_node(state: Task3GraphState, ctx: Task3NodeContext) -> Ta
             "Q": state.get("current_question", ""),
             "A": {
                 "content": state.get("current_answer", ""),
-                "references": state.get("current_references", []),
                 "image": [],
+                "references": state.get("current_references", []),
             },
         }
     )

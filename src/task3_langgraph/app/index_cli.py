@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+from dataclasses import replace
 import json
 from pathlib import Path
 
@@ -143,6 +144,8 @@ def main() -> None:
         embedding_batch_pause_seconds=args.embedding_batch_pause_seconds,
         embedding_max_batches_per_run=args.embedding_max_batches_per_run,
     )
+    if args.retrieval_smoke_question:
+        config = replace(config, build_index_on_start=False)
     existing_chunk_count = _load_existing_chunk_count(args.base_dir)
     existing_completed = _load_existing_completed(args.base_dir)
     progress_state, progress_handler = _build_index_progress_handler(existing_chunk_count, existing_completed)

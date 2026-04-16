@@ -23,6 +23,9 @@ class Task3LangGraphConfig:
     embedding_base_url: str | None = None
     embedding_api_key: str | None = None
     embedding_model: str | None = None
+    rerank_base_url: str | None = None
+    rerank_api_key: str | None = None
+    rerank_model: str | None = None
     chunk_size_chars: int = 900
     chunk_overlap_chars: int = 150
     max_pages_per_report: int = 100

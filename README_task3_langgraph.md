@@ -38,6 +38,11 @@
 1. 任务三主链已经跑通
 2. 数据准备层已经可用
 3. 当前主要问题转为澄清门控、SQL 与证据融合质量、`references` 精度和后续图表链接入
+4. `rerank` 现已升级为“专门 reranker 优先，LLM/分数回退兜底”
+5. 当前全量知识库已可用：
+   - `总 chunk = 12856`
+   - `已建向量索引 chunk = 12856`
+   - `index_status = ready`
 
 附件 5 中这两个信息表会在三个阶段用到：
 
@@ -140,10 +145,11 @@ flowchart TD
 - `rerank_evidence`
 - `fuse_sql_and_evidence`
 
-其中 `rerank` 还是骨架版：
-- 优先按召回得分去重排序
-- 若 LLM 可用，再让模型输出保留证据下标
-- 后续还可以继续替换成更强的 reranker
+其中 `rerank` 当前策略是：
+- 若配置 `TASK3_RERANK_*`，优先调用专门 reranker 模型
+- 当前推荐：`BAAI/bge-reranker-v2-m3`
+- 若 reranker 不可用，再回退到 LLM rerank
+- 若 LLM 也失败，再回退到召回分数排序
 
 chunk 当前已经升级成“标题/段落优先”的策略：
 
@@ -217,6 +223,58 @@ chunk 当前已经升级成“标题/段落优先”的策略：
 
 ---
 
+## 4.1 当前提速策略
+
+任务三目前已经开始做“在尽量不牺牲质量前提下的提速”，当前已经落地的策略有：
+
+1. **问题解析与计划合并**
+   - 原来分开的 `build_query_plan` 与 `build_retrieval_plan`，现在优先由一个统一 planning 节点一起产出。
+   - 这样每题可少一次 LLM 往返。
+
+2. **SQL 缓存**
+   - 同一条 SQL 再次执行时，直接复用本地缓存结果。
+   - 缓存目录：
+     - `outputs/task3_langgraph/artifacts/sql_cache`
+
+3. **retrieval 缓存**
+   - 同一个 retrieval plan 会直接复用已检索结果。
+   - 缓存目录：
+     - `outputs/task3_langgraph/artifacts/retrieval_cache`
+
+4. **rerank 触发条件收紧**
+   - 命中证据很少、题目明显简单、或 metadata 结果已经足够明确时，会直接跳过 rerank。
+   - debug 中会显示：
+     - `rerank_strategy=skipped_fast_path`
+
+5. **self_check 触发条件收紧**
+   - 简单事实题、小结果集题不会强制跑自检。
+   - debug 中会显示：
+     - `self_check_skipped_fast_path`
+
+6. **rewrite 只在高风险失败时触发**
+   - 不是所有 `self_check.pass=false` 都会自动重写
+   - 当前只对：
+     - 指标混淆
+     - 数字不一致
+     - 聚合值误映射
+     - 关键遗漏
+     这类高风险问题触发 rewrite
+
+当前要明确一点：
+- 这些提速策略已经接入
+- 但复杂多轮题仍然可能较慢
+- 例如 `B2003` 单题实测仍约 `181s`
+
+所以任务三当前状态是：
+- **已经开始提速**
+- **但还没有完全进入最终比赛速度**
+
+下一步仍要继续观察：
+- 哪些题能稳定走 fast path
+- 哪些题仍然卡在复杂融合 / 自检 / rewrite
+
+---
+
 ## 5. 输出
 
 默认输出到：
@@ -266,6 +324,20 @@ chunk 当前已经升级成“标题/段落优先”的策略：
 - `TASK3_EMBEDDING_BASE_URL`
 - `TASK3_EMBEDDING_API_KEY`
 - `TASK3_EMBEDDING_MODEL`
+
+也可额外配置专门 reranker：
+
+- `TASK3_RERANK_BASE_URL`
+- `TASK3_RERANK_API_KEY`
+- `TASK3_RERANK_MODEL`
+
+推荐配置：
+
+```env
+TASK3_RERANK_BASE_URL=https://api.siliconflow.cn/v1
+TASK3_RERANK_API_KEY=YOUR_API_KEY
+TASK3_RERANK_MODEL=BAAI/bge-reranker-v2-m3
+```
 
 在正式建库前，建议先单独验证 embedding 接口是否可用。  
 当前项目的 embedding client 会请求：
@@ -389,6 +461,19 @@ python run_task3_index.py \
 3. 再做小样本回答冒烟
    - `python run_task3_langgraph.py --question-ids B2002,B2003,B2005,B2008`
 4. 最后再扩大样本
+
+### 6.3.1 当前推荐的正式建库命令
+
+当前项目内已经统一采用：
+
+```bash
+rm -rf outputs/task3_langgraph
+python run_task3_index.py \
+  --embedding-batch-size 64 \
+  --embedding-batch-pause-seconds 1
+```
+
+如果之后又改了 chunk 规则、metadata 规则、embedding 模型或 FAISS 结构，建议仍然按这个命令重建知识库。
 
 ### 6.4 按题号批量运行
 

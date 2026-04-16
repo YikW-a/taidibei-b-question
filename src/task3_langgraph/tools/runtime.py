@@ -3,7 +3,9 @@ from __future__ import annotations
 import json
 import re
 import sqlite3
+import hashlib
 from collections.abc import Callable
+from pathlib import Path
 from typing import Any
 
 import pandas as pd
@@ -14,6 +16,7 @@ from ..schemas import QuestionRecord
 from ..services import (
     OpenAICompatibleClient,
     OpenAICompatibleEmbeddingClient,
+    OpenAICompatibleRerankerClient,
     PromptManager,
     Task3IntentParser,
     extract_json_object,
@@ -45,6 +48,10 @@ class Task3Runtime:
         self.config.retrieval_dir.mkdir(parents=True, exist_ok=True)
         self.config.vector_store_dir.mkdir(parents=True, exist_ok=True)
         self.config.chunk_dir.mkdir(parents=True, exist_ok=True)
+        self.sql_cache_dir = self.config.artifacts_dir / "sql_cache"
+        self.retrieval_cache_dir = self.config.artifacts_dir / "retrieval_cache"
+        self.sql_cache_dir.mkdir(parents=True, exist_ok=True)
+        self.retrieval_cache_dir.mkdir(parents=True, exist_ok=True)
 
         self.engine = create_engine(config.database_url)
         self.view_df = self._build_view()
@@ -78,6 +85,13 @@ class Task3Runtime:
                 config.embedding_base_url,
                 config.embedding_api_key,
                 config.embedding_model,
+            )
+        self.reranker_client = None
+        if config.rerank_base_url and config.rerank_api_key and config.rerank_model:
+            self.reranker_client = OpenAICompatibleRerankerClient(
+                config.rerank_base_url,
+                config.rerank_api_key,
+                config.rerank_model,
             )
         self.chunk_manifest = self._load_or_build_chunk_manifest(
             stock_report_info=stock_report_info,
@@ -153,6 +167,52 @@ class Task3Runtime:
             default_plan["companies"] = list(parsed_slots.get("companies", []))
         return default_plan
 
+    def build_plans(
+        self,
+        question: str,
+        parsed_slots: dict[str, object],
+        *,
+        context_companies: list[str] | None = None,
+        context_rows: list[dict[str, Any]] | None = None,
+    ) -> tuple[dict[str, object], dict[str, object]]:
+        default_query_plan = {
+            "intent_type": parsed_slots.get("intent_type"),
+            "companies": list(parsed_slots.get("companies", [])),
+            "periods": parsed_slots.get("periods", []),
+            "metrics": parsed_slots.get("metrics", []),
+            "needs_sql": bool(parsed_slots.get("needs_sql")),
+            "top_n": parsed_slots.get("top_n"),
+            "threshold": parsed_slots.get("threshold"),
+            "question": question,
+        }
+        default_retrieval_plan = {
+            "question": question,
+            "companies": list(parsed_slots.get("companies", [])),
+            "focus_topics": list(parsed_slots.get("focus_topics", [])),
+            "needs_retrieval": bool(parsed_slots.get("needs_retrieval", True)),
+            "top_k": 5,
+            "source_scope": "hybrid",
+            "retrieval_mode": "hybrid" if self.embedding_client else "metadata",
+        }
+        try:
+            system_prompt = self.prompt_manager.load("planning_system")
+            user_prompt = (
+                f"Question: {question}\n"
+                f"Parsed slots: {json.dumps(parsed_slots, ensure_ascii=False)}\n"
+                f"Previous cohort companies: {context_companies or []}\n"
+                f"Previous turn rows: {json.dumps((context_rows or [])[:10], ensure_ascii=False)}\n"
+                "请一次性输出 query_plan 和 retrieval_plan。"
+            )
+            payload = extract_json_object(self.llm_client.chat(system_prompt, user_prompt, temperature=0.0))
+            query_plan = dict(default_query_plan)
+            retrieval_plan = dict(default_retrieval_plan)
+            query_plan.update({k: v for k, v in dict(payload.get("query_plan", {}) or {}).items() if v is not None})
+            retrieval_plan.update({k: v for k, v in dict(payload.get("retrieval_plan", {}) or {}).items() if v is not None})
+            retrieval_plan = self._normalize_retrieval_plan(question, retrieval_plan, parsed_slots)
+            return query_plan, retrieval_plan
+        except Exception:
+            return default_query_plan, self._normalize_retrieval_plan(question, default_retrieval_plan, parsed_slots)
+
     def build_retrieval_plan(
         self,
         question: str,
@@ -174,7 +234,7 @@ class Task3Runtime:
             default_plan.update({k: v for k, v in payload.items() if v is not None})
         except Exception:
             pass
-        return default_plan
+        return self._normalize_retrieval_plan(question, default_plan, parsed_slots)
 
     def generate_sql(
         self,
@@ -216,16 +276,41 @@ class Task3Runtime:
     def run_sql(self, sql: str) -> pd.DataFrame:
         if not sql.strip():
             return pd.DataFrame()
+        cache_path = self._sql_cache_path(sql)
+        cached = self._load_json_cache(cache_path)
+        if isinstance(cached, list):
+            return pd.DataFrame(cached)
         conn = sqlite3.connect(self.config.query_cache_db)
         try:
-            return pd.read_sql_query(sql, conn)
+            df = pd.read_sql_query(sql, conn)
         finally:
             conn.close()
+        self._write_json_cache(cache_path, df.to_dict(orient="records"))
+        return df
 
     def retrieve_evidence(self, retrieval_plan: dict[str, object]) -> list[dict[str, Any]]:
-        if not retrieval_plan.get("needs_retrieval", True):
+        normalized_plan = self._normalize_retrieval_plan(
+            str(retrieval_plan.get("question", "") or ""),
+            retrieval_plan,
+            {
+                "companies": list(retrieval_plan.get("companies", []) or []),
+                "focus_topics": list(retrieval_plan.get("focus_topics", []) or []),
+                "needs_retrieval": bool(retrieval_plan.get("needs_retrieval", True)),
+            },
+        )
+        if not normalized_plan.get("needs_retrieval", True):
             return []
-        return self.retriever.retrieve(retrieval_plan)
+        cache_path = self._retrieval_cache_path(normalized_plan)
+        cached = self._load_json_cache(cache_path)
+        if isinstance(cached, list):
+            return cached
+        hits = self.retriever.retrieve(normalized_plan)
+        if not hits:
+            fallback_plan = self._fallback_retrieval_plan(normalized_plan)
+            if fallback_plan is not None:
+                hits = self.retriever.retrieve(fallback_plan)
+        self._write_json_cache(cache_path, hits)
+        return hits
 
     def rerank_evidence(
         self,
@@ -241,6 +326,32 @@ class Task3Runtime:
             reverse=True,
         )
         default_ranked = self._deduplicate_evidences(default_ranked)[: int(retrieval_plan.get("top_k", 5) or 5)]
+        if self.reranker_client:
+            try:
+                documents = [self._evidence_to_rerank_text(item) for item in evidences[:20]]
+                rerank_results = self.reranker_client.rerank(
+                    question,
+                    documents,
+                    top_n=min(int(retrieval_plan.get("top_k", 5) or 5), len(documents)),
+                )
+                reranked = []
+                for item in rerank_results:
+                    idx = item.get("index")
+                    if isinstance(idx, str) and idx.isdigit():
+                        idx = int(idx)
+                    if isinstance(idx, (int, float)):
+                        pos = int(idx)
+                        if 0 <= pos < len(evidences[:20]):
+                            reranked.append(dict(evidences[pos]))
+                reranked = self._deduplicate_evidences(reranked)
+                if reranked:
+                    return reranked, {
+                        "strategy": "reranker_model",
+                        "kept_count": len(reranked),
+                        "reason": self.config.rerank_model or "",
+                    }
+            except Exception:
+                pass
         try:
             system_prompt = self.prompt_manager.load("evidence_rerank_system")
             user_prompt = (
@@ -269,6 +380,20 @@ class Task3Runtime:
                 "reason": str(exc),
             }
 
+    def should_rerank(
+        self,
+        question: str,
+        retrieval_plan: dict[str, object],
+        evidences: list[dict[str, Any]],
+    ) -> bool:
+        if len(evidences) <= 3:
+            return False
+        if self._is_simple_fact_question(question):
+            return False
+        if str(retrieval_plan.get("retrieval_mode", "")) == "metadata" and len(evidences) <= 5:
+            return False
+        return True
+
     def retrieval_smoke_test(
         self,
         question: str,
@@ -279,16 +404,16 @@ class Task3Runtime:
         source_scope: str = "hybrid",
         retrieval_mode: str | None = None,
     ) -> dict[str, Any]:
-        mode = retrieval_mode or ("hybrid" if self.embedding_client else "metadata")
-        plan = {
-            "question": question,
-            "companies": companies or [],
-            "focus_topics": focus_topics or [],
-            "needs_retrieval": True,
-            "top_k": top_k,
-            "source_scope": source_scope,
-            "retrieval_mode": mode,
+        intent = self.intent_parser.parse_text(question)
+        parsed_slots = {
+            "companies": companies if companies is not None else list(intent.companies),
+            "focus_topics": focus_topics if focus_topics is not None else list(intent.focus_topics),
+            "needs_retrieval": intent.needs_retrieval,
         }
+        plan = self.build_retrieval_plan(question, parsed_slots)
+        plan["top_k"] = top_k
+        plan["source_scope"] = source_scope if source_scope else str(plan.get("source_scope", "hybrid"))
+        plan["retrieval_mode"] = retrieval_mode or str(plan.get("retrieval_mode", "hybrid" if self.embedding_client else "metadata"))
         hits = self.retrieve_evidence(plan)
         return {
             "retrieval_plan": plan,
@@ -338,6 +463,55 @@ class Task3Runtime:
         except Exception:
             return {"pass": True, "notes": ["self_check_skipped"]}
 
+    def should_run_self_check(
+        self,
+        question: str,
+        query_plan: dict[str, Any] | None,
+        query_result: pd.DataFrame,
+        evidences: list[dict[str, Any]],
+    ) -> bool:
+        analysis_tokens = ["共同点", "关系", "影响", "分析", "可视化", "差异", "对比"]
+        reason_tokens = ["为什么", "原因"]
+        if self._is_simple_fact_question(question) and len(query_result) <= 3 and len(evidences) <= 3:
+            return False
+        if not evidences and len(query_result) <= 3:
+            if any(token in question for token in reason_tokens) and not any(token in question for token in analysis_tokens):
+                return False
+        if len(query_result) > 1 or len(evidences) > 3:
+            return True
+        if any(token in question for token in reason_tokens + analysis_tokens):
+            return True
+        if bool((query_plan or {}).get("needs_sql")) and bool(evidences):
+            return True
+        return False
+
+    def should_rewrite_after_self_check(
+        self,
+        question: str,
+        query_plan: dict[str, Any] | None,
+        query_result: pd.DataFrame,
+        evidences: list[dict[str, Any]],
+        self_check: dict[str, Any],
+    ) -> bool:
+        if bool(self_check.get("pass", True)):
+            return False
+        if not evidences and len(query_result) <= 3 and not any(
+            token in question for token in ["共同点", "关系", "影响", "分析", "对比", "差异"]
+        ):
+            return False
+        notes = " ".join(str(item) for item in self_check.get("notes", []) if item)
+        severe_patterns = [
+            r"数字.*不一致",
+            r"引用.*不准确",
+            r"错误地将聚合",
+            r"聚合统计结果.*具体公司",
+            r"混淆",
+            r"遗漏.*关键",
+            r"与SQL rows.*矛盾",
+            r"错误对应",
+        ]
+        return any(re.search(pattern, notes) for pattern in severe_patterns)
+
     def generate_answer(
         self,
         question: str,
@@ -358,6 +532,31 @@ class Task3Runtime:
             "请直接给出中文回答。"
         )
         return self.llm_client.chat(system_prompt, user_prompt, temperature=0.2).strip()
+
+    def rewrite_answer(
+        self,
+        question: str,
+        sql: str,
+        query_plan: dict[str, Any] | None,
+        query_result: pd.DataFrame,
+        evidences: list[dict[str, Any]],
+        previous_answer: str,
+        self_check: dict[str, Any],
+    ) -> str:
+        system_prompt = self.prompt_manager.load("answer_generation_system")
+        answer_constraints = self._derive_answer_constraints(question, query_plan or {}, query_result)
+        user_prompt = (
+            f"Question: {question}\n"
+            f"Query plan: {json.dumps(query_plan or {}, ensure_ascii=False)}\n"
+            f"SQL: {sql}\n"
+            f"Rows: {query_result.head(20).to_json(force_ascii=False, orient='records')}\n"
+            f"Evidences: {json.dumps(evidences[:5], ensure_ascii=False)}\n"
+            f"Answer constraints: {json.dumps(answer_constraints, ensure_ascii=False)}\n"
+            f"Previous answer: {previous_answer}\n"
+            f"Self-check findings: {json.dumps(self_check, ensure_ascii=False)}\n"
+            "请根据自检意见重写答案，修复其中指出的问题。请直接给出中文回答。"
+        )
+        return self.llm_client.chat(system_prompt, user_prompt, temperature=0.1).strip()
 
     def enrich_reference(self, evidence: dict[str, Any], *, question: str = "") -> dict[str, Any]:
         metadata_ref = str(evidence.get("metadata_ref", "") or "")
@@ -386,20 +585,14 @@ class Task3Runtime:
         page_ref = ""
         if page_start and page_end:
             page_ref = f"第{page_start}页" if page_start == page_end else f"第{page_start}-{page_end}页"
-        return {
-            "paper_path": evidence.get("relative_path", "") or metadata.get("path", ""),
+        reference_path = evidence.get("relative_path", "") or metadata.get("path", "")
+        reference: dict[str, Any] = {
+            "paper_path": self._to_reference_relative_path(reference_path),
             "text": chunk_text[:600],
-            "paper_image": paper_image,
-            "page_ref": page_ref,
-            "title": evidence.get("title", "") or metadata.get("title", ""),
-            "source_type": evidence.get("source_type", "") or metadata.get("source_type", ""),
-            "publish_date": evidence.get("publish_date", "") or metadata.get("publish_date", ""),
-            "organization": evidence.get("organization", "") or metadata.get("organization", ""),
-            "company_or_industry": evidence.get("company_or_industry", "")
-            or metadata.get("company")
-            or metadata.get("industry", ""),
-            "rating_current": metadata.get("rating_current", ""),
         }
+        if paper_image:
+            reference["paper_image"] = paper_image
+        return reference
 
     def generate_clarification(self, question: str, missing_slots: list[str]) -> str:
         if not missing_slots:
@@ -627,8 +820,178 @@ class Task3Runtime:
             "must_preserve_metric_name": bool(metric_name),
             "must_explain_empty_evidence": True,
             "must_list_entities_when_multiple_rows": len(query_result) > 1,
+            "has_aggregate_only_rows": any(
+                str(col).lower().startswith(("avg_", "min_", "max_", "sum_", "count_"))
+                for col in query_result.columns.tolist()
+            ),
+            "forbid_using_aggregate_rows_as_company_common_points": bool(
+                query_result.columns.tolist()
+                and all(
+                    str(col).lower().startswith(("avg_", "min_", "max_", "sum_", "count_"))
+                    or str(col) in {"report_period", "stock_abbr", "stock_code"}
+                    for col in query_result.columns.tolist()
+                )
+            ),
+            "must_explicitly_distinguish_revenue_terms": any(
+                token in question for token in ["主营业务收入", "营业总收入", "营业收入"]
+            ),
+            "prefer_qualitative_evidence_for_reason_analysis": any(
+                token in question for token in ["为什么", "原因", "驱动"]
+            ),
+            "ignore_suspicious_zero_growth_fields": self._has_suspicious_zero_growth_fields(query_result),
             "numeric_unit_hint": "数据库金额口径默认为万元；如转成亿元表述，必须明确说明换算关系。",
         }
+
+    def _normalize_retrieval_plan(
+        self,
+        question: str,
+        retrieval_plan: dict[str, Any],
+        parsed_slots: dict[str, Any] | None = None,
+    ) -> dict[str, Any]:
+        parsed_slots = parsed_slots or {}
+        plan = dict(retrieval_plan or {})
+        companies = list(plan.get("companies", []) or parsed_slots.get("companies", []) or [])
+        focus_topics = list(plan.get("focus_topics", []) or parsed_slots.get("focus_topics", []) or [])
+        focus_topics = self._augment_focus_topics(question, focus_topics)
+        source_scope = self._normalize_source_scope(question, plan.get("source_scope"), companies, focus_topics)
+        retrieval_mode = self._normalize_retrieval_mode(plan.get("retrieval_mode"))
+        top_k = int(plan.get("top_k", 5) or 5)
+        if any(token in question for token in ["为什么", "原因", "驱动"]) and companies:
+            top_k = max(top_k, 8)
+        plan.update(
+            {
+                "question": question,
+                "companies": companies,
+                "focus_topics": focus_topics,
+                "needs_retrieval": bool(plan.get("needs_retrieval", parsed_slots.get("needs_retrieval", True))),
+                "top_k": top_k,
+                "source_scope": source_scope,
+                "retrieval_mode": retrieval_mode,
+            }
+        )
+        return plan
+
+    def _fallback_retrieval_plan(self, retrieval_plan: dict[str, Any]) -> dict[str, Any] | None:
+        question = str(retrieval_plan.get("question", "") or "")
+        companies = list(retrieval_plan.get("companies", []) or [])
+        if not companies:
+            return None
+        if not any(token in question for token in ["为什么", "原因", "驱动", "变化", "提升", "上升"]):
+            return None
+        fallback_topics = self._augment_focus_topics(question, list(retrieval_plan.get("focus_topics", []) or []))
+        fallback_topics.extend(["收入增长", "业绩增长", "产品", "渠道", "品牌", "业务结构", "市场拓展", "并购整合"])
+        dedup_topics: list[str] = []
+        for topic in fallback_topics:
+            if topic and topic not in dedup_topics:
+                dedup_topics.append(topic)
+        return {
+            "question": question,
+            "companies": companies,
+            "focus_topics": dedup_topics[:12],
+            "needs_retrieval": True,
+            "top_k": max(int(retrieval_plan.get("top_k", 5) or 5), 8),
+            "source_scope": "hybrid",
+            "retrieval_mode": "hybrid" if self.embedding_client else "metadata",
+        }
+
+    def _normalize_source_scope(
+        self,
+        question: str,
+        raw_scope: Any,
+        companies: list[str],
+        focus_topics: list[str],
+    ) -> str:
+        if isinstance(raw_scope, list):
+            scope_tokens = [str(item).strip().lower() for item in raw_scope if str(item).strip()]
+        else:
+            scope_tokens = [str(raw_scope or "").strip().lower()]
+        valid = {"stock", "industry", "hybrid"}
+        for token in scope_tokens:
+            if token in valid:
+                return token
+        joined = " ".join(scope_tokens)
+        if any(token in joined for token in ["company_announcement", "annual_report", "stock_report", "research_report"]):
+            if companies and any(token in question for token in ["为什么", "原因", "驱动", "变化", "上升", "下降"]):
+                return "hybrid"
+            return "stock" if companies else "hybrid"
+        if any(token in joined for token in ["industry_report", "sector", "行业", "板块"]):
+            return "industry" if not companies else "hybrid"
+        if companies:
+            if any(token in question for token in ["行业", "景气度", "关系", "影响", "对比", "趋势"]):
+                return "hybrid"
+            if any(topic for topic in focus_topics if any(flag in topic for flag in ["行业", "板块", "景气度", "趋势"])):
+                return "hybrid"
+            return "stock"
+        return "industry" if any(token in question for token in ["行业", "板块"]) else "hybrid"
+
+    def _normalize_retrieval_mode(self, raw_mode: Any) -> str:
+        mode = str(raw_mode or "").strip().lower()
+        if mode in {"metadata", "vector", "hybrid"}:
+            return mode
+        if mode in {"semantic_search", "semantic", "embedding", "dense"}:
+            return "hybrid" if self.embedding_client else "metadata"
+        if mode in {"keyword", "bm25"}:
+            return "metadata"
+        return "hybrid" if self.embedding_client else "metadata"
+
+    @staticmethod
+    def _augment_focus_topics(question: str, focus_topics: list[str]) -> list[str]:
+        augmented: list[str] = []
+        for topic in focus_topics or []:
+            topic_str = str(topic).strip()
+            if topic_str and topic_str not in augmented:
+                augmented.append(topic_str)
+        if any(token in question for token in ["为什么", "原因", "驱动"]):
+            for token in ["增长驱动", "业务结构", "市场拓展", "产品线", "品牌", "渠道"]:
+                if token not in augmented:
+                    augmented.append(token)
+        if any(token in question for token in ["主营业务收入", "营业总收入", "营业收入"]):
+            for token in ["主营业务收入", "营业总收入", "收入增长"]:
+                if token not in augmented:
+                    augmented.append(token)
+        return augmented
+
+    @staticmethod
+    def _is_simple_fact_question(question: str) -> bool:
+        simple_tokens = ["有哪些", "是什么", "多少", "列出", "给出", "哪几家", "哪家", "哪只", "是哪一个"]
+        complex_tokens = ["为什么", "原因", "共同点", "关系", "影响", "分析", "比较", "趋势", "驱动"]
+        return any(token in question for token in simple_tokens) and not any(token in question for token in complex_tokens)
+
+    def _sql_cache_path(self, sql: str) -> Path:
+        digest = hashlib.sha1(sql.encode("utf-8")).hexdigest()
+        return self.sql_cache_dir / f"{digest}.json"
+
+    def _retrieval_cache_path(self, retrieval_plan: dict[str, object]) -> Path:
+        payload = json.dumps(retrieval_plan, ensure_ascii=False, sort_keys=True)
+        digest = hashlib.sha1(payload.encode("utf-8")).hexdigest()
+        return self.retrieval_cache_dir / f"{digest}.json"
+
+    @staticmethod
+    def _load_json_cache(path: Path) -> Any:
+        if not path.exists():
+            return None
+        try:
+            return json.loads(path.read_text(encoding="utf-8"))
+        except Exception:
+            return None
+
+    @staticmethod
+    def _write_json_cache(path: Path, payload: Any) -> None:
+        path.write_text(json.dumps(payload, ensure_ascii=False), encoding="utf-8")
+
+    def sanitize_query_result_for_answer(self, question: str, query_result: pd.DataFrame) -> pd.DataFrame:
+        if query_result.empty:
+            return query_result
+        sanitized = query_result.copy()
+        if any(token in question for token in ["为什么", "原因", "驱动", "变化"]) and self._has_suspicious_zero_growth_fields(sanitized):
+            drop_cols = [
+                col
+                for col in sanitized.columns
+                if any(token in str(col).lower() for token in ["yoy_growth", "qoq_growth", "_growth"])
+            ]
+            if drop_cols:
+                sanitized = sanitized.drop(columns=drop_cols, errors="ignore")
+        return sanitized
 
     @staticmethod
     def _format_visual_caption(value: Any) -> str:
@@ -637,6 +1000,21 @@ class Task3Runtime:
             caption = str(value.get("caption", "") or "").strip()
             return f"{label}：{caption}" if label and caption else label or caption
         return str(value or "").strip()
+
+    def _to_reference_relative_path(self, path_value: Any) -> str:
+        path_str = str(path_value or "").strip()
+        if not path_str:
+            return ""
+        path = Path(path_str)
+        try:
+            relative = path.relative_to(self.config.base_dir / "正式数据")
+            return f"./{relative.as_posix()}"
+        except Exception:
+            try:
+                relative = path.relative_to(self.config.base_dir)
+                return f"./{relative.as_posix()}"
+            except Exception:
+                return path_str
 
     @staticmethod
     def _normalize_threshold_literals(sql: str, query_plan: dict[str, Any]) -> str:
@@ -792,6 +1170,42 @@ class Task3Runtime:
             seen.add(key)
             deduped.append(item)
         return deduped
+
+    @staticmethod
+    def _evidence_to_rerank_text(item: dict[str, Any]) -> str:
+        parts = [
+            str(item.get("title", "") or ""),
+            str(item.get("company_or_industry", "") or item.get("company", "") or item.get("industry", "") or ""),
+            str(item.get("organization", "") or ""),
+            str(item.get("snippet", "") or ""),
+            str(item.get("text", "") or ""),
+        ]
+        return "\n".join(part for part in parts if part).strip()
+
+    @staticmethod
+    def _has_suspicious_zero_growth_fields(query_result: pd.DataFrame) -> bool:
+        if query_result.empty:
+            return False
+        growth_cols = [
+            col
+            for col in query_result.columns
+            if any(token in str(col).lower() for token in ["yoy_growth", "qoq_growth", "_growth"])
+        ]
+        if not growth_cols:
+            return False
+        direct_value_cols = [
+            col
+            for col in query_result.columns
+            if any(token in str(col).lower() for token in ["revenue", "profit", "income", "total_operating_revenue", "total_profit"])
+            and col not in growth_cols
+        ]
+        if not direct_value_cols:
+            return False
+        for col in growth_cols:
+            series = pd.to_numeric(query_result[col], errors="coerce").dropna()
+            if not series.empty and (series.abs() <= 1e-9).all():
+                return True
+        return False
 
     def _prepare_vector_index(self) -> None:
         if not self.embedding_client:

@@ -42,6 +42,7 @@ class Task3GraphState(TypedDict, total=False):
 
     current_answer: str
     current_references: list[dict[str, Any]]
+    answer_rewritten: bool
     turn_answers: list[dict[str, Any]]
     answer_json: str
     references_json: str

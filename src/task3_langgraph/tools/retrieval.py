@@ -147,29 +147,52 @@ class HybridRetriever:
         retrieval_mode = str(retrieval_plan.get("retrieval_mode", "metadata") or "metadata")
         if retrieval_mode not in {"metadata", "hybrid", "vector"}:
             retrieval_mode = "metadata"
+        balance_hybrid = self._should_balance_hybrid(question=question, companies=companies, focus_topics=focus_topics)
+        candidate_top_k = max(top_k, top_k * 3) if balance_hybrid else top_k
 
         metadata_hits = self.metadata_retriever.retrieve(
             question=question,
             companies=companies,
             focus_topics=focus_topics,
-            top_k=top_k,
+            top_k=candidate_top_k,
             source_scope=source_scope,
         )
         if retrieval_mode == "metadata" or self.vector_retriever is None:
-            return metadata_hits
+            return self._select_results(
+                ranked=metadata_hits,
+                top_k=top_k,
+                question=question,
+                companies=companies,
+                focus_topics=focus_topics,
+                source_scope=source_scope,
+            )
 
         vector_hits = self.vector_retriever.retrieve(
             question=question,
             companies=companies,
             focus_topics=focus_topics,
-            top_k=top_k,
+            top_k=candidate_top_k,
             source_scope=source_scope,
         )
         vector_error = getattr(self.vector_retriever, "last_error", "")
         if retrieval_mode == "vector":
             if vector_hits:
-                return vector_hits
-            return metadata_hits
+                return self._select_results(
+                    ranked=vector_hits,
+                    top_k=top_k,
+                    question=question,
+                    companies=companies,
+                    focus_topics=focus_topics,
+                    source_scope=source_scope,
+                )
+            return self._select_results(
+                ranked=metadata_hits,
+                top_k=top_k,
+                question=question,
+                companies=companies,
+                focus_topics=focus_topics,
+                source_scope=source_scope,
+            )
 
         merged: dict[tuple[str, str], dict[str, Any]] = {}
         for item in metadata_hits:
@@ -197,11 +220,71 @@ class HybridRetriever:
             if vector_error:
                 merged[key]["retrieval_warning"] = vector_error
         ranked = sorted(merged.values(), key=lambda row: float(row.get("score", 0.0)), reverse=True)
-        results = ranked[:top_k]
+        results = self._select_results(
+            ranked=ranked,
+            top_k=top_k,
+            question=question,
+            companies=companies,
+            focus_topics=focus_topics,
+            source_scope=source_scope,
+        )
         if vector_error and not vector_hits:
             for item in results:
                 item["retrieval_warning"] = vector_error
         return results
+
+    def _select_results(
+        self,
+        *,
+        ranked: list[dict[str, Any]],
+        top_k: int,
+        question: str,
+        companies: list[str],
+        focus_topics: list[str],
+        source_scope: str,
+    ) -> list[dict[str, Any]]:
+        if not ranked or source_scope != "hybrid":
+            return ranked[:top_k]
+        if not self._should_balance_hybrid(question=question, companies=companies, focus_topics=focus_topics):
+            return ranked[:top_k]
+
+        stock_hits = [row for row in ranked if str(row.get("source_type", "")) == "stock"]
+        industry_hits = [row for row in ranked if str(row.get("source_type", "")) == "industry"]
+        if not stock_hits or not industry_hits:
+            return ranked[:top_k]
+
+        selected: list[dict[str, Any]] = []
+        max_industry = min(max(1, top_k // 2), len(industry_hits))
+        max_stock = min(top_k - max_industry, len(stock_hits))
+        industry_idx = 0
+        stock_idx = 0
+        while len(selected) < top_k and (stock_idx < len(stock_hits) or industry_idx < len(industry_hits)):
+            if stock_idx < max_stock:
+                selected.append(stock_hits[stock_idx])
+                stock_idx += 1
+            if len(selected) >= top_k:
+                break
+            if industry_idx < max_industry:
+                selected.append(industry_hits[industry_idx])
+                industry_idx += 1
+            if stock_idx >= max_stock and industry_idx >= max_industry:
+                break
+
+        for row in ranked:
+            if len(selected) >= top_k:
+                break
+            if row not in selected:
+                selected.append(row)
+        return selected[:top_k]
+
+    @staticmethod
+    def _should_balance_hybrid(*, question: str, companies: list[str], focus_topics: list[str]) -> bool:
+        if not companies:
+            return False
+        signals = ["行业", "板块", "景气度", "环境", "趋势", "关系", "对比", "相对", "影响"]
+        if any(token in question for token in signals):
+            return True
+        return any(topic for topic in focus_topics if any(token in topic for token in signals))
 
 
 __all__ = ["HybridRetriever", "MetadataRetriever", "VectorRetriever"]
