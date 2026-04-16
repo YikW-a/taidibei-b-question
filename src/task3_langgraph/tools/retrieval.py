@@ -7,6 +7,7 @@ from typing import Any
 import pandas as pd
 
 from ..schemas import RetrievedEvidence
+from .report_metadata import normalize_report_metadata
 
 
 class MetadataRetriever:
@@ -55,6 +56,7 @@ class MetadataRetriever:
             return rows
         for row in df.to_dict(orient="records"):
             title = str(row.get("title", "") or "")
+            normalized = normalize_report_metadata(row, source_type)
             score = 0.0
             for company in companies:
                 if company and (company in title or company == str(row.get("stockName", ""))):
@@ -87,6 +89,7 @@ class MetadataRetriever:
                     organization=organization,
                     snippet=snippet,
                     score=score,
+                    metadata_ref=str(normalized.get("metadata_ref", "") or ""),
                 )
             )
         return rows

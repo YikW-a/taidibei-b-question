@@ -95,7 +95,21 @@ def clarify_or_continue_node(state: Task3GraphState, ctx: Task3NodeContext) -> T
     parsed = state.get("parsed_slots", {})
     text = state.get("current_question", "")
     missing: list[str] = []
-    if not parsed.get("companies") and any(token in text for token in ["公司", "企业"]) and "行业" not in text:
+    asks_for_specific_company = any(token in text for token in ["哪家公司", "哪家企业", "哪只股票", "哪个公司"])
+    is_broad_company_screening = bool(
+        parsed.get("metrics")
+        and (
+            parsed.get("threshold") is not None
+            or parsed.get("top_n") is not None
+            or any(token in text for token in ["有哪些", "哪些", "哪几家", "前", "Top", "top", "超过", "高于", "低于", "不低于", "不超过", "共同点", "筛选"])
+        )
+    )
+    is_follow_up_group_question = any(token in text for token in ["他们", "这些", "上述", "其中", "共同点", "原因"])
+    if (
+        not parsed.get("companies")
+        and "行业" not in text
+        and (asks_for_specific_company or (any(token in text for token in ["公司", "企业"]) and not is_broad_company_screening and not is_follow_up_group_question))
+    ):
         missing.append("company")
     if not parsed.get("periods") and parsed.get("metrics") and any(token in text for token in ["近三年", "近3年"]) is False:
         if any(token in text for token in ["季度", "年度", "上半年", "报告期", "去年", "今年"]):
@@ -233,11 +247,12 @@ def generate_answer_node(state: Task3GraphState, ctx: Task3NodeContext) -> Task3
     answer = ctx.runtime.generate_answer(
         question=question_text,
         sql=state.get("sql", ""),
+        query_plan=state.get("query_plan", {}),
         query_result=query_result,
         evidences=state.get("reranked_evidence", []) or state.get("retrieved_evidence", []),
     )
     references = [
-        ctx.runtime.enrich_reference(item)
+        ctx.runtime.enrich_reference(item, question=question_text)
         for item in (state.get("reranked_evidence", []) or state.get("retrieved_evidence", []))[:5]
     ]
     return {**state, "current_answer": answer, "current_references": references}
@@ -268,7 +283,11 @@ def export_result_node(state: Task3GraphState, ctx: Task3NodeContext) -> Task3Gr
     dedup = []
     seen = set()
     for item in references:
-        key = (item.get("title", ""), item.get("path", ""))
+        key = (
+            item.get("paper_path", ""),
+            item.get("text", ""),
+            item.get("paper_image", ""),
+        )
         if key in seen:
             continue
         seen.add(key)

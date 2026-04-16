@@ -37,7 +37,7 @@ class RetrievedEvidence:
     organization: str = ""
     snippet: str = ""
     score: float = 0.0
+    metadata_ref: str = ""
 
 
 __all__ = ["ParsedTask3Intent", "QuestionRecord", "RetrievedEvidence"]
-

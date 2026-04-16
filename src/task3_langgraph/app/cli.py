@@ -8,6 +8,27 @@ from ..graph.runner import Task3LangGraphPrototype
 from .common import resolve_config
 
 
+def _print_kb_summary(summary: dict[str, object]) -> None:
+    index_meta = dict(summary.get("index_meta", {}) or {})
+    total_chunks = int(summary.get("chunk_count", 0) or 0)
+    indexed_chunks = int(index_meta.get("chunk_count", 0) or 0)
+    status = str(index_meta.get("index_status", "unknown") or "unknown")
+    coverage = (indexed_chunks / total_chunks * 100.0) if total_chunks else 0.0
+    print(
+        "[kb-summary] "
+        f"总 chunk={total_chunks} | "
+        f"已建向量索引 chunk={indexed_chunks} | "
+        f"覆盖率={coverage:.2f}% | "
+        f"索引状态={status}",
+        flush=True,
+    )
+    if total_chunks and indexed_chunks < total_chunks:
+        print(
+            "[kb-summary] 当前是局部向量知识库，适合小样本验证；如需更可靠的全量回答，建议先用 run_task3_index.py 完成全量建库。",
+            flush=True,
+        )
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Task 3 LangGraph answering workflow")
     parser.add_argument("--base-dir", type=Path, default=Path.cwd(), help="项目根目录")
@@ -31,6 +52,8 @@ def main() -> None:
     )
 
     runner = Task3LangGraphPrototype(config)
+    kb_summary = runner.context.runtime.summarize_index_status() if runner.context is not None else {}
+    _print_kb_summary(kb_summary)
 
     if args.question_id:
         result = runner.run_single(args.question_id)

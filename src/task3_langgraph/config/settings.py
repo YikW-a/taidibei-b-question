@@ -25,7 +25,7 @@ class Task3LangGraphConfig:
     embedding_model: str | None = None
     chunk_size_chars: int = 900
     chunk_overlap_chars: int = 150
-    max_pages_per_report: int = 20
+    max_pages_per_report: int = 100
     embedding_batch_size: int = 16
     index_limit: int | None = None
     embedding_batch_pause_seconds: float = 1.0
