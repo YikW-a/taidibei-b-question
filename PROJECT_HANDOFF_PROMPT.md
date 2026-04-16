@@ -8,6 +8,7 @@
 
 - `/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/README_task1.md`
 - `/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/README_task2_langgraph.md`
+- `/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/README_task3_langgraph.md`
 
 继续后续工作。
 
@@ -19,9 +20,13 @@
 
 1. 任务一：从财务报告 PDF 中抽取四张目标表，完成字段映射、单位统一、自动校验、入库与质量评估。
 2. 任务二：基于任务一数据库做多轮智能问数，支持澄清、SQL 生成、图表输出，并按赛题要求导出 `result_2.xlsx`。
-3. 任务三：后续要做研报增强分析，预计采用 `RAG + SQL + LangGraph`。
+3. 任务三：基于研报知识库与任务一数据库，完成 `RAG + SQL + LangGraph` 的增强分析问答。
 
-当前工作重点仍集中在任务一和任务二。
+当前工作重点已经扩展到任务三骨架搭建，但整体优先级仍是：
+
+1. 任务一保证数据底座质量
+2. 任务二保证数据库问数链稳定
+3. 任务三在此基础上完成 `RAG + SQL` 融合链
 
 ---
 
@@ -71,6 +76,31 @@
 3. 澄清门控收敛
 4. 任务一脏数据导致的问题回溯
 
+### 2.3 任务三
+
+任务三主模块已经建立：
+
+- `/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph`
+
+并且已拆分为两个入口：
+
+- 建库入口：`/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/run_task3_index.py`
+- 回答入口：`/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/run_task3_langgraph.py`
+
+当前任务三已经完成：
+
+1. 附件 5 研报信息表和字段说明接入
+2. PDF 正文抽取
+3. 标题/段落优先 chunk 切分
+4. 图表/表格引用基础字段准备
+5. `bge-m3` embedding 接入
+6. 真正的 `FAISS` 向量索引
+7. `metadata / vector / hybrid` 检索底座
+8. `retrieve -> rerank -> fuse -> answer -> self_check` 骨架
+9. 3 到 5 题小样本回答冒烟已跑通
+
+当前任务三已经从“纯骨架”进入“可用第一版”，但还处在小样本调优阶段，不是最终效果版。
+
 ---
 
 ## 3. 当前正在做什么
@@ -99,6 +129,22 @@
 3. 调 `prompts/*.txt`
 4. 优先通过通用规则而不是题号特判解决问题
 
+### 任务三正在做的事
+
+任务三当前不是继续补目录骨架，而是：
+
+1. 先稳住数据准备层
+   - chunk
+   - metadata 标准化
+   - `bge-m3`
+   - `FAISS`
+2. 跑小样本检索与小样本回答冒烟
+3. 调整：
+   - 澄清门控
+   - SQL 与证据融合
+   - `references` 结构
+4. 之后再做全量调优
+
 ---
 
 ## 4. 技术栈
@@ -126,6 +172,19 @@
 - matplotlib
 - 自定义 `chart_spec` 渲染链路
 
+### 任务三
+
+- Python
+- LangGraph
+- LangChain
+- OpenAI 兼容 LLM API
+- OpenAI 兼容 Embedding API
+- `BAAI/bge-m3`
+- FAISS (`faiss-cpu`)
+- PyMuPDF
+- pandas
+- SQLite（复用任务一数据库）
+
 ---
 
 ## 5. 关键约束
@@ -143,6 +202,13 @@
    - 图表策略调整
    而不是按题号硬编码特判。
 6. 任务一的异常值会直接污染任务二，所以若任务二结果明显异常，应优先回查任务一数据层。
+7. 任务三当前默认使用：
+   - LLM：OpenAI 兼容接口
+   - Embedding：硅基流动 `BAAI/bge-m3`
+8. 任务三知识库构建与回答流程已经拆分为两个入口：
+   - `run_task3_index.py`
+   - `run_task3_langgraph.py`
+9. 任务三当前采用“纯文本抽取 + 结构化切分”，不是先转 markdown 再切 chunk。
 
 ---
 
@@ -170,6 +236,25 @@
 - `result_2.xlsx` 正式导出
 - 两个 README 已整理
 
+### 任务三已完成
+
+- `task3_langgraph` 独立模块搭建
+- 两个入口拆分：
+  - 建库入口
+  - 回答入口
+- 附件 5：
+  - `个股_研报信息.xlsx`
+  - `行业_研报信息.xlsx`
+  - `字段说明.xlsx`
+  已正式接入
+- PDF 正文抽取与结构化 chunk
+- `metadata_ref + report_metadata_lookup`
+- `bge-m3` embedding 调用
+- `FAISS IndexFlatIP`
+- `metadata / vector / hybrid`
+- `rerank` 骨架
+- 小样本回答冒烟成功
+
 ---
 
 ## 7. 待完成的工作
@@ -190,9 +275,11 @@
 
 ### 任务三
 
-尚未正式开始，计划后续采用：
-
-- `RAG + SQL + LangGraph`
+1. 继续小样本回答回归
+2. 收紧澄清门控，避免完整条件问题被误追问
+3. 改善 SQL 与证据融合质量，减少利润/营收等字段语义混淆
+4. 把 `references` 从“报告级”推进到“chunk / page / figure_ref”级
+5. 后续再决定是否把任务二的图表链正式接入任务三
 
 ---
 
@@ -210,6 +297,18 @@
 - 少量题会因为任务一脏数据出现异常均值或异常排序
 - 部分复杂问题更适合继续调 `query_plan / answer / chart_plan` prompt，而不是补特判
 
+### 任务三
+
+- 小样本回答链已经跑通，但效果仍需调优，不宜直接视为最终版。
+- 当前 `references` 已有：
+  - `paper_path`
+  - `text`
+  - 基础来源信息
+  但还没有完全达到附件 7 示例中的最终精度。
+- 当前 chunk 已是标题/段落优先切分，但仍不是最终章节级语义切分。
+- 建库输出中的 `ready` 可能是“局部索引 ready”，需要结合本次 `--index-limit` 判断，不一定代表全量知识库都建完。
+- 回答入口默认不会自动重建全量向量索引；如果要重建知识库，应使用 `run_task3_index.py`。
+
 ---
 
 ## 9. 关键文件
@@ -226,12 +325,25 @@
 - `/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task2_langgraph`
 - `/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/README_task2_langgraph.md`
 
+### 任务三
+
+- `/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/run_task3_index.py`
+- `/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/run_task3_langgraph.py`
+- `/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph`
+- `/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/README_task3_langgraph.md`
+- `/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/docs/task3/任务三完成流程与技术方案.md`
+
 ### 调试重点目录
 
 - `/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/outputs/task1`
 - `/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/outputs/task2_langgraph`
 - `/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/outputs/task2_langgraph/artifacts/debug`
 - `/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs`
+- `/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/outputs/task3_langgraph`
+- `/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/outputs/task3_langgraph/artifacts/debug`
+- `/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/outputs/task3_langgraph/artifacts/retrieval`
+- `/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/outputs/task3_langgraph/artifacts/chunks`
+- `/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/outputs/task3_langgraph/artifacts/vector_store`
 
 ---
 
@@ -242,17 +354,23 @@
 1. 先阅读：
    - `README_task1.md`
    - `README_task2_langgraph.md`
+   - `README_task3_langgraph.md`
    - 本文件
 2. 安装依赖：
    - `pip install -r requirements.txt`
 3. 检查任务一数据库是否存在：
    - `outputs/task1/task1_financials.db`
-4. 检查任务二 LLM 配置：
+4. 检查任务二 / 任务三 LLM 配置：
    - `configs/task2_llm.env`
-5. 先跑单题 / 小样本再跑全量
-6. 如遇异常，优先看：
+   - `configs/task3_llm.env`
+5. 若要继续任务三，优先区分：
+   - 建库：`run_task3_index.py`
+   - 回答：`run_task3_langgraph.py`
+6. 先跑单题 / 小样本再跑全量
+7. 如遇异常，优先看：
    - 任务一：`summary.json / validation_log.csv / database_quality_review.md`
    - 任务二：`result_2.xlsx / debug/*.json / chart_specs/*.spec.json`
+   - 任务三：`result_3.xlsx / debug/*.json / retrieval/*.json / chunks/report_chunks.json / vector_store/index_meta.json`
 
 ---
 
@@ -261,7 +379,12 @@
 1. 优先保持当前框架，不轻易重构主流程。
 2. 任务一优先优化提取质量、字段来源约束和异常值治理。
 3. 任务二优先做小批量回归和 Prompt 调优。
-4. 若任务二出现异常问答，优先判断：
+4. 任务三优先做小样本回归和检索/融合/引用调优。
+5. 若任务二出现异常问答，优先判断：
    - 是任务一数据问题
    - 还是任务二解析 / SQL / 图表 / 回答问题
-5. 避免按题号硬编码，优先做通用规则。
+6. 若任务三回答异常，优先判断：
+   - 是任务一数据库问题
+   - 是知识库 chunk / retrieval 问题
+   - 还是任务三澄清 / SQL / 融合 / references 问题
+7. 避免按题号硬编码，优先做通用规则。

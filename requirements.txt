@@ -3,6 +3,7 @@ sqlalchemy>=2.0,<3
 pymysql>=1.1,<2
 openpyxl>=3.1,<4
 tqdm>=4.66,<5
+numpy>=1.26,<3
 
 # Task 1: PDF extraction
 pymupdf>=1.24,<2
@@ -12,13 +13,12 @@ camelot-py[base]>=1.0.0,<2
 paddleocr>=2.8,<3
 paddlepaddle>=3.0,<4
 
-# Task 2: charting and NL2SQL pipeline
+# Task 2 / Task 3: charting and numerical utilities
 matplotlib>=3.8,<4
-numpy>=1.26,<3
 
-# Optional chart enhancement for task 2
-pyecharts>=2.0,<3
-
-# Optional workflow framework for task 2 / task 3 prototypes
+# Task 2 / Task 3: workflow framework
 langchain>=0.3,<0.4
 langgraph>=0.2,<0.3
+
+# Task 3: retrieval and vector index
+faiss-cpu>=1.8,<2
