@@ -12,6 +12,7 @@ from ..nodes import (
     generate_answer_node,
     generate_sql_node,
     parse_question_node,
+    render_chart_node,
     rerank_evidence_node,
     retrieve_reports_node,
     self_check_node,
@@ -32,6 +33,7 @@ def build_task3_graph(config: Task3LangGraphConfig):
     graph.add_node("retrieve_reports", lambda state: retrieve_reports_node(state, ctx))
     graph.add_node("rerank_evidence", lambda state: rerank_evidence_node(state, ctx))
     graph.add_node("fuse_sql_and_evidence", lambda state: fuse_sql_and_evidence_node(state, ctx))
+    graph.add_node("render_chart", lambda state: render_chart_node(state, ctx))
     graph.add_node("generate_answer", lambda state: generate_answer_node(state, ctx))
     graph.add_node("run_self_check", lambda state: self_check_node(state, ctx))
     graph.add_node("append_turn_result", lambda state: append_turn_result_node(state, ctx))
@@ -70,7 +72,8 @@ def build_task3_graph(config: Task3LangGraphConfig):
     )
     graph.add_edge("retrieve_reports", "rerank_evidence")
     graph.add_edge("rerank_evidence", "fuse_sql_and_evidence")
-    graph.add_edge("fuse_sql_and_evidence", "generate_answer")
+    graph.add_edge("fuse_sql_and_evidence", "render_chart")
+    graph.add_edge("render_chart", "generate_answer")
     graph.add_edge("generate_answer", "run_self_check")
     graph.add_edge("run_self_check", "append_turn_result")
     graph.add_edge("append_turn_result", "export_result")

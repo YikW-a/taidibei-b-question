@@ -46,6 +46,7 @@ class Task3Runtime:
         self.config.artifacts_dir.mkdir(parents=True, exist_ok=True)
         self.config.debug_dir.mkdir(parents=True, exist_ok=True)
         self.config.retrieval_dir.mkdir(parents=True, exist_ok=True)
+        self.config.chart_spec_dir.mkdir(parents=True, exist_ok=True)
         self.config.vector_store_dir.mkdir(parents=True, exist_ok=True)
         self.config.chunk_dir.mkdir(parents=True, exist_ok=True)
         self.sql_cache_dir = self.config.artifacts_dir / "sql_cache"
@@ -175,8 +176,23 @@ class Task3Runtime:
         context_companies: list[str] | None = None,
         context_rows: list[dict[str, Any]] | None = None,
     ) -> tuple[dict[str, object], dict[str, object]]:
+        intent_type = str(parsed_slots.get("intent_type", "") or "")
+        default_needs_retrieval = bool(parsed_slots.get("needs_retrieval", True))
+        default_source_scope = "hybrid"
+        default_top_k = 5
+        if intent_type in {"sql_only", "sql_chart"}:
+            default_needs_retrieval = False
+            default_top_k = 0
+        elif intent_type == "causal_analysis":
+            default_needs_retrieval = True
+            default_top_k = 8
+            default_source_scope = "stock" if parsed_slots.get("companies") else "hybrid"
+        elif intent_type == "industry_open_analysis":
+            default_needs_retrieval = True
+            default_top_k = 8
+            default_source_scope = "industry"
         default_query_plan = {
-            "intent_type": parsed_slots.get("intent_type"),
+            "intent_type": intent_type,
             "companies": list(parsed_slots.get("companies", [])),
             "periods": parsed_slots.get("periods", []),
             "metrics": parsed_slots.get("metrics", []),
@@ -189,9 +205,9 @@ class Task3Runtime:
             "question": question,
             "companies": list(parsed_slots.get("companies", [])),
             "focus_topics": list(parsed_slots.get("focus_topics", [])),
-            "needs_retrieval": bool(parsed_slots.get("needs_retrieval", True)),
-            "top_k": 5,
-            "source_scope": "hybrid",
+            "needs_retrieval": default_needs_retrieval,
+            "top_k": default_top_k,
+            "source_scope": default_source_scope,
             "retrieval_mode": "hybrid" if self.embedding_client else "metadata",
         }
         try:
@@ -386,11 +402,33 @@ class Task3Runtime:
         retrieval_plan: dict[str, object],
         evidences: list[dict[str, Any]],
     ) -> bool:
-        if len(evidences) <= 3:
+        evidence_count = len(evidences)
+        if evidence_count <= 5:
             return False
         if self._is_simple_fact_question(question):
             return False
-        if str(retrieval_plan.get("retrieval_mode", "")) == "metadata" and len(evidences) <= 5:
+        if self._question_requires_chart(question):
+            return False
+        retrieval_mode = str(retrieval_plan.get("retrieval_mode", "") or "")
+        source_scope = str(retrieval_plan.get("source_scope", "") or "")
+        complex_reasoning = any(token in question for token in ["为什么", "原因", "共同点", "关系", "影响", "分析", "依据", "判断依据", "驱动"])
+        if retrieval_mode == "metadata" and evidence_count <= 8:
+            return False
+        if not complex_reasoning and evidence_count <= 8:
+            return False
+        source_types = {str(item.get("source_type", "") or "") for item in evidences}
+        companies = {
+            str(item.get("company_or_industry", "") or "").strip()
+            for item in evidences
+            if str(item.get("source_type", "") or "") == "stock" and str(item.get("company_or_industry", "") or "").strip()
+        }
+        if source_types == {"stock"} and len(companies) <= 1 and evidence_count <= 12:
+            return False
+        if source_scope == "stock" and len(companies) <= 1 and evidence_count <= 10:
+            return False
+        if len(source_types) <= 1 and evidence_count <= 8:
+            return False
+        if self._top_scores_are_clearly_separated(evidences):
             return False
         return True
 
@@ -472,7 +510,25 @@ class Task3Runtime:
     ) -> bool:
         analysis_tokens = ["共同点", "关系", "影响", "分析", "可视化", "差异", "对比"]
         reason_tokens = ["为什么", "原因"]
+        evidence_source_types = {str(item.get("source_type", "") or "") for item in evidences}
+        evidence_companies = {
+            str(item.get("company_or_industry", "") or "").strip()
+            for item in evidences
+            if str(item.get("source_type", "") or "") == "stock" and str(item.get("company_or_industry", "") or "").strip()
+        }
+        if self._question_requires_chart(question) and bool((query_plan or {}).get("needs_sql")):
+            return False
         if self._is_simple_fact_question(question) and len(query_result) <= 3 and len(evidences) <= 3:
+            return False
+        if not evidences and self._can_short_circuit_without_evidence(question, query_plan, query_result):
+            return False
+        if (
+            any(token in question for token in reason_tokens)
+            and len(query_result) <= 3
+            and 0 < len(evidences) <= 8
+            and evidence_source_types == {"stock"}
+            and len(evidence_companies) <= 1
+        ):
             return False
         if not evidences and len(query_result) <= 3:
             if any(token in question for token in reason_tokens) and not any(token in question for token in analysis_tokens):
@@ -495,11 +551,26 @@ class Task3Runtime:
     ) -> bool:
         if bool(self_check.get("pass", True)):
             return False
+        if self._question_requires_chart(question) and bool((query_plan or {}).get("needs_sql")):
+            return False
+        if not evidences and self._can_short_circuit_without_evidence(question, query_plan, query_result):
+            return False
         if not evidences and len(query_result) <= 3 and not any(
             token in question for token in ["共同点", "关系", "影响", "分析", "对比", "差异"]
         ):
             return False
         notes = " ".join(str(item) for item in self_check.get("notes", []) if item)
+        support_only_patterns = [
+            r"仅引用了标题",
+            r"未提供.*正文",
+            r"未提供.*具体解释",
+            r"缺乏实质性内容",
+            r"证据支撑.*不足",
+            r"研报证据支撑.*缺乏",
+            r"由于证据缺失",
+            r"回答本身是诚实的",
+            r"未检索到直接.*原因",
+        ]
         severe_patterns = [
             r"数字.*不一致",
             r"引用.*不准确",
@@ -510,6 +581,10 @@ class Task3Runtime:
             r"与SQL rows.*矛盾",
             r"错误对应",
         ]
+        if any(re.search(pattern, notes) for pattern in support_only_patterns) and not any(
+            re.search(pattern, notes) for pattern in severe_patterns
+        ):
+            return False
         return any(re.search(pattern, notes) for pattern in severe_patterns)
 
     def generate_answer(
@@ -575,11 +650,18 @@ class Task3Runtime:
         )
         paper_image = ""
         if figure_refs:
-            labels = [str(item.get("label", "") or "").strip() for item in figure_refs if str(item.get("label", "") or "").strip()]
-            if labels:
-                paper_image = "；".join(labels[:3])
+            formatted_refs = []
+            for item in figure_refs[:3]:
+                formatted = self._format_visual_caption(item)
+                if formatted:
+                    formatted_refs.append(formatted)
+            if formatted_refs:
+                paper_image = "；".join(formatted_refs)
         if visual_caption:
-            paper_image = f"{paper_image}：{visual_caption}" if paper_image else visual_caption
+            if not paper_image:
+                paper_image = visual_caption
+            elif visual_caption not in paper_image:
+                paper_image = f"{paper_image}；{visual_caption}"
         page_start = evidence.get("page_start") or evidence.get("page") or reference_chunk.get("page_start") or reference_chunk.get("page")
         page_end = evidence.get("page_end") or reference_chunk.get("page_end") or page_start
         page_ref = ""
@@ -594,6 +676,71 @@ class Task3Runtime:
             reference["paper_image"] = paper_image
         return reference
 
+    def canonicalize_company_name(self, value: str) -> str:
+        text = str(value or "").strip()
+        if not text:
+            return ""
+        normalized = self.intent_parser._normalize_company_text(text)
+        if normalized in self.intent_parser._normalized_company_map:
+            return self.intent_parser._normalized_company_map[normalized]
+        for name in self.intent_parser.company_names:
+            if name and (name in text or normalized in self.intent_parser._normalize_company_text(name)):
+                return name
+        return ""
+
+    def derive_companies_from_evidences(self, evidences: list[dict[str, Any]], *, question: str = "") -> list[str]:
+        companies: list[str] = []
+        for item in evidences or []:
+            if str(item.get("source_type", "") or "") != "stock":
+                continue
+            metadata_ref = str(item.get("metadata_ref", "") or "")
+            metadata = self.report_metadata_lookup.get(metadata_ref, {}) if metadata_ref else {}
+            if not self._evidence_matches_question_event(item, metadata, question):
+                continue
+            candidates = [
+                str(item.get("company_or_industry", "") or ""),
+                str(item.get("company", "") or ""),
+                str(metadata.get("company", "") or ""),
+            ]
+            for candidate in candidates:
+                canonical = self.canonicalize_company_name(candidate)
+                if canonical and canonical not in companies:
+                    companies.append(canonical)
+        return companies
+
+    def _evidence_matches_question_event(
+        self,
+        evidence: dict[str, Any],
+        metadata: dict[str, Any],
+        question: str,
+    ) -> bool:
+        text = "\n".join(
+            part
+            for part in [
+                str(evidence.get("title", "") or ""),
+                str(evidence.get("snippet", "") or ""),
+                str(evidence.get("text", "") or ""),
+                str(metadata.get("title", "") or ""),
+            ]
+            if part
+        )
+        if "资产重组" in question:
+            return any(
+                token in text
+                for token in ["资产重组", "重大资产重组", "控股股东变更", "控制权变更", "股权转让"]
+            )
+        if "商誉减值风险" in question:
+            return "商誉" in text and "减值" in text
+        if "应收账款回收风险" in question:
+            return "应收账款" in text and any(token in text for token in ["回收风险", "回款风险", "回收不及预期"])
+        if "FDA" in question or "认证" in question:
+            return "FDA" in text and "认证" in text
+        if "集采" in question:
+            return any(token in text for token in ["集采", "中标"])
+        if "业绩预告" in question:
+            return "业绩预告" in text
+        return True
+
     def generate_clarification(self, question: str, missing_slots: list[str]) -> str:
         if not missing_slots:
             return ""
@@ -601,9 +748,12 @@ class Task3Runtime:
             system_prompt = self.prompt_manager.load("clarification_system")
             user_prompt = f"Question: {question}\nMissing slots: {missing_slots}"
             response = self.llm_client.chat(system_prompt, user_prompt, temperature=0.2).strip()
-            return response
+            if response:
+                return response
         except Exception:
-            return "请补充继续分析所需的关键信息。"
+            pass
+        missing_text = "、".join(str(item) for item in missing_slots if item) or "关键信息"
+        return f"请补充继续分析所需的关键信息：{missing_text}。"
 
     def _build_view(self) -> pd.DataFrame:
         key_cols = ["stock_code", "stock_abbr", "report_period", "report_year"]
@@ -611,6 +761,13 @@ class Task3Runtime:
         bal = pd.read_sql_table("balance_sheet", self.engine)
         cash = pd.read_sql_table("cash_flow_sheet", self.engine)
         inc = pd.read_sql_table("income_sheet", self.engine)
+
+        def ensure_columns(frame: pd.DataFrame, cols: list[str]) -> pd.DataFrame:
+            subset = frame.copy()
+            for col in cols:
+                if col not in subset.columns:
+                    subset[col] = pd.NA
+            return subset
 
         view = pd.concat([frame[key_cols] for frame in [kpi, bal, cash, inc]], ignore_index=True).drop_duplicates()
 
@@ -638,17 +795,24 @@ class Task3Runtime:
                 "net_profit_qoq_growth": "kpi_net_profit_qoq_growth",
             }
         )
+        inc_cols = [
+            "net_profit",
+            "net_profit_yoy_growth",
+            "total_operating_revenue",
+            "operating_revenue_yoy_growth",
+            "total_profit",
+            "operating_expense_rnd_expenses",
+            "operating_expense_selling_expenses",
+            "operating_expense_cost_of_sales",
+            "operating_expense_administrative_expenses",
+            "operating_expense_financial_expenses",
+            "operating_expense_taxes_and_surcharges",
+            "total_operating_expenses",
+        ]
+        inc = ensure_columns(inc, inc_cols)
         inc_subset = inc[
             key_cols
-            + [
-                "net_profit",
-                "net_profit_yoy_growth",
-                "total_operating_revenue",
-                "operating_revenue_yoy_growth",
-                "total_profit",
-                "operating_expense_rnd_expenses",
-                "operating_expense_selling_expenses",
-            ]
+            + inc_cols
         ].rename(
             columns={
                 "net_profit": "income_net_profit",
@@ -659,7 +823,23 @@ class Task3Runtime:
         )
         view = view.merge(kpi_subset, on=key_cols, how="left")
         view = view.merge(inc_subset, on=key_cols, how="left")
-        view = view.merge(bal[key_cols + ["asset_liability_ratio", "asset_cash_and_cash_equivalents", "liability_short_term_loans", "equity_unappropriated_profit", "asset_inventory"]], on=key_cols, how="left")
+        view = view.merge(
+            bal[
+                key_cols
+                + [
+                    "asset_liability_ratio",
+                    "asset_cash_and_cash_equivalents",
+                    "liability_short_term_loans",
+                    "equity_unappropriated_profit",
+                    "equity_total_equity",
+                    "asset_total_assets",
+                    "asset_accounts_receivable",
+                    "asset_inventory",
+                ]
+            ],
+            on=key_cols,
+            how="left",
+        )
         view = view.merge(cash[key_cols + ["operating_cf_net_amount", "investing_cf_net_amount", "financing_cf_net_amount", "net_cash_flow"]], on=key_cols, how="left")
 
         view["total_operating_revenue"] = view["income_total_operating_revenue"].combine_first(view["kpi_total_operating_revenue"])
@@ -668,8 +848,22 @@ class Task3Runtime:
         view["net_profit"] = view["income_net_profit"].combine_first(view["kpi_net_profit"])
         view["net_profit_yoy_growth"] = view["income_net_profit_yoy_growth"].combine_first(view["kpi_net_profit_yoy_growth"])
         view["net_profit_qoq_growth"] = view["kpi_net_profit_qoq_growth"]
+        view["total_assets"] = view["asset_total_assets"]
+        view["total_equity"] = view["equity_total_equity"]
+        view["accounts_receivable"] = view["asset_accounts_receivable"]
+        view["operating_cost"] = view["operating_expense_cost_of_sales"]
+        view["selling_expenses"] = view["operating_expense_selling_expenses"]
+        view["administrative_expenses"] = view["operating_expense_administrative_expenses"]
+        view["financial_expenses"] = view["operating_expense_financial_expenses"]
+        view["taxes_and_surcharges"] = view["operating_expense_taxes_and_surcharges"]
+        view["total_operating_expenses"] = view["total_operating_expenses"]
         view["rnd_expense_ratio"] = (
             pd.to_numeric(view["operating_expense_rnd_expenses"], errors="coerce")
+            / pd.to_numeric(view["total_operating_revenue"], errors="coerce")
+            * 100
+        )
+        view["accounts_receivable_ratio"] = (
+            pd.to_numeric(view["asset_accounts_receivable"], errors="coerce")
             / pd.to_numeric(view["total_operating_revenue"], errors="coerce")
             * 100
         )
@@ -691,6 +885,16 @@ class Task3Runtime:
         return (
             "Use only the SQLite table `financials_view`.\n"
             f"Available columns: {columns}\n"
+            "Helpful aliases already available in financials_view:\n"
+            "- total_assets = 资产总计\n"
+            "- total_equity = 股东权益总额\n"
+            "- accounts_receivable = 应收账款\n"
+            "- accounts_receivable_ratio = 应收账款占营业总收入比例\n"
+            "- operating_cost = 营业成本\n"
+            "- selling_expenses = 销售费用\n"
+            "- administrative_expenses = 管理费用\n"
+            "- financial_expenses = 财务费用\n"
+            "- taxes_and_surcharges = 税金及附加\n"
             "Report period format uses values like 2024FY, 2025Q3, 2025H1."
         )
 
@@ -853,9 +1057,21 @@ class Task3Runtime:
         companies = list(plan.get("companies", []) or parsed_slots.get("companies", []) or [])
         focus_topics = list(plan.get("focus_topics", []) or parsed_slots.get("focus_topics", []) or [])
         focus_topics = self._augment_focus_topics(question, focus_topics)
+        intent_type = str(parsed_slots.get("intent_type", "") or "")
+        if any(token in question for token in ["未来", "趋势", "预测", "价格波动", "中药材价格"]):
+            companies = []
         source_scope = self._normalize_source_scope(question, plan.get("source_scope"), companies, focus_topics)
         retrieval_mode = self._normalize_retrieval_mode(plan.get("retrieval_mode"))
         top_k = int(plan.get("top_k", 5) or 5)
+        needs_retrieval = bool(plan.get("needs_retrieval", parsed_slots.get("needs_retrieval", True)))
+        if intent_type in {"sql_only", "sql_chart"}:
+            needs_retrieval = False
+            top_k = 0
+        elif intent_type == "industry_open_analysis":
+            source_scope = "industry"
+            top_k = max(top_k, 8)
+        elif intent_type == "causal_analysis":
+            top_k = max(top_k, 8)
         if any(token in question for token in ["为什么", "原因", "驱动"]) and companies:
             top_k = max(top_k, 8)
         plan.update(
@@ -863,7 +1079,7 @@ class Task3Runtime:
                 "question": question,
                 "companies": companies,
                 "focus_topics": focus_topics,
-                "needs_retrieval": bool(plan.get("needs_retrieval", parsed_slots.get("needs_retrieval", True))),
+                "needs_retrieval": needs_retrieval,
                 "top_k": top_k,
                 "source_scope": source_scope,
                 "retrieval_mode": retrieval_mode,
@@ -949,6 +1165,14 @@ class Task3Runtime:
             for token in ["主营业务收入", "营业总收入", "收入增长"]:
                 if token not in augmented:
                     augmented.append(token)
+        if any(token in question for token in ["主营业务类型", "业务类型", "成本控制", "成本结构", "营业总成本", "营业成本", "销售费用", "管理费用", "研发费用"]):
+            for token in ["主营业务", "主营业务类型", "业务类型", "成本控制", "成本结构", "销售费用", "研发费用", "中药", "创新药"]:
+                if token not in augmented:
+                    augmented.append(token)
+        if any(token in question for token in ["中药材", "价格波动", "价格趋势", "趋势", "供需", "库存", "种植", "气候"]):
+            for token in ["中药材", "价格", "价格波动", "趋势", "供需", "库存", "种植", "气候", "政策", "中药"]:
+                if token not in augmented:
+                    augmented.append(token)
         return augmented
 
     @staticmethod
@@ -956,6 +1180,64 @@ class Task3Runtime:
         simple_tokens = ["有哪些", "是什么", "多少", "列出", "给出", "哪几家", "哪家", "哪只", "是哪一个"]
         complex_tokens = ["为什么", "原因", "共同点", "关系", "影响", "分析", "比较", "趋势", "驱动"]
         return any(token in question for token in simple_tokens) and not any(token in question for token in complex_tokens)
+
+    @staticmethod
+    def _question_requires_chart(question: str) -> bool:
+        return any(token in question for token in ["可视化", "绘图", "画图", "图表", "柱状图", "折线图", "饼图", "雷达图", "散点图", "直方图", "箱线图"])
+
+    @staticmethod
+    def _top_scores_are_clearly_separated(evidences: list[dict[str, Any]]) -> bool:
+        scores: list[float] = []
+        for item in evidences[:5]:
+            try:
+                scores.append(float(item.get("score", 0.0)))
+            except Exception:
+                scores.append(0.0)
+        if len(scores) < 3:
+            return True
+        top1, top2, top3 = scores[0], scores[1], scores[2]
+        if top1 <= 0:
+            return False
+        return (top1 - top2 >= 0.18 and top2 - top3 >= 0.08) or (top1 >= top2 * 1.25 and top2 >= top3 * 1.1)
+
+    def should_skip_retrieval(
+        self,
+        question: str,
+        query_plan: dict[str, Any] | None,
+        parsed_slots: dict[str, Any] | None,
+        turn_index: int,
+    ) -> bool:
+        if turn_index != 0:
+            return False
+        query_plan = query_plan or {}
+        parsed_slots = parsed_slots or {}
+        if not bool(query_plan.get("needs_sql")):
+            return False
+        if not self._question_requires_chart(question):
+            return False
+        if any(token in question for token in ["为什么", "原因", "依据", "判断依据", "关系", "共同点", "影响", "分析"]):
+            return False
+        metrics = list(parsed_slots.get("metrics", []) or query_plan.get("metrics", []) or [])
+        if not metrics:
+            return False
+        return True
+
+    def _can_short_circuit_without_evidence(
+        self,
+        question: str,
+        query_plan: dict[str, Any] | None,
+        query_result: pd.DataFrame,
+    ) -> bool:
+        query_plan = query_plan or {}
+        if self._question_requires_chart(question) and bool(query_plan.get("needs_sql")):
+            return True
+        if self._is_simple_fact_question(question):
+            return True
+        if len(query_result) > 0 and not any(
+            token in question for token in ["为什么", "原因", "关系", "共同点", "影响", "分析", "判断依据", "依据"]
+        ):
+            return True
+        return False
 
     def _sql_cache_path(self, sql: str) -> Path:
         digest = hashlib.sha1(sql.encode("utf-8")).hexdigest()

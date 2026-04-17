@@ -57,27 +57,36 @@ class MetadataRetriever:
         for row in df.to_dict(orient="records"):
             title = str(row.get("title", "") or "")
             normalized = normalize_report_metadata(row, source_type)
+            company_or_industry = str(
+                normalized.get("company")
+                or normalized.get("industry")
+                or row.get("stockName", "")
+                or row.get("industryName", "")
+                or ""
+            )
+            organization = str(row.get("orgSName", "") or row.get("orgName", "") or "")
+            haystack = " ".join(part for part in [title, company_or_industry, organization] if part)
             score = 0.0
+            company_matched = False
             for company in companies:
-                if company and (company in title or company == str(row.get("stockName", ""))):
+                if company and (company in haystack or company == str(row.get("stockName", ""))):
                     score += 3.0
+                    company_matched = True
+            if source_type == "stock" and companies and not company_matched:
+                score -= 2.5
             for topic in focus_topics:
-                if topic and topic in title:
+                if topic and topic in haystack:
                     score += 2.0
             for token in str(question).split():
-                if len(token) >= 2 and token in title:
+                if len(token) >= 2 and token in haystack:
                     score += 0.2
             if source_type == "industry" and any(token in question for token in ["行业", "板块", "医保目录", "集采"]):
                 score += 1.0
             file_name = f"{title}.pdf"
             if source_type == "stock":
                 file_path = self._stock_file_map.get(file_name)
-                company_or_industry = str(row.get("stockName", "") or "")
-                organization = str(row.get("orgSName", "") or row.get("orgName", "") or "")
             else:
                 file_path = self._industry_file_map.get(file_name)
-                company_or_industry = str(row.get("industryName", "") or "")
-                organization = str(row.get("orgSName", "") or row.get("orgName", "") or "")
             snippet = "；".join(item for item in [title, company_or_industry, organization] if item)
             rows.append(
                 RetrievedEvidence(
@@ -243,6 +252,12 @@ class HybridRetriever:
         focus_topics: list[str],
         source_scope: str,
     ) -> list[dict[str, Any]]:
+        if companies and source_scope == "stock":
+            ranked = [
+                row
+                for row in ranked
+                if any(company in str(row.get("company_or_industry", "") or "") for company in companies)
+            ]
         if not ranked or source_scope != "hybrid":
             return ranked[:top_k]
         if not self._should_balance_hybrid(question=question, companies=companies, focus_topics=focus_topics):

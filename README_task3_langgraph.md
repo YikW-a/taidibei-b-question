@@ -37,12 +37,26 @@
 
 1. 任务三主链已经跑通
 2. 数据准备层已经可用
-3. 当前主要问题转为澄清门控、SQL 与证据融合质量、`references` 精度和后续图表链接入
+3. 当前主要问题转为澄清门控、SQL 与证据融合质量、`references` 精度和图表策略细调
 4. `rerank` 现已升级为“专门 reranker 优先，LLM/分数回退兜底”
 5. 当前全量知识库已可用：
    - `总 chunk = 12856`
    - `已建向量索引 chunk = 12856`
    - `index_status = ready`
+6. 已完成一轮 `40` 题半量回归：
+   - `total_questions = 40`
+   - `ok_count = 40`
+   - `error_count = 0`
+7. 当前 `references` 输出语义已对齐赛题：
+   - `paper_path` 使用相对路径
+   - `text` 为参考文献原文摘要
+   - `paper_image` 仅在命中图表/表格时填写，格式为“图表编号 + 标题”
+8. task3 图表链现已正式接入，且**实现已独立于 task2**：
+   - 本地图表模块：
+     - [src/task3_langgraph/tools/charts.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/tools/charts.py)
+     - [src/task3_langgraph/tools/chart_spec.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/tools/chart_spec.py)
+   - 题目明确要求绘图时，会强制尝试生图
+   - 生成图片路径会写入 `A.image`
 
 附件 5 中这两个信息表会在三个阶段用到：
 
@@ -91,6 +105,9 @@
   - [src/task3_langgraph/tools/report_parser.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/tools/report_parser.py)
 - 向量存储骨架：
   - [src/task3_langgraph/tools/vector_store.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/tools/vector_store.py)
+- 图表渲染：
+  - [src/task3_langgraph/tools/charts.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/tools/charts.py)
+  - [src/task3_langgraph/tools/chart_spec.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/tools/chart_spec.py)
 - 节点：
   - [src/task3_langgraph/nodes/workflow.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/nodes/workflow.py)
 - 图编排：
@@ -113,10 +130,11 @@ flowchart TD
     E -->|不需要SQL| H
     H --> I["rerank_evidence"]
     I --> J["fuse_sql_and_evidence"]
-    J --> K["generate_answer"]
-    K --> L["self_check"]
-    L --> M["append_turn_result"]
-    M --> N["export_result"]
+    J --> K["render_chart"]
+    K --> L["generate_answer"]
+    L --> M["self_check"]
+    M --> N["append_turn_result"]
+    N --> O["export_result"]
 ```
 
 ---
@@ -298,7 +316,6 @@ chunk 当前已经升级成“标题/段落优先”的策略：
 - `编号`
 - `问题`
 - `SQL 查询语句`
-- `参考依据`
 - `回答`
 
 ---
@@ -310,10 +327,6 @@ chunk 当前已经升级成“标题/段落优先”的策略：
 优先读取：
 
 - `configs/task3_llm.env`
-
-如果不存在，会回退读取：
-
-- `configs/task2_llm.env`
 
 模板文件：
 
@@ -505,9 +518,19 @@ python run_task3_langgraph.py
 2. 当前 chunk 已经来自 PDF 正文并做了结构化切分，但仍不是最终的章节级/语义级切片。
 3. rerank 已有骨架，但还不是最终版强 reranker。
 4. 证据融合和自检仍是第一版 Prompt 逻辑。
-5. 任务三图表链路尚未正式接入，所以像 `B2003` 这类要求可视化的问题目前 `image` 可能仍为空。
-6. `references` 所需的 `paper_path / text / paper_image` 能力基础已经在数据准备层开始准备，但最终引用筛选和拼装仍在后续回答阶段完成。
-7. 当前小样本中，`B2008` 这类完整筛选问题仍可能触发不必要的澄清；`B2005` 这类题仍可能出现利润/营收语义混淆，说明效果调优还在进行中。
+5. 任务三图表链路现已正式接入，且实现已独立于 task2。
+   - 题目明确要求可视化/绘图时，会强制尝试生图
+   - 生成图片路径会写入 `A.image`
+   - 若当前数据不足或图表计划无法落地，`image` 仍可能为空
+6. `references` 现在只保留：
+   - `paper_path`
+   - `text`
+   - `paper_image`
+   其中 `paper_image` 并不是图片文件路径，而是引用到的 PDF 图表/表格的“编号 + 标题”；如果没有命中图表，则省略该字段。
+7. 当前并不是所有题都能稳定带出 `references`。
+   - 若知识库里没有对应公司研报或没有相关行业研报，`references` 可以为空
+   - 例如 `B2056` 当前就因附件 5 中缺少目标公司的个股研报而无引用
+8. 当前小样本回归中，像 `B2003` 这类题第一问已能生成图片并写入 `A.image`，第二问则继续走文字回答与 `references`。
 
 另外，若 `bge-m3` 出现 `429 Too Many Requests`：
 
@@ -531,4 +554,4 @@ python run_task3_langgraph.py
    - 澄清门控
    - SQL 与证据融合
    - `references`
-4. 之后再考虑接任务三图表链与更强 rerank
+4. 之后继续优化 task3 图表策略与更强 rerank

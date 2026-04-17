@@ -52,6 +52,10 @@ class Task3LangGraphConfig:
         return self.artifacts_dir / "retrieval"
 
     @property
+    def chart_spec_dir(self) -> Path:
+        return self.artifacts_dir / "chart_specs"
+
+    @property
     def vector_store_dir(self) -> Path:
         return self.artifacts_dir / "vector_store"
 

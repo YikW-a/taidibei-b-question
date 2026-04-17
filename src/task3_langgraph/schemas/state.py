@@ -18,6 +18,7 @@ class Task3GraphState(TypedDict, total=False):
     parsed_slots: dict[str, Any]
     missing_slots: list[str]
     needs_clarification: bool
+    reuse_prior_context: bool
 
     query_plan: dict[str, Any]
     retrieval_plan: dict[str, Any]
@@ -39,6 +40,12 @@ class Task3GraphState(TypedDict, total=False):
     rerank_preview: str
     fused_context: dict[str, Any]
     self_check: dict[str, Any]
+    chart_plan: dict[str, Any]
+    chart_spec: dict[str, Any]
+    current_chart_paths: list[str]
+    all_chart_paths: list[str]
+    current_chart_specs: list[str]
+    all_chart_specs: list[str]
 
     current_answer: str
     current_references: list[dict[str, Any]]

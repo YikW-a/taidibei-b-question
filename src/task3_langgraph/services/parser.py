@@ -12,20 +12,34 @@ from ..schemas import ParsedTask3Intent, QuestionRecord
 QUESTION_KEYWORDS_TO_METRICS = {
     "营业总收入": "营业总收入",
     "主营业务收入": "营业总收入",
+    "营业收入": "营业总收入",
+    "销售额": "营业总收入",
+    "营收": "营业总收入",
     "收入": "营业总收入",
     "净利润": "净利润",
+    "利润": "净利润",
     "利润总额": "利润总额",
     "毛利率": "销售毛利率",
     "净利率": "销售净利率",
+    "净利润率": "销售净利率",
     "资产负债率": "资产负债率",
     "经营性现金流量净额": "经营性现金流量净额",
     "投资性现金流量净额": "投资性现金流量净额",
     "货币资金": "货币资金",
     "短期借款": "短期借款",
+    "营业成本": "营业成本",
+    "销售费用": "销售费用",
+    "管理费用": "管理费用",
     "研发费用": "研发费用",
     "研发费用占比": "研发费用占比",
     "未分配利润": "未分配利润",
     "存货周转率": "存货周转率",
+    "总资产": "总资产",
+    "股东权益总额": "股东权益总额",
+    "股东权益": "股东权益总额",
+    "应收账款": "应收账款",
+    "海外业务收入": "海外业务收入",
+    "主营业务类型": "主营业务类型",
     "收益率": "ROE",
     "净资产收益率": "ROE",
 }
@@ -40,12 +54,30 @@ TOPIC_KEYWORDS = [
     "渠道",
     "改革",
     "行业",
+    "中药材",
+    "价格",
+    "价格波动",
+    "趋势",
+    "预测",
+    "供需",
+    "库存",
+    "种植",
+    "气候",
+    "成本控制",
+    "成本结构",
+    "业务类型",
+    "主营业务类型",
     "原因",
     "归因",
     "驱动",
     "风险",
     "催化",
 ]
+
+CHART_TOKENS = ["可视化", "绘图", "画图", "图表", "柱状图", "折线图", "饼图", "雷达图", "散点图", "直方图", "箱线图"]
+REASON_TOKENS = ["原因", "归因", "为什么", "驱动", "怎么看", "分析"]
+INDUSTRY_OPEN_TOKENS = ["行业", "板块", "景气度", "趋势", "预测", "中药材", "价格波动", "供需", "库存", "种植", "气候"]
+SCREENING_TOKENS = ["有哪些", "哪些", "哪几家", "前十", "前五", "前三", "最高", "最低", "超过", "高于", "低于", "不低于", "不超过", "统计", "找出", "列出", "筛选", "数量"]
 
 COMMON_COMPANY_ALIASES = {
     "999": "华润三九",
@@ -57,13 +89,19 @@ COMMON_COMPANY_ALIASES = {
 
 PERIOD_PATTERNS = [
     (r"(\d{4})年前三季度", lambda y: f"{y}Q3"),
+    (r"(\d{4})前三季度", lambda y: f"{y}Q3"),
     (r"(\d{4})年第三季度", lambda y: f"{y}Q3"),
+    (r"(\d{4})第三季度", lambda y: f"{y}Q3"),
     (r"(\d{4})年第二季度", lambda y: f"{y}Q2"),
+    (r"(\d{4})第二季度", lambda y: f"{y}Q2"),
     (r"(\d{4})年第一季度", lambda y: f"{y}Q1"),
+    (r"(\d{4})第一季度", lambda y: f"{y}Q1"),
     (r"(\d{4})年半年度", lambda y: f"{y}H1"),
     (r"(\d{4})年上半年", lambda y: f"{y}H1"),
+    (r"(\d{4})上半年", lambda y: f"{y}H1"),
     (r"(\d{4})年全年", lambda y: f"{y}FY"),
     (r"(\d{4})年年度", lambda y: f"{y}FY"),
+    (r"(\d{4})年度", lambda y: f"{y}FY"),
 ]
 
 
@@ -108,21 +146,19 @@ class Task3IntentParser:
         focus_topics = self._extract_topics(text)
         top_n = self._extract_top_n(text)
         threshold = self._extract_threshold(text)
-        intent_type = self._classify_intent(text, companies, metrics, periods, focus_topics)
-        needs_sql = bool(metrics or periods or any(token in text for token in ["top", "前十", "前五", "前三", "最高", "最低"]))
-        needs_retrieval = True
+        route = self._classify_route(text, companies, metrics, periods, focus_topics, top_n, threshold)
         return ParsedTask3Intent(
-            intent_type=intent_type,
+            intent_type=route["intent_type"],
             companies=companies,
             stock_codes=stock_codes,
             metrics=metrics,
             periods=periods,
             focus_topics=focus_topics,
-            needs_sql=needs_sql,
-            needs_retrieval=needs_retrieval,
+            needs_sql=route["needs_sql"],
+            needs_retrieval=route["needs_retrieval"],
             top_n=top_n,
             threshold=threshold,
-            notes=[],
+            notes=route["notes"],
         )
 
     def _extract_companies(self, text: str) -> tuple[list[str], list[str]]:
@@ -199,21 +235,78 @@ class Task3IntentParser:
             return value / 10000
         return value
 
-    def _classify_intent(
+    def _classify_route(
         self,
         text: str,
         companies: list[str],
         metrics: list[str],
         periods: list[str],
         focus_topics: list[str],
-    ) -> str:
-        if any(word in text for word in ["原因", "归因", "为什么", "驱动", "怎么看", "分析"]):
-            return "hybrid_sql_rag" if (companies or metrics or periods) else "rag_only"
-        if metrics or periods:
-            return "hybrid_sql_rag" if focus_topics else "sql_only"
-        if companies or focus_topics:
-            return "rag_only"
-        return "open_analysis"
+        top_n: int | None,
+        threshold: float | None,
+    ) -> dict[str, object]:
+        has_chart = any(token in text for token in CHART_TOKENS)
+        has_reason = any(word in text for word in REASON_TOKENS)
+        is_industry_open = any(token in text for token in INDUSTRY_OPEN_TOKENS)
+        has_screening = bool(
+            top_n is not None
+            or threshold is not None
+            or any(token in text for token in SCREENING_TOKENS)
+            or "所有公司" in text
+            or "各公司" in text
+            or "企业" in text
+        )
+        has_sql_signal = bool(metrics or periods or top_n is not None or threshold is not None or has_screening)
+        notes: list[str] = []
+
+        if has_chart and has_sql_signal and not has_reason:
+            return {
+                "intent_type": "sql_chart",
+                "needs_sql": True,
+                "needs_retrieval": False,
+                "notes": ["route=sql_chart"],
+            }
+        if has_reason:
+            return {
+                "intent_type": "causal_analysis",
+                "needs_sql": bool(has_sql_signal),
+                "needs_retrieval": True,
+                "notes": ["route=causal_analysis"],
+            }
+        if is_industry_open and not companies and not has_sql_signal:
+            return {
+                "intent_type": "industry_open_analysis",
+                "needs_sql": False,
+                "needs_retrieval": True,
+                "notes": ["route=industry_open_analysis"],
+            }
+        if has_sql_signal and not focus_topics and not is_industry_open:
+            return {
+                "intent_type": "sql_only",
+                "needs_sql": True,
+                "needs_retrieval": False,
+                "notes": ["route=sql_only"],
+            }
+        if has_sql_signal and (focus_topics or is_industry_open):
+            return {
+                "intent_type": "hybrid_sql_rag",
+                "needs_sql": True,
+                "needs_retrieval": True,
+                "notes": ["route=hybrid_sql_rag"],
+            }
+        if companies or focus_topics or is_industry_open:
+            return {
+                "intent_type": "rag_only" if not is_industry_open else "industry_open_analysis",
+                "needs_sql": False,
+                "needs_retrieval": True,
+                "notes": ["route=rag_only" if not is_industry_open else "route=industry_open_analysis"],
+            }
+        return {
+            "intent_type": "open_analysis",
+            "needs_sql": False,
+            "needs_retrieval": True,
+            "notes": notes,
+        }
 
     @staticmethod
     def _normalize_company_text(text: str) -> str:
@@ -223,4 +316,3 @@ class Task3IntentParser:
 
 
 __all__ = ["Task3IntentParser", "load_questions"]
-
