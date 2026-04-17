@@ -128,6 +128,22 @@
       - `/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/tools/chart_spec.py`
     - 题目明确要求绘图/可视化时，会强制尝试生图
     - 生成图片路径会写入 `A.image`
+16. 当前 task3 已引入更细的题型路由：
+    - `sql_only`
+    - `sql_chart`
+    - `causal_analysis`
+    - `industry_open_analysis`
+    - `hybrid_sql_rag`
+17. 当前 task3 已完成一轮性能收口：
+    - planning 合并
+    - SQL / retrieval 缓存
+    - rerank / self_check / rewrite 触发范围收紧
+    - 纯 SQL 题、纯图表题、单公司归因题更容易走短路径
+    - 例如 `B2003` 单题耗时已从约 `181s` 压到约 `67s`
+18. 当前 task3 已达到“可初步提交、仍需继续收口”的状态：
+    - 主链可用
+    - 输出结构已收敛
+    - 后续重点不再是补骨架，而是全量质量回归、引用质量提纯、图表策略和性能继续收口
 
 当前任务三已经从“纯骨架”进入“可用第一版”，但还处在小样本调优阶段，不是最终效果版。
 
@@ -179,6 +195,10 @@
    - SQL 缓存
    - retrieval 缓存
    - rerank / self_check / rewrite 触发条件收紧
+6. 当前更推荐的推进方式是：
+   - 先跑更大批次甚至全量
+   - 再按真实耗时和失败题做定向收口
+   - 不再优先继续补新模块
 
 ---
 

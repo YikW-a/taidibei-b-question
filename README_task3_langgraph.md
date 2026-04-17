@@ -57,6 +57,23 @@
      - [src/task3_langgraph/tools/chart_spec.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/tools/chart_spec.py)
    - 题目明确要求绘图时，会强制尝试生图
    - 生成图片路径会写入 `A.image`
+9. 当前 task3 已引入更细的题型路由：
+   - `sql_only`
+   - `sql_chart`
+   - `causal_analysis`
+   - `industry_open_analysis`
+   - `hybrid_sql_rag`
+10. 当前已完成一轮面向复杂题的性能收口：
+   - 纯 SQL 题、纯图表题更容易走短路径
+   - 单公司同源证据的归因题更容易跳过 `rerank/self_check`
+   - 例如 `B2003` 单题已从约 `181s` 逐步压到约 `67s`
+11. 当前 task3 已进入“可初步提交、仍需继续收口”的阶段：
+   - 数据准备层已完成
+   - `SQL + RAG + chart + references` 主链已接通
+   - 后续主要工作转为：
+     - 全量质量回归
+     - `references` 质量提纯
+     - 图表策略与性能继续收口
 
 附件 5 中这两个信息表会在三个阶段用到：
 
@@ -139,7 +156,35 @@ flowchart TD
 
 ---
 
-## 4. 当前检索实现
+## 4. 当前题型路由
+
+当前 task3 不再把所有问题统一处理为同一种 `hybrid_sql_rag`，而是先做题型路由，再决定链路长度：
+
+- `sql_only`
+  - 适用于 TopN、筛选、直接数值列举、单轮数据库问数题。
+  - 默认 `needs_sql=true`、`needs_retrieval=false`。
+- `sql_chart`
+  - 适用于“先查数，再绘图”的题。
+  - 默认 `needs_sql=true`、`needs_retrieval=false`，优先走 `SQL -> chart -> answer` 短路径。
+- `causal_analysis`
+  - 适用于“为什么/原因/驱动/依据/关系/共同点”类题。
+  - 默认保留 `SQL + RAG`。
+  - 对单公司、同源个股证据且证据不多的场景，会更积极跳过 `rerank/self_check`。
+- `industry_open_analysis`
+  - 适用于行业趋势、政策、景气度、价格波动、未来判断等开放分析题。
+  - 默认 `needs_retrieval=true`、`source_scope=industry`，避免误追问具体公司。
+- `hybrid_sql_rag`
+  - 适用于既要查数据库，又要给出研报证据支撑的复杂题。
+
+这一层路由的作用是：
+
+1. 把纯 SQL 题和纯图表题从长链路里拆出来。
+2. 让归因题优先保留定性证据解释能力。
+3. 让行业开放题不再误走“补具体公司”的错误分支。
+
+---
+
+## 5. 当前检索实现
 
 现在已经支持三层骨架：
 
@@ -280,8 +325,8 @@ chunk 当前已经升级成“标题/段落优先”的策略：
 
 当前要明确一点：
 - 这些提速策略已经接入
-- 但复杂多轮题仍然可能较慢
-- 例如 `B2003` 单题实测仍约 `181s`
+- 复杂多轮题仍然可能较慢，但最慢题已经明显压缩
+- 例如 `B2003` 单题已从约 `181s` 压到约 `67s`
 
 所以任务三当前状态是：
 - **已经开始提速**
@@ -317,6 +362,24 @@ chunk 当前已经升级成“标题/段落优先”的策略：
 - `问题`
 - `SQL 查询语句`
 - `回答`
+
+其中 `回答` 内 `A` 的字段顺序固定为：
+
+- `content`
+- `image`
+- `references`
+
+当前 `references` 只保留：
+
+- `paper_path`
+- `text`
+- `paper_image`
+
+并且：
+
+- `paper_path` 使用相对路径
+- `paper_image` 不表示图片文件路径，而表示命中的 PDF 图表/表格“编号 + 标题”
+- 若未命中图表/表格，则省略 `paper_image`
 
 ---
 
