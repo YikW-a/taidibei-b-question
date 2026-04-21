@@ -19,14 +19,24 @@ def detect_unit(text: str | None) -> str | None:
     if not text:
         return None
     text = str(text)
+    amount_unit = detect_amount_unit(text)
+    if amount_unit:
+        return amount_unit
+    if "%" in text or "率" in text or "同比" in text or "环比" in text:
+        return "%"
+    return None
+
+
+def detect_amount_unit(text: str | None) -> str | None:
+    if not text:
+        return None
+    text = str(text)
     if "亿元" in text:
         return "亿元"
     if "万元" in text:
         return "万元"
     if "元" in text:
         return "元"
-    if "%" in text or "率" in text or "同比" in text or "环比" in text:
-        return "%"
     return None
 
 
@@ -44,6 +54,8 @@ def parse_numeric(value: Any, unit_hint: str | None = None) -> float | None:
             negative = True
             text = text[1:-1]
         text = text.replace(",", "").replace("，", "")
+        text = text.replace("－", "-").replace("＋", "+")
+        text = re.sub(r"^([+-])\s+", r"\1", text)
         percent_in_value = "%" in text
         text = text.replace("%", "")
         unit_in_value = detect_unit(text)
@@ -69,6 +81,37 @@ def parse_numeric(value: Any, unit_hint: str | None = None) -> float | None:
         if effective_unit == "元":
             return numeric / 10000
     return numeric
+
+
+def parse_numeric_plain(value: Any) -> float | None:
+    if value is None:
+        return None
+    if isinstance(value, (int, float)):
+        return float(value)
+    text = str(value).strip()
+    if text in {"", "--", "—", "N/A", "nan", "None"}:
+        return None
+    negative = False
+    if text.startswith("(") and text.endswith(")"):
+        negative = True
+        text = text[1:-1]
+    text = text.replace(",", "").replace("，", "")
+    text = text.replace("－", "-").replace("＋", "+")
+    text = re.sub(r"^([+-])\s+", r"\1", text)
+    text = text.replace("%", "")
+    text = text.replace("亿元", "").replace("万元", "").replace("元", "")
+    text = text.replace("股", "")
+    text = text.strip()
+    if text in {"", "--", "—"}:
+        return None
+    try:
+        numeric = float(text)
+    except ValueError:
+        match = re.search(r"-?\d+(?:\.\d+)?", text)
+        if not match:
+            return None
+        numeric = float(match.group(0))
+    return -numeric if negative else numeric
 
 
 FIELDS_KEEP_YUAN = {
@@ -98,20 +141,18 @@ FIELDS_PERCENT = {
 
 
 def convert_for_field(field_name: str, raw_value: Any, source_unit: str | None) -> float | None:
-    raw_numeric = parse_numeric(raw_value, None)
+    raw_numeric = parse_numeric_plain(raw_value)
     if raw_numeric is None:
         return None
     if field_name in FIELDS_PERCENT:
         return parse_numeric(raw_value, "%")
+    explicit_unit = detect_amount_unit(str(raw_value))
     if field_name in FIELDS_KEEP_YUAN:
-        if source_unit == "亿元":
-            return raw_numeric * 100000000
-        if source_unit == "万元":
-            return raw_numeric * 10000
         return raw_numeric
-    if source_unit == "亿元":
+    effective_unit = explicit_unit or source_unit
+    if effective_unit == "亿元":
         return raw_numeric * 10000
-    if source_unit == "元":
+    if effective_unit == "元":
         return raw_numeric / 10000
     return raw_numeric
 

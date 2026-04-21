@@ -177,6 +177,13 @@ class Task3Runtime:
         context_rows: list[dict[str, Any]] | None = None,
     ) -> tuple[dict[str, object], dict[str, object]]:
         intent_type = str(parsed_slots.get("intent_type", "") or "")
+        retrieval_must_run = bool(parsed_slots.get("needs_retrieval", True)) or intent_type in {
+            "causal_analysis",
+            "industry_open_analysis",
+            "hybrid_sql_rag",
+            "rag_only",
+            "open_analysis",
+        }
         default_needs_retrieval = bool(parsed_slots.get("needs_retrieval", True))
         default_source_scope = "hybrid"
         default_top_k = 5
@@ -224,6 +231,19 @@ class Task3Runtime:
             retrieval_plan = dict(default_retrieval_plan)
             query_plan.update({k: v for k, v in dict(payload.get("query_plan", {}) or {}).items() if v is not None})
             retrieval_plan.update({k: v for k, v in dict(payload.get("retrieval_plan", {}) or {}).items() if v is not None})
+            if parsed_slots.get("metrics"):
+                query_plan["metrics"] = list(parsed_slots.get("metrics", []) or [])
+            if parsed_slots.get("periods"):
+                query_plan["periods"] = list(parsed_slots.get("periods", []) or [])
+            if parsed_slots.get("companies"):
+                query_plan["companies"] = list(parsed_slots.get("companies", []) or [])
+            if retrieval_must_run:
+                retrieval_plan["needs_retrieval"] = True
+                retrieval_plan["top_k"] = max(int(retrieval_plan.get("top_k", 5) or 5), default_top_k or 5)
+                if not retrieval_plan.get("companies") and parsed_slots.get("companies"):
+                    retrieval_plan["companies"] = list(parsed_slots.get("companies", []) or [])
+                if not retrieval_plan.get("focus_topics") and parsed_slots.get("focus_topics"):
+                    retrieval_plan["focus_topics"] = list(parsed_slots.get("focus_topics", []) or [])
             retrieval_plan = self._normalize_retrieval_plan(question, retrieval_plan, parsed_slots)
             return query_plan, retrieval_plan
         except Exception:
@@ -595,6 +615,9 @@ class Task3Runtime:
         query_result: pd.DataFrame,
         evidences: list[dict[str, Any]],
     ) -> str:
+        deterministic = self._deterministic_sql_answer(question, query_plan or {}, query_result)
+        if deterministic:
+            return deterministic
         system_prompt = self.prompt_manager.load("answer_generation_system")
         answer_constraints = self._derive_answer_constraints(question, query_plan or {}, query_result)
         user_prompt = (
@@ -607,6 +630,75 @@ class Task3Runtime:
             "请直接给出中文回答。"
         )
         return self.llm_client.chat(system_prompt, user_prompt, temperature=0.2).strip()
+
+    def _deterministic_sql_answer(
+        self,
+        question: str,
+        query_plan: dict[str, Any],
+        query_result: pd.DataFrame,
+    ) -> str:
+        intent_type = str(query_plan.get("intent_type", "") or "")
+        threshold = query_plan.get("threshold")
+        top_n = query_plan.get("top_n")
+        metrics = list(query_plan.get("metrics", []) or [])
+        if intent_type not in {"sql_only", "sql_chart"}:
+            return ""
+        if threshold in (None, "") and top_n in (None, ""):
+            return ""
+        if not metrics:
+            return ""
+        metric_label = str(metrics[0])
+        if query_result.empty:
+            threshold_text = ""
+            if threshold not in (None, ""):
+                threshold_text = f"超过{float(threshold) / 10000:.0f}亿元" if float(threshold) >= 10000 else f"超过{threshold}"
+            return (
+                f"根据查询结果，当前数据库中未找到满足条件的公司。"
+                f"{' 条件为：' + threshold_text if threshold_text else ''}"
+            ).strip()
+        if not {"stock_abbr", "stock_code"}.issubset(query_result.columns):
+            return ""
+        value_field = None
+        for candidate in ["total_operating_revenue", "net_profit", "total_profit", "roe"]:
+            if candidate in query_result.columns:
+                value_field = candidate
+                break
+        if value_field is None:
+            numeric_cols = [col for col in query_result.columns if pd.to_numeric(query_result[col], errors="coerce").notna().sum() > 0]
+            value_field = numeric_cols[0] if numeric_cols else None
+        if value_field is None:
+            return ""
+        rows = query_result.head(int(top_n or len(query_result))).to_dict(orient="records")
+        lines = []
+        for idx, row in enumerate(rows, start=1):
+            stock_abbr = str(row.get("stock_abbr", "") or "").strip()
+            stock_code = str(row.get("stock_code", "") or "").strip()
+            raw_value = row.get(value_field)
+            if raw_value is None or raw_value == "":
+                continue
+            try:
+                value = float(raw_value)
+            except Exception:
+                continue
+            if metric_label in {"营业总收入", "主营业务收入", "营业收入"}:
+                value_text = f"{value / 10000:.2f}亿元"
+            elif metric_label in {"净利润", "利润总额"}:
+                value_text = f"{value / 10000:.2f}亿元" if abs(value) >= 10000 else f"{value:.2f}万元"
+            elif metric_label == "ROE":
+                value_text = f"{value:.2f}%"
+            else:
+                value_text = f"{value:.2f}"
+            lines.append(f"{idx}. **{stock_abbr} ({stock_code})**：{metric_label}为{value_text}。")
+        if not lines:
+            return ""
+        prefix = "根据SQL查询结果，满足条件的公司如下："
+        if "共同点" in question:
+            prefix = "根据SQL查询结果，这些公司的共同点如下："
+        summary = ""
+        if "共同点" in question and metric_label in {"营业总收入", "主营业务收入", "营业收入"} and threshold not in (None, ""):
+            threshold_text = f"{float(threshold) / 10000:.0f}亿元" if float(threshold) >= 10000 else str(threshold)
+            summary = f"\n\n**直接结论**：这些公司在当前报告期的{metric_label}均超过{threshold_text}，属于该指标规模最高的一组公司。"
+        return prefix + "\n" + "\n".join(lines) + summary
 
     def rewrite_answer(
         self,
@@ -637,6 +729,11 @@ class Task3Runtime:
         metadata_ref = str(evidence.get("metadata_ref", "") or "")
         metadata = self.report_metadata_lookup.get(metadata_ref, {}) if metadata_ref else {}
         reference_chunk = self._select_reference_chunk(evidence, question=question)
+        visual_chunk = self._select_visual_reference_chunk(
+            evidence,
+            reference_chunk=reference_chunk,
+            question=question,
+        )
         chunk_text = (
             str(evidence.get("text", "") or "")
             or str(reference_chunk.get("text", "") or "")
@@ -645,8 +742,12 @@ class Task3Runtime:
         figure_refs = list(evidence.get("figure_table_refs", []) or [])
         if not figure_refs:
             figure_refs = list(reference_chunk.get("figure_table_refs", []) or [])
+        if not figure_refs and visual_chunk:
+            figure_refs = list(visual_chunk.get("figure_table_refs", []) or [])
         visual_caption = self._format_visual_caption(
-            evidence.get("visual_caption") or reference_chunk.get("visual_caption")
+            evidence.get("visual_caption")
+            or reference_chunk.get("visual_caption")
+            or (visual_chunk or {}).get("visual_caption")
         )
         paper_image = ""
         if figure_refs:
@@ -675,6 +776,49 @@ class Task3Runtime:
         if paper_image:
             reference["paper_image"] = paper_image
         return reference
+
+    def build_references(
+        self,
+        evidences: list[dict[str, Any]],
+        *,
+        question: str = "",
+        limit: int = 5,
+    ) -> list[dict[str, Any]]:
+        if limit <= 0:
+            return []
+        evidence_list = list(evidences or [])
+        initial = evidence_list[:limit]
+        references = [self.enrich_reference(item, question=question) for item in initial]
+        if any(ref.get("paper_image") for ref in references):
+            return references
+        fallback_reference: dict[str, Any] | None = None
+        for item in evidence_list[limit: min(len(evidence_list), 20)]:
+            candidate = self.enrich_reference(item, question=question)
+            if candidate.get("paper_image"):
+                fallback_reference = candidate
+                break
+        if not fallback_reference:
+            return references
+        fallback_key = (
+            fallback_reference.get("paper_path", ""),
+            fallback_reference.get("text", ""),
+            fallback_reference.get("paper_image", ""),
+        )
+        existing_keys = {
+            (
+                ref.get("paper_path", ""),
+                ref.get("text", ""),
+                ref.get("paper_image", ""),
+            )
+            for ref in references
+        }
+        if fallback_key in existing_keys:
+            return references
+        if len(references) < limit:
+            references.append(fallback_reference)
+            return references
+        references[-1] = fallback_reference
+        return references
 
     def canonicalize_company_name(self, value: str) -> str:
         text = str(value or "").strip()
@@ -998,6 +1142,55 @@ class Task3Runtime:
                 best_chunk = chunk
         return best_chunk
 
+    def _select_visual_reference_chunk(
+        self,
+        evidence: dict[str, Any],
+        *,
+        reference_chunk: dict[str, Any] | None = None,
+        question: str = "",
+    ) -> dict[str, Any]:
+        metadata_ref = str(evidence.get("metadata_ref", "") or "").strip()
+        candidates = self.chunks_by_metadata_ref.get(metadata_ref, []) if metadata_ref else []
+        visual_candidates = [chunk for chunk in candidates if str(chunk.get("chunk_type", "") or "") == "visual_caption"]
+        if not visual_candidates:
+            return {}
+        question_terms = self._question_terms(question)
+        reference_chunk = reference_chunk or {}
+        reference_page = int(
+            reference_chunk.get("page_start")
+            or reference_chunk.get("page")
+            or evidence.get("page_start")
+            or evidence.get("page")
+            or 0
+        )
+        company_or_industry = str(evidence.get("company_or_industry", "") or "")
+        best_score = float("-inf")
+        best_chunk: dict[str, Any] = {}
+        for chunk in visual_candidates:
+            score = 0.0
+            text = str(chunk.get("text", "") or "")
+            caption = self._format_visual_caption(chunk.get("visual_caption"))
+            page = int(chunk.get("page_start") or chunk.get("page") or 0)
+            if caption:
+                score += 1.0
+            if company_or_industry and (company_or_industry in text or company_or_industry in caption):
+                score += 1.5
+            for term in question_terms:
+                if term and (term in text or term in caption):
+                    score += 1.0
+            if reference_page and page:
+                gap = abs(reference_page - page)
+                if gap == 0:
+                    score += 1.2
+                elif gap <= 2:
+                    score += 0.6
+                elif gap <= 4:
+                    score += 0.2
+            if score > best_score:
+                best_score = score
+                best_chunk = chunk
+        return best_chunk if best_score >= 1.0 else {}
+
     def _derive_answer_constraints(
         self,
         question: str,
@@ -1058,6 +1251,22 @@ class Task3Runtime:
         focus_topics = list(plan.get("focus_topics", []) or parsed_slots.get("focus_topics", []) or [])
         focus_topics = self._augment_focus_topics(question, focus_topics)
         intent_type = str(parsed_slots.get("intent_type", "") or "")
+        retrieval_must_run = any(
+            token in question
+            for token in [
+                "结合研报",
+                "结合个股研报",
+                "结合行业研报",
+                "检索研报",
+                "研报中",
+                "提取研报",
+                "提取研报观点",
+                "提取观点",
+                "观点",
+                "风险预警",
+                "说明",
+            ]
+        )
         if any(token in question for token in ["未来", "趋势", "预测", "价格波动", "中药材价格"]):
             companies = []
         source_scope = self._normalize_source_scope(question, plan.get("source_scope"), companies, focus_topics)
@@ -1065,12 +1274,15 @@ class Task3Runtime:
         top_k = int(plan.get("top_k", 5) or 5)
         needs_retrieval = bool(plan.get("needs_retrieval", parsed_slots.get("needs_retrieval", True)))
         if intent_type in {"sql_only", "sql_chart"}:
-            needs_retrieval = False
-            top_k = 0
+            needs_retrieval = retrieval_must_run
+            top_k = max(top_k, 8) if retrieval_must_run else 0
         elif intent_type == "industry_open_analysis":
             source_scope = "industry"
             top_k = max(top_k, 8)
         elif intent_type == "causal_analysis":
+            top_k = max(top_k, 8)
+        if retrieval_must_run:
+            needs_retrieval = True
             top_k = max(top_k, 8)
         if any(token in question for token in ["为什么", "原因", "驱动"]) and companies:
             top_k = max(top_k, 8)
@@ -1132,6 +1344,12 @@ class Task3Runtime:
             return "stock" if companies else "hybrid"
         if any(token in joined for token in ["industry_report", "sector", "行业", "板块"]):
             return "industry" if not companies else "hybrid"
+        if any(token in question for token in ["结合个股研报", "个股研报", "业绩预告", "FDA", "资产重组", "海外市场拓展"]):
+            return "stock" if companies else "hybrid"
+        if any(token in question for token in ["结合行业研报", "政策研报", "行业研报", "行业周报", "投资策略", "行业趋势", "景气度"]):
+            return "industry" if not companies else "hybrid"
+        if not companies and any(token in question for token in ["新品上市周期", "研发投入结构", "大健康产品布局", "大健康"]):
+            return "industry"
         if companies:
             if any(token in question for token in ["行业", "景气度", "关系", "影响", "对比", "趋势"]):
                 return "hybrid"
@@ -1161,6 +1379,26 @@ class Task3Runtime:
             for token in ["增长驱动", "业务结构", "市场拓展", "产品线", "品牌", "渠道"]:
                 if token not in augmented:
                     augmented.append(token)
+        if any(token in question for token in ["海外市场拓展", "海外拓展", "出海"]):
+            for token in ["海外市场拓展", "海外拓展", "出海", "国际化", "海外业务", "出口"]:
+                if token not in augmented:
+                    augmented.append(token)
+        if any(token in question for token in ["人工智能", "产业升级", "AI"]):
+            for token in ["人工智能", "产业升级", "AI", "智能化", "数字化", "信息化"]:
+                if token not in augmented:
+                    augmented.append(token)
+        if any(token in question for token in ["资产重组", "并购重组"]):
+            for token in ["资产重组", "重大资产重组", "并购", "重组", "控制权变更", "股权转让"]:
+                if token not in augmented:
+                    augmented.append(token)
+        if any(token in question for token in ["FDA", "认证"]):
+            for token in ["FDA", "FDA认证", "认证", "海外注册", "国际认证"]:
+                if token not in augmented:
+                    augmented.append(token)
+        if "业绩预告" in question:
+            for token in ["业绩预告", "预告", "净利润预告", "业绩快报"]:
+                if token not in augmented:
+                    augmented.append(token)
         if any(token in question for token in ["主营业务收入", "营业总收入", "营业收入"]):
             for token in ["主营业务收入", "营业总收入", "收入增长"]:
                 if token not in augmented:
@@ -1171,6 +1409,32 @@ class Task3Runtime:
                     augmented.append(token)
         if any(token in question for token in ["中药材", "价格波动", "价格趋势", "趋势", "供需", "库存", "种植", "气候"]):
             for token in ["中药材", "价格", "价格波动", "趋势", "供需", "库存", "种植", "气候", "政策", "中药"]:
+                if token not in augmented:
+                    augmented.append(token)
+        if any(token in question for token in ["偿债风险", "偿债能力", "流动比率"]):
+            for token in ["偿债风险", "偿债能力", "流动比率", "短期偿债", "现金流", "负债"]:
+                if token not in augmented:
+                    augmented.append(token)
+        if any(token in question for token in ["投资项目", "投资性现金流"]):
+            for token in ["投资项目", "投资说明", "资本开支", "投资性现金流", "扩产"]:
+                if token not in augmented:
+                    augmented.append(token)
+        if any(token in question for token in ["大健康", "新品上市周期", "研发投入结构", "种植基地", "订单农业", "基地共建"]):
+            for token in [
+                "大健康",
+                "新品上市",
+                "新品上市周期",
+                "新药上市",
+                "研发投入结构",
+                "研发投入",
+                "研发费用",
+                "研发强度",
+                "研发管线",
+                "创新管线",
+                "种植基地",
+                "订单农业",
+                "基地共建",
+            ]:
                 if token not in augmented:
                     augmented.append(token)
         return augmented
@@ -1495,11 +1759,26 @@ class Task3Runtime:
             return
         if not self.config.build_index_on_start:
             current_meta = self.vector_store.load_index_meta()
-            if not self.vector_store.has_index():
+            persisted_chunks = self.vector_store.load_chunks()
+            has_persisted_faiss = self.vector_store.faiss_index_path.exists()
+            if self.vector_store.has_index():
+                if current_meta:
+                    current_meta.setdefault("index_status", "ready")
+                    self.vector_store.save_index_meta(current_meta)
+                return
+            if persisted_chunks and has_persisted_faiss:
+                repaired_meta = dict(current_meta)
+                repaired_meta.setdefault("index_type", self.vector_store._preferred_index_type())
+                repaired_meta.setdefault(
+                    "embedding_provider",
+                    "openai-compatible" if self.embedding_client else "not_configured",
+                )
+                repaired_meta.setdefault("embedding_model", self.config.embedding_model or "")
+                repaired_meta["chunk_count"] = int(repaired_meta.get("chunk_count", len(persisted_chunks)) or len(persisted_chunks))
+                repaired_meta["index_status"] = "ready"
+                self.vector_store.save_index_meta(repaired_meta)
+            else:
                 self._write_vector_store_meta()
-            elif current_meta:
-                current_meta.setdefault("index_status", "ready")
-                self.vector_store.save_index_meta(current_meta)
             return
         indexed_chunk_count = min(self.config.index_limit or len(self.chunk_manifest), len(self.chunk_manifest))
         current_meta = self.vector_store.load_index_meta()

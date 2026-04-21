@@ -4,26 +4,15 @@ import argparse
 import json
 from pathlib import Path
 
-from ..config.settings import Task2LangGraphConfig
 from ..graph.runner import Task2LangGraphPrototype
-
-
-def _load_env_file(path: Path) -> dict[str, str]:
-    if not path.exists():
-        return {}
-    values: dict[str, str] = {}
-    for raw_line in path.read_text(encoding="utf-8").splitlines():
-        line = raw_line.strip()
-        if not line or line.startswith("#") or "=" not in line:
-            continue
-        key, value = line.split("=", 1)
-        values[key.strip()] = value.strip().strip('"').strip("'")
-    return values
+from .common import resolve_config
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Task 2 LangGraph prototype")
     parser.add_argument("--base-dir", type=Path, default=Path.cwd(), help="项目根目录")
+    parser.add_argument("--question-file", type=Path, default=None, help="问题文件路径，默认读取附件4")
+    parser.add_argument("--output-dir", type=Path, default=None, help="输出目录，默认 outputs/task2_langgraph")
     parser.add_argument("--question-id", type=str, default=None, help="单题原型调试，例如 B1006")
     parser.add_argument("--question-ids", type=str, default=None, help="逗号分隔题号列表，例如 B1001,B1006")
     parser.add_argument("--sample-limit", type=int, default=None, help="随机抽样题数")
@@ -31,19 +20,11 @@ def main() -> None:
     parser.add_argument("--llm-config", type=Path, default=None, help="LLM 配置文件，默认读取 configs/task2_llm.env")
     args = parser.parse_args()
 
-    base_config = Task2LangGraphConfig.default(args.base_dir)
-    llm_config_path = args.llm_config or (args.base_dir / "configs/task2_llm.env")
-    file_values = _load_env_file(llm_config_path)
-    config = Task2LangGraphConfig(
-        base_dir=base_config.base_dir,
-        question_file=base_config.question_file,
-        company_info_path=base_config.company_info_path,
-        database_url=base_config.database_url,
-        output_dir=base_config.output_dir,
-        llm_mode="llm",
-        llm_base_url=file_values.get("TASK2_LLM_BASE_URL"),
-        llm_api_key=file_values.get("TASK2_LLM_API_KEY"),
-        llm_model=file_values.get("TASK2_LLM_MODEL"),
+    config = resolve_config(
+        base_dir=args.base_dir,
+        llm_config=args.llm_config,
+        question_file=args.question_file,
+        output_dir=args.output_dir,
     )
     runner = Task2LangGraphPrototype(config)
 

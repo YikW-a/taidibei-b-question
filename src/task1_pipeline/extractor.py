@@ -59,13 +59,19 @@ class PDFExtractor:
                 "max_span": 6,
             },
             "income_sheet": {
-                "start": ["合并利润表", "3、合并利润表"],
-                "stop": ["母公司利润表", "4、合并现金流量表", "合并现金流量表"],
+                "start": ["合并利润表", "合并年初到报告期末利润表", "3、合并利润表"],
+                "stop": ["母公司利润表", "4、合并现金流量表", "合并现金流量表", "合并年初到报告期末现金流量表"],
                 "max_span": 5,
             },
             "cash_flow_sheet": {
-                "start": ["合并现金流量表", "5、合并现金流量表", "4、合并现金流量表"],
-                "stop": ["母公司现金流量表", "合并所有者权益变动表"],
+                "start": [
+                    "合并现金流量表",
+                    "合并年初到报告期末现金流量表",
+                    "年初到报告期末现金流量表",
+                    "5、合并现金流量表",
+                    "4、合并现金流量表",
+                ],
+                "stop": ["母公司现金流量表", "合并所有者权益变动表", "所有者权益变动表", "审计报告"],
                 "max_span": 5,
             },
             "core_performance_indicators_sheet": {
@@ -80,7 +86,7 @@ class PDFExtractor:
             if not page_indexes:
                 continue
             df = self._combine_pdfplumber_tables(Path(report_file.source_path), page_indexes)
-            unit_hint = self._guess_unit(doc[page_indexes[0]])
+            unit_hint = self._guess_unit(doc[page_indexes[0]], table_name)
             if not df.empty and self._table_quality_score(table_name, df) >= self._quality_threshold(table_name):
                 results.append(
                     ExtractedTable(
@@ -114,23 +120,75 @@ class PDFExtractor:
         stop_markers: list[str],
         max_span: int,
     ) -> list[int]:
-        start_index = None
+        candidate_ranges: list[list[int]] = []
         for i in range(len(doc)):
             text = doc[i].get_text() or ""
-            if any(marker in text for marker in start_markers) and self._page_is_candidate(text, table_name):
-                start_index = i
-                break
-        if start_index is None:
+            if self._has_standalone_table_marker(text, start_markers):
+                candidate_ranges.append(self._collect_page_range(doc, i, stop_markers, max_span))
+        if not candidate_ranges:
             return []
 
+        return max(candidate_ranges, key=lambda pages: self._page_range_candidate_score(doc, table_name, pages))
+
+    def _collect_page_range(
+        self,
+        doc: fitz.Document,
+        start_index: int,
+        stop_markers: list[str],
+        max_span: int,
+    ) -> list[int]:
         pages = [start_index]
         for i in range(start_index + 1, min(len(doc), start_index + max_span)):
             text = doc[i].get_text() or ""
-            if any(marker in text for marker in stop_markers):
+            if self._has_standalone_table_marker(text, stop_markers):
                 pages.append(i)
                 break
             pages.append(i)
         return pages
+
+    def _page_range_candidate_score(self, doc: fitz.Document, table_name: str, page_indexes: list[int]) -> float:
+        text = "\n".join(doc[page_index].get_text() or "" for page_index in page_indexes)
+        normalized = clean_label(text)
+        alias_hits = {
+            clean_label(alias)
+            for alias in FIELD_ALIASES.get(table_name, {})
+            if clean_label(alias) and clean_label(alias) in normalized
+        }
+        digit_count = sum(ch.isdigit() for ch in text)
+        score = len(alias_hits) * 10.0 + min(digit_count / 80.0, 10.0)
+        if re.search(r"单位[:：]?(?:人民币)?(亿元|万元|元)", normalized):
+            score += 8.0
+        if "项目" in normalized:
+            score += 4.0
+
+        required_signals = {
+            "balance_sheet": ["资产总计", "负债合计", "所有者权益"],
+            "income_sheet": ["营业收入", "营业成本", "净利润"],
+            "cash_flow_sheet": ["经营活动产生的现金流量净额", "现金及现金等价物净增加额"],
+            "core_performance_indicators_sheet": ["营业收入", "每股收益", "净资产收益率"],
+        }
+        score += sum(12.0 for signal in required_signals.get(table_name, []) if signal in normalized)
+        if any(marker in normalized for marker in ["受影响的合并", "会计政策变更前", "关联交易", "审计报告"]):
+            score -= 25.0
+        return score
+
+    def _has_standalone_table_marker(self, text: str, markers: list[str]) -> bool:
+        marker_values = [clean_label(marker) for marker in markers if clean_label(marker)]
+        if not marker_values:
+            return False
+        for raw_line in text.splitlines():
+            line = clean_label(raw_line)
+            if not line:
+                continue
+            line = re.sub(r"^[（(]?[一二三四五六七八九十\d]+[）).、\.]*", "", line)
+            line = line.strip(":：")
+            for marker in marker_values:
+                if line == marker:
+                    return True
+                suffix = line[len(marker) :] if line.startswith(marker) else ""
+                if suffix in {"(续)", "续", "续表", "(续表)"}:
+                    return True
+        return False
 
     def _combine_pdfplumber_tables(self, pdf_path: Path, page_indexes: list[int]) -> pd.DataFrame:
         rows: list[list[object]] = []
@@ -182,7 +240,7 @@ class PDFExtractor:
                         source_method=f"pymupdf.find_tables[{idx}]",
                         dataframe=df,
                         raw_title=self._guess_title(page),
-                        unit_hint=self._guess_unit(page),
+                            unit_hint=self._guess_unit(page, table_name),
                     )
                 )
 
@@ -212,7 +270,7 @@ class PDFExtractor:
                     source_method="text_fallback",
                     dataframe=fallback_df,
                     raw_title=self._guess_title(page),
-                    unit_hint=self._guess_unit(page),
+                    unit_hint=self._guess_unit(page, table_name),
                 )
             )
         return results
@@ -278,11 +336,22 @@ class PDFExtractor:
                 return line
         return None
 
-    def _guess_unit(self, page: fitz.Page) -> str | None:
+    def _guess_unit(self, page: fitz.Page, table_name: str | None = None) -> str | None:
         text = page.get_text() or ""
-        for snippet in text.splitlines()[:20]:
+        lines = text.splitlines()[:80]
+        for snippet in lines:
+            normalized = clean_label(snippet)
+            match = re.search(r"单位[:：]?(?:人民币)?(亿元|万元|元)", normalized)
+            if match:
+                return match.group(1)
+            match = re.search(r"单位[:：]?人民币(亿元|万元|元)?", normalized)
+            if match:
+                return match.group(1) or "元"
+        if table_name != "core_performance_indicators_sheet":
+            return None
+        for snippet in lines[:20]:
             unit = detect_unit(snippet)
-            if unit:
+            if unit and unit != "%":
                 return unit
         return None
 

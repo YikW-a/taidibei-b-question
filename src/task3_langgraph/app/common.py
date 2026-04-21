@@ -23,6 +23,9 @@ def resolve_config(
     *,
     base_dir: Path,
     llm_config: Path | None = None,
+    question_file: Path | None = None,
+    output_dir: Path | None = None,
+    knowledge_base_dir: Path | None = None,
     index_limit: int | None = None,
     embedding_batch_size: int | None = None,
     embedding_batch_pause_seconds: float | None = None,
@@ -41,7 +44,7 @@ def resolve_config(
     env = os.environ
     return Task3LangGraphConfig(
         base_dir=base_config.base_dir,
-        question_file=base_config.question_file,
+        question_file=question_file or base_config.question_file,
         company_info_path=base_config.company_info_path,
         stock_report_info_path=base_config.stock_report_info_path,
         industry_report_info_path=base_config.industry_report_info_path,
@@ -49,7 +52,8 @@ def resolve_config(
         stock_report_dir=base_config.stock_report_dir,
         industry_report_dir=base_config.industry_report_dir,
         database_url=base_config.database_url,
-        output_dir=base_config.output_dir,
+        output_dir=output_dir or base_config.output_dir,
+        knowledge_base_dir=knowledge_base_dir,
         llm_mode="llm",
         llm_base_url=env.get("TASK3_LLM_BASE_URL")
         or file_values.get("TASK3_LLM_BASE_URL")

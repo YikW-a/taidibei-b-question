@@ -192,6 +192,7 @@ def clarify_or_continue_node(state: Task3GraphState, ctx: Task3NodeContext) -> T
         "行业" in text
         or "板块" in text
         or any(token in text for token in ["公司数量", "各公司", "所有公司", "企业数量", "中药企业", "中标企业"])
+        or any(token in text for token in ["以2-3家", "以 2-3 家", "2-3家", "两三家", "为例"])
     )
     asks_for_specific_company_after_screening = bool(
         asks_for_specific_company
@@ -274,7 +275,18 @@ def execute_sql_node(state: Task3GraphState, ctx: Task3NodeContext) -> Task3Grap
     if state.get("needs_clarification") or not state.get("query_plan", {}).get("needs_sql"):
         return {**state, "sql_error": "", "final_status": "running"}
     try:
-        df = ctx.runtime.run_sql(state.get("sql", ""))
+        sql = state.get("sql", "")
+        df = ctx.runtime.run_sql(sql)
+        query_plan = dict(state.get("query_plan", {}) or {})
+        normalized_sql = ctx.runtime._normalize_threshold_literals(sql, query_plan) if sql else sql
+        if df.empty and normalized_sql and normalized_sql != sql:
+            retry_df = ctx.runtime.run_sql(normalized_sql)
+            if not retry_df.empty:
+                history = list(state.get("sql_history", []) or [])
+                if normalized_sql not in history:
+                    history.append(normalized_sql)
+                state = {**state, "sql": normalized_sql, "sql_history": history}
+                df = retry_df
         context_companies = (
             df["stock_abbr"].dropna().astype(str).drop_duplicates().tolist()
             if "stock_abbr" in df.columns
@@ -297,9 +309,10 @@ def execute_sql_node(state: Task3GraphState, ctx: Task3NodeContext) -> Task3Grap
 def retrieve_reports_node(state: Task3GraphState, ctx: Task3NodeContext) -> Task3GraphState:
     retrieval_plan = dict(state.get("retrieval_plan", {}) or {})
     question_text = _current_turn_question(state, ctx)
+    query_plan = dict(state.get("query_plan", {}) or {})
     if ctx.runtime.should_skip_retrieval(
         question_text,
-        state.get("query_plan", {}),
+        query_plan,
         state.get("parsed_slots", {}),
         int(state.get("current_turn_index", 0) or 0),
     ):
@@ -311,6 +324,29 @@ def retrieve_reports_node(state: Task3GraphState, ctx: Task3NodeContext) -> Task
             "notes": state.get("notes", []) + ["retrieval_skipped_fast_path", "retrieval_hits=0"],
         }
     result_rows = list(state.get("result_rows", []) or [])
+    if (
+        retrieval_plan.get("needs_retrieval")
+        and not retrieval_plan.get("companies")
+        and str(query_plan.get("intent_type", "") or "") in {"hybrid_sql_rag", "causal_analysis"}
+    ):
+        sql_companies = list(dict.fromkeys([str(item).strip() for item in (state.get("context_companies", []) or []) if str(item).strip()]))
+        if not sql_companies and result_rows:
+            for row in result_rows:
+                if not isinstance(row, dict):
+                    continue
+                stock_abbr = str(row.get("stock_abbr", "") or "").strip()
+                if stock_abbr and stock_abbr not in sql_companies:
+                    sql_companies.append(stock_abbr)
+                if len(sql_companies) >= 5:
+                    break
+        if sql_companies:
+            retrieval_plan["companies"] = sql_companies
+            if retrieval_plan.get("source_scope") == "hybrid":
+                retrieval_plan["source_scope"] = "stock"
+            state_notes = list(state.get("notes", []) or [])
+            state_notes.append(f"retrieval_companies_seeded_from_sql={','.join(sql_companies[:5])}")
+            state = {**state, "notes": state_notes}
+
     if (
         not retrieval_plan.get("companies")
         and result_rows
@@ -338,7 +374,6 @@ def retrieve_reports_node(state: Task3GraphState, ctx: Task3NodeContext) -> Task
             f"retrieval_hits={len(evidences)}",
         ],
     }
-    query_plan = dict(state.get("query_plan", {}) or {})
     if (
         query_plan.get("needs_sql")
         and not state.get("result_rows")
@@ -548,8 +583,12 @@ def generate_answer_node(state: Task3GraphState, ctx: Task3NodeContext) -> Task3
         query_result=query_result,
         evidences=state.get("reranked_evidence", []) or state.get("retrieved_evidence", []),
     )
-    evidence_source = (state.get("reranked_evidence", []) or state.get("retrieved_evidence", []))[:5]
-    references = [ctx.runtime.enrich_reference(item, question=question_text) for item in evidence_source]
+    evidence_source = state.get("reranked_evidence", []) or state.get("retrieved_evidence", [])
+    references = ctx.runtime.build_references(
+        evidence_source,
+        question=question_text,
+        limit=5,
+    )
     if state.get("reuse_prior_context") and not references and state.get("turn_answers"):
         last_turn_refs = list(state.get("turn_answers", [])[-1].get("A", {}).get("references", []) or [])
         references = last_turn_refs[:5]

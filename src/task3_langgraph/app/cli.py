@@ -32,6 +32,9 @@ def _print_kb_summary(summary: dict[str, object]) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(description="Task 3 LangGraph answering workflow")
     parser.add_argument("--base-dir", type=Path, default=Path.cwd(), help="项目根目录")
+    parser.add_argument("--question-file", type=Path, default=None, help="问题文件路径，默认读取附件6")
+    parser.add_argument("--output-dir", type=Path, default=None, help="回答输出目录，默认 outputs/task3_langgraph")
+    parser.add_argument("--knowledge-base-dir", type=Path, default=None, help="知识库目录，默认与输出目录相同；测试集可指向已有 outputs/task3_langgraph")
     parser.add_argument("--question-id", type=str, default=None, help="单题调试，例如 B2001")
     parser.add_argument("--question-ids", type=str, default=None, help="逗号分隔题号列表")
     parser.add_argument("--sample-limit", type=int, default=None, help="随机抽样题数")
@@ -45,6 +48,9 @@ def main() -> None:
     config = resolve_config(
         base_dir=args.base_dir,
         llm_config=args.llm_config,
+        question_file=args.question_file,
+        output_dir=args.output_dir,
+        knowledge_base_dir=args.knowledge_base_dir,
         embedding_batch_size=args.embedding_batch_size,
         embedding_batch_pause_seconds=args.embedding_batch_pause_seconds,
         embedding_max_batches_per_run=args.embedding_max_batches_per_run,

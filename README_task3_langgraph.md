@@ -2,619 +2,293 @@
 
 ## 1. 模块定位
 
-[src/task3_langgraph](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph) 是当前任务三的主架构实现。
+任务三当前主实现为：
 
-当前目标不是立刻把任务三调到最优，而是先把这条主链路搭起来并进入小样本调优：
+- [src/task3_langgraph](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph)
 
-- 读取附件 6 问题
-- 多轮问题解析
-- 澄清门控
-- SQL 查询计划
-- 研报检索计划
-- 数据库查询
-- 研报检索
-- 证据重排（rerank 骨架）
-- SQL 与证据融合
-- 自检
-- 导出 `result_3.xlsx`
+它已经不是纯骨架，而是一个已经完成：
 
-这版仍是 `LLM-only` 工作流，但检索部分已经推进到：
+- 研报知识库构建
+- SQL + RAG 融合
+- 图表输出
+- 结构化引用输出
 
-- 元数据检索
-- PDF 正文抽取与 chunk 清单
-- OpenAI 兼容 embedding 调用
-- 真正的 `FAISS`
-- `metadata / vector / hybrid` 检索模式
+的“**可初步提交版本**”。
 
-当前任务三已经完成过一轮 4 题小样本回答冒烟：
+入口分为两个：
 
-- `B2002`
-- `B2003`
-- `B2005`
-- `B2008`
-
-当前结论是：
-
-1. 任务三主链已经跑通
-2. 数据准备层已经可用
-3. 当前主要问题转为澄清门控、SQL 与证据融合质量、`references` 精度和图表策略细调
-4. `rerank` 现已升级为“专门 reranker 优先，LLM/分数回退兜底”
-5. 当前全量知识库已可用：
-   - `总 chunk = 12856`
-   - `已建向量索引 chunk = 12856`
-   - `index_status = ready`
-6. 已完成一轮 `40` 题半量回归：
-   - `total_questions = 40`
-   - `ok_count = 40`
-   - `error_count = 0`
-7. 当前 `references` 输出语义已对齐赛题：
-   - `paper_path` 使用相对路径
-   - `text` 为参考文献原文摘要
-   - `paper_image` 仅在命中图表/表格时填写，格式为“图表编号 + 标题”
-8. task3 图表链现已正式接入，且**实现已独立于 task2**：
-   - 本地图表模块：
-     - [src/task3_langgraph/tools/charts.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/tools/charts.py)
-     - [src/task3_langgraph/tools/chart_spec.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/tools/chart_spec.py)
-   - 题目明确要求绘图时，会强制尝试生图
-   - 生成图片路径会写入 `A.image`
-9. 当前 task3 已引入更细的题型路由：
-   - `sql_only`
-   - `sql_chart`
-   - `causal_analysis`
-   - `industry_open_analysis`
-   - `hybrid_sql_rag`
-10. 当前已完成一轮面向复杂题的性能收口：
-   - 纯 SQL 题、纯图表题更容易走短路径
-   - 单公司同源证据的归因题更容易跳过 `rerank/self_check`
-   - 例如 `B2003` 单题已从约 `181s` 逐步压到约 `67s`
-11. 当前 task3 已进入“可初步提交、仍需继续收口”的阶段：
-   - 数据准备层已完成
-   - `SQL + RAG + chart + references` 主链已接通
-   - 后续主要工作转为：
-     - 全量质量回归
-     - `references` 质量提纯
-     - 图表策略与性能继续收口
-
-附件 5 中这两个信息表会在三个阶段用到：
-
-- 建库阶段：
-  - `个股_研报信息.xlsx`
-  - `行业_研报信息.xlsx`
-  - 用来做 chunk metadata 标准化，补齐公司、行业、股票代码、机构、发布日期、评级、研究员、市场等字段。
-- 检索阶段：
-  - 用来做 `source_type=stock/industry` 区分，以及按公司/行业/机构/评级等元数据过滤与打分。
-- 回答阶段：
-  - 用来给证据引用补齐标题、机构、日期、来源类型等信息，方便最终输出参考依据。
-
-另外，附件 5 中的 [字段说明.xlsx](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/正式数据/附件5：研报数据/字段说明.xlsx) 现在已经正式接进建库流程，用来解释：
-
-- `个股_研报信息.xlsx` 的字段含义
-- `行业_研报信息.xlsx` 的字段含义
-
-并把这些字段说明同步写入 chunk 构建与 metadata 标准化逻辑中。
+- 建库入口：
+  - [run_task3_index.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/run_task3_index.py)
+- 回答入口：
+  - [run_task3_langgraph.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/run_task3_langgraph.py)
 
 ---
 
-## 2. 当前结构
+## 2. 当前已完成能力
 
-- 入口：
-  - 回答入口：[run_task3_langgraph.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/run_task3_langgraph.py)
-  - 建库入口：[run_task3_index.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/run_task3_index.py)
-- 配置：
-  - [src/task3_langgraph/config/settings.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/config/settings.py)
-- 状态：
-  - [src/task3_langgraph/schemas/state.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/schemas/state.py)
-- 问题模型：
-  - [src/task3_langgraph/schemas/models.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/schemas/models.py)
-- 解析：
-  - [src/task3_langgraph/services/parser.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/services/parser.py)
-- LLM：
-  - [src/task3_langgraph/services/llm.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/services/llm.py)
-- Prompt：
-  - [src/task3_langgraph/prompts](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/prompts)
-- 运行时：
-  - [src/task3_langgraph/tools/runtime.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/tools/runtime.py)
-- metadata 标准化：
-  - [src/task3_langgraph/tools/report_metadata.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/tools/report_metadata.py)
-- 检索骨架：
-  - [src/task3_langgraph/tools/retrieval.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/tools/retrieval.py)
-- 切片清单骨架：
-  - [src/task3_langgraph/tools/report_parser.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/tools/report_parser.py)
-- 向量存储骨架：
-  - [src/task3_langgraph/tools/vector_store.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/tools/vector_store.py)
-- 图表渲染：
-  - [src/task3_langgraph/tools/charts.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/tools/charts.py)
-  - [src/task3_langgraph/tools/chart_spec.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/tools/chart_spec.py)
-- 节点：
-  - [src/task3_langgraph/nodes/workflow.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/nodes/workflow.py)
-- 图编排：
-  - [src/task3_langgraph/graph/builder.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/graph/builder.py)
-  - [src/task3_langgraph/graph/runner.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/graph/runner.py)
+### 2.1 数据准备层
 
----
+已完成：
 
-## 3. 当前工作流
+1. 附件 5 元数据接入
+2. `字段说明.xlsx` 标准化接入
+3. PDF 正文抽取
+4. 标题/段落优先 chunk
+5. 图表/表格编号与标题基础字段准备
+6. `BAAI/bge-m3`
+7. `FAISS`
+8. `metadata / vector / hybrid` 检索
 
-```mermaid
-flowchart TD
-    A["parse_question"] --> B["clarify_or_continue"]
-    B -->|需要澄清| C["generate_answer(clarification)"]
-    B -->|继续| D["build_query_plan"]
-    D --> E["build_retrieval_plan"]
-    E -->|需要SQL| F["generate_sql"]
-    F --> G["execute_sql"]
-    G --> H["retrieve_reports"]
-    E -->|不需要SQL| H
-    H --> I["rerank_evidence"]
-    I --> J["fuse_sql_and_evidence"]
-    J --> K["render_chart"]
-    K --> L["generate_answer"]
-    L --> M["self_check"]
-    M --> N["append_turn_result"]
-    N --> O["export_result"]
-```
+当前知识库状态：
 
----
+- `总 chunk = 12856`
+- `已建向量索引 chunk = 12856`
+- `index_status = ready`
 
-## 4. 当前题型路由
+### 2.2 回答主链
 
-当前 task3 不再把所有问题统一处理为同一种 `hybrid_sql_rag`，而是先做题型路由，再决定链路长度：
+当前 task3 主链已经接通：
 
-- `sql_only`
-  - 适用于 TopN、筛选、直接数值列举、单轮数据库问数题。
-  - 默认 `needs_sql=true`、`needs_retrieval=false`。
-- `sql_chart`
-  - 适用于“先查数，再绘图”的题。
-  - 默认 `needs_sql=true`、`needs_retrieval=false`，优先走 `SQL -> chart -> answer` 短路径。
-- `causal_analysis`
-  - 适用于“为什么/原因/驱动/依据/关系/共同点”类题。
-  - 默认保留 `SQL + RAG`。
-  - 对单公司、同源个股证据且证据不多的场景，会更积极跳过 `rerank/self_check`。
-- `industry_open_analysis`
-  - 适用于行业趋势、政策、景气度、价格波动、未来判断等开放分析题。
-  - 默认 `needs_retrieval=true`、`source_scope=industry`，避免误追问具体公司。
-- `hybrid_sql_rag`
-  - 适用于既要查数据库，又要给出研报证据支撑的复杂题。
+`parse -> clarify -> query_plan/retrieval_plan -> SQL -> retrieve -> rerank -> fuse -> chart -> answer -> self_check -> export`
 
-这一层路由的作用是：
+### 2.3 图表链
 
-1. 把纯 SQL 题和纯图表题从长链路里拆出来。
-2. 让归因题优先保留定性证据解释能力。
-3. 让行业开放题不再误走“补具体公司”的错误分支。
+task3 图表链已经正式接入，并且**实现独立于 task2**。
 
----
+本地图表模块位于：
 
-## 5. 当前检索实现
+- [src/task3_langgraph/tools/charts.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/tools/charts.py)
+- [src/task3_langgraph/tools/chart_spec.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/tools/chart_spec.py)
 
-现在已经支持三层骨架：
+规则是：
 
-1. 元数据检索
-   - 基于标题、公司名、行业名、主题词打分
-2. 正文 chunk 清单
-   - 通过 PDF 正文抽取生成 report chunk manifest
-3. FAISS 向量检索
-   - 若配置 `TASK3_EMBEDDING_*`，会生成 dense vector index 骨架
-   - 当前默认使用 `FAISS IndexFlatIP` 做 dense 检索
-   - 若环境里没有 `faiss`，会自动回退到本地精确余弦检索
+- 题面明确要求绘图 / 可视化时，强制尝试生图
+- 图片路径写入 `A.image`
 
-还没有正式接入：
+### 2.4 `references`
 
-- 更细粒度标题/章节切片
-- 更强的 evidence fusion
-
-当前已经有：
-
-- `retrieve_reports`
-- `rerank_evidence`
-- `fuse_sql_and_evidence`
-
-其中 `rerank` 当前策略是：
-- 若配置 `TASK3_RERANK_*`，优先调用专门 reranker 模型
-- 当前推荐：`BAAI/bge-reranker-v2-m3`
-- 若 reranker 不可用，再回退到 LLM rerank
-- 若 LLM 也失败，再回退到召回分数排序
-
-chunk 当前已经升级成“标题/段落优先”的策略：
-
-- 先按 PDF 页抽正文
-- 再按标题、自然段、图表/表格标题做结构化预切分
-- 正文优先按段落组合成 chunk
-- 只有正文过长时，才退回字符窗口切片
-- 默认 `chunk_size_chars=900`
-- 默认 `chunk_overlap_chars=150`
-
-并且每个 chunk 都会带上由附件 5 研报信息表标准化后的 metadata，例如：
-
-- `source_type`
-- `title`
-- `company`
-- `stock_code`
-- `industry`
-- `publish_date`
-- `organization`
-- `organization_full_name`
-- `organization_short_name`
-- `rating_current`
-- `rating_previous`
-- `researchers`
-- `page_start`
-- `page_end`
-- `section_title`
-- `subsection_title`
-- `chunk_type`
-- `figure_table_refs`
-
-其中：
-
-- `chunk_type`
-  - `body`
-  - `visual_caption`
-  - `metadata_fallback`
-- `figure_table_refs`
-  - 用来记录 chunk 中命中的 `图8 / 图表8 / 表3` 这类引用标号
-  - 方便后续回答阶段生成附件 7 里 `references.paper_image`
-
-当前不是先转 markdown 再切，而是：
-
-- 直接从 PDF 抽纯文本
-- 用结构化规则识别标题/段落/图表标题
-- 再做 chunk 切分
-
-这样做的原因是：
-
-- PDF 转 markdown 在中文研报里不一定稳定
-- 当前先保证结构化切块和引用元信息稳定
-- 后续如有需要，仍可以继续升级成 markdown/版面感知切分
-
-为了避免 chunk metadata 过于臃肿，当前实现采用了“两层结构”：
-
-- chunk 上只保留核心检索字段和 `metadata_ref`
-- 完整研报信息与字段说明单独写入：
-  - `artifacts/chunks/report_metadata_lookup.json`
-
-后续如果回答阶段需要更多字段，可以通过 `metadata_ref` 再回查完整 metadata，而不必把所有字段重复塞进每个 chunk。
-
-当前任务三已经完成了真实小样本问答冒烟，所以现在的链路不只是“检索骨架”，而是：
-
-- `retrieve_reports`
-- `rerank_evidence`
-- `fuse_sql_and_evidence`
-- `generate_answer`
-- `self_check`
-
-都已经能在小样本上跑通。
-
----
-
-## 4.1 当前提速策略
-
-任务三目前已经开始做“在尽量不牺牲质量前提下的提速”，当前已经落地的策略有：
-
-1. **问题解析与计划合并**
-   - 原来分开的 `build_query_plan` 与 `build_retrieval_plan`，现在优先由一个统一 planning 节点一起产出。
-   - 这样每题可少一次 LLM 往返。
-
-2. **SQL 缓存**
-   - 同一条 SQL 再次执行时，直接复用本地缓存结果。
-   - 缓存目录：
-     - `outputs/task3_langgraph/artifacts/sql_cache`
-
-3. **retrieval 缓存**
-   - 同一个 retrieval plan 会直接复用已检索结果。
-   - 缓存目录：
-     - `outputs/task3_langgraph/artifacts/retrieval_cache`
-
-4. **rerank 触发条件收紧**
-   - 命中证据很少、题目明显简单、或 metadata 结果已经足够明确时，会直接跳过 rerank。
-   - debug 中会显示：
-     - `rerank_strategy=skipped_fast_path`
-
-5. **self_check 触发条件收紧**
-   - 简单事实题、小结果集题不会强制跑自检。
-   - debug 中会显示：
-     - `self_check_skipped_fast_path`
-
-6. **rewrite 只在高风险失败时触发**
-   - 不是所有 `self_check.pass=false` 都会自动重写
-   - 当前只对：
-     - 指标混淆
-     - 数字不一致
-     - 聚合值误映射
-     - 关键遗漏
-     这类高风险问题触发 rewrite
-
-当前要明确一点：
-- 这些提速策略已经接入
-- 复杂多轮题仍然可能较慢，但最慢题已经明显压缩
-- 例如 `B2003` 单题已从约 `181s` 压到约 `67s`
-
-所以任务三当前状态是：
-- **已经开始提速**
-- **但还没有完全进入最终比赛速度**
-
-下一步仍要继续观察：
-- 哪些题能稳定走 fast path
-- 哪些题仍然卡在复杂融合 / 自检 / rewrite
-
----
-
-## 5. 输出
-
-默认输出到：
-
-- [outputs/task3_langgraph](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/outputs/task3_langgraph)
-
-主要产物：
-
-- `result_3.xlsx`
-- `artifacts/task3_langgraph_results.csv`
-- `artifacts/task3_langgraph_summary.json`
-- `artifacts/debug/*.json`
-- `artifacts/retrieval/*.json`
-- `artifacts/chunks/report_chunks.json`
-- `artifacts/chunks/report_metadata_lookup.json`
-- `artifacts/vector_store/index_meta.json`
-- `artifacts/vector_store/index.faiss`
-
-当前导出字段为：
-
-- `编号`
-- `问题`
-- `SQL 查询语句`
-- `回答`
-
-其中 `回答` 内 `A` 的字段顺序固定为：
-
-- `content`
-- `image`
-- `references`
-
-当前 `references` 只保留：
+当前 `references` 结构已经收敛为：
 
 - `paper_path`
 - `text`
 - `paper_image`
 
-并且：
+其中：
 
-- `paper_path` 使用相对路径
-- `paper_image` 不表示图片文件路径，而表示命中的 PDF 图表/表格“编号 + 标题”
-- 若未命中图表/表格，则省略 `paper_image`
+- `paper_path`：相对路径
+- `text`：研报原文摘要
+- `paper_image`：仅命中图表/表格时写入，语义是：
+  - `图表编号 + 标题`
+
+### 2.5 `paper_image`
+
+`paper_image` 现在已经从“结构支持”升级到“真实命中可用”：
+
+- 当前代码会在最终 `references` 中**有意识保留 1 条图表类证据**
+- 最近全量结果中已统计到：
+  - `paper_image_hits = 170`
 
 ---
 
-## 6. 运行方式
+## 3. 当前全量状态
 
-### 6.1 配置
+最近一轮 task3 全量回答结果已经做到：
 
-优先读取：
+- `80` 题全部导出非空回答
+- 当前知识库：
+  - `总 chunk = 12856`
+  - `已建向量索引 chunk = 12856`
+  - `index_type = faiss_flat_ip`
+  - `index_status = ready`
 
-- `configs/task3_llm.env`
+当前更准确的判断是：
 
-模板文件：
+- 主链已经是：
+  - `PDF -> chunk -> bge-m3 -> FAISS -> retrieval -> answer`
+- `paper_image` 已经在真实结果中命中
+- 强制要求绘图的题，当前没有系统性漏图问题
+- 剩余问题主要转向：
+  - 少量多轮题的一致性
+  - 少量 SQL 主导 / 知识库边界题引用为空
+  - 个别题仍可继续润色答案自然度
 
-- [configs/task3_llm.env.example](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/configs/task3_llm.env.example)
+最近针对多轮题还补了：
 
-可额外配置 embedding：
+- 相对期间解析：
+  - 例如“去年”会优先落到 `2024FY`
+- 别名映射：
+  - 例如 `三金 -> 桂林三金`
+- 阈值筛选空结果的自动重试
+- 针对筛选 / 排名题的更保守短路径
 
-- `TASK3_EMBEDDING_BASE_URL`
-- `TASK3_EMBEDDING_API_KEY`
-- `TASK3_EMBEDDING_MODEL`
+例如：
 
-也可额外配置专门 reranker：
+- `B2048`
+  - SQL 会先筛出公司
+  - 当前筛出的是 `康惠制药`
+  - 但附件 5 中没有该公司的个股研报 chunk
+  - 所以 `references=0` 属于真实边界，而不是题面解析错误
 
-- `TASK3_RERANK_BASE_URL`
-- `TASK3_RERANK_API_KEY`
-- `TASK3_RERANK_MODEL`
+---
 
-推荐配置：
+## 4. 当前题型路由
 
-```env
-TASK3_RERANK_BASE_URL=https://api.siliconflow.cn/v1
-TASK3_RERANK_API_KEY=YOUR_API_KEY
-TASK3_RERANK_MODEL=BAAI/bge-reranker-v2-m3
-```
+当前 task3 已引入更细的题型路由：
 
-在正式建库前，建议先单独验证 embedding 接口是否可用。  
-当前项目的 embedding client 会请求：
+- `sql_only`
+- `sql_chart`
+- `causal_analysis`
+- `industry_open_analysis`
+- `hybrid_sql_rag`
 
-- `POST {TASK3_EMBEDDING_BASE_URL}/embeddings`
+对应默认策略：
 
-所以 `TASK3_EMBEDDING_BASE_URL` 应填写根地址，例如：
+### 纯 SQL 题
 
-- `https://api.siliconflow.cn/v1`
+- `needs_sql=true`
+- `needs_retrieval=false`
 
-不要直接写成：
+### 纯 SQL 图表题
 
-- `https://api.siliconflow.cn/v1/embeddings`
+- `needs_sql=true`
+- `needs_retrieval=false`
+- 优先走短路径并生图
 
-最小测试命令：
+### 归因题
 
-```bash
-set -a
-source configs/task3_llm.env
-set +a
+- `needs_sql=true`
+- `needs_retrieval=true`
 
-curl --request POST \
-  --url "${TASK3_EMBEDDING_BASE_URL}/embeddings" \
-  --header "Authorization: Bearer ${TASK3_EMBEDDING_API_KEY}" \
-  --header "Content-Type: application/json" \
-  --data "{
-    \"model\": \"${TASK3_EMBEDDING_MODEL}\",
-    \"input\": [\"请分析云南白药盈利改善的驱动因素\"]
-  }"
-```
+### 行业开放题
 
-如果返回中出现：
+- `needs_retrieval=true`
+- `source_scope=industry`
 
-- `"object": "list"`
-- `"data": [...]`
-- `"embedding": [...]`
+### 混合题
 
-就说明 embedding 接口已经打通。
+- `needs_sql=true`
+- `needs_retrieval=true`
 
-如果配置了 embedding：
+---
 
-- 第一次运行会构建 chunk manifest
-- 然后尝试构建 `FAISS` 向量索引
-- 构建结果会写到：
-  - `artifacts/chunks/report_chunks.json`
-  - `artifacts/chunks/report_metadata_lookup.json`
-  - `artifacts/vector_store/index_meta.json`
-  - `artifacts/vector_store/index.faiss`
+## 5. 当前提速策略
 
-### 6.2 回答入口
+task3 现在已完成一轮性能收口，当前已落地：
 
-单题运行：
+1. planning 合并
+2. SQL 缓存
+3. retrieval 缓存
+4. rerank fast path
+5. self_check fast path
+6. rewrite 触发范围收紧
+7. 纯 SQL / 纯图表题短路径
 
-```bash
-python run_task3_langgraph.py --question-id B2001
-```
-### 6.3 建库入口
+例如：
 
-只构建 / 检查索引：
+- `B2003` 单题耗时已从约 `181s` 逐步压到约 `67s`
 
-```bash
-python run_task3_index.py
-```
+---
 
-建库时会打印更直观的批次进度，例如：
+## 6. 常用命令
 
-```text
-[index] batch=3 completed=24/200 remaining=176 next_resume=24
-```
-
-启动时还会先打印摘要，例如：
-
-```text
-[index-summary] 个股研报=160 | 行业研报=313 | 个股 chunk=160 | 行业 chunk=313 | 正文抽取成功研报=420 | metadata fallback 研报=53 | 总 chunk=473 | 已完成=24 | 剩余=449 | 当前索引状态=partial | 下次续跑起点=24
-```
-
-输出 JSON 里也会带：
-
-- `completed_chunk_count`
-- `remaining_chunk_count`
-- `next_resume_index`
-- `index_progress`
-
-小样本索引冒烟：
+### 6.1 建库
 
 ```bash
-python run_task3_index.py --index-limit 200
-```
-
-如果担心限流，建议用更稳的断点续建方式：
-
-```bash
-python run_task3_index.py \
-  --index-limit 500 \
-  --embedding-batch-size 8 \
-  --embedding-batch-pause-seconds 2 \
-  --embedding-max-batches-per-run 10
-```
-
-这样会：
-
-- 小批次请求 embedding
-- 每批成功后落盘
-- 中断后下次继续未完成部分
-
-检索冒烟测试：
-
-```bash
-python run_task3_index.py \
-  --retrieval-smoke-question "请分析云南白药盈利改善的驱动因素" \
-  --retrieval-mode hybrid \
-  --index-limit 200
-```
-
-### 6.3 当前推荐的任务三调试顺序
-
-1. 先建库或续跑索引
-   - `python run_task3_index.py --index-limit 20`
-2. 再做检索冒烟
-   - `python run_task3_index.py --retrieval-smoke-question "..." --retrieval-mode hybrid --index-limit 20`
-3. 再做小样本回答冒烟
-   - `python run_task3_langgraph.py --question-ids B2002,B2003,B2005,B2008`
-4. 最后再扩大样本
-
-### 6.3.1 当前推荐的正式建库命令
-
-当前项目内已经统一采用：
-
-```bash
-rm -rf outputs/task3_langgraph
 python run_task3_index.py \
   --embedding-batch-size 64 \
   --embedding-batch-pause-seconds 1
 ```
 
-如果之后又改了 chunk 规则、metadata 规则、embedding 模型或 FAISS 结构，建议仍然按这个命令重建知识库。
-
-### 6.4 按题号批量运行
+### 6.2 全量回答
 
 ```bash
-python run_task3_langgraph.py --question-ids B2001,B2002,B2003
+/opt/anaconda3/envs/taidibei/bin/python run_task3_langgraph.py
 ```
 
-### 6.5 抽样运行
+### 6.2.1 使用自定义测试题集
 
 ```bash
-python run_task3_langgraph.py --sample-limit 10 --sample-seed 7
+/opt/anaconda3/envs/taidibei/bin/python run_task3_langgraph.py \
+  --question-file "正式数据/测试集/任务三问题汇总.xlsx" \
+  --output-dir "outputs/testsets/task3_langgraph" \
+  --knowledge-base-dir "outputs/task3_langgraph"
 ```
 
-### 6.6 全量运行
+这里的含义是：
+
+- 回答结果写到 `outputs/testsets/task3_langgraph`
+- 继续复用已经建好的正式知识库：
+  - `outputs/task3_langgraph/artifacts/chunks`
+  - `outputs/task3_langgraph/artifacts/vector_store`
+
+### 6.2.2 使用统一测试入口
 
 ```bash
-python run_task3_langgraph.py
+python3 run_test_question_sets.py --skip-task2
 ```
+
+### 6.3 只清回答输出、保留知识库
+
+```bash
+rm -rf outputs/task3_langgraph/result \
+       outputs/task3_langgraph/artifacts/debug \
+       outputs/task3_langgraph/artifacts/retrieval \
+       outputs/task3_langgraph/artifacts/chart_specs
+rm -f outputs/task3_langgraph/result_3.xlsx \
+      outputs/task3_langgraph/artifacts/task3_langgraph_results.csv \
+      outputs/task3_langgraph/artifacts/task3_langgraph_summary.json \
+      outputs/task3_langgraph/task3_langgraph_query_cache.db
+```
+
+### 6.4 测试集推荐放置位置
+
+后续比赛测试题集建议固定放在：
+
+- `正式数据/测试集/任务三问题汇总.xlsx`
+
+统一测试输出默认放在：
+
+- `outputs/testsets/task3_langgraph`
 
 ---
 
-## 7. 当前边界
+## 7. 关键文件
 
-这版已经不是“纯骨架”，而是“可用第一版”，但还不是最终效果版。
-
-当前边界包括：
-
-1. 检索现在已经能走 `bge-m3 + FAISS IndexFlatIP` 主链，但还没有做更强的 ANN、IVF、PQ 或更精细的检索调优。
-2. 当前 chunk 已经来自 PDF 正文并做了结构化切分，但仍不是最终的章节级/语义级切片。
-3. rerank 已有骨架，但还不是最终版强 reranker。
-4. 证据融合和自检仍是第一版 Prompt 逻辑。
-5. 任务三图表链路现已正式接入，且实现已独立于 task2。
-   - 题目明确要求可视化/绘图时，会强制尝试生图
-   - 生成图片路径会写入 `A.image`
-   - 若当前数据不足或图表计划无法落地，`image` 仍可能为空
-6. `references` 现在只保留：
-   - `paper_path`
-   - `text`
-   - `paper_image`
-   其中 `paper_image` 并不是图片文件路径，而是引用到的 PDF 图表/表格的“编号 + 标题”；如果没有命中图表，则省略该字段。
-7. 当前并不是所有题都能稳定带出 `references`。
-   - 若知识库里没有对应公司研报或没有相关行业研报，`references` 可以为空
-   - 例如 `B2056` 当前就因附件 5 中缺少目标公司的个股研报而无引用
-8. 当前小样本回归中，像 `B2003` 这类题第一问已能生成图片并写入 `A.image`，第二问则继续走文字回答与 `references`。
-
-另外，若 `bge-m3` 出现 `429 Too Many Requests`：
-
-- 可以减小 `--embedding-batch-size`
-- 增大 `--embedding-batch-pause-seconds`
-- 限制 `--embedding-max-batches-per-run`
-- 多次重复运行完成断点续建
-
-所以它的定位是：
-
-- 先把任务三框架立起来
-- 后面等任务一、任务二进一步稳定后，再逐步补真实检索和调优
+- 主入口：
+  - [run_task3_langgraph.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/run_task3_langgraph.py)
+  - [run_task3_index.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/run_task3_index.py)
+- 配置：
+  - [src/task3_langgraph/config/settings.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/config/settings.py)
+- 解析器：
+  - [src/task3_langgraph/services/parser.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/services/parser.py)
+- 运行时：
+  - [src/task3_langgraph/tools/runtime.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/tools/runtime.py)
+- 检索：
+  - [src/task3_langgraph/tools/retrieval.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/tools/retrieval.py)
+- 建库：
+  - [src/task3_langgraph/tools/report_parser.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/tools/report_parser.py)
+  - [src/task3_langgraph/tools/vector_store.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/tools/vector_store.py)
+- 节点：
+  - [src/task3_langgraph/nodes/workflow.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task3_langgraph/nodes/workflow.py)
 
 ---
 
-## 8. 推荐的后续顺序
+## 8. 当前判断
 
-1. 继续稳住任务一、任务二数据底座
-2. 持续做任务三 3 到 5 题小样本回归
-3. 优先调：
-   - 澄清门控
-   - SQL 与证据融合
-   - `references`
-4. 之后继续优化 task3 图表策略与更强 rerank
+**task3 现在已经达到“可初步提交”状态。**
+
+当前最主要的剩余问题是：
+
+1. 少量外部接口 `503`
+2. 少量真实边界题仍然无引用
+3. 个别题的答案仍可继续润色
+
+但从主链角度看，当前已经具备：
+
+- 知识库
+- SQL
+- RAG
+- 图表
+- 引用
+- `paper_image`
+- 全量运行能力

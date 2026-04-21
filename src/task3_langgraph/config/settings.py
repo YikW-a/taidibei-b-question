@@ -16,6 +16,7 @@ class Task3LangGraphConfig:
     industry_report_dir: Path
     database_url: str
     output_dir: Path
+    knowledge_base_dir: Path | None = None
     llm_mode: str = "llm"
     llm_base_url: str | None = None
     llm_api_key: str | None = None
@@ -44,6 +45,14 @@ class Task3LangGraphConfig:
         return self.output_dir / "artifacts"
 
     @property
+    def knowledge_base_root(self) -> Path:
+        return self.knowledge_base_dir or self.output_dir
+
+    @property
+    def knowledge_base_artifacts_dir(self) -> Path:
+        return self.knowledge_base_root / "artifacts"
+
+    @property
     def debug_dir(self) -> Path:
         return self.artifacts_dir / "debug"
 
@@ -57,11 +66,11 @@ class Task3LangGraphConfig:
 
     @property
     def vector_store_dir(self) -> Path:
-        return self.artifacts_dir / "vector_store"
+        return self.knowledge_base_artifacts_dir / "vector_store"
 
     @property
     def chunk_dir(self) -> Path:
-        return self.artifacts_dir / "chunks"
+        return self.knowledge_base_artifacts_dir / "chunks"
 
     @property
     def query_cache_db(self) -> Path:

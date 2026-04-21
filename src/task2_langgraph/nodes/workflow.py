@@ -258,41 +258,47 @@ def plan_chart_node(state: Task2GraphState, ctx: Task2NodeContext) -> Task2Graph
         return state
     parsed = state.get("parsed_slots", {})
     question_text = state.get("current_question", "")
-    plan = build_default_chart_plan(
-        question_text,
-        dataframe,
-        preferred_chart_type=state.get("query_plan", {}).get("chart_type") or parsed.get("chart_type"),
-        preferred_metric_field=None,
-        preferred_metric_name=(state.get("query_plan", {}).get("metrics") or parsed.get("metrics", [None]))[0],
-    )
-    if plan is not None:
-        try:
-            plan = refine_chart_plan_with_llm(
-                ctx.runtime.llm_client,
-                ctx.runtime.prompt_manager.load("chart_plan_system"),
-                question_text,
-                state.get("sql", ""),
-                dataframe.head(50),
-                plan,
-            )
-        except Exception:
-            pass
-    if plan is None:
-        return state
-    return {
-        **state,
-        "chart_plan": {
-            "chart_type": plan.chart_type,
-            "title": plan.title,
-            "x_field": plan.x_field,
-            "y_fields": plan.y_fields,
-            "category_field": plan.category_field,
-            "sort_by": plan.sort_by,
-            "sort_ascending": plan.sort_ascending,
-            "top_n": plan.top_n,
-            "should_draw": plan.should_draw,
-        },
-    }
+    try:
+        preferred_metrics = state.get("query_plan", {}).get("metrics") or parsed.get("metrics", [])
+        preferred_metric_name = preferred_metrics[0] if preferred_metrics else None
+        preferred_chart_type = state.get("query_plan", {}).get("chart_type") or parsed.get("chart_type")
+        plan = build_default_chart_plan(
+            question_text,
+            dataframe,
+            preferred_chart_type=preferred_chart_type,
+            preferred_metric_field=None,
+            preferred_metric_name=preferred_metric_name,
+        )
+        if plan is not None and preferred_chart_type != "scatter":
+            try:
+                plan = refine_chart_plan_with_llm(
+                    ctx.runtime.llm_client,
+                    ctx.runtime.prompt_manager.load("chart_plan_system"),
+                    question_text,
+                    state.get("sql", ""),
+                    dataframe.head(50),
+                    plan,
+                )
+            except Exception:
+                pass
+        if plan is None:
+            return state
+        return {
+            **state,
+            "chart_plan": {
+                "chart_type": plan.chart_type,
+                "title": plan.title,
+                "x_field": plan.x_field,
+                "y_fields": plan.y_fields,
+                "category_field": plan.category_field,
+                "sort_by": plan.sort_by,
+                "sort_ascending": plan.sort_ascending,
+                "top_n": plan.top_n,
+                "should_draw": plan.should_draw,
+            },
+        }
+    except Exception as exc:
+        return {**state, "notes": state.get("notes", []) + [f"chart_plan_failed={repr(exc)}"], "chart_plan": {}}
 
 
 def render_chart_node(state: Task2GraphState, ctx: Task2NodeContext) -> Task2GraphState:
@@ -316,42 +322,45 @@ def render_chart_node(state: Task2GraphState, ctx: Task2NodeContext) -> Task2Gra
         )
     except Exception:
         return state
-    image_index = state.get("current_turn_index", 0) + 1
-    chart_spec = build_chart_spec(
-        state["question_id"],
-        dataframe.head(50),
-        plan,
-        image_index=image_index,
-        sql=state.get("sql", ""),
-    )
-    current_specs: list[str] = []
-    chart_spec_dict: dict[str, object] = {}
-    if chart_spec is not None:
-        spec_path = save_chart_spec(ctx.config.chart_spec_dir, chart_spec)
-        current_specs = [str(spec_path)]
-        chart_spec_dict = chart_spec.to_dict()
-    chart_path = ""
-    if chart_spec is not None:
-        chart_path = render_chart_from_spec(
-            ctx.config.result_dir,
+    try:
+        image_index = state.get("current_turn_index", 0) + 1
+        chart_spec = build_chart_spec(
+            state["question_id"],
             dataframe.head(50),
-            chart_spec,
+            plan,
+            image_index=image_index,
+            sql=state.get("sql", ""),
         )
-    current_paths = [f"./result/{Path(chart_path).name}"] if chart_path else []
-    graph_formats = list(state.get("graph_formats", []))
-    if chart_path:
-        label = chart_type_to_label(plan.chart_type)
-        if label != "无" and label not in graph_formats:
-            graph_formats.append(label)
-    return {
-        **state,
-        "chart_spec": chart_spec_dict,
-        "current_chart_specs": current_specs,
-        "all_chart_specs": state.get("all_chart_specs", []) + current_specs,
-        "current_chart_paths": current_paths,
-        "all_chart_paths": state.get("all_chart_paths", []) + current_paths,
-        "graph_formats": graph_formats,
-    }
+        current_specs: list[str] = []
+        chart_spec_dict: dict[str, object] = {}
+        if chart_spec is not None:
+            spec_path = save_chart_spec(ctx.config.chart_spec_dir, chart_spec)
+            current_specs = [str(spec_path)]
+            chart_spec_dict = chart_spec.to_dict()
+        chart_path = ""
+        if chart_spec is not None:
+            chart_path = render_chart_from_spec(
+                ctx.config.result_dir,
+                dataframe.head(50),
+                chart_spec,
+            )
+        current_paths = [f"./result/{Path(chart_path).name}"] if chart_path else []
+        graph_formats = list(state.get("graph_formats", []))
+        if chart_path:
+            label = chart_type_to_label(plan.chart_type)
+            if label != "无" and label not in graph_formats:
+                graph_formats.append(label)
+        return {
+            **state,
+            "chart_spec": chart_spec_dict,
+            "current_chart_specs": current_specs,
+            "all_chart_specs": state.get("all_chart_specs", []) + current_specs,
+            "current_chart_paths": current_paths,
+            "all_chart_paths": state.get("all_chart_paths", []) + current_paths,
+            "graph_formats": graph_formats,
+        }
+    except Exception as exc:
+        return {**state, "notes": state.get("notes", []) + [f"render_chart_failed={repr(exc)}"]}
 
 
 def generate_answer_node(state: Task2GraphState, ctx: Task2NodeContext) -> Task2GraphState:
@@ -363,8 +372,17 @@ def generate_answer_node(state: Task2GraphState, ctx: Task2NodeContext) -> Task2
     question = _current_turn_question(state, ctx)
     dataframe = _result_dataframe(state)
     if not dataframe.empty:
-        answer = ctx.runtime.generate_answer(question, state.get("sql", ""), dataframe)
-        return {**state, "current_answer": answer, "final_status": "ok"}
+        try:
+            answer = ctx.runtime.generate_answer(question, state.get("sql", ""), dataframe)
+            return {**state, "current_answer": answer, "final_status": "ok"}
+        except Exception as exc:
+            fallback = ctx.runtime.deterministic_listing_answer(question.raw_question, dataframe)
+            return {
+                **state,
+                "current_answer": fallback,
+                "final_status": "warning",
+                "notes": state.get("notes", []) + [f"generate_answer_failed={repr(exc)}"],
+            }
     if state.get("sql"):
         return {
             **state,

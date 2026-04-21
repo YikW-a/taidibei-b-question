@@ -328,7 +328,7 @@ class Task2Runtime:
         ]
         ratio_like_tokens = ["ratio", "margin", "growth", "roe", "率", "占比", "比例"]
         for column in dataframe.columns:
-            numeric = pd.to_numeric(dataframe[column], errors="coerce")
+            numeric = pd.to_numeric(self._column_as_series(dataframe, column), errors="coerce")
             if numeric.notna().sum() == 0:
                 continue
             column_name = str(column).lower()
@@ -405,6 +405,13 @@ class Task2Runtime:
                 if candidate in dataframe.columns and candidate not in relevant:
                     relevant.append(candidate)
         return relevant
+
+    @staticmethod
+    def _column_as_series(dataframe: pd.DataFrame, column: str) -> pd.Series:
+        value = dataframe[column]
+        if isinstance(value, pd.DataFrame):
+            return value.iloc[:, 0]
+        return value
 
     def _write_query_cache(self) -> None:
         conn = sqlite3.connect(self.config.query_cache_db)

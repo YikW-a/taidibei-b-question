@@ -148,7 +148,13 @@ class DataValidator:
                             )
 
             if income is not None and kpi is not None:
-                revenue = self._safe_float(income.values.get("total_operating_revenue"))
+                kpi_revenue = self._safe_float(kpi.values.get("total_operating_revenue"))
+                revenue = self._select_margin_revenue(
+                    self._safe_float(income.values.get("total_operating_revenue")),
+                    kpi_revenue,
+                    self._safe_float(income.values.get("operating_expense_cost_of_sales")),
+                    self._safe_float(income.values.get("net_profit")),
+                )
                 cost = self._safe_float(income.values.get("operating_expense_cost_of_sales"))
                 net_profit = self._safe_float(income.values.get("net_profit"))
                 kpi_gross_margin = self._safe_float(kpi.values.get("gross_profit_margin"))
@@ -165,44 +171,52 @@ class DataValidator:
                     derived = net_profit / revenue * 100
                     if abs(derived - kpi_net_margin) > 5:
                         issues.append(self._issue("warning", "net_profit_margin_consistency_precheck", "core_performance_indicators_sheet", kpi.source_name, record_key, f"net_profit_margin mismatch: stored={kpi_net_margin:.2f}, derived={derived:.2f}"))
-                if self._is_fy_period(report_period) and equity not in (None, 0) and net_profit is not None and kpi_roe is not None:
+                if (
+                    self._is_fy_period(report_period)
+                    and equity not in (None, 0)
+                    and net_profit is not None
+                    and kpi_roe is not None
+                    and equity > 0
+                    and abs(kpi_roe) <= 100
+                ):
                     derived = net_profit / equity * 100
+                    if abs(derived) > 100 or not self._same_sign_or_zero(derived, kpi_roe):
+                        continue
                     tolerance = max(8.0, abs(derived) * 0.8, abs(kpi_roe) * 0.8)
-                    if not self._same_sign_or_zero(derived, kpi_roe) or abs(derived - kpi_roe) > tolerance:
+                    if abs(derived - kpi_roe) > tolerance:
                         issues.append(self._issue("warning", "roe_consistency_precheck", "core_performance_indicators_sheet", kpi.source_name, record_key, f"roe mismatch: stored={kpi_roe:.2f}, derived={derived:.2f}"))
-                if self._is_fy_period(report_period):
-                    eps = self._safe_float(kpi.values.get("eps"))
-                    shares = self._infer_share_count_proxy(net_profit, eps)
-                    if shares not in (None, 0):
-                        kpi_net_asset_per_share = self._safe_float(kpi.values.get("net_asset_per_share"))
-                        if equity is not None and kpi_net_asset_per_share is not None:
-                            derived = (equity * 10000) / shares
-                            if self._material_per_share_mismatch(kpi_net_asset_per_share, derived):
-                                issues.append(
-                                    self._issue(
-                                        "warning",
-                                        "net_asset_per_share_consistency_precheck",
-                                        "core_performance_indicators_sheet",
-                                        kpi.source_name,
-                                        record_key,
-                                        f"net_asset_per_share mismatch: stored={kpi_net_asset_per_share:.4f}, derived={derived:.4f}",
-                                    )
+                eps = self._safe_float(kpi.values.get("eps"))
+                shares = self._infer_share_count_proxy(net_profit, eps)
+                if shares not in (None, 0):
+                    kpi_net_asset_per_share = self._safe_float(kpi.values.get("net_asset_per_share"))
+                    if equity is not None and kpi_net_asset_per_share is not None:
+                        derived = (equity * 10000) / shares
+                        if self._material_per_share_mismatch(kpi_net_asset_per_share, derived):
+                            issues.append(
+                                self._issue(
+                                    "warning",
+                                    "net_asset_per_share_consistency_precheck",
+                                    "core_performance_indicators_sheet",
+                                    kpi.source_name,
+                                    record_key,
+                                    f"net_asset_per_share mismatch: stored={kpi_net_asset_per_share:.4f}, derived={derived:.4f}",
                                 )
-                        operating_cf = self._safe_float(cash_flow.values.get("operating_cf_net_amount")) if cash_flow is not None else None
-                        kpi_operating_cf_per_share = self._safe_float(kpi.values.get("operating_cf_per_share"))
-                        if operating_cf is not None and kpi_operating_cf_per_share is not None:
-                            derived = (operating_cf * 10000) / shares
-                            if self._material_per_share_mismatch(kpi_operating_cf_per_share, derived):
-                                issues.append(
-                                    self._issue(
-                                        "warning",
-                                        "operating_cf_per_share_consistency_precheck",
-                                        "core_performance_indicators_sheet",
-                                        kpi.source_name,
-                                        record_key,
-                                        f"operating_cf_per_share mismatch: stored={kpi_operating_cf_per_share:.4f}, derived={derived:.4f}",
-                                    )
+                            )
+                    operating_cf = self._safe_float(cash_flow.values.get("operating_cf_net_amount")) if cash_flow is not None else None
+                    kpi_operating_cf_per_share = self._safe_float(kpi.values.get("operating_cf_per_share"))
+                    if operating_cf is not None and kpi_operating_cf_per_share is not None:
+                        derived = (operating_cf * 10000) / shares
+                        if self._material_per_share_mismatch(kpi_operating_cf_per_share, derived):
+                            issues.append(
+                                self._issue(
+                                    "warning",
+                                    "operating_cf_per_share_consistency_precheck",
+                                    "core_performance_indicators_sheet",
+                                    kpi.source_name,
+                                    record_key,
+                                    f"operating_cf_per_share mismatch: stored={kpi_operating_cf_per_share:.4f}, derived={derived:.4f}",
                                 )
+                            )
         return issues
 
     def issues_to_dataframe(self, issues: list[ValidationIssue]) -> pd.DataFrame:
@@ -267,3 +281,39 @@ class DataValidator:
         if left == 0 or right == 0:
             return True
         return left * right > 0
+
+    def _select_margin_revenue(
+        self,
+        income_revenue: float | None,
+        kpi_revenue: float | None,
+        cost: float | None,
+        net_profit: float | None,
+    ) -> float | None:
+        candidates: list[tuple[float, float]] = []
+        for revenue in (income_revenue, kpi_revenue):
+            if revenue in (None, 0) or revenue <= 0:
+                continue
+            candidates.append((self._margin_candidate_score(revenue, cost, net_profit), revenue))
+        if not candidates:
+            return income_revenue or kpi_revenue
+        candidates.sort(key=lambda item: (item[0], -abs(item[1])))
+        return candidates[0][1]
+
+    def _margin_candidate_score(self, revenue: float, cost: float | None, net_profit: float | None) -> float:
+        score = 0.0
+        gross_margin = None
+        net_margin = None
+        if revenue != 0 and cost is not None:
+            gross_margin = (revenue - cost) / revenue * 100
+        if revenue != 0 and net_profit is not None:
+            net_margin = net_profit / revenue * 100
+        for value in (gross_margin, net_margin):
+            if value is None:
+                continue
+            if abs(value) > 100:
+                score += 1000.0 + abs(value)
+            if value < -50:
+                score += abs(value) - 50.0
+        if gross_margin is not None and net_margin is not None and net_margin > gross_margin + 20:
+            score += 500.0 + (net_margin - gross_margin - 20)
+        return score

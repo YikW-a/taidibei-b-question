@@ -123,6 +123,8 @@ def build_chart_spec(
     x_field = plan.x_field
     if chart_type == "line" and (not x_field or x_field not in dataframe.columns):
         x_field = "report_period" if "report_period" in dataframe.columns else _first_dimension_column(dataframe)
+    if chart_type == "scatter" and (not x_field or x_field not in dataframe.columns):
+        x_field = _first_numeric_column(dataframe)
     if chart_type == "line":
         enough_points = (
             x_field in dataframe.columns
@@ -154,8 +156,17 @@ def build_chart_spec(
         )
         if chart_type == "line":
             encodings["x"] = EncodingSpec(field=x_field, data_type="temporal", label=_field_label(x_field))
+        elif chart_type == "scatter":
+            encodings["x"] = EncodingSpec(
+                field=x_field,
+                data_type="quantitative",
+                label=_field_label(x_field),
+                unit=_infer_unit(x_field, dataframe[x_field]),
+            )
         else:
             encodings["category"] = EncodingSpec(field=category_field, data_type="nominal", label=_field_label(category_field))
+    if chart_type == "scatter" and category_field and category_field in dataframe.columns:
+        encodings["category"] = EncodingSpec(field=category_field, data_type="nominal", label=_field_label(category_field))
     if series_field:
         encodings["series"] = EncodingSpec(field=series_field, data_type="nominal", label=_field_label(series_field))
 
@@ -175,7 +186,7 @@ def build_chart_spec(
         },
     }
     if chart_type == "bar" and category_field and category_field in dataframe.columns and dataframe[category_field].duplicated().any():
-        numeric = pd.to_numeric(dataframe[value_field], errors="coerce").dropna() if value_field else pd.Series(dtype=float)
+        numeric = pd.to_numeric(_column_as_series(dataframe, value_field), errors="coerce").dropna() if value_field else pd.Series(dtype=float)
         if not numeric.empty:
             meta["category_aggregate"] = "min" if numeric.quantile(0.75) <= 0 else "max"
 
@@ -258,6 +269,25 @@ def render_chart_from_spec(output_dir: Path, dataframe: pd.DataFrame, spec: Char
             ax.set_ylabel(axis_suffix, fontproperties=FONT_PROP)
         if spec.layout.legend:
             ax.legend(frameon=False, prop=FONT_PROP)
+    elif chart_type == "scatter":
+        x_encoding = spec.encodings.get("x")
+        if x_encoding is None or not x_encoding.field or x_encoding.field not in df.columns:
+            return ""
+        x_numeric = pd.to_numeric(_column_as_series(df, x_encoding.field), errors="coerce")
+        y_numeric = pd.to_numeric(_column_as_series(df, value_encoding.field), errors="coerce")
+        valid = x_numeric.notna() & y_numeric.notna()
+        if valid.sum() < 2:
+            return ""
+        x_scaled, x_suffix = _scale_series_for_plot(x_encoding.field, x_numeric[valid])
+        y_scaled, y_suffix = _scale_series_for_plot(value_encoding.field, y_numeric[valid])
+        ax.scatter(x_scaled, y_scaled, color=palette[0], alpha=0.85, s=36)
+        category_encoding = spec.encodings.get("category")
+        if category_encoding and category_encoding.field and category_encoding.field in df.columns:
+            labels = df.loc[valid, category_encoding.field].astype(str).tolist()
+            for xv, yv, label in zip(x_scaled.tolist(), y_scaled.tolist(), labels):
+                ax.text(xv, yv, label, fontsize=7, fontproperties=FONT_PROP)
+        ax.set_xlabel(x_suffix or (x_encoding.label or x_encoding.field), fontproperties=FONT_PROP)
+        ax.set_ylabel(y_suffix or (value_encoding.label or value_encoding.field), fontproperties=FONT_PROP)
     elif chart_type == "pie":
         category_encoding = spec.encodings.get("category")
         if category_encoding is None or not category_encoding.field or category_encoding.field not in df.columns:
@@ -448,23 +478,23 @@ def render_chart_from_spec(output_dir: Path, dataframe: pd.DataFrame, spec: Char
 
 
 def _normalize_chart_type(chart_type: str | None) -> str:
-    if chart_type in {"line", "bar", "pie", "table"}:
+    if chart_type in {"line", "bar", "pie", "table", "scatter"}:
         return chart_type
-    if chart_type in {"barh", "grouped_bar", "radar", "scatter", "hist", "box"}:
+    if chart_type in {"barh", "grouped_bar", "radar", "hist", "box"}:
         return "bar"
     return "bar"
 
 
 def _first_numeric_column(dataframe: pd.DataFrame) -> str | None:
     for column in dataframe.columns:
-        if pd.to_numeric(dataframe[column], errors="coerce").notna().sum() > 0:
+        if pd.to_numeric(_column_as_series(dataframe, column), errors="coerce").notna().sum() > 0:
             return str(column)
     return None
 
 
 def _first_dimension_column(dataframe: pd.DataFrame) -> str | None:
     numeric_columns = {
-        column for column in dataframe.columns if pd.to_numeric(dataframe[column], errors="coerce").notna().sum() > 0
+        column for column in dataframe.columns if pd.to_numeric(_column_as_series(dataframe, column), errors="coerce").notna().sum() > 0
     }
     for candidate in ["stock_abbr", "report_period", "stock_code"]:
         if candidate in dataframe.columns and candidate not in numeric_columns:
@@ -531,3 +561,12 @@ def _field_label(field_name: str | None) -> str | None:
 
 
 __all__ = ["ChartSpec", "build_chart_spec", "render_chart_from_spec", "save_chart_spec"]
+
+
+def _column_as_series(dataframe: pd.DataFrame, column: str | None) -> pd.Series:
+    if not column or column not in dataframe.columns:
+        return pd.Series(dtype=float)
+    value = dataframe[column]
+    if isinstance(value, pd.DataFrame):
+        return value.iloc[:, 0]
+    return value

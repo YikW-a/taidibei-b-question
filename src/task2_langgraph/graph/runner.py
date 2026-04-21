@@ -77,20 +77,27 @@ class Task2LangGraphPrototype:
                 state = self.run_single(question_id)
             except Exception as exc:  # pragma: no cover
                 question = self.context.get_question(question_id) if self.context is not None else None
+                fallback_answer_json, fallback_turn_answers = self._build_fallback_answer_payload(
+                    question_id=question_id,
+                    raw_question=question.raw_question if question else "",
+                    sub_questions=question.sub_questions if question else [],
+                    notes=[repr(exc)],
+                )
                 state = {
                     "question_id": question_id,
                     "final_status": "error",
                     "question_type": question.question_type if question else "",
                     "raw_question_json": question.original_question_json if question else "[]",
                     "raw_question": question.raw_question if question else "",
-                    "turn_answers": [],
+                    "turn_answers": fallback_turn_answers,
                     "all_chart_paths": [],
                     "graph_formats": [],
-                    "answer_json": "[]",
+                    "answer_json": fallback_answer_json,
                     "graph_format_text": "无",
                     "sql": "",
                     "notes": [repr(exc)],
                 }
+            state = self._ensure_nonempty_answer_payload(state)
             status = state.get("final_status", "ok")
             if status == "error":
                 error_count += 1
@@ -114,6 +121,45 @@ class Task2LangGraphPrototype:
         if progress_bar is not None:
             progress_bar.close()
         return results
+
+    def _build_fallback_answer_payload(
+        self,
+        *,
+        question_id: str,
+        raw_question: str,
+        sub_questions: list[str],
+        notes: list[str],
+    ) -> tuple[str, list[dict[str, object]]]:
+        note_text = "；".join(item for item in notes if item)
+        content = (
+            "本题在运行过程中出现异常，暂未能生成稳定答案。"
+            + (f"异常信息：{note_text}" if note_text else "")
+        )
+        turn_questions = sub_questions or ([raw_question] if raw_question else [question_id])
+        turn_answers = [{"Q": item, "A": {"content": content, "image": []}} for item in turn_questions]
+        return json.dumps(turn_answers, ensure_ascii=False), turn_answers
+
+    def _ensure_nonempty_answer_payload(self, state: Task2GraphState) -> Task2GraphState:
+        answer_json = str(state.get("answer_json", "") or "").strip()
+        if answer_json and answer_json not in {"[]", "{}", "null", "None"}:
+            return state
+        raw_question = str(state.get("raw_question", "") or "")
+        turn_answers = list(state.get("turn_answers", []) or [])
+        if turn_answers:
+            synthesized = json.dumps(turn_answers, ensure_ascii=False)
+            return {**state, "answer_json": synthesized}
+        question = self.context.get_question(state["question_id"]) if self.context is not None else None
+        fallback_answer_json, fallback_turn_answers = self._build_fallback_answer_payload(
+            question_id=str(state.get("question_id", "") or ""),
+            raw_question=raw_question,
+            sub_questions=question.sub_questions if question else [],
+            notes=list(state.get("notes", []) or []),
+        )
+        return {
+            **state,
+            "turn_answers": fallback_turn_answers,
+            "answer_json": fallback_answer_json,
+        }
 
     def export_batch_results(self, states: list[Task2GraphState]) -> dict[str, object]:
         output_dir = self.config.output_dir
