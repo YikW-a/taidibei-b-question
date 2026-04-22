@@ -1,0 +1,73 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1068",
+  "image_index": 2,
+  "chart_type": "bar",
+  "title": "2025年第三季度中药行业平均盈利能力",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 1,
+    "preview_rows": [
+      {
+        "avg_gross_profit_margin": 52.72351254856017,
+        "avg_net_profit_margin": 7.319933157931603
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "avg_gross_profit_margin",
+    "sort_ascending": true,
+    "top_n": 1,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "avg_gross_profit_margin",
+      "data_type": "quantitative",
+      "label": "行业平均销售毛利率",
+      "unit": "%"
+    },
+    "category": {
+      "field": "avg_gross_profit_margin",
+      "data_type": "nominal",
+      "label": "行业平均销售毛利率",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1068_2.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1068_2.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT AVG(gross_profit_margin) AS avg_gross_profit_margin, AVG(net_profit_margin) AS avg_net_profit_margin FROM financials_view WHERE report_period = '2025Q3'",
+    "value_fields": [
+      "avg_gross_profit_margin",
+      "avg_net_profit_margin"
+    ],
+    "value_labels": [
+      "行业平均销售毛利率",
+      "行业平均销售净利率"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "avg_gross_profit_margin",
+        "avg_net_profit_margin"
+      ],
+      "category_field": "avg_gross_profit_margin",
+      "sort_by": "avg_gross_profit_margin",
+      "sort_ascending": true,
+      "top_n": 1
+    }
+  }
+}

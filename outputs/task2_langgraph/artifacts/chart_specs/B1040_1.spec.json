@@ -1,0 +1,162 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1040",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "2025Q3货币资金占比>20%且投资性现金流为负的公司",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 14,
+    "preview_rows": [
+      {
+        "stock_code": "002864",
+        "stock_abbr": "盘龙药业",
+        "asset_cash_and_cash_equivalents": 116462.96655999999,
+        "asset_total_assets": 240103.25196999998,
+        "investing_cf_net_amount": -4780.803726,
+        "cash_to_total_assets_ratio": 48.50536825488378
+      },
+      {
+        "stock_code": "002773",
+        "stock_abbr": "康弘药业",
+        "asset_cash_and_cash_equivalents": 382807.109877,
+        "asset_total_assets": 987003.3859620001,
+        "investing_cf_net_amount": -273263.30981199996,
+        "cash_to_total_assets_ratio": 38.78478182766216
+      },
+      {
+        "stock_code": "600252",
+        "stock_abbr": "中恒集团",
+        "asset_cash_and_cash_equivalents": 405705.846238,
+        "asset_total_assets": 1106425.351924,
+        "investing_cf_net_amount": -2367.455579,
+        "cash_to_total_assets_ratio": 36.66816252289452
+      },
+      {
+        "stock_code": "600085",
+        "stock_abbr": "同仁堂",
+        "asset_cash_and_cash_equivalents": 1091000.974934,
+        "asset_total_assets": 3181904.968438,
+        "investing_cf_net_amount": -40241.245616,
+        "cash_to_total_assets_ratio": 34.28766684598923
+      },
+      {
+        "stock_code": "300519",
+        "stock_abbr": "新光药业",
+        "asset_cash_and_cash_equivalents": 29063.115754000002,
+        "asset_total_assets": 89340.61440199999,
+        "investing_cf_net_amount": -21537.302393,
+        "cash_to_total_assets_ratio": 32.53068713320757
+      },
+      {
+        "stock_code": "600557",
+        "stock_abbr": "康缘药业",
+        "asset_cash_and_cash_equivalents": 215737.65545,
+        "asset_total_assets": 674025.034955,
+        "investing_cf_net_amount": -33337.169518,
+        "cash_to_total_assets_ratio": 32.00736534428626
+      },
+      {
+        "stock_code": "600566",
+        "stock_abbr": "济川药业",
+        "asset_cash_and_cash_equivalents": 512989.83035,
+        "asset_total_assets": 1653353.1541809998,
+        "investing_cf_net_amount": -56276.567728999995,
+        "cash_to_total_assets_ratio": 31.027238739210144
+      },
+      {
+        "stock_code": "600750",
+        "stock_abbr": "江中药业",
+        "asset_cash_and_cash_equivalents": 199873.652313,
+        "asset_total_assets": 689149.162719,
+        "investing_cf_net_amount": -48042.029238999996,
+        "cash_to_total_assets_ratio": 29.00295946445172
+      },
+      {
+        "stock_code": "600993",
+        "stock_abbr": "马应龙",
+        "asset_cash_and_cash_equivalents": 154072.95291400002,
+        "asset_total_assets": 534133.058838,
+        "investing_cf_net_amount": -134717.268054,
+        "cash_to_total_assets_ratio": 28.84542537943333
+      },
+      {
+        "stock_code": "002589",
+        "stock_abbr": "瑞康医药",
+        "asset_cash_and_cash_equivalents": 424108.343077,
+        "asset_total_assets": 1532895.401678,
+        "investing_cf_net_amount": -12710.496835,
+        "cash_to_total_assets_ratio": 27.667141711870574
+      },
+      {
+        "stock_code": "002275",
+        "stock_abbr": "桂林三金",
+        "asset_cash_and_cash_equivalents": 107792.846029,
+        "asset_total_assets": 429977.056455,
+        "investing_cf_net_amount": -13522.590707,
+        "cash_to_total_assets_ratio": 25.069441359897592
+      },
+      {
+        "stock_code": "603896",
+        "stock_abbr": "寿仙谷",
+        "asset_cash_and_cash_equivalents": 69742.869276,
+        "asset_total_assets": 315462.44307,
+        "investing_cf_net_amount": -24825.812035,
+        "cash_to_total_assets_ratio": 22.108137056595453
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "cash_to_total_assets_ratio",
+    "sort_ascending": false,
+    "top_n": 14,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "cash_to_total_assets_ratio",
+      "data_type": "quantitative",
+      "label": "货币资金占总资产比例",
+      "unit": "%"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1040_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1040_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT stock_code, stock_abbr, asset_cash_and_cash_equivalents, asset_total_assets, investing_cf_net_amount, (asset_cash_and_cash_equivalents / asset_total_assets) * 100 AS cash_to_total_assets_ratio FROM financials_view WHERE report_period = '2025Q3' AND asset_total_assets > 0 AND (asset_cash_and_cash_equivalents / asset_total_assets) * 100 > 20.0 AND investing_cf_net_amount < 0 ORDER BY cash_to_total_assets_ratio DESC",
+    "value_fields": [
+      "cash_to_total_assets_ratio"
+    ],
+    "value_labels": [
+      "货币资金占总资产比例"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "cash_to_total_assets_ratio"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": "cash_to_total_assets_ratio",
+      "sort_ascending": false,
+      "top_n": 14
+    }
+  }
+}

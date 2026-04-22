@@ -1,0 +1,320 @@
+{
+  "question_id": "B1066",
+  "question_type": "数据统计分析查询",
+  "raw_question": "哪些公司的业绩比较好？ | 2025年第三季度，2家中药上市公司中，营业总收入和净利润均排名前十的公司",
+  "raw_question_json": "[{\"Q\":\"哪些公司的业绩比较好？\"},{\"Q\":\"2025年第三季度，2家中药上市公司中，营业总收入和净利润均排名前十的公司\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入",
+      "净利润"
+    ],
+    "chart_type": null,
+    "intent_type": "ranking",
+    "top_n": 10,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "ranking",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入",
+      "净利润"
+    ],
+    "chart_type": "barh",
+    "top_n": 10,
+    "threshold": null,
+    "question": "2025年第三季度，2家中药上市公司中，营业总收入和净利润均排名前十的公司",
+    "should_draw": true,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "WITH ranked_by_revenue AS ( SELECT stock_code, stock_abbr, total_operating_revenue, ROW_NUMBER() OVER (ORDER BY total_operating_revenue DESC) AS revenue_rank FROM financials_view WHERE report_period = '2025Q3'), ranked_by_profit AS ( SELECT stock_code, stock_abbr, net_profit, ROW_NUMBER() OVER (ORDER BY net_profit DESC) AS profit_rank FROM financials_view WHERE report_period = '2025Q3') SELECT r.stock_code, r.stock_abbr, r.total_operating_revenue, r.revenue_rank, p.net_profit, p.profit_rank FROM ranked_by_revenue r JOIN ranked_by_profit p ON r.stock_code = p.stock_code WHERE r.revenue_rank <= 10 AND p.profit_rank <= 10 ORDER BY r.revenue_rank, p.profit_rank",
+  "sql_history": [
+    "WITH ranked_by_revenue AS ( SELECT stock_code, stock_abbr, total_operating_revenue, ROW_NUMBER() OVER (ORDER BY total_operating_revenue DESC) AS revenue_rank FROM financials_view WHERE report_period = '2025Q3'), ranked_by_profit AS ( SELECT stock_code, stock_abbr, net_profit, ROW_NUMBER() OVER (ORDER BY net_profit DESC) AS profit_rank FROM financials_view WHERE report_period = '2025Q3') SELECT r.stock_code, r.stock_abbr, r.total_operating_revenue, r.revenue_rank, p.net_profit, p.profit_rank FROM ranked_by_revenue r JOIN ranked_by_profit p ON r.stock_code = p.stock_code WHERE r.revenue_rank <= 10 AND p.profit_rank <= 10 ORDER BY r.revenue_rank, p.profit_rank"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 6,
+  "result_rows": [
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "total_operating_revenue": 6160599.379554,
+      "revenue_rank": 1,
+      "net_profit": 331005.207786,
+      "profit_rank": 2
+    },
+    {
+      "stock_code": "000538",
+      "stock_abbr": "云南白药",
+      "total_operating_revenue": 3065421.420901,
+      "revenue_rank": 2,
+      "net_profit": 477711.965747,
+      "profit_rank": 1
+    },
+    {
+      "stock_code": "000999",
+      "stock_abbr": "华润三九",
+      "total_operating_revenue": 2198640.396207,
+      "revenue_rank": 3,
+      "net_profit": 235282.69556599998,
+      "profit_rank": 3
+    },
+    {
+      "stock_code": "600085",
+      "stock_abbr": "同仁堂",
+      "total_operating_revenue": 1330791.480027,
+      "revenue_rank": 4,
+      "net_profit": 117755.58453,
+      "profit_rank": 7
+    },
+    {
+      "stock_code": "600436",
+      "stock_abbr": "片仔癀",
+      "total_operating_revenue": 744236.610835,
+      "revenue_rank": 7,
+      "net_profit": 212934.76773800002,
+      "profit_rank": 5
+    },
+    {
+      "stock_code": "002603",
+      "stock_abbr": "以岭药业",
+      "total_operating_revenue": 586760.307361,
+      "revenue_rank": 9,
+      "net_profit": 100040.467191,
+      "profit_rank": 10
+    }
+  ],
+  "context_companies": [
+    "白云山",
+    "云南白药",
+    "华润三九",
+    "同仁堂",
+    "片仔癀",
+    "以岭药业"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "total_operating_revenue": 6160599.379554,
+      "revenue_rank": 1,
+      "net_profit": 331005.207786,
+      "profit_rank": 2
+    },
+    {
+      "stock_code": "000538",
+      "stock_abbr": "云南白药",
+      "total_operating_revenue": 3065421.420901,
+      "revenue_rank": 2,
+      "net_profit": 477711.965747,
+      "profit_rank": 1
+    },
+    {
+      "stock_code": "000999",
+      "stock_abbr": "华润三九",
+      "total_operating_revenue": 2198640.396207,
+      "revenue_rank": 3,
+      "net_profit": 235282.69556599998,
+      "profit_rank": 3
+    },
+    {
+      "stock_code": "600085",
+      "stock_abbr": "同仁堂",
+      "total_operating_revenue": 1330791.480027,
+      "revenue_rank": 4,
+      "net_profit": 117755.58453,
+      "profit_rank": 7
+    },
+    {
+      "stock_code": "600436",
+      "stock_abbr": "片仔癀",
+      "total_operating_revenue": 744236.610835,
+      "revenue_rank": 7,
+      "net_profit": 212934.76773800002,
+      "profit_rank": 5
+    },
+    {
+      "stock_code": "002603",
+      "stock_abbr": "以岭药业",
+      "total_operating_revenue": 586760.307361,
+      "revenue_rank": 9,
+      "net_profit": 100040.467191,
+      "profit_rank": 10
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"600332\",\"stock_abbr\":\"白云山\",\"total_operating_revenue\":6160599.3795539998,\"revenue_rank\":1,\"net_profit\":331005.207786,\"profit_rank\":2},{\"stock_code\":\"000538\",\"stock_abbr\":\"云南白药\",\"total_operating_revenue\":3065421.420901,\"revenue_rank\":2,\"net_profit\":477711.965747,\"profit_rank\":1},{\"stock_code\":\"000999\",\"stock_abbr\":\"华润三九\",\"total_operating_revenue\":2198640.3962070001,\"revenue_rank\":3,\"net_profit\":235282.695566,\"profit_rank\":3},{\"stock_code\":\"600085\",\"stock_abbr\":\"同仁堂\",\"total_operating_revenue\":1330791.480027,\"revenue_rank\":4,\"net_profit\":117755.58453,\"profit_rank\":7},{\"stock_code\":\"600436\",\"stock_abbr\":\"片仔癀\",\"total_operating_revenue\":744236.6108350001,\"revenue_rank\":7,\"net_profit\":212934.767738,\"profit_rank\":5},{\"stock_code\":\"002603\",\"stock_abbr\":\"以岭药业\",\"total_operating_revenue\":586760.307361,\"revenue_rank\":9,\"net_profit\":100040.467191,\"profit_rank\":10}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2025Q3 中药公司营收与净利润排名前十",
+    "x_field": null,
+    "y_fields": [
+      "total_operating_revenue",
+      "net_profit"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": null,
+    "sort_ascending": true,
+    "top_n": 6,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1066",
+    "image_index": 2,
+    "chart_type": "bar",
+    "title": "2025Q3 中药公司营收与净利润排名前十",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 6,
+      "preview_rows": [
+        {
+          "stock_code": "600332",
+          "stock_abbr": "白云山",
+          "total_operating_revenue": 6160599.379554,
+          "revenue_rank": 1,
+          "net_profit": 331005.207786,
+          "profit_rank": 2
+        },
+        {
+          "stock_code": "000538",
+          "stock_abbr": "云南白药",
+          "total_operating_revenue": 3065421.420901,
+          "revenue_rank": 2,
+          "net_profit": 477711.965747,
+          "profit_rank": 1
+        },
+        {
+          "stock_code": "000999",
+          "stock_abbr": "华润三九",
+          "total_operating_revenue": 2198640.396207,
+          "revenue_rank": 3,
+          "net_profit": 235282.69556599998,
+          "profit_rank": 3
+        },
+        {
+          "stock_code": "600085",
+          "stock_abbr": "同仁堂",
+          "total_operating_revenue": 1330791.480027,
+          "revenue_rank": 4,
+          "net_profit": 117755.58453,
+          "profit_rank": 7
+        },
+        {
+          "stock_code": "600436",
+          "stock_abbr": "片仔癀",
+          "total_operating_revenue": 744236.610835,
+          "revenue_rank": 7,
+          "net_profit": 212934.76773800002,
+          "profit_rank": 5
+        },
+        {
+          "stock_code": "002603",
+          "stock_abbr": "以岭药业",
+          "total_operating_revenue": 586760.307361,
+          "revenue_rank": 9,
+          "net_profit": 100040.467191,
+          "profit_rank": 10
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": null,
+      "sort_ascending": true,
+      "top_n": 6,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "total_operating_revenue",
+        "data_type": "quantitative",
+        "label": "营业总收入",
+        "unit": "万元"
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B1066_2.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1066_2.jpg"
+    },
+    "meta": {
+      "source_sql": "WITH ranked_by_revenue AS ( SELECT stock_code, stock_abbr, total_operating_revenue, ROW_NUMBER() OVER (ORDER BY total_operating_revenue DESC) AS revenue_rank FROM financials_view WHERE report_period = '2025Q3'), ranked_by_profit AS ( SELECT stock_code, stock_abbr, net_profit, ROW_NUMBER() OVER (ORDER BY net_profit DESC) AS profit_rank FROM financials_view WHERE report_period = '2025Q3') SELECT r.stock_code, r.stock_abbr, r.total_operating_revenue, r.revenue_rank, p.net_profit, p.profit_rank FROM ranked_by_revenue r JOIN ranked_by_profit p ON r.stock_code = p.stock_code WHERE r.revenue_rank <= 10 AND p.profit_rank <= 10 ORDER BY r.revenue_rank, p.profit_rank",
+      "value_fields": [
+        "total_operating_revenue",
+        "net_profit"
+      ],
+      "value_labels": [
+        "营业总收入",
+        "净利润"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "total_operating_revenue",
+          "net_profit"
+        ],
+        "category_field": "stock_abbr",
+        "sort_by": null,
+        "sort_ascending": true,
+        "top_n": 6
+      }
+    }
+  },
+  "all_chart_specs": [
+    "outputs/task2_langgraph_regression_v3/artifacts/chart_specs/B1066_2.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1066_2.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "哪些公司的业绩比较好？",
+      "A": {
+        "content": "您想了解哪些具体的财务指标呢？比如营业总收入、净利润，还是其他指标？",
+        "image": []
+      }
+    },
+    {
+      "Q": "2025年第三季度，2家中药上市公司中，营业总收入和净利润均排名前十的公司",
+      "A": {
+        "content": "2025年第三季度，在中药上市公司中，营业总收入和净利润均位列前十的公司共有6家，分别是：白云山（营收排名第1，净利润排名第2）、云南白药（营收排名第2，净利润排名第1）、华润三九（营收排名第3，净利润排名第3）、同仁堂（营收排名第4，净利润排名第7）、片仔癀（营收排名第7，净利润排名第5）、以岭药业（营收排名第9，净利润排名第10）。",
+        "image": [
+          "./result/B1066_2.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"哪些公司的业绩比较好？\", \"A\": {\"content\": \"您想了解哪些具体的财务指标呢？比如营业总收入、净利润，还是其他指标？\", \"image\": []}}, {\"Q\": \"2025年第三季度，2家中药上市公司中，营业总收入和净利润均排名前十的公司\", \"A\": {\"content\": \"2025年第三季度，在中药上市公司中，营业总收入和净利润均位列前十的公司共有6家，分别是：白云山（营收排名第1，净利润排名第2）、云南白药（营收排名第2，净利润排名第1）、华润三九（营收排名第3，净利润排名第3）、同仁堂（营收排名第4，净利润排名第7）、片仔癀（营收排名第7，净利润排名第5）、以岭药业（营收排名第9，净利润排名第10）。\", \"image\": [\"./result/B1066_2.jpg\"]}}]",
+  "notes": [
+    "Used deterministic SQL template for a known query pattern."
+  ],
+  "final_status": "ok"
+}

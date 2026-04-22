@@ -1,0 +1,243 @@
+{
+  "question_id": "B1051",
+  "question_type": "数据统计分析查询",
+  "raw_question": "对比白云山、云南白药、片仔癀2025年第三季度的核心盈利能力指标（销售毛利率、销售净利率、ROE），用雷达图展示差异",
+  "raw_question_json": "[{\"Q\":\"对比白云山、云南白药、片仔癀2025年第三季度的核心盈利能力指标（销售毛利率、销售净利率、ROE），用雷达图展示差异\"}]",
+  "parsed_slots": {
+    "companies": [
+      "白云山",
+      "云南白药",
+      "片仔癀"
+    ],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "销售毛利率",
+      "销售净利率",
+      "ROE"
+    ],
+    "chart_type": "radar",
+    "intent_type": "trend_or_chart",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "comparison",
+    "companies": [
+      "白云山",
+      "云南白药",
+      "片仔癀"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "销售毛利率",
+      "销售净利率",
+      "ROE"
+    ],
+    "chart_type": "radar",
+    "top_n": null,
+    "threshold": null,
+    "question": "对比白云山、云南白药、片仔癀2025年第三季度的核心盈利能力指标（销售毛利率、销售净利率、ROE），用雷达图展示差异",
+    "should_draw": true,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT stock_code, stock_abbr, gross_profit_margin, net_profit_margin, roe FROM financials_view WHERE stock_abbr IN ('白云山', '云南白药', '片仔癀') AND report_period = '2025Q3'",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, gross_profit_margin, net_profit_margin, roe FROM financials_view WHERE stock_abbr IN ('白云山', '云南白药', '片仔癀') AND report_period = '2025Q3'"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 3,
+  "result_rows": [
+    {
+      "stock_code": "000538",
+      "stock_abbr": "云南白药",
+      "gross_profit_margin": 30.05989436448057,
+      "net_profit_margin": 15.583892070754471,
+      "roe": 2.8
+    },
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "gross_profit_margin": 17.604173963320054,
+      "net_profit_margin": 5.372938368336032,
+      "roe": 2.09
+    },
+    {
+      "stock_code": "600436",
+      "stock_abbr": "片仔癀",
+      "gross_profit_margin": 38.929751841546285,
+      "net_profit_margin": 28.611165405998605,
+      "roe": 4.68
+    }
+  ],
+  "context_companies": [
+    "云南白药",
+    "白云山",
+    "片仔癀"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "000538",
+      "stock_abbr": "云南白药",
+      "gross_profit_margin": 30.05989436448057,
+      "net_profit_margin": 15.583892070754471,
+      "roe": 2.8
+    },
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "gross_profit_margin": 17.604173963320054,
+      "net_profit_margin": 5.372938368336032,
+      "roe": 2.09
+    },
+    {
+      "stock_code": "600436",
+      "stock_abbr": "片仔癀",
+      "gross_profit_margin": 38.929751841546285,
+      "net_profit_margin": 28.611165405998605,
+      "roe": 4.68
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"000538\",\"stock_abbr\":\"云南白药\",\"gross_profit_margin\":30.0598943645,\"net_profit_margin\":15.5838920708,\"roe\":2.8},{\"stock_code\":\"600332\",\"stock_abbr\":\"白云山\",\"gross_profit_margin\":17.6041739633,\"net_profit_margin\":5.3729383683,\"roe\":2.09},{\"stock_code\":\"600436\",\"stock_abbr\":\"片仔癀\",\"gross_profit_margin\":38.9297518415,\"net_profit_margin\":28.611165406,\"roe\":4.68}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "白云山、云南白药、片仔癀2025Q3核心盈利能力指标对比",
+    "x_field": null,
+    "y_fields": [
+      "gross_profit_margin",
+      "net_profit_margin",
+      "roe"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": "stock_code",
+    "sort_ascending": true,
+    "top_n": 3,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1051",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "白云山、云南白药、片仔癀2025Q3核心盈利能力指标对比",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 3,
+      "preview_rows": [
+        {
+          "stock_code": "000538",
+          "stock_abbr": "云南白药",
+          "gross_profit_margin": 30.05989436448057,
+          "net_profit_margin": 15.583892070754471,
+          "roe": 2.8
+        },
+        {
+          "stock_code": "600332",
+          "stock_abbr": "白云山",
+          "gross_profit_margin": 17.604173963320054,
+          "net_profit_margin": 5.372938368336032,
+          "roe": 2.09
+        },
+        {
+          "stock_code": "600436",
+          "stock_abbr": "片仔癀",
+          "gross_profit_margin": 38.929751841546285,
+          "net_profit_margin": 28.611165405998605,
+          "roe": 4.68
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "stock_code",
+      "sort_ascending": true,
+      "top_n": 3,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "gross_profit_margin",
+        "data_type": "quantitative",
+        "label": "销售毛利率",
+        "unit": "%"
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B1051_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1051_1.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT stock_code, stock_abbr, gross_profit_margin, net_profit_margin, roe FROM financials_view WHERE stock_abbr IN ('白云山', '云南白药', '片仔癀') AND report_period = '2025Q3'",
+      "value_fields": [
+        "gross_profit_margin",
+        "net_profit_margin",
+        "roe"
+      ],
+      "value_labels": [
+        "销售毛利率",
+        "销售净利率",
+        "roe"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "gross_profit_margin",
+          "net_profit_margin",
+          "roe"
+        ],
+        "category_field": "stock_abbr",
+        "sort_by": "stock_code",
+        "sort_ascending": true,
+        "top_n": 3
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1051_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1051_1.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "对比白云山、云南白药、片仔癀2025年第三季度的核心盈利能力指标（销售毛利率、销售净利率、ROE），用雷达图展示差异",
+      "A": {
+        "content": "根据2025年第三季度财报数据，三家公司的核心盈利能力指标对比如下：\n\n*   **片仔癀 (600436)**：销售毛利率最高，为38.93%；销售净利率也最高，为28.61%；ROE为4.68%。\n*   **云南白药 (000538)**：销售毛利率为30.06%；销售净利率为15.58%；ROE为2.80%。\n*   **白云山 (600332)**：三项指标均相对较低，销售毛利率为17.60%，销售净利率为5.37%，ROE为2.09%。\n\n从数据看，片仔癀在盈利能力和股东回报效率上表现最为突出，云南白药居中，白云山相对较低。这些差异可以通过雷达图直观展示。",
+        "image": [
+          "./result/B1051_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"对比白云山、云南白药、片仔癀2025年第三季度的核心盈利能力指标（销售毛利率、销售净利率、ROE），用雷达图展示差异\", \"A\": {\"content\": \"根据2025年第三季度财报数据，三家公司的核心盈利能力指标对比如下：\\n\\n*   **片仔癀 (600436)**：销售毛利率最高，为38.93%；销售净利率也最高，为28.61%；ROE为4.68%。\\n*   **云南白药 (000538)**：销售毛利率为30.06%；销售净利率为15.58%；ROE为2.80%。\\n*   **白云山 (600332)**：三项指标均相对较低，销售毛利率为17.60%，销售净利率为5.37%，ROE为2.09%。\\n\\n从数据看，片仔癀在盈利能力和股东回报效率上表现最为突出，云南白药居中，白云山相对较低。这些差异可以通过雷达图直观展示。\", \"image\": [\"./result/B1051_1.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，需要对比白云山、云南白药、片仔癀三家公司在2025Q3的三个核心盈利能力指标：销售毛利率（gross_profit_margin）、销售净利率（net_profit_margin）、ROE（roe）。查询直接使用stock_abbr IN列表和报告期'2025Q3'进行筛选，返回所需字段。"
+  ],
+  "final_status": "ok"
+}

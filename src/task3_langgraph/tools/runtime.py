@@ -30,6 +30,23 @@ from .vector_store import VectorStoreManager
 
 SAFE_SQL_PREFIXES = ("select", "with")
 FORBIDDEN_SQL_TOKENS = ("insert ", "update ", "delete ", "drop ", "alter ", "create ", "attach ", "pragma ")
+DERIVABLE_SINGLE_QUARTER_COLUMNS = [
+    "total_operating_revenue",
+    "net_profit",
+    "total_profit",
+    "operating_expense_rnd_expenses",
+    "operating_expense_selling_expenses",
+    "operating_expense_cost_of_sales",
+    "operating_expense_administrative_expenses",
+    "operating_expense_financial_expenses",
+    "operating_expense_taxes_and_surcharges",
+    "total_operating_expenses",
+    "operating_cf_net_amount",
+    "investing_cf_net_amount",
+    "financing_cf_net_amount",
+    "net_profit_excl_non_recurring",
+]
+PERIOD_ORDER = {"Q1": 1, "Q2": 2, "H1": 3, "Q3": 4, "Q4": 5, "FY": 6}
 
 
 class Task3Runtime:
@@ -287,6 +304,20 @@ class Task3Runtime:
             f"{self._schema_text()}\n\n"
             f"Question: {question}\n"
             f"Query plan: {json.dumps(query_plan or {}, ensure_ascii=False)}\n"
+        )
+        if not (query_plan or {}).get("companies"):
+            user_prompt += (
+                "Important: if the query plan does not explicitly provide companies, "
+                "do not invent or manually enumerate a stock_abbr IN (...) list.\n"
+            )
+        if any(str(period).endswith(("Q2", "Q4")) for period in (query_plan or {}).get("periods", []) or []):
+            user_prompt += (
+                "Important: financials_view already contains derived single-quarter rows such as Q2/Q4 when they "
+                "can be reconstructed from cumulative disclosures, so you may query 2025Q2/2025Q4 directly.\n"
+            )
+        user_prompt += (
+            "SQLite compatibility: do not use PERCENTILE_CONT / WITHIN GROUP. "
+            "If median is needed, emulate it with ROW_NUMBER() and COUNT() window functions.\n"
         )
         if context_rows:
             user_prompt += f"Previous turn result rows: {json.dumps(context_rows[:12], ensure_ascii=False)}\n"
@@ -896,6 +927,22 @@ class Task3Runtime:
                 return response
         except Exception:
             pass
+        return self._deterministic_clarification(missing_slots)
+
+    def _deterministic_clarification(self, missing_slots: list[str]) -> str:
+        missing = set(str(item) for item in missing_slots if str(item).strip())
+        if missing == {"metric"}:
+            return "请补充想看的具体财务指标，例如营业总收入、净利润或资产负债率。"
+        if missing == {"period"}:
+            return "请补充具体报告期，例如2025年第三季度或2025年全年。"
+        if missing == {"company"}:
+            return "请补充公司名称或股票代码。"
+        if missing == {"period", "metric"}:
+            return "请补充具体报告期和财务指标，例如2025年第三季度的营业总收入。"
+        if missing == {"company", "metric"}:
+            return "请补充公司名称和财务指标，例如云南白药的净利润。"
+        if missing == {"company", "period"}:
+            return "请补充公司名称和报告期，例如云南白药2025年第三季度。"
         missing_text = "、".join(str(item) for item in missing_slots if item) or "关键信息"
         return f"请补充继续分析所需的关键信息：{missing_text}。"
 
@@ -1001,6 +1048,7 @@ class Task3Runtime:
         view["financial_expenses"] = view["operating_expense_financial_expenses"]
         view["taxes_and_surcharges"] = view["operating_expense_taxes_and_surcharges"]
         view["total_operating_expenses"] = view["total_operating_expenses"]
+        view = self._append_single_quarter_rows(view)
         view["rnd_expense_ratio"] = (
             pd.to_numeric(view["operating_expense_rnd_expenses"], errors="coerce")
             / pd.to_numeric(view["total_operating_revenue"], errors="coerce")
@@ -1016,6 +1064,58 @@ class Task3Runtime:
             / pd.to_numeric(view["asset_inventory"], errors="coerce")
         )
         return view
+
+    def _append_single_quarter_rows(self, dataframe: pd.DataFrame) -> pd.DataFrame:
+        if dataframe.empty or "report_period" not in dataframe.columns or "report_year" not in dataframe.columns:
+            return dataframe
+        derivable_columns = [column for column in DERIVABLE_SINGLE_QUARTER_COLUMNS if column in dataframe.columns]
+        if not derivable_columns:
+            return dataframe
+
+        new_rows: list[dict[str, Any]] = []
+        work = dataframe.copy()
+        work["report_year"] = pd.to_numeric(work["report_year"], errors="coerce")
+        work = work.dropna(subset=["stock_code", "report_year", "report_period"]).copy()
+        work["report_year"] = work["report_year"].astype(int)
+
+        for (stock_code, report_year), group in work.groupby(["stock_code", "report_year"]):
+            records = group.to_dict(orient="records")
+            period_map = {
+                str(row["report_period"])[4:]: row
+                for row in records
+                if str(row.get("report_period", "")).startswith(str(report_year))
+            }
+            existing_periods = {
+                str(row.get("report_period", ""))
+                for row in records
+                if str(row.get("report_period", "")).startswith(str(report_year))
+            }
+            for target_suffix, base_suffix, previous_suffix in [("Q2", "H1", "Q1"), ("Q4", "FY", "Q3")]:
+                target_period = f"{report_year}{target_suffix}"
+                if target_period in existing_periods:
+                    continue
+                base_row = period_map.get(base_suffix)
+                previous_row = period_map.get(previous_suffix)
+                if not base_row or not previous_row:
+                    continue
+                new_row = {column: pd.NA for column in dataframe.columns}
+                new_row["stock_code"] = stock_code
+                if "stock_abbr" in dataframe.columns:
+                    new_row["stock_abbr"] = base_row.get("stock_abbr") or previous_row.get("stock_abbr")
+                new_row["report_period"] = target_period
+                new_row["report_year"] = report_year
+                for column in derivable_columns:
+                    base_value = pd.to_numeric(pd.Series([base_row.get(column)]), errors="coerce").iloc[0]
+                    previous_value = pd.to_numeric(pd.Series([previous_row.get(column)]), errors="coerce").iloc[0]
+                    if pd.isna(base_value) or pd.isna(previous_value):
+                        continue
+                    new_row[column] = float(base_value - previous_value)
+                if any(pd.notna(new_row.get(column)) for column in derivable_columns):
+                    new_rows.append(new_row)
+
+        if not new_rows:
+            return dataframe
+        return pd.concat([dataframe, pd.DataFrame(new_rows)], ignore_index=True, sort=False)
 
     def _write_query_cache(self) -> None:
         conn = sqlite3.connect(self.config.query_cache_db)
@@ -1039,7 +1139,8 @@ class Task3Runtime:
             "- administrative_expenses = 管理费用\n"
             "- financial_expenses = 财务费用\n"
             "- taxes_and_surcharges = 税金及附加\n"
-            "Report period format uses values like 2024FY, 2025Q3, 2025H1."
+            "Report period format uses values like 2024FY, 2025Q3, 2025H1, 2025Q2, 2025Q4.\n"
+            "Q2/Q4 rows may be derived from cumulative disclosures when available."
         )
 
     def _write_chunk_manifest(self) -> None:

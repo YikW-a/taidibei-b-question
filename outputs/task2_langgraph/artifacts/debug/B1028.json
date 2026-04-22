@@ -1,0 +1,346 @@
+{
+  "question_id": "B1028",
+  "question_type": "数据统计分析查询",
+  "raw_question": "对比白云山（600332）、云南白药（000538）、片仔癀（600436）2022-2025年第三季度的“净利润（万元）”，生成多系列折线图展示趋势。",
+  "raw_question_json": "[{\"Q\":\"对比白云山（600332）、云南白药（000538）、片仔癀（600436）2022-2025年第三季度的“净利润（万元）”，生成多系列折线图展示趋势。\"}]",
+  "parsed_slots": {
+    "companies": [
+      "白云山",
+      "云南白药",
+      "片仔癀"
+    ],
+    "stock_codes": [
+      "600332",
+      "000538",
+      "600436"
+    ],
+    "periods": [
+      "2025Q3",
+      "2022Q3",
+      "2023Q3",
+      "2024Q3"
+    ],
+    "metrics": [
+      "净利润"
+    ],
+    "chart_type": "line",
+    "intent_type": "trend_or_chart",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "trend_or_chart",
+    "companies": [
+      "白云山",
+      "云南白药",
+      "片仔癀"
+    ],
+    "periods": [
+      "2022Q3",
+      "2023Q3",
+      "2024Q3",
+      "2025Q3"
+    ],
+    "metrics": [
+      "净利润"
+    ],
+    "chart_type": "line",
+    "top_n": null,
+    "threshold": null,
+    "question": "对比白云山（600332）、云南白药（000538）、片仔癀（600436）2022-2025年第三季度的“净利润（万元）”，生成多系列折线图展示趋势。",
+    "should_draw": true,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT stock_code, stock_abbr, report_period, net_profit FROM financials_view WHERE stock_abbr IN ('白云山', '云南白药', '片仔癀') AND report_period IN ('2022Q3', '2023Q3', '2024Q3', '2025Q3') ORDER BY stock_abbr, report_period",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, report_period, net_profit FROM financials_view WHERE stock_abbr IN ('白云山', '云南白药', '片仔癀') AND report_period IN ('2022Q3', '2023Q3', '2024Q3', '2025Q3') ORDER BY stock_abbr, report_period"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 9,
+  "result_rows": [
+    {
+      "stock_code": "000538",
+      "stock_abbr": "云南白药",
+      "report_period": "2023Q3",
+      "net_profit": 412347.741445
+    },
+    {
+      "stock_code": "000538",
+      "stock_abbr": "云南白药",
+      "report_period": "2024Q3",
+      "net_profit": 432672.806805
+    },
+    {
+      "stock_code": "000538",
+      "stock_abbr": "云南白药",
+      "report_period": "2025Q3",
+      "net_profit": 477711.965747
+    },
+    {
+      "stock_code": "600436",
+      "stock_abbr": "片仔癀",
+      "report_period": "2023Q3",
+      "net_profit": 240464.84146
+    },
+    {
+      "stock_code": "600436",
+      "stock_abbr": "片仔癀",
+      "report_period": "2024Q3",
+      "net_profit": 268668.474325
+    },
+    {
+      "stock_code": "600436",
+      "stock_abbr": "片仔癀",
+      "report_period": "2025Q3",
+      "net_profit": 212934.76773800002
+    },
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "report_period": "2023Q3",
+      "net_profit": 379125.018992
+    },
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "report_period": "2024Q3",
+      "net_profit": 315897.699891
+    },
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "report_period": "2025Q3",
+      "net_profit": 331005.207786
+    }
+  ],
+  "context_companies": [
+    "云南白药",
+    "片仔癀",
+    "白云山"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "000538",
+      "stock_abbr": "云南白药",
+      "report_period": "2023Q3",
+      "net_profit": 412347.741445
+    },
+    {
+      "stock_code": "000538",
+      "stock_abbr": "云南白药",
+      "report_period": "2024Q3",
+      "net_profit": 432672.806805
+    },
+    {
+      "stock_code": "000538",
+      "stock_abbr": "云南白药",
+      "report_period": "2025Q3",
+      "net_profit": 477711.965747
+    },
+    {
+      "stock_code": "600436",
+      "stock_abbr": "片仔癀",
+      "report_period": "2023Q3",
+      "net_profit": 240464.84146
+    },
+    {
+      "stock_code": "600436",
+      "stock_abbr": "片仔癀",
+      "report_period": "2024Q3",
+      "net_profit": 268668.474325
+    },
+    {
+      "stock_code": "600436",
+      "stock_abbr": "片仔癀",
+      "report_period": "2025Q3",
+      "net_profit": 212934.76773800002
+    },
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "report_period": "2023Q3",
+      "net_profit": 379125.018992
+    },
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "report_period": "2024Q3",
+      "net_profit": 315897.699891
+    },
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "report_period": "2025Q3",
+      "net_profit": 331005.207786
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"000538\",\"stock_abbr\":\"云南白药\",\"report_period\":\"2023Q3\",\"net_profit\":412347.741445},{\"stock_code\":\"000538\",\"stock_abbr\":\"云南白药\",\"report_period\":\"2024Q3\",\"net_profit\":432672.806805},{\"stock_code\":\"000538\",\"stock_abbr\":\"云南白药\",\"report_period\":\"2025Q3\",\"net_profit\":477711.965747},{\"stock_code\":\"600436\",\"stock_abbr\":\"片仔癀\",\"report_period\":\"2023Q3\",\"net_profit\":240464.84146},{\"stock_code\":\"600436\",\"stock_abbr\":\"片仔癀\",\"report_period\":\"2024Q3\",\"net_profit\":268668.474325},{\"stock_code\":\"600436\",\"stock_abbr\":\"片仔癀\",\"report_period\":\"2025Q3\",\"net_profit\":212934.767738},{\"stock_code\":\"600332\",\"stock_abbr\":\"白云山\",\"report_period\":\"2023Q3\",\"net_profit\":379125.018992},{\"stock_code\":\"600332\",\"stock_abbr\":\"白云山\",\"report_period\":\"2024Q3\",\"net_profit\":315897.699891},{\"stock_code\":\"600332\",\"stock_abbr\":\"白云山\",\"report_period\":\"2025Q3\",\"net_profit\":331005.207786}]",
+  "chart_plan": {
+    "chart_type": "line",
+    "title": "白云山、云南白药、片仔癀2022-2025年第三季度净利润趋势",
+    "x_field": "report_period",
+    "y_fields": [
+      "net_profit"
+    ],
+    "category_field": null,
+    "sort_by": "report_period",
+    "sort_ascending": true,
+    "top_n": null,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1028",
+    "image_index": 1,
+    "chart_type": "line",
+    "title": "白云山、云南白药、片仔癀2022-2025年第三季度净利润趋势",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 9,
+      "preview_rows": [
+        {
+          "stock_code": "000538",
+          "stock_abbr": "云南白药",
+          "report_period": "2023Q3",
+          "net_profit": 412347.741445
+        },
+        {
+          "stock_code": "000538",
+          "stock_abbr": "云南白药",
+          "report_period": "2024Q3",
+          "net_profit": 432672.806805
+        },
+        {
+          "stock_code": "000538",
+          "stock_abbr": "云南白药",
+          "report_period": "2025Q3",
+          "net_profit": 477711.965747
+        },
+        {
+          "stock_code": "600436",
+          "stock_abbr": "片仔癀",
+          "report_period": "2023Q3",
+          "net_profit": 240464.84146
+        },
+        {
+          "stock_code": "600436",
+          "stock_abbr": "片仔癀",
+          "report_period": "2024Q3",
+          "net_profit": 268668.474325
+        },
+        {
+          "stock_code": "600436",
+          "stock_abbr": "片仔癀",
+          "report_period": "2025Q3",
+          "net_profit": 212934.76773800002
+        },
+        {
+          "stock_code": "600332",
+          "stock_abbr": "白云山",
+          "report_period": "2023Q3",
+          "net_profit": 379125.018992
+        },
+        {
+          "stock_code": "600332",
+          "stock_abbr": "白云山",
+          "report_period": "2024Q3",
+          "net_profit": 315897.699891
+        },
+        {
+          "stock_code": "600332",
+          "stock_abbr": "白云山",
+          "report_period": "2025Q3",
+          "net_profit": 331005.207786
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "report_period",
+      "sort_ascending": true,
+      "top_n": null,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "net_profit",
+        "data_type": "quantitative",
+        "label": "净利润",
+        "unit": "万元"
+      },
+      "x": {
+        "field": "report_period",
+        "data_type": "temporal",
+        "label": "报告期",
+        "unit": null
+      },
+      "series": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": true,
+      "rotate_xticks": 30,
+      "show_value_labels": false
+    },
+    "output": {
+      "filename": "B1028_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1028_1.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT stock_code, stock_abbr, report_period, net_profit FROM financials_view WHERE stock_abbr IN ('白云山', '云南白药', '片仔癀') AND report_period IN ('2022Q3', '2023Q3', '2024Q3', '2025Q3') ORDER BY stock_abbr, report_period",
+      "value_fields": [
+        "net_profit"
+      ],
+      "value_labels": [
+        "净利润"
+      ],
+      "original_chart_plan": {
+        "chart_type": "line",
+        "x_field": "report_period",
+        "y_fields": [
+          "net_profit"
+        ],
+        "category_field": null,
+        "sort_by": "report_period",
+        "sort_ascending": true,
+        "top_n": null
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1028_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1028_1.jpg"
+  ],
+  "graph_formats": [
+    "折线图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "对比白云山（600332）、云南白药（000538）、片仔癀（600436）2022-2025年第三季度的“净利润（万元）”，生成多系列折线图展示趋势。",
+      "A": {
+        "content": "根据查询结果，白云山（600332）、云南白药（000538）和片仔癀（600436）在2023年至2025年第三季度的净利润（万元）趋势如下：\n\n*   **云南白药**：净利润从2023年第三季度的412,347.74万元持续增长至2025年第三季度的477,711.97万元，呈上升趋势。\n*   **片仔癀**：净利润从2023年第三季度的240,464.84万元增长至2024年第三季度的268,668.47万元，但在2025年第三季度下降至212,934.77万元，呈现先升后降的波动趋势。\n*   **白云山**：净利润从2023年第三季度的379,125.02万元下降至2024年第三季度的315,897.70万元，2025年第三季度小幅回升至331,005.21万元，整体呈波动下降趋势。\n\n**注**：查询结果中未包含2022年第三季度的数据。",
+        "image": [
+          "./result/B1028_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"对比白云山（600332）、云南白药（000538）、片仔癀（600436）2022-2025年第三季度的“净利润（万元）”，生成多系列折线图展示趋势。\", \"A\": {\"content\": \"根据查询结果，白云山（600332）、云南白药（000538）和片仔癀（600436）在2023年至2025年第三季度的净利润（万元）趋势如下：\\n\\n*   **云南白药**：净利润从2023年第三季度的412,347.74万元持续增长至2025年第三季度的477,711.97万元，呈上升趋势。\\n*   **片仔癀**：净利润从2023年第三季度的240,464.84万元增长至2024年第三季度的268,668.47万元，但在2025年第三季度下降至212,934.77万元，呈现先升后降的波动趋势。\\n*   **白云山**：净利润从2023年第三季度的379,125.02万元下降至2024年第三季度的315,897.70万元，2025年第三季度小幅回升至331,005.21万元，整体呈波动下降趋势。\\n\\n**注**：查询结果中未包含2022年第三季度的数据。\", \"image\": [\"./result/B1028_1.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，需要对比三家公司（白云山、云南白药、片仔癀）在指定四个报告期（2022Q3至2025Q3）的净利润（net_profit）趋势。使用IN进行公司和报告期的精确筛选，并按公司和报告期排序以支持生成多系列折线图。"
+  ],
+  "final_status": "ok"
+}

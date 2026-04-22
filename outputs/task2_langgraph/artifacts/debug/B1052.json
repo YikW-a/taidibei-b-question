@@ -1,0 +1,204 @@
+{
+  "question_id": "B1052",
+  "question_type": "数据统计分析查询",
+  "raw_question": "统计2025年第三季度中药公司资产负债率的分布情况（按0-30%、30%-50%、50%-70%、70%以上分组），用饼图展示各组公司数量占比",
+  "raw_question_json": "[{\"Q\":\"统计2025年第三季度中药公司资产负债率的分布情况（按0-30%、30%-50%、50%-70%、70%以上分组），用饼图展示各组公司数量占比\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "资产负债率"
+    ],
+    "chart_type": "pie",
+    "intent_type": "trend_or_chart",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "trend_or_chart",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "资产负债率"
+    ],
+    "chart_type": "pie",
+    "top_n": null,
+    "threshold": null,
+    "question": "统计2025年第三季度中药公司资产负债率的分布情况（按0-30%、30%-50%、50%-70%、70%以上分组），用饼图展示各组公司数量占比",
+    "should_draw": true,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT CASE WHEN asset_liability_ratio < 30 THEN '0-30%' WHEN asset_liability_ratio >= 30 AND asset_liability_ratio < 50 THEN '30%-50%' WHEN asset_liability_ratio >= 50 AND asset_liability_ratio < 70 THEN '50%-70%' ELSE '70%以上' END AS liability_ratio_group, COUNT(*) AS company_count FROM financials_view WHERE report_period = '2025Q3' AND stock_abbr IN ('云南白药', '片仔癀', '同仁堂', '白云山', '华润三九', '东阿阿胶', '以岭药业', '天士力', '九芝堂', '太极集团', '中新药业', '康恩贝', '江中药业', '马应龙', '广誉远', '健民集团', '千金药业', '桂林三金', '贵州百灵', '振东制药', '红日药业', '香雪制药', '上海凯宝', '康缘药业', '益佰制药', '众生药业', '华海药业', '浙江震元', '太安堂', '嘉应制药', '紫鑫药业', '吉林敖东', '羚锐制药', '康弘药业', '奇正藏药', '西藏药业', '易明医药', '维康药业', '寿仙谷', '佐力药业', '陇神戎发', '新天药业', '盘龙药业', '特一药业', '贵州三力', '万邦德', '葫芦娃', '粤万年青', '贵州茅台', '五粮液', '泸州老窖', '洋河股份', '山西汾酒', '古井贡酒', '今世缘', '口子窖', '老白干酒', '舍得酒业', '水井坊', '迎驾贡酒', '金徽酒', '伊力特', '青青稞酒', '金种子酒') GROUP BY liability_ratio_group ORDER BY liability_ratio_group",
+  "sql_history": [
+    "SELECT CASE WHEN asset_liability_ratio < 30 THEN '0-30%' WHEN asset_liability_ratio >= 30 AND asset_liability_ratio < 50 THEN '30%-50%' WHEN asset_liability_ratio >= 50 AND asset_liability_ratio < 70 THEN '50%-70%' ELSE '70%以上' END AS liability_ratio_group, COUNT(*) AS company_count FROM financials_view WHERE report_period = '2025Q3' AND stock_abbr IN ('云南白药', '片仔癀', '同仁堂', '白云山', '华润三九', '东阿阿胶', '以岭药业', '天士力', '九芝堂', '太极集团', '中新药业', '康恩贝', '江中药业', '马应龙', '广誉远', '健民集团', '千金药业', '桂林三金', '贵州百灵', '振东制药', '红日药业', '香雪制药', '上海凯宝', '康缘药业', '益佰制药', '众生药业', '华海药业', '浙江震元', '太安堂', '嘉应制药', '紫鑫药业', '吉林敖东', '羚锐制药', '康弘药业', '奇正藏药', '西藏药业', '易明医药', '维康药业', '寿仙谷', '佐力药业', '陇神戎发', '新天药业', '盘龙药业', '特一药业', '贵州三力', '万邦德', '葫芦娃', '粤万年青', '贵州茅台', '五粮液', '泸州老窖', '洋河股份', '山西汾酒', '古井贡酒', '今世缘', '口子窖', '老白干酒', '舍得酒业', '水井坊', '迎驾贡酒', '金徽酒', '伊力特', '青青稞酒', '金种子酒') GROUP BY liability_ratio_group ORDER BY liability_ratio_group"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 4,
+  "result_rows": [
+    {
+      "liability_ratio_group": "0-30%",
+      "company_count": 20
+    },
+    {
+      "liability_ratio_group": "30%-50%",
+      "company_count": 15
+    },
+    {
+      "liability_ratio_group": "50%-70%",
+      "company_count": 1
+    },
+    {
+      "liability_ratio_group": "70%以上",
+      "company_count": 1
+    }
+  ],
+  "context_companies": [],
+  "context_rows": [
+    {
+      "liability_ratio_group": "0-30%",
+      "company_count": 20
+    },
+    {
+      "liability_ratio_group": "30%-50%",
+      "company_count": 15
+    },
+    {
+      "liability_ratio_group": "50%-70%",
+      "company_count": 1
+    },
+    {
+      "liability_ratio_group": "70%以上",
+      "company_count": 1
+    }
+  ],
+  "result_preview": "[{\"liability_ratio_group\":\"0-30%\",\"company_count\":20},{\"liability_ratio_group\":\"30%-50%\",\"company_count\":15},{\"liability_ratio_group\":\"50%-70%\",\"company_count\":1},{\"liability_ratio_group\":\"70%以上\",\"company_count\":1}]",
+  "chart_plan": {
+    "chart_type": "pie",
+    "title": "2025Q3中药公司资产负债率分布",
+    "x_field": null,
+    "y_fields": [
+      "company_count"
+    ],
+    "category_field": "liability_ratio_group",
+    "sort_by": "company_count",
+    "sort_ascending": true,
+    "top_n": 4,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1052",
+    "image_index": 1,
+    "chart_type": "pie",
+    "title": "2025Q3中药公司资产负债率分布",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 4,
+      "preview_rows": [
+        {
+          "liability_ratio_group": "0-30%",
+          "company_count": 20
+        },
+        {
+          "liability_ratio_group": "30%-50%",
+          "company_count": 15
+        },
+        {
+          "liability_ratio_group": "50%-70%",
+          "company_count": 1
+        },
+        {
+          "liability_ratio_group": "70%以上",
+          "company_count": 1
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "company_count",
+      "sort_ascending": true,
+      "top_n": 4,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "company_count",
+        "data_type": "quantitative",
+        "label": "company_count",
+        "unit": null
+      },
+      "category": {
+        "field": "liability_ratio_group",
+        "data_type": "nominal",
+        "label": "liability_ratio_group",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 0,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B1052_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1052_1.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT CASE WHEN asset_liability_ratio < 30 THEN '0-30%' WHEN asset_liability_ratio >= 30 AND asset_liability_ratio < 50 THEN '30%-50%' WHEN asset_liability_ratio >= 50 AND asset_liability_ratio < 70 THEN '50%-70%' ELSE '70%以上' END AS liability_ratio_group, COUNT(*) AS company_count FROM financials_view WHERE report_period = '2025Q3' AND stock_abbr IN ('云南白药', '片仔癀', '同仁堂', '白云山', '华润三九', '东阿阿胶', '以岭药业', '天士力', '九芝堂', '太极集团', '中新药业', '康恩贝', '江中药业', '马应龙', '广誉远', '健民集团', '千金药业', '桂林三金', '贵州百灵', '振东制药', '红日药业', '香雪制药', '上海凯宝', '康缘药业', '益佰制药', '众生药业', '华海药业', '浙江震元', '太安堂', '嘉应制药', '紫鑫药业', '吉林敖东', '羚锐制药', '康弘药业', '奇正藏药', '西藏药业', '易明医药', '维康药业', '寿仙谷', '佐力药业', '陇神戎发', '新天药业', '盘龙药业', '特一药业', '贵州三力', '万邦德', '葫芦娃', '粤万年青', '贵州茅台', '五粮液', '泸州老窖', '洋河股份', '山西汾酒', '古井贡酒', '今世缘', '口子窖', '老白干酒', '舍得酒业', '水井坊', '迎驾贡酒', '金徽酒', '伊力特', '青青稞酒', '金种子酒') GROUP BY liability_ratio_group ORDER BY liability_ratio_group",
+      "value_fields": [
+        "company_count"
+      ],
+      "value_labels": [
+        "company_count"
+      ],
+      "original_chart_plan": {
+        "chart_type": "pie",
+        "x_field": null,
+        "y_fields": [
+          "company_count"
+        ],
+        "category_field": "liability_ratio_group",
+        "sort_by": "company_count",
+        "sort_ascending": true,
+        "top_n": 4
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1052_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1052_1.jpg"
+  ],
+  "graph_formats": [
+    "饼图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "统计2025年第三季度中药公司资产负债率的分布情况（按0-30%、30%-50%、50%-70%、70%以上分组），用饼图展示各组公司数量占比",
+      "A": {
+        "content": "2025年第三季度，统计范围内的中药公司资产负债率分布情况如下：\n- 资产负债率在0-30%的公司有20家。\n- 资产负债率在30%-50%的公司有15家。\n- 资产负债率在50%-70%的公司有1家。\n- 资产负债率在70%以上的公司有1家。\n\n各组公司数量占比可用饼图直观展示。",
+        "image": [
+          "./result/B1052_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"统计2025年第三季度中药公司资产负债率的分布情况（按0-30%、30%-50%、50%-70%、70%以上分组），用饼图展示各组公司数量占比\", \"A\": {\"content\": \"2025年第三季度，统计范围内的中药公司资产负债率分布情况如下：\\n- 资产负债率在0-30%的公司有20家。\\n- 资产负债率在30%-50%的公司有15家。\\n- 资产负债率在50%-70%的公司有1家。\\n- 资产负债率在70%以上的公司有1家。\\n\\n各组公司数量占比可用饼图直观展示。\", \"image\": [\"./result/B1052_1.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，需要统计2025年第三季度中药公司的资产负债率分布情况，并按指定分组计算公司数量。由于查询计划中companies为空，但问题明确要求中药公司，因此使用已知的66家中药上市公司列表进行筛选。报告期使用'2025Q3'。资产负债率字段asset_liability_ratio已经是百分比值，直接按数值范围分组。分组后计数，结果可用于绘制饼图。"
+  ],
+  "final_status": "ok"
+}

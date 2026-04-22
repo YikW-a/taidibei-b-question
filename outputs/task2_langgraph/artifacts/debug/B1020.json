@@ -1,0 +1,271 @@
+{
+  "question_id": "B1020",
+  "question_type": "数据统计分析查询",
+  "raw_question": "2025年第三季度，“股东权益-未分配利润”金额排名前五的公司，其2025年的“净利润”占未分配利润的比例是多少？请展示具体数值。",
+  "raw_question_json": "[{\"Q\":\"2025年第三季度，“股东权益-未分配利润”金额排名前五的公司，其2025年的“净利润”占未分配利润的比例是多少？请展示具体数值。\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3",
+      "2025FY"
+    ],
+    "metrics": [
+      "净利润",
+      "未分配利润"
+    ],
+    "chart_type": null,
+    "intent_type": "ranking",
+    "top_n": 5,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "ranking",
+    "companies": [],
+    "periods": [
+      "2025Q3",
+      "2025FY"
+    ],
+    "metrics": [
+      "净利润",
+      "未分配利润"
+    ],
+    "chart_type": "table",
+    "top_n": 5,
+    "threshold": null,
+    "question": "2025年第三季度，“股东权益-未分配利润”金额排名前五的公司，其2025年的“净利润”占未分配利润的比例是多少？请展示具体数值。",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "WITH top_unappropriated AS (\n    SELECT stock_code, stock_abbr, equity_unappropriated_profit AS unappropriated_profit\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n    ORDER BY equity_unappropriated_profit DESC\n    LIMIT 5\n)\nSELECT \n    t.stock_code,\n    t.stock_abbr,\n    t.unappropriated_profit,\n    fv.net_profit AS net_profit_2025,\n    CASE \n        WHEN t.unappropriated_profit != 0 THEN (fv.net_profit / t.unappropriated_profit) * 100\n        ELSE NULL\n    END AS net_profit_to_unappropriated_ratio_percent\nFROM top_unappropriated t\nLEFT JOIN financials_view fv ON t.stock_code = fv.stock_code AND fv.report_period = '2025FY'\nORDER BY t.unappropriated_profit DESC;",
+  "sql_history": [
+    "WITH top_unappropriated AS (\n    SELECT stock_code, stock_abbr, equity_unappropriated_profit AS unappropriated_profit\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n    ORDER BY equity_unappropriated_profit DESC\n    LIMIT 5\n)\nSELECT \n    t.stock_code,\n    t.stock_abbr,\n    t.unappropriated_profit,\n    fv.net_profit AS net_profit_2025,\n    CASE \n        WHEN t.unappropriated_profit != 0 THEN (fv.net_profit / t.unappropriated_profit) * 100\n        ELSE NULL\n    END AS net_profit_to_unappropriated_ratio_percent\nFROM top_unappropriated t\nLEFT JOIN financials_view fv ON t.stock_code = fv.stock_code AND fv.report_period = '2025FY'\nORDER BY t.unappropriated_profit DESC;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 5,
+  "result_rows": [
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "unappropriated_profit": 2382475.5853979997,
+      "net_profit_2025": null,
+      "net_profit_to_unappropriated_ratio_percent": null
+    },
+    {
+      "stock_code": "000538",
+      "stock_abbr": "云南白药",
+      "unappropriated_profit": 1782594.4281080002,
+      "net_profit_2025": null,
+      "net_profit_to_unappropriated_ratio_percent": null
+    },
+    {
+      "stock_code": "000999",
+      "stock_abbr": "华润三九",
+      "unappropriated_profit": 1725583.952706,
+      "net_profit_2025": null,
+      "net_profit_to_unappropriated_ratio_percent": null
+    },
+    {
+      "stock_code": "600436",
+      "stock_abbr": "片仔癀",
+      "unappropriated_profit": 1079313.2553299998,
+      "net_profit_2025": null,
+      "net_profit_to_unappropriated_ratio_percent": null
+    },
+    {
+      "stock_code": "600566",
+      "stock_abbr": "济川药业",
+      "unappropriated_profit": 928608.18395,
+      "net_profit_2025": null,
+      "net_profit_to_unappropriated_ratio_percent": null
+    }
+  ],
+  "context_companies": [
+    "白云山",
+    "云南白药",
+    "华润三九",
+    "片仔癀",
+    "济川药业"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "unappropriated_profit": 2382475.5853979997,
+      "net_profit_2025": null,
+      "net_profit_to_unappropriated_ratio_percent": null
+    },
+    {
+      "stock_code": "000538",
+      "stock_abbr": "云南白药",
+      "unappropriated_profit": 1782594.4281080002,
+      "net_profit_2025": null,
+      "net_profit_to_unappropriated_ratio_percent": null
+    },
+    {
+      "stock_code": "000999",
+      "stock_abbr": "华润三九",
+      "unappropriated_profit": 1725583.952706,
+      "net_profit_2025": null,
+      "net_profit_to_unappropriated_ratio_percent": null
+    },
+    {
+      "stock_code": "600436",
+      "stock_abbr": "片仔癀",
+      "unappropriated_profit": 1079313.2553299998,
+      "net_profit_2025": null,
+      "net_profit_to_unappropriated_ratio_percent": null
+    },
+    {
+      "stock_code": "600566",
+      "stock_abbr": "济川药业",
+      "unappropriated_profit": 928608.18395,
+      "net_profit_2025": null,
+      "net_profit_to_unappropriated_ratio_percent": null
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"600332\",\"stock_abbr\":\"白云山\",\"unappropriated_profit\":2382475.5853979997,\"net_profit_2025\":null,\"net_profit_to_unappropriated_ratio_percent\":null},{\"stock_code\":\"000538\",\"stock_abbr\":\"云南白药\",\"unappropriated_profit\":1782594.4281080002,\"net_profit_2025\":null,\"net_profit_to_unappropriated_ratio_percent\":null},{\"stock_code\":\"000999\",\"stock_abbr\":\"华润三九\",\"unappropriated_profit\":1725583.9527060001,\"net_profit_2025\":null,\"net_profit_to_unappropriated_ratio_percent\":null},{\"stock_code\":\"600436\",\"stock_abbr\":\"片仔癀\",\"unappropriated_profit\":1079313.2553299998,\"net_profit_2025\":null,\"net_profit_to_unappropriated_ratio_percent\":null},{\"stock_code\":\"600566\",\"stock_abbr\":\"济川药业\",\"unappropriated_profit\":928608.18395,\"net_profit_2025\":null,\"net_profit_to_unappropriated_ratio_percent\":null}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2025Q3未分配利润Top5公司及其2025年净利润占比",
+    "x_field": null,
+    "y_fields": [
+      "stock_code"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": null,
+    "sort_ascending": true,
+    "top_n": 5,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1020",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "2025Q3未分配利润Top5公司及其2025年净利润占比",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 5,
+      "preview_rows": [
+        {
+          "stock_code": "600332",
+          "stock_abbr": "白云山",
+          "unappropriated_profit": 2382475.5853979997,
+          "net_profit_2025": null,
+          "net_profit_to_unappropriated_ratio_percent": null
+        },
+        {
+          "stock_code": "000538",
+          "stock_abbr": "云南白药",
+          "unappropriated_profit": 1782594.4281080002,
+          "net_profit_2025": null,
+          "net_profit_to_unappropriated_ratio_percent": null
+        },
+        {
+          "stock_code": "000999",
+          "stock_abbr": "华润三九",
+          "unappropriated_profit": 1725583.952706,
+          "net_profit_2025": null,
+          "net_profit_to_unappropriated_ratio_percent": null
+        },
+        {
+          "stock_code": "600436",
+          "stock_abbr": "片仔癀",
+          "unappropriated_profit": 1079313.2553299998,
+          "net_profit_2025": null,
+          "net_profit_to_unappropriated_ratio_percent": null
+        },
+        {
+          "stock_code": "600566",
+          "stock_abbr": "济川药业",
+          "unappropriated_profit": 928608.18395,
+          "net_profit_2025": null,
+          "net_profit_to_unappropriated_ratio_percent": null
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": null,
+      "sort_ascending": true,
+      "top_n": 5,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "stock_code",
+        "data_type": "quantitative",
+        "label": "股票代码",
+        "unit": "万元"
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B1020_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1020_1.jpg"
+    },
+    "meta": {
+      "source_sql": "WITH top_unappropriated AS (\n    SELECT stock_code, stock_abbr, equity_unappropriated_profit AS unappropriated_profit\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n    ORDER BY equity_unappropriated_profit DESC\n    LIMIT 5\n)\nSELECT \n    t.stock_code,\n    t.stock_abbr,\n    t.unappropriated_profit,\n    fv.net_profit AS net_profit_2025,\n    CASE \n        WHEN t.unappropriated_profit != 0 THEN (fv.net_profit / t.unappropriated_profit) * 100\n        ELSE NULL\n    END AS net_profit_to_unappropriated_ratio_percent\nFROM top_unappropriated t\nLEFT JOIN financials_view fv ON t.stock_code = fv.stock_code AND fv.report_period = '2025FY'\nORDER BY t.unappropriated_profit DESC;",
+      "value_fields": [
+        "stock_code"
+      ],
+      "value_labels": [
+        "股票代码"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "stock_code"
+        ],
+        "category_field": "stock_abbr",
+        "sort_by": null,
+        "sort_ascending": true,
+        "top_n": 5
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1020_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1020_1.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "2025年第三季度，“股东权益-未分配利润”金额排名前五的公司，其2025年的“净利润”占未分配利润的比例是多少？请展示具体数值。",
+      "A": {
+        "content": "根据查询结果，2025年第三季度“股东权益-未分配利润”金额排名前五的公司，其2025年的“净利润”数据均为空值（null），因此无法计算净利润占未分配利润的比例。\n\n具体公司名单及未分配利润如下：\n1. 白云山（600332），未分配利润为2,382,475.59万元。\n2. 云南白药（000538），未分配利润为1,782,594.43万元。\n3. 华润三九（000999），未分配利润为1,725,583.95万元。\n4. 片仔癀（600436），未分配利润为1,079,313.26万元。\n5. 济川药业（600566），未分配利润为928,608.18万元。",
+        "image": [
+          "./result/B1020_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"2025年第三季度，“股东权益-未分配利润”金额排名前五的公司，其2025年的“净利润”占未分配利润的比例是多少？请展示具体数值。\", \"A\": {\"content\": \"根据查询结果，2025年第三季度“股东权益-未分配利润”金额排名前五的公司，其2025年的“净利润”数据均为空值（null），因此无法计算净利润占未分配利润的比例。\\n\\n具体公司名单及未分配利润如下：\\n1. 白云山（600332），未分配利润为2,382,475.59万元。\\n2. 云南白药（000538），未分配利润为1,782,594.43万元。\\n3. 华润三九（000999），未分配利润为1,725,583.95万元。\\n4. 片仔癀（600436），未分配利润为1,079,313.26万元。\\n5. 济川药业（600566），未分配利润为928,608.18万元。\", \"image\": [\"./result/B1020_1.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，这是一个排名问题，需要找到2025Q3未分配利润（equity_unappropriated_profit）排名前五的公司，并计算这些公司2025年全年（2025FY）的净利润（net_profit）占未分配利润的比例。首先使用CTE获取前五名公司，然后左连接获取2025FY的净利润，并计算比例。由于未分配利润和净利润都是金额（万元），比例计算为（净利润/未分配利润）*100，以百分比形式展示。结果按未分配利润降序排列。"
+  ],
+  "final_status": "ok"
+}

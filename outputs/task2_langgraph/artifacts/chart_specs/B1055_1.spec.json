@@ -1,0 +1,157 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1055",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "2024与2025年Q3净利润同比增长率前十对比",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 20,
+    "preview_rows": [
+      {
+        "report_period": "2024Q3",
+        "stock_code": "300158",
+        "stock_abbr": "振东制药",
+        "net_profit_yoy_growth_rate": 984.479046489349,
+        "rank": 1
+      },
+      {
+        "report_period": "2024Q3",
+        "stock_code": "600080",
+        "stock_abbr": "金花股份",
+        "net_profit_yoy_growth_rate": 807.5946290625814,
+        "rank": 2
+      },
+      {
+        "report_period": "2024Q3",
+        "stock_code": "002082",
+        "stock_abbr": "万邦德",
+        "net_profit_yoy_growth_rate": 517.0911892249761,
+        "rank": 3
+      },
+      {
+        "report_period": "2024Q3",
+        "stock_code": "600222",
+        "stock_abbr": "太龙药业",
+        "net_profit_yoy_growth_rate": 253.41439188226468,
+        "rank": 4
+      },
+      {
+        "report_period": "2024Q3",
+        "stock_code": "600518",
+        "stock_abbr": "康美药业",
+        "net_profit_yoy_growth_rate": 105.53496795625207,
+        "rank": 5
+      },
+      {
+        "report_period": "2024Q3",
+        "stock_code": "002166",
+        "stock_abbr": "莱茵生物",
+        "net_profit_yoy_growth_rate": 99.57179748212958,
+        "rank": 6
+      },
+      {
+        "report_period": "2024Q3",
+        "stock_code": "002589",
+        "stock_abbr": "瑞康医药",
+        "net_profit_yoy_growth_rate": 87.72989549777405,
+        "rank": 7
+      },
+      {
+        "report_period": "2024Q3",
+        "stock_code": "600671",
+        "stock_abbr": "天目药业",
+        "net_profit_yoy_growth_rate": 86.33637685323507,
+        "rank": 8
+      },
+      {
+        "report_period": "2024Q3",
+        "stock_code": "603567",
+        "stock_abbr": "珍宝岛",
+        "net_profit_yoy_growth_rate": 82.13941795055905,
+        "rank": 9
+      },
+      {
+        "report_period": "2024Q3",
+        "stock_code": "002907",
+        "stock_abbr": "华森制药",
+        "net_profit_yoy_growth_rate": 66.55907170061606,
+        "rank": 10
+      },
+      {
+        "report_period": "2025Q3",
+        "stock_code": "002728",
+        "stock_abbr": "特一药业",
+        "net_profit_yoy_growth_rate": 985.1796452032535,
+        "rank": 1
+      },
+      {
+        "report_period": "2025Q3",
+        "stock_code": "002198",
+        "stock_abbr": "嘉应制药",
+        "net_profit_yoy_growth_rate": 658.498909607456,
+        "rank": 2
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "rank",
+    "sort_ascending": true,
+    "top_n": 10,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "net_profit_yoy_growth_rate",
+      "data_type": "quantitative",
+      "label": "净利润同比增长率",
+      "unit": "%"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    },
+    "series": {
+      "field": "report_period",
+      "data_type": "nominal",
+      "label": "报告期",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": true,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1055_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1055_1.jpg"
+  },
+  "meta": {
+    "source_sql": "WITH ranked_2024 AS (\n    SELECT stock_code, stock_abbr, report_period, net_profit_yoy_growth AS net_profit_yoy_growth_rate,\n           ROW_NUMBER() OVER (ORDER BY net_profit_yoy_growth DESC) AS rank\n    FROM financials_view\n    WHERE report_period = '2024Q3'\n      AND net_profit_yoy_growth IS NOT NULL\n), ranked_2025 AS (\n    SELECT stock_code, stock_abbr, report_period, net_profit_yoy_growth AS net_profit_yoy_growth_rate,\n           ROW_NUMBER() OVER (ORDER BY net_profit_yoy_growth DESC) AS rank\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n      AND net_profit_yoy_growth IS NOT NULL\n)\nSELECT '2024Q3' AS report_period, stock_code, stock_abbr, net_profit_yoy_growth_rate, rank\nFROM ranked_2024\nWHERE rank <= 10\nUNION ALL\nSELECT '2025Q3' AS report_period, stock_code, stock_abbr, net_profit_yoy_growth_rate, rank\nFROM ranked_2025\nWHERE rank <= 10\nORDER BY report_period, rank",
+    "value_fields": [
+      "net_profit_yoy_growth_rate"
+    ],
+    "value_labels": [
+      "净利润同比增长率"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "net_profit_yoy_growth_rate"
+      ],
+      "category_field": "report_period",
+      "sort_by": "rank",
+      "sort_ascending": true,
+      "top_n": 10
+    },
+    "category_aggregate": "max"
+  }
+}

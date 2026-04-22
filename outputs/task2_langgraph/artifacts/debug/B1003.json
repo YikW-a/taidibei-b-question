@@ -1,0 +1,105 @@
+{
+  "question_id": "B1003",
+  "question_type": "数据基本查询",
+  "raw_question": "999与白云山相比，去年收益率最高的是",
+  "raw_question_json": "[{\"Q\":\"999与白云山相比，去年收益率最高的是\"}]",
+  "parsed_slots": {
+    "companies": [
+      "华润三九",
+      "白云山"
+    ],
+    "stock_codes": [
+      "000999"
+    ],
+    "periods": [
+      "2024FY"
+    ],
+    "metrics": [
+      "ROE"
+    ],
+    "chart_type": null,
+    "intent_type": "ranking",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "comparison",
+    "companies": [
+      "华润三九",
+      "白云山"
+    ],
+    "periods": [
+      "2024FY"
+    ],
+    "metrics": [
+      "ROE"
+    ],
+    "chart_type": "bar",
+    "top_n": null,
+    "threshold": null,
+    "question": "999与白云山相比，去年收益率最高的是",
+    "should_draw": true,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT stock_code, stock_abbr, report_period, roe FROM financials_view WHERE stock_abbr IN ('华润三九', '白云山') AND report_period = '2024FY' ORDER BY roe DESC LIMIT 1",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, report_period, roe FROM financials_view WHERE stock_abbr IN ('华润三九', '白云山') AND report_period = '2024FY' ORDER BY roe DESC LIMIT 1"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 1,
+  "result_rows": [
+    {
+      "stock_code": "000999",
+      "stock_abbr": "华润三九",
+      "report_period": "2024FY",
+      "roe": 17.33
+    }
+  ],
+  "context_companies": [
+    "华润三九"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "000999",
+      "stock_abbr": "华润三九",
+      "report_period": "2024FY",
+      "roe": 17.33
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"000999\",\"stock_abbr\":\"华润三九\",\"report_period\":\"2024FY\",\"roe\":17.33}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "华润三九与白云山2024年ROE对比",
+    "x_field": null,
+    "y_fields": [
+      "roe"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": "stock_code",
+    "sort_ascending": true,
+    "top_n": 1,
+    "should_draw": true
+  },
+  "chart_spec": {},
+  "all_chart_specs": [],
+  "all_chart_paths": [],
+  "graph_formats": [],
+  "turn_answers": [
+    {
+      "Q": "999与白云山相比，去年收益率最高的是",
+      "A": {
+        "content": "华润三九（000999）在2024财年的净资产收益率（ROE）为17.33%，高于白云山。",
+        "image": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"999与白云山相比，去年收益率最高的是\", \"A\": {\"content\": \"华润三九（000999）在2024财年的净资产收益率（ROE）为17.33%，高于白云山。\", \"image\": []}}]",
+  "notes": [
+    "根据查询计划，需要比较华润三九（999）和白云山在2024FY的ROE（收益率），并找出最高者。使用IN筛选公司，按ROE降序排列并取第一条记录。"
+  ],
+  "final_status": "ok"
+}

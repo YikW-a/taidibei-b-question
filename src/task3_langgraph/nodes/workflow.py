@@ -224,6 +224,11 @@ def clarify_or_continue_node(state: Task3GraphState, ctx: Task3NodeContext) -> T
     if not parsed.get("periods") and parsed.get("metrics") and any(token in text for token in ["近三年", "近3年"]) is False:
         if any(token in text for token in ["季度", "年度", "上半年", "报告期", "去年", "今年"]):
             missing.append("period")
+    if not parsed.get("metrics") and any(
+        token in text
+        for token in ["收入", "利润", "毛利率", "净利率", "现金流", "负债率", "收益率", "财务数据", "业绩", "表现"]
+    ):
+        missing.append("metric")
     return {
         **state,
         "missing_slots": list(dict.fromkeys(missing)),

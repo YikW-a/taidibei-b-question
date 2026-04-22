@@ -1,0 +1,244 @@
+{
+  "question_id": "B1010",
+  "question_type": "数据统计分析查询",
+  "raw_question": "对比白云山（600332）2022年至2025年第三季度的“营业总收入同比增长率”，展示各报告期的增长率数据，并生成趋势折线图。",
+  "raw_question_json": "[{\"Q\":\"对比白云山（600332）2022年至2025年第三季度的“营业总收入同比增长率”，展示各报告期的增长率数据，并生成趋势折线图。\"}]",
+  "parsed_slots": {
+    "companies": [
+      "白云山"
+    ],
+    "stock_codes": [
+      "600332"
+    ],
+    "periods": [
+      "2025Q3",
+      "2022FY"
+    ],
+    "metrics": [
+      "营业总收入",
+      "同比增长率"
+    ],
+    "chart_type": "line",
+    "intent_type": "trend_or_chart",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "trend_or_chart",
+    "companies": [
+      "白云山"
+    ],
+    "periods": [
+      "2022FY",
+      "2023FY",
+      "2024FY",
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入同比增长率"
+    ],
+    "chart_type": "line",
+    "top_n": null,
+    "threshold": null,
+    "question": "对比白云山（600332）2022年至2025年第三季度的“营业总收入同比增长率”，展示各报告期的增长率数据，并生成趋势折线图。",
+    "should_draw": true,
+    "needs_clarification": false,
+    "missing_slots": [],
+    "unsupported_metrics": [
+      "营业总收入同比增长率"
+    ]
+  },
+  "sql": "SELECT stock_code, stock_abbr, report_period, operating_revenue_yoy_growth AS 营业总收入同比增长率 FROM financials_view WHERE stock_code = '600332' AND report_period IN ('2022FY', '2023FY', '2024FY', '2025Q3') ORDER BY report_period",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, report_period, operating_revenue_yoy_growth AS 营业总收入同比增长率 FROM financials_view WHERE stock_code = '600332' AND report_period IN ('2022FY', '2023FY', '2024FY', '2025Q3') ORDER BY report_period"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 4,
+  "result_rows": [
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "report_period": "2022FY",
+      "营业总收入同比增长率": 2.5706398350572206
+    },
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "report_period": "2023FY",
+      "营业总收入同比增长率": 6.678022504978267
+    },
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "report_period": "2024FY",
+      "营业总收入同比增长率": -0.6920224134086848
+    },
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "report_period": "2025Q3",
+      "营业总收入同比增长率": 4.310859259082497
+    }
+  ],
+  "context_companies": [
+    "白云山"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "report_period": "2022FY",
+      "营业总收入同比增长率": 2.5706398350572206
+    },
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "report_period": "2023FY",
+      "营业总收入同比增长率": 6.678022504978267
+    },
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "report_period": "2024FY",
+      "营业总收入同比增长率": -0.6920224134086848
+    },
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "report_period": "2025Q3",
+      "营业总收入同比增长率": 4.310859259082497
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"600332\",\"stock_abbr\":\"白云山\",\"report_period\":\"2022FY\",\"营业总收入同比增长率\":2.5706398351},{\"stock_code\":\"600332\",\"stock_abbr\":\"白云山\",\"report_period\":\"2023FY\",\"营业总收入同比增长率\":6.678022505},{\"stock_code\":\"600332\",\"stock_abbr\":\"白云山\",\"report_period\":\"2024FY\",\"营业总收入同比增长率\":-0.6920224134},{\"stock_code\":\"600332\",\"stock_abbr\":\"白云山\",\"report_period\":\"2025Q3\",\"营业总收入同比增长率\":4.3108592591}]",
+  "chart_plan": {
+    "chart_type": "line",
+    "title": "白云山（600332）营业总收入同比增长率趋势",
+    "x_field": "report_period",
+    "y_fields": [
+      "营业总收入同比增长率"
+    ],
+    "category_field": null,
+    "sort_by": "report_period",
+    "sort_ascending": true,
+    "top_n": null,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1010",
+    "image_index": 1,
+    "chart_type": "line",
+    "title": "白云山（600332）营业总收入同比增长率趋势",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 4,
+      "preview_rows": [
+        {
+          "stock_code": "600332",
+          "stock_abbr": "白云山",
+          "report_period": "2022FY",
+          "营业总收入同比增长率": 2.5706398350572206
+        },
+        {
+          "stock_code": "600332",
+          "stock_abbr": "白云山",
+          "report_period": "2023FY",
+          "营业总收入同比增长率": 6.678022504978267
+        },
+        {
+          "stock_code": "600332",
+          "stock_abbr": "白云山",
+          "report_period": "2024FY",
+          "营业总收入同比增长率": -0.6920224134086848
+        },
+        {
+          "stock_code": "600332",
+          "stock_abbr": "白云山",
+          "report_period": "2025Q3",
+          "营业总收入同比增长率": 4.310859259082497
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "report_period",
+      "sort_ascending": true,
+      "top_n": null,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "营业总收入同比增长率",
+        "data_type": "quantitative",
+        "label": "营业总收入同比增长率",
+        "unit": "%"
+      },
+      "x": {
+        "field": "report_period",
+        "data_type": "temporal",
+        "label": "报告期",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": false
+    },
+    "output": {
+      "filename": "B1010_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1010_1.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT stock_code, stock_abbr, report_period, operating_revenue_yoy_growth AS 营业总收入同比增长率 FROM financials_view WHERE stock_code = '600332' AND report_period IN ('2022FY', '2023FY', '2024FY', '2025Q3') ORDER BY report_period",
+      "value_fields": [
+        "营业总收入同比增长率"
+      ],
+      "value_labels": [
+        "营业总收入同比增长率"
+      ],
+      "original_chart_plan": {
+        "chart_type": "line",
+        "x_field": "report_period",
+        "y_fields": [
+          "营业总收入同比增长率"
+        ],
+        "category_field": null,
+        "sort_by": "report_period",
+        "sort_ascending": true,
+        "top_n": null
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1010_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1010_1.jpg"
+  ],
+  "graph_formats": [
+    "折线图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "对比白云山（600332）2022年至2025年第三季度的“营业总收入同比增长率”，展示各报告期的增长率数据，并生成趋势折线图。",
+      "A": {
+        "content": "白云山（600332）2022年至2025年第三季度的营业总收入同比增长率数据如下：\n- 2022年度：2.57%\n- 2023年度：6.68%\n- 2024年度：-0.69%\n- 2025年第三季度：4.31%\n\n从趋势上看，增长率在2023年达到高点后，2024年转为小幅负增长，2025年前三季度恢复至正增长。",
+        "image": [
+          "./result/B1010_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"对比白云山（600332）2022年至2025年第三季度的“营业总收入同比增长率”，展示各报告期的增长率数据，并生成趋势折线图。\", \"A\": {\"content\": \"白云山（600332）2022年至2025年第三季度的营业总收入同比增长率数据如下：\\n- 2022年度：2.57%\\n- 2023年度：6.68%\\n- 2024年度：-0.69%\\n- 2025年第三季度：4.31%\\n\\n从趋势上看，增长率在2023年达到高点后，2024年转为小幅负增长，2025年前三季度恢复至正增长。\", \"image\": [\"./result/B1010_1.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，需要查询白云山（600332）在2022FY、2023FY、2024FY、2025Q3四个报告期的营业总收入同比增长率。字段operating_revenue_yoy_growth对应此指标，按报告期排序以支持趋势折线图。"
+  ],
+  "final_status": "ok"
+}

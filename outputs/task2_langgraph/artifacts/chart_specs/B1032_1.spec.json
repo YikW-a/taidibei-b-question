@@ -1,0 +1,141 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1032",
+  "image_index": 1,
+  "chart_type": "table",
+  "title": "2025年第三季度公司营业总收入与销售毛利率",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 50,
+    "preview_rows": [
+      {
+        "stock_code": "000423",
+        "stock_abbr": "东阿阿胶",
+        "total_operating_revenue_kpi": 476637.06,
+        "gross_profit_margin": 73.69
+      },
+      {
+        "stock_code": "000538",
+        "stock_abbr": "云南白药",
+        "total_operating_revenue_kpi": 3065421.42,
+        "gross_profit_margin": 30.06
+      },
+      {
+        "stock_code": "000590",
+        "stock_abbr": "启迪药业",
+        "total_operating_revenue_kpi": 22481.58,
+        "gross_profit_margin": 46.67
+      },
+      {
+        "stock_code": "000650",
+        "stock_abbr": "仁和药业",
+        "total_operating_revenue_kpi": 283345.18,
+        "gross_profit_margin": 36.43
+      },
+      {
+        "stock_code": "000766",
+        "stock_abbr": "通化金马",
+        "total_operating_revenue_kpi": 89225.11,
+        "gross_profit_margin": 72.58
+      },
+      {
+        "stock_code": "000790",
+        "stock_abbr": "华神科技",
+        "total_operating_revenue_kpi": 45738.46,
+        "gross_profit_margin": 45.48
+      },
+      {
+        "stock_code": "000989",
+        "stock_abbr": "九芝堂",
+        "total_operating_revenue_kpi": 162745.33,
+        "gross_profit_margin": 59.8
+      },
+      {
+        "stock_code": "000999",
+        "stock_abbr": "华润三九",
+        "total_operating_revenue_kpi": 2198640.4,
+        "gross_profit_margin": 53.52
+      },
+      {
+        "stock_code": "002082",
+        "stock_abbr": "万邦德",
+        "total_operating_revenue_kpi": 101770.64,
+        "gross_profit_margin": 32.3
+      },
+      {
+        "stock_code": "002107",
+        "stock_abbr": "沃华医药",
+        "total_operating_revenue_kpi": 62461.34,
+        "gross_profit_margin": 75.12
+      },
+      {
+        "stock_code": "002166",
+        "stock_abbr": "莱茵生物",
+        "total_operating_revenue_kpi": 127215.58,
+        "gross_profit_margin": 25.0
+      },
+      {
+        "stock_code": "002198",
+        "stock_abbr": "嘉应制药",
+        "total_operating_revenue_kpi": 29343.63,
+        "gross_profit_margin": 56.41
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": null,
+    "sort_ascending": true,
+    "top_n": 12,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "total_operating_revenue_kpi",
+      "data_type": "quantitative",
+      "label": "total_operating_revenue_kpi",
+      "unit": "万元"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": false
+  },
+  "output": {
+    "filename": "B1032_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1032_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT stock_code, stock_abbr, ROUND(total_operating_revenue_kpi, 2) AS total_operating_revenue_kpi, ROUND((total_operating_revenue_income - operating_expense_cost_of_sales) / total_operating_revenue_income * 100, 2) AS gross_profit_margin FROM financials_view WHERE report_period = '2025Q3'",
+    "value_fields": [
+      "total_operating_revenue_kpi",
+      "gross_profit_margin"
+    ],
+    "value_labels": [
+      "total_operating_revenue_kpi",
+      "销售毛利率"
+    ],
+    "original_chart_plan": {
+      "chart_type": "table",
+      "x_field": null,
+      "y_fields": [
+        "total_operating_revenue_kpi",
+        "gross_profit_margin"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": null,
+      "sort_ascending": true,
+      "top_n": 12
+    }
+  }
+}

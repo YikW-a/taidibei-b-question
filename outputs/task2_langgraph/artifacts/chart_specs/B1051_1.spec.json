@@ -1,0 +1,93 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1051",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "白云山、云南白药、片仔癀2025Q3核心盈利能力指标对比",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 3,
+    "preview_rows": [
+      {
+        "stock_code": "000538",
+        "stock_abbr": "云南白药",
+        "gross_profit_margin": 30.05989436448057,
+        "net_profit_margin": 15.583892070754471,
+        "roe": 2.8
+      },
+      {
+        "stock_code": "600332",
+        "stock_abbr": "白云山",
+        "gross_profit_margin": 17.604173963320054,
+        "net_profit_margin": 5.372938368336032,
+        "roe": 2.09
+      },
+      {
+        "stock_code": "600436",
+        "stock_abbr": "片仔癀",
+        "gross_profit_margin": 38.929751841546285,
+        "net_profit_margin": 28.611165405998605,
+        "roe": 4.68
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "stock_code",
+    "sort_ascending": true,
+    "top_n": 3,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "gross_profit_margin",
+      "data_type": "quantitative",
+      "label": "销售毛利率",
+      "unit": "%"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1051_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1051_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT stock_code, stock_abbr, gross_profit_margin, net_profit_margin, roe FROM financials_view WHERE stock_abbr IN ('白云山', '云南白药', '片仔癀') AND report_period = '2025Q3'",
+    "value_fields": [
+      "gross_profit_margin",
+      "net_profit_margin",
+      "roe"
+    ],
+    "value_labels": [
+      "销售毛利率",
+      "销售净利率",
+      "roe"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "gross_profit_margin",
+        "net_profit_margin",
+        "roe"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": "stock_code",
+      "sort_ascending": true,
+      "top_n": 3
+    }
+  }
+}

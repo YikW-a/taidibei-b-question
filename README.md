@@ -78,9 +78,10 @@ cp configs/task3_llm.env.example configs/task3_llm.env
 
 ### `docs/`
 
-当前保留的任务一论文稿在这里：
+当前保留的论文稿包括：
 
 - [任务一建模与求解（论文版）.md](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/docs/任务一建模与求解（论文版）.md)
+- [任务二建模与求解（论文版）.md](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/docs/任务二建模与求解（论文版）.md)
 
 ### `outputs/`
 
@@ -113,6 +114,11 @@ cp configs/task3_llm.env.example configs/task3_llm.env
 
 - 主代码目录：
   - [src/task2_langgraph](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/src/task2_langgraph)
+- 正式输出目录：
+  - [outputs/task2_langgraph](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph)
+- 当前正式结果：
+  - `70` 题
+  - `69 ok / 1 warning / 0 error`
 - 详细说明：
   - [README_task2_langgraph.md](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/README_task2_langgraph.md)
 
@@ -193,3 +199,4 @@ python3 run_test_question_sets.py
 2. [README_task2_langgraph.md](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/README_task2_langgraph.md)
 3. [README_task3_langgraph.md](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/README_task3_langgraph.md)
 4. [任务一建模与求解（论文版）.md](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/docs/任务一建模与求解（论文版）.md)
+5. [任务二建模与求解（论文版）.md](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/docs/任务二建模与求解（论文版）.md)

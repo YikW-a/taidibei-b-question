@@ -1,0 +1,196 @@
+{
+  "question_id": "B1041",
+  "question_type": "数据基本查询",
+  "raw_question": "检查2025年第三季度核心业绩指标表中的“营业总收入”与利润表中的“营业收入”数值不一致的公司，列出股票代码、两个表中的数值及差值（绝对值）。",
+  "raw_question_json": "[{\"Q\":\"检查2025年第三季度核心业绩指标表中的“营业总收入”与利润表中的“营业收入”数值不一致的公司，列出股票代码、两个表中的数值及差值（绝对值）。\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入"
+    ],
+    "chart_type": null,
+    "intent_type": "period_stat",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "filter",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入",
+      "营业收入"
+    ],
+    "chart_type": "table",
+    "top_n": null,
+    "threshold": null,
+    "question": "检查2025年第三季度核心业绩指标表中的“营业总收入”与利润表中的“营业收入”数值不一致的公司，列出股票代码、两个表中的数值及差值（绝对值）。",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": [],
+    "unsupported_metrics": [
+      "营业收入"
+    ]
+  },
+  "sql": "SELECT stock_code, total_operating_revenue_kpi AS 营业总收入, total_operating_revenue_income AS 营业收入, ABS(total_operating_revenue_kpi - total_operating_revenue_income) AS 差值 FROM financials_view WHERE report_period = '2025Q3' AND total_operating_revenue_kpi IS NOT NULL AND total_operating_revenue_income IS NOT NULL AND total_operating_revenue_kpi != total_operating_revenue_income ORDER BY stock_code",
+  "sql_history": [
+    "SELECT stock_code, total_operating_revenue_kpi AS 营业总收入, total_operating_revenue_income AS 营业收入, ABS(total_operating_revenue_kpi - total_operating_revenue_income) AS 差值 FROM financials_view WHERE report_period = '2025Q3' AND total_operating_revenue_kpi IS NOT NULL AND total_operating_revenue_income IS NOT NULL AND total_operating_revenue_kpi != total_operating_revenue_income ORDER BY stock_code"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 2,
+  "result_rows": [
+    {
+      "stock_code": "600332",
+      "营业总收入": 6160599.3796,
+      "营业收入": 6160599.379554,
+      "差值": 4.5999884605407715e-05
+    },
+    {
+      "stock_code": "603567",
+      "营业总收入": 91818.60239500001,
+      "营业收入": 91880.328812,
+      "差值": 61.72641699999804
+    }
+  ],
+  "context_companies": [],
+  "context_rows": [
+    {
+      "stock_code": "600332",
+      "营业总收入": 6160599.3796,
+      "营业收入": 6160599.379554,
+      "差值": 4.5999884605407715e-05
+    },
+    {
+      "stock_code": "603567",
+      "营业总收入": 91818.60239500001,
+      "营业收入": 91880.328812,
+      "差值": 61.72641699999804
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"600332\",\"营业总收入\":6160599.3795999996,\"营业收入\":6160599.3795539998,\"差值\":0.0000459999},{\"stock_code\":\"603567\",\"营业总收入\":91818.602395,\"营业收入\":91880.328812,\"差值\":61.726417}]",
+  "chart_plan": {
+    "chart_type": "line",
+    "title": "2025Q3 营业总收入与营业收入不一致的公司",
+    "x_field": "stock_code",
+    "y_fields": [
+      "stock_code"
+    ],
+    "category_field": null,
+    "sort_by": "stock_code",
+    "sort_ascending": true,
+    "top_n": null,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1041",
+    "image_index": 1,
+    "chart_type": "line",
+    "title": "2025Q3 营业总收入与营业收入不一致的公司",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 2,
+      "preview_rows": [
+        {
+          "stock_code": "600332",
+          "营业总收入": 6160599.3796,
+          "营业收入": 6160599.379554,
+          "差值": 4.5999884605407715e-05
+        },
+        {
+          "stock_code": "603567",
+          "营业总收入": 91818.60239500001,
+          "营业收入": 91880.328812,
+          "差值": 61.72641699999804
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "stock_code",
+      "sort_ascending": true,
+      "top_n": null,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "stock_code",
+        "data_type": "quantitative",
+        "label": "股票代码",
+        "unit": "万元"
+      },
+      "x": {
+        "field": "stock_code",
+        "data_type": "temporal",
+        "label": "股票代码",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": false
+    },
+    "output": {
+      "filename": "B1041_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1041_1.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT stock_code, total_operating_revenue_kpi AS 营业总收入, total_operating_revenue_income AS 营业收入, ABS(total_operating_revenue_kpi - total_operating_revenue_income) AS 差值 FROM financials_view WHERE report_period = '2025Q3' AND total_operating_revenue_kpi IS NOT NULL AND total_operating_revenue_income IS NOT NULL AND total_operating_revenue_kpi != total_operating_revenue_income ORDER BY stock_code",
+      "value_fields": [
+        "stock_code"
+      ],
+      "value_labels": [
+        "股票代码"
+      ],
+      "original_chart_plan": {
+        "chart_type": "line",
+        "x_field": "stock_code",
+        "y_fields": [
+          "stock_code"
+        ],
+        "category_field": null,
+        "sort_by": "stock_code",
+        "sort_ascending": true,
+        "top_n": null
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1041_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1041_1.jpg"
+  ],
+  "graph_formats": [
+    "折线图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "检查2025年第三季度核心业绩指标表中的“营业总收入”与利润表中的“营业收入”数值不一致的公司，列出股票代码、两个表中的数值及差值（绝对值）。",
+      "A": {
+        "content": "经核查2025年第三季度数据，共有2家公司的核心业绩指标表“营业总收入”与利润表“营业收入”数值不一致，具体如下：\n\n1. 股票代码 600332：核心业绩指标表营业总收入为 6,160,599.38 元，利润表营业收入为 6,160,599.38 元，差值为 0.000046 元。\n2. 股票代码 603567：核心业绩指标表营业总收入为 91,818.60 元，利润表营业收入为 91,880.33 元，差值为 61.73 元。",
+        "image": [
+          "./result/B1041_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"检查2025年第三季度核心业绩指标表中的“营业总收入”与利润表中的“营业收入”数值不一致的公司，列出股票代码、两个表中的数值及差值（绝对值）。\", \"A\": {\"content\": \"经核查2025年第三季度数据，共有2家公司的核心业绩指标表“营业总收入”与利润表“营业收入”数值不一致，具体如下：\\n\\n1. 股票代码 600332：核心业绩指标表营业总收入为 6,160,599.38 元，利润表营业收入为 6,160,599.38 元，差值为 0.000046 元。\\n2. 股票代码 603567：核心业绩指标表营业总收入为 91,818.60 元，利润表营业收入为 91,880.33 元，差值为 61.73 元。\", \"image\": [\"./result/B1041_1.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，需要筛选2025Q3报告期，对比核心业绩指标表中的total_operating_revenue_kpi（营业总收入）和利润表中的total_operating_revenue_income（营业收入）。查询需要返回股票代码、两个数值以及它们的绝对差值，并且只筛选出两者不一致的记录。"
+  ],
+  "final_status": "ok"
+}

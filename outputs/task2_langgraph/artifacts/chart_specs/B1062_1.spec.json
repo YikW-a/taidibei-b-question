@@ -1,0 +1,116 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1062",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "2025年第三季度营业成本占营业总收入比例排名后十",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 10,
+    "preview_rows": [
+      {
+        "stock_code": "002589",
+        "stock_abbr": "瑞康医药",
+        "cost_revenue_ratio": 0.8845207448886292
+      },
+      {
+        "stock_code": "300878",
+        "stock_abbr": "维康药业",
+        "cost_revenue_ratio": 0.8465711405948348
+      },
+      {
+        "stock_code": "002390",
+        "stock_abbr": "信邦制药",
+        "cost_revenue_ratio": 0.8255836807506028
+      },
+      {
+        "stock_code": "600332",
+        "stock_abbr": "白云山",
+        "cost_revenue_ratio": 0.8239582603729517
+      },
+      {
+        "stock_code": "600518",
+        "stock_abbr": "康美药业",
+        "cost_revenue_ratio": 0.8093241219771902
+      },
+      {
+        "stock_code": "600222",
+        "stock_abbr": "太龙药业",
+        "cost_revenue_ratio": 0.7570994574793025
+      },
+      {
+        "stock_code": "002166",
+        "stock_abbr": "莱茵生物",
+        "cost_revenue_ratio": 0.7499874279374572
+      },
+      {
+        "stock_code": "603139",
+        "stock_abbr": "康惠制药",
+        "cost_revenue_ratio": 0.7355326143747279
+      },
+      {
+        "stock_code": "002219",
+        "stock_abbr": "新里程",
+        "cost_revenue_ratio": 0.7308260767975637
+      },
+      {
+        "stock_code": "600129",
+        "stock_abbr": "太极集团",
+        "cost_revenue_ratio": 0.7144061759919319
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": null,
+    "sort_ascending": true,
+    "top_n": 10,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "cost_revenue_ratio",
+      "data_type": "quantitative",
+      "label": "cost_revenue_ratio",
+      "unit": "%"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1062_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1062_1.jpg"
+  },
+  "meta": {
+    "source_sql": "WITH cost_ratio AS (\n  SELECT stock_code, stock_abbr, report_period, operating_expense_cost_of_sales, total_operating_revenue,\n         CASE WHEN total_operating_revenue > 0 THEN operating_expense_cost_of_sales / total_operating_revenue ELSE NULL END AS cost_revenue_ratio\n  FROM financials_view\n  WHERE report_period = '2025Q3'\n    AND total_operating_revenue IS NOT NULL\n    AND operating_expense_cost_of_sales IS NOT NULL\n)\nSELECT stock_code, stock_abbr, cost_revenue_ratio\nFROM cost_ratio\nWHERE cost_revenue_ratio IS NOT NULL\nORDER BY cost_revenue_ratio DESC\nLIMIT 10",
+    "value_fields": [
+      "cost_revenue_ratio"
+    ],
+    "value_labels": [
+      "cost_revenue_ratio"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "cost_revenue_ratio"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": null,
+      "sort_ascending": true,
+      "top_n": 10
+    }
+  }
+}

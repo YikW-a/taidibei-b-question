@@ -1,0 +1,78 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1041",
+  "image_index": 1,
+  "chart_type": "line",
+  "title": "2025Q3 营业总收入与营业收入不一致的公司",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 2,
+    "preview_rows": [
+      {
+        "stock_code": "600332",
+        "营业总收入": 6160599.3796,
+        "营业收入": 6160599.379554,
+        "差值": 4.5999884605407715e-05
+      },
+      {
+        "stock_code": "603567",
+        "营业总收入": 91818.60239500001,
+        "营业收入": 91880.328812,
+        "差值": 61.72641699999804
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "stock_code",
+    "sort_ascending": true,
+    "top_n": null,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "stock_code",
+      "data_type": "quantitative",
+      "label": "股票代码",
+      "unit": "万元"
+    },
+    "x": {
+      "field": "stock_code",
+      "data_type": "temporal",
+      "label": "股票代码",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": false
+  },
+  "output": {
+    "filename": "B1041_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1041_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT stock_code, total_operating_revenue_kpi AS 营业总收入, total_operating_revenue_income AS 营业收入, ABS(total_operating_revenue_kpi - total_operating_revenue_income) AS 差值 FROM financials_view WHERE report_period = '2025Q3' AND total_operating_revenue_kpi IS NOT NULL AND total_operating_revenue_income IS NOT NULL AND total_operating_revenue_kpi != total_operating_revenue_income ORDER BY stock_code",
+    "value_fields": [
+      "stock_code"
+    ],
+    "value_labels": [
+      "股票代码"
+    ],
+    "original_chart_plan": {
+      "chart_type": "line",
+      "x_field": "stock_code",
+      "y_fields": [
+        "stock_code"
+      ],
+      "category_field": null,
+      "sort_by": "stock_code",
+      "sort_ascending": true,
+      "top_n": null
+    }
+  }
+}

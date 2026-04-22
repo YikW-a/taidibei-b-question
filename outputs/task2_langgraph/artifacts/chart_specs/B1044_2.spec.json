@@ -1,0 +1,96 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1044",
+  "image_index": 2,
+  "chart_type": "bar",
+  "title": "五家公司净利润对比",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 5,
+    "preview_rows": [
+      {
+        "stock_code": "600332",
+        "stock_abbr": "白云山",
+        "total_operating_revenue": 6160599.379554,
+        "net_profit": 331005.207786
+      },
+      {
+        "stock_code": "000538",
+        "stock_abbr": "云南白药",
+        "total_operating_revenue": 3065421.420901,
+        "net_profit": 477711.965747
+      },
+      {
+        "stock_code": "000999",
+        "stock_abbr": "华润三九",
+        "total_operating_revenue": 2198640.396207,
+        "net_profit": 235282.69556599998
+      },
+      {
+        "stock_code": "600085",
+        "stock_abbr": "同仁堂",
+        "total_operating_revenue": 1330791.480027,
+        "net_profit": 117755.58453
+      },
+      {
+        "stock_code": "600129",
+        "stock_abbr": "太极集团",
+        "total_operating_revenue": 808773.698907,
+        "net_profit": 16590.530672
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "net_profit",
+    "sort_ascending": false,
+    "top_n": 5,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "net_profit",
+      "data_type": "quantitative",
+      "label": "净利润",
+      "unit": "万元"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1044_2.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1044_2.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT stock_code, stock_abbr, total_operating_revenue, net_profit FROM financials_view WHERE report_period = '2025Q3' AND stock_abbr IN ('白云山', '云南白药', '华润三九', '同仁堂', '太极集团') ORDER BY total_operating_revenue DESC",
+    "value_fields": [
+      "net_profit"
+    ],
+    "value_labels": [
+      "净利润"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "net_profit"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": "net_profit",
+      "sort_ascending": false,
+      "top_n": 5
+    }
+  }
+}

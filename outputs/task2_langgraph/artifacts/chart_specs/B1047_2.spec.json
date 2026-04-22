@@ -1,0 +1,116 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1047",
+  "image_index": 2,
+  "chart_type": "bar",
+  "title": "各公司销售毛利率对比",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 10,
+    "preview_rows": [
+      {
+        "stock_code": "002773",
+        "stock_abbr": "康弘药业",
+        "gross_profit_margin": 99.99903286191602
+      },
+      {
+        "stock_code": "002275",
+        "stock_abbr": "桂林三金",
+        "gross_profit_margin": 75.22712417383367
+      },
+      {
+        "stock_code": "603998",
+        "stock_abbr": "方盛制药",
+        "gross_profit_margin": 71.27539060730282
+      },
+      {
+        "stock_code": "600557",
+        "stock_abbr": "康缘药业",
+        "gross_profit_margin": 69.46544083285633
+      },
+      {
+        "stock_code": "600535",
+        "stock_abbr": "天士力",
+        "gross_profit_margin": 66.99075076644773
+      },
+      {
+        "stock_code": "002603",
+        "stock_abbr": "以岭药业",
+        "gross_profit_margin": 60.531245635278154
+      },
+      {
+        "stock_code": "000989",
+        "stock_abbr": "九芝堂",
+        "gross_profit_margin": 59.80491707311483
+      },
+      {
+        "stock_code": "300158",
+        "stock_abbr": "振东制药",
+        "gross_profit_margin": 52.92511251987674
+      },
+      {
+        "stock_code": "600479",
+        "stock_abbr": "千金药业",
+        "gross_profit_margin": 49.87408091159749
+      },
+      {
+        "stock_code": "300878",
+        "stock_abbr": "维康药业",
+        "gross_profit_margin": 15.342885940516512
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "gross_profit_margin",
+    "sort_ascending": false,
+    "top_n": 10,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "gross_profit_margin",
+      "data_type": "quantitative",
+      "label": "销售毛利率",
+      "unit": "%"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1047_2.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1047_2.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT stock_code, stock_abbr, gross_profit_margin FROM financials_view WHERE report_period = '2025Q3' AND stock_abbr IN ('康缘药业', '以岭药业', '康弘药业', '天士力', '方盛制药', '桂林三金', '九芝堂', '千金药业', '振东制药', '维康药业') ORDER BY gross_profit_margin DESC",
+    "value_fields": [
+      "gross_profit_margin"
+    ],
+    "value_labels": [
+      "销售毛利率"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "gross_profit_margin"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": "gross_profit_margin",
+      "sort_ascending": false,
+      "top_n": 10
+    }
+  }
+}

@@ -1,0 +1,214 @@
+{
+  "question_id": "B1016",
+  "question_type": "数据统计分析查询",
+  "raw_question": "2025年第三季度，“资产-存货”金额排名前三的公司，其“营业总收入”与存货金额的比值分别是多少？请列出公司简称、存货（万元）、营业总收入（万元）及比值。",
+  "raw_question_json": "[{\"Q\":\"2025年第三季度，“资产-存货”金额排名前三的公司，其“营业总收入”与存货金额的比值分别是多少？请列出公司简称、存货（万元）、营业总收入（万元）及比值。\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入"
+    ],
+    "chart_type": null,
+    "intent_type": "ranking",
+    "top_n": 3,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "ranking",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "资产-存货",
+      "营业总收入"
+    ],
+    "chart_type": "table",
+    "top_n": 3,
+    "threshold": null,
+    "question": "2025年第三季度，“资产-存货”金额排名前三的公司，其“营业总收入”与存货金额的比值分别是多少？请列出公司简称、存货（万元）、营业总收入（万元）及比值。",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": [],
+    "unsupported_metrics": [
+      "资产-存货"
+    ]
+  },
+  "sql": "WITH ranked AS (\n  SELECT\n    stock_abbr,\n    asset_inventory AS 存货_万元,\n    total_operating_revenue AS 营业总收入_万元,\n    total_operating_revenue / NULLIF(asset_inventory, 0) AS 比值,\n    ROW_NUMBER() OVER (ORDER BY asset_inventory DESC) AS rn\n  FROM financials_view\n  WHERE report_period = '2025Q3'\n    AND asset_inventory IS NOT NULL\n    AND total_operating_revenue IS NOT NULL\n)\nSELECT\n  stock_abbr AS 公司简称,\n  存货_万元,\n  营业总收入_万元,\n  比值\nFROM ranked\nWHERE rn <= 3\nORDER BY rn;",
+  "sql_history": [
+    "WITH ranked AS (\n  SELECT\n    stock_abbr,\n    asset_inventory AS 存货_万元,\n    total_operating_revenue AS 营业总收入_万元,\n    total_operating_revenue / NULLIF(asset_inventory, 0) AS 比值,\n    ROW_NUMBER() OVER (ORDER BY asset_inventory DESC) AS rn\n  FROM financials_view\n  WHERE report_period = '2025Q3'\n    AND asset_inventory IS NOT NULL\n    AND total_operating_revenue IS NOT NULL\n)\nSELECT\n  stock_abbr AS 公司简称,\n  存货_万元,\n  营业总收入_万元,\n  比值\nFROM ranked\nWHERE rn <= 3\nORDER BY rn;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 3,
+  "result_rows": [
+    {
+      "公司简称": "同仁堂",
+      "存货_万元": 1112490.3777649999,
+      "营业总收入_万元": 1330791.480027,
+      "比值": 1.1962274071085166
+    },
+    {
+      "公司简称": "白云山",
+      "存货_万元": 1108068.571539,
+      "营业总收入_万元": 6160599.379554,
+      "比值": 5.559763662457752
+    },
+    {
+      "公司简称": "华润三九",
+      "存货_万元": 638694.735653,
+      "营业总收入_万元": 2198640.396207,
+      "比值": 3.4423963021381656
+    }
+  ],
+  "context_companies": [],
+  "context_rows": [
+    {
+      "公司简称": "同仁堂",
+      "存货_万元": 1112490.3777649999,
+      "营业总收入_万元": 1330791.480027,
+      "比值": 1.1962274071085166
+    },
+    {
+      "公司简称": "白云山",
+      "存货_万元": 1108068.571539,
+      "营业总收入_万元": 6160599.379554,
+      "比值": 5.559763662457752
+    },
+    {
+      "公司简称": "华润三九",
+      "存货_万元": 638694.735653,
+      "营业总收入_万元": 2198640.396207,
+      "比值": 3.4423963021381656
+    }
+  ],
+  "result_preview": "[{\"公司简称\":\"同仁堂\",\"存货_万元\":1112490.3777649999,\"营业总收入_万元\":1330791.480027,\"比值\":1.1962274071},{\"公司简称\":\"白云山\",\"存货_万元\":1108068.5715389999,\"营业总收入_万元\":6160599.3795539998,\"比值\":5.5597636625},{\"公司简称\":\"华润三九\",\"存货_万元\":638694.735653,\"营业总收入_万元\":2198640.3962070001,\"比值\":3.4423963021}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2025Q3存货前三公司的存货与营业总收入比值",
+    "x_field": null,
+    "y_fields": [
+      "比值"
+    ],
+    "category_field": "公司简称",
+    "sort_by": null,
+    "sort_ascending": true,
+    "top_n": 3,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1016",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "2025Q3存货前三公司的存货与营业总收入比值",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 3,
+      "preview_rows": [
+        {
+          "公司简称": "同仁堂",
+          "存货_万元": 1112490.3777649999,
+          "营业总收入_万元": 1330791.480027,
+          "比值": 1.1962274071085166
+        },
+        {
+          "公司简称": "白云山",
+          "存货_万元": 1108068.571539,
+          "营业总收入_万元": 6160599.379554,
+          "比值": 5.559763662457752
+        },
+        {
+          "公司简称": "华润三九",
+          "存货_万元": 638694.735653,
+          "营业总收入_万元": 2198640.396207,
+          "比值": 3.4423963021381656
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": null,
+      "sort_ascending": true,
+      "top_n": 3,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "比值",
+        "data_type": "quantitative",
+        "label": "比值",
+        "unit": null
+      },
+      "category": {
+        "field": "公司简称",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B1016_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1016_1.jpg"
+    },
+    "meta": {
+      "source_sql": "WITH ranked AS (\n  SELECT\n    stock_abbr,\n    asset_inventory AS 存货_万元,\n    total_operating_revenue AS 营业总收入_万元,\n    total_operating_revenue / NULLIF(asset_inventory, 0) AS 比值,\n    ROW_NUMBER() OVER (ORDER BY asset_inventory DESC) AS rn\n  FROM financials_view\n  WHERE report_period = '2025Q3'\n    AND asset_inventory IS NOT NULL\n    AND total_operating_revenue IS NOT NULL\n)\nSELECT\n  stock_abbr AS 公司简称,\n  存货_万元,\n  营业总收入_万元,\n  比值\nFROM ranked\nWHERE rn <= 3\nORDER BY rn;",
+      "value_fields": [
+        "比值"
+      ],
+      "value_labels": [
+        "比值"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "比值"
+        ],
+        "category_field": "公司简称",
+        "sort_by": null,
+        "sort_ascending": true,
+        "top_n": 3
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1016_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1016_1.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "2025年第三季度，“资产-存货”金额排名前三的公司，其“营业总收入”与存货金额的比值分别是多少？请列出公司简称、存货（万元）、营业总收入（万元）及比值。",
+      "A": {
+        "content": "2025年第三季度，“资产-存货”金额排名前三的公司及其相关数据如下：\n\n1. **同仁堂**：存货为1,112,490.38万元，营业总收入为1,330,791.48万元，比值为1.20。\n2. **白云山**：存货为1,108,068.57万元，营业总收入为6,160,599.38万元，比值为5.56。\n3. **华润三九**：存货为638,694.74万元，营业总收入为2,198,640.40万元，比值为3.44。",
+        "image": [
+          "./result/B1016_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"2025年第三季度，“资产-存货”金额排名前三的公司，其“营业总收入”与存货金额的比值分别是多少？请列出公司简称、存货（万元）、营业总收入（万元）及比值。\", \"A\": {\"content\": \"2025年第三季度，“资产-存货”金额排名前三的公司及其相关数据如下：\\n\\n1. **同仁堂**：存货为1,112,490.38万元，营业总收入为1,330,791.48万元，比值为1.20。\\n2. **白云山**：存货为1,108,068.57万元，营业总收入为6,160,599.38万元，比值为5.56。\\n3. **华润三九**：存货为638,694.74万元，营业总收入为2,198,640.40万元，比值为3.44。\", \"image\": [\"./result/B1016_1.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，这是一个排名类问题，需要找出2025Q3存货金额最高的前三家公司，并计算营业总收入与存货的比值。查询计划中指定的periods为['2025Q3']，metrics包含['资产-存货', '营业总收入']，top_n为3。'资产-存货'对应schema中的asset_inventory，'营业总收入'对应total_operating_revenue。使用ROW_NUMBER()按存货降序排名，取前三名。计算比值时使用total_operating_revenue / asset_inventory，并处理除零错误。结果按要求返回公司简称、存货、营业总收入及比值。"
+  ],
+  "final_status": "ok"
+}

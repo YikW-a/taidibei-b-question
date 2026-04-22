@@ -1,0 +1,145 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1007",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "哪些企业是亏钱的？",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 50,
+    "preview_rows": [
+      {
+        "stock_code": "000590",
+        "stock_abbr": "启迪药业",
+        "report_period": "2025Q3",
+        "net_profit": -1482.060447
+      },
+      {
+        "stock_code": "000790",
+        "stock_abbr": "华神科技",
+        "report_period": "2025Q3",
+        "net_profit": -9778.528761
+      },
+      {
+        "stock_code": "002219",
+        "stock_abbr": "新里程",
+        "report_period": "2025Q3",
+        "net_profit": -3846.8212240000003
+      },
+      {
+        "stock_code": "002737",
+        "stock_abbr": "葵花药业",
+        "report_period": "2025Q3",
+        "net_profit": -3353.869369
+      },
+      {
+        "stock_code": "300878",
+        "stock_abbr": "维康药业",
+        "report_period": "2025Q3",
+        "net_profit": -12385.457987
+      },
+      {
+        "stock_code": "301111",
+        "stock_abbr": "粤万年青",
+        "report_period": "2025Q3",
+        "net_profit": -812.952108
+      },
+      {
+        "stock_code": "600594",
+        "stock_abbr": "益佰制药",
+        "report_period": "2025Q3",
+        "net_profit": -8656.262179000001
+      },
+      {
+        "stock_code": "603139",
+        "stock_abbr": "康惠制药",
+        "report_period": "2025Q3",
+        "net_profit": -13250.394158
+      },
+      {
+        "stock_code": "603567",
+        "stock_abbr": "珍宝岛",
+        "report_period": "2025Q3",
+        "net_profit": -37309.834572
+      },
+      {
+        "stock_code": "000590",
+        "stock_abbr": "启迪药业",
+        "report_period": "2025Q1",
+        "net_profit": -1625.616133
+      },
+      {
+        "stock_code": "000790",
+        "stock_abbr": "华神科技",
+        "report_period": "2025Q1",
+        "net_profit": -1459.242976
+      },
+      {
+        "stock_code": "002898",
+        "stock_abbr": "赛隆药业",
+        "report_period": "2025Q1",
+        "net_profit": -103.850528
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "stock_code",
+    "sort_ascending": true,
+    "top_n": 15,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "net_profit",
+      "data_type": "quantitative",
+      "label": "净利润",
+      "unit": "万元"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    },
+    "series": {
+      "field": "report_period",
+      "data_type": "nominal",
+      "label": "报告期",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": true,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1007_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1007_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT DISTINCT stock_code, stock_abbr, report_period, net_profit FROM financials_view WHERE net_profit < 0 ORDER BY report_period DESC, stock_code",
+    "value_fields": [
+      "net_profit"
+    ],
+    "value_labels": [
+      "净利润"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "net_profit"
+      ],
+      "category_field": "report_period",
+      "sort_by": "stock_code",
+      "sort_ascending": true,
+      "top_n": 15
+    },
+    "category_aggregate": "min"
+  }
+}

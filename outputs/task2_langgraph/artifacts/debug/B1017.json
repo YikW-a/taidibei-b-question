@@ -1,0 +1,575 @@
+{
+  "question_id": "B1017",
+  "question_type": "数据统计分析查询",
+  "raw_question": "2025年第三季度，“资产-应收账款”占“营业总收入”比例超过30%的公司有哪些？请列出股票代码、简称、应收账款占比（%）。",
+  "raw_question_json": "[{\"Q\":\"2025年第三季度，“资产-应收账款”占“营业总收入”比例超过30%的公司有哪些？请列出股票代码、简称、应收账款占比（%）。\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入"
+    ],
+    "chart_type": null,
+    "intent_type": "filter",
+    "top_n": null,
+    "threshold": 30.0
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "filter",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "资产-应收账款",
+      "营业总收入"
+    ],
+    "chart_type": "table",
+    "top_n": null,
+    "threshold": 30.0,
+    "question": "2025年第三季度，“资产-应收账款”占“营业总收入”比例超过30%的公司有哪些？请列出股票代码、简称、应收账款占比（%）。",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": [],
+    "unsupported_metrics": [
+      "资产-应收账款"
+    ]
+  },
+  "sql": "SELECT stock_code, stock_abbr, (asset_accounts_receivable / total_operating_revenue) * 100 AS accounts_receivable_ratio FROM financials_view WHERE report_period = '2025Q3' AND (asset_accounts_receivable / total_operating_revenue) > 0.3 ORDER BY accounts_receivable_ratio DESC",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, (asset_accounts_receivable / total_operating_revenue) * 100 AS accounts_receivable_ratio FROM financials_view WHERE report_period = '2025Q3' AND (asset_accounts_receivable / total_operating_revenue) > 0.3 ORDER BY accounts_receivable_ratio DESC"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 34,
+  "result_rows": [
+    {
+      "stock_code": "603567",
+      "stock_abbr": "珍宝岛",
+      "accounts_receivable_ratio": 338.10230035814556
+    },
+    {
+      "stock_code": "600671",
+      "stock_abbr": "天目药业",
+      "accounts_receivable_ratio": 96.14933671205934
+    },
+    {
+      "stock_code": "600222",
+      "stock_abbr": "太龙药业",
+      "accounts_receivable_ratio": 83.59115271868657
+    },
+    {
+      "stock_code": "300878",
+      "stock_abbr": "维康药业",
+      "accounts_receivable_ratio": 71.77359082707453
+    },
+    {
+      "stock_code": "002082",
+      "stock_abbr": "万邦德",
+      "accounts_receivable_ratio": 71.57058836178315
+    },
+    {
+      "stock_code": "002589",
+      "stock_abbr": "瑞康医药",
+      "accounts_receivable_ratio": 69.05086048782508
+    },
+    {
+      "stock_code": "002424",
+      "stock_abbr": "贵州百灵",
+      "accounts_receivable_ratio": 68.523241737486
+    },
+    {
+      "stock_code": "600422",
+      "stock_abbr": "昆药集团",
+      "accounts_receivable_ratio": 65.67560529134848
+    },
+    {
+      "stock_code": "600518",
+      "stock_abbr": "康美药业",
+      "accounts_receivable_ratio": 62.471045305716736
+    },
+    {
+      "stock_code": "300026",
+      "stock_abbr": "红日药业",
+      "accounts_receivable_ratio": 61.42927583259446
+    },
+    {
+      "stock_code": "000790",
+      "stock_abbr": "华神科技",
+      "accounts_receivable_ratio": 59.06544530573807
+    },
+    {
+      "stock_code": "002166",
+      "stock_abbr": "莱茵生物",
+      "accounts_receivable_ratio": 58.524813800789566
+    },
+    {
+      "stock_code": "002390",
+      "stock_abbr": "信邦制药",
+      "accounts_receivable_ratio": 57.219117331495696
+    },
+    {
+      "stock_code": "000766",
+      "stock_abbr": "通化金马",
+      "accounts_receivable_ratio": 55.32343169371393
+    },
+    {
+      "stock_code": "603439",
+      "stock_abbr": "贵州三力",
+      "accounts_receivable_ratio": 52.870019648935006
+    },
+    {
+      "stock_code": "603139",
+      "stock_abbr": "康惠制药",
+      "accounts_receivable_ratio": 51.66514482625456
+    },
+    {
+      "stock_code": "002219",
+      "stock_abbr": "新里程",
+      "accounts_receivable_ratio": 51.546413153939156
+    },
+    {
+      "stock_code": "002864",
+      "stock_abbr": "盘龙药业",
+      "accounts_receivable_ratio": 51.202891417388166
+    },
+    {
+      "stock_code": "002198",
+      "stock_abbr": "嘉应制药",
+      "accounts_receivable_ratio": 46.2440447518809
+    },
+    {
+      "stock_code": "002873",
+      "stock_abbr": "新天药业",
+      "accounts_receivable_ratio": 45.215411407816156
+    },
+    {
+      "stock_code": "600252",
+      "stock_abbr": "中恒集团",
+      "accounts_receivable_ratio": 41.12005867996013
+    },
+    {
+      "stock_code": "300158",
+      "stock_abbr": "振东制药",
+      "accounts_receivable_ratio": 39.517056402270605
+    },
+    {
+      "stock_code": "600566",
+      "stock_abbr": "济川药业",
+      "accounts_receivable_ratio": 39.410188752252665
+    },
+    {
+      "stock_code": "300181",
+      "stock_abbr": "佐力药业",
+      "accounts_receivable_ratio": 39.234313857552664
+    },
+    {
+      "stock_code": "600129",
+      "stock_abbr": "太极集团",
+      "accounts_receivable_ratio": 35.81987140723186
+    },
+    {
+      "stock_code": "301111",
+      "stock_abbr": "粤万年青",
+      "accounts_receivable_ratio": 35.488535970515514
+    },
+    {
+      "stock_code": "000999",
+      "stock_abbr": "华润三九",
+      "accounts_receivable_ratio": 34.86729408067442
+    },
+    {
+      "stock_code": "600976",
+      "stock_abbr": "健民集团",
+      "accounts_receivable_ratio": 33.918712012641016
+    },
+    {
+      "stock_code": "002566",
+      "stock_abbr": "益盛药业",
+      "accounts_receivable_ratio": 33.839662157935216
+    },
+    {
+      "stock_code": "300534",
+      "stock_abbr": "陇神戎发",
+      "accounts_receivable_ratio": 33.49979099154237
+    },
+    {
+      "stock_code": "000538",
+      "stock_abbr": "云南白药",
+      "accounts_receivable_ratio": 33.45586667426505
+    },
+    {
+      "stock_code": "002907",
+      "stock_abbr": "华森制药",
+      "accounts_receivable_ratio": 33.123814071841664
+    },
+    {
+      "stock_code": "002317",
+      "stock_abbr": "众生药业",
+      "accounts_receivable_ratio": 32.06339957436855
+    },
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "accounts_receivable_ratio": 31.059993531920387
+    }
+  ],
+  "context_companies": [
+    "珍宝岛",
+    "天目药业",
+    "太龙药业",
+    "维康药业",
+    "万邦德",
+    "瑞康医药",
+    "贵州百灵",
+    "昆药集团",
+    "康美药业",
+    "红日药业",
+    "华神科技",
+    "莱茵生物",
+    "信邦制药",
+    "通化金马",
+    "贵州三力",
+    "康惠制药",
+    "新里程",
+    "盘龙药业",
+    "嘉应制药",
+    "新天药业",
+    "中恒集团",
+    "振东制药",
+    "济川药业",
+    "佐力药业",
+    "太极集团",
+    "粤万年青",
+    "华润三九",
+    "健民集团",
+    "益盛药业",
+    "陇神戎发",
+    "云南白药",
+    "华森制药",
+    "众生药业",
+    "白云山"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "603567",
+      "stock_abbr": "珍宝岛",
+      "accounts_receivable_ratio": 338.10230035814556
+    },
+    {
+      "stock_code": "600671",
+      "stock_abbr": "天目药业",
+      "accounts_receivable_ratio": 96.14933671205934
+    },
+    {
+      "stock_code": "600222",
+      "stock_abbr": "太龙药业",
+      "accounts_receivable_ratio": 83.59115271868657
+    },
+    {
+      "stock_code": "300878",
+      "stock_abbr": "维康药业",
+      "accounts_receivable_ratio": 71.77359082707453
+    },
+    {
+      "stock_code": "002082",
+      "stock_abbr": "万邦德",
+      "accounts_receivable_ratio": 71.57058836178315
+    },
+    {
+      "stock_code": "002589",
+      "stock_abbr": "瑞康医药",
+      "accounts_receivable_ratio": 69.05086048782508
+    },
+    {
+      "stock_code": "002424",
+      "stock_abbr": "贵州百灵",
+      "accounts_receivable_ratio": 68.523241737486
+    },
+    {
+      "stock_code": "600422",
+      "stock_abbr": "昆药集团",
+      "accounts_receivable_ratio": 65.67560529134848
+    },
+    {
+      "stock_code": "600518",
+      "stock_abbr": "康美药业",
+      "accounts_receivable_ratio": 62.471045305716736
+    },
+    {
+      "stock_code": "300026",
+      "stock_abbr": "红日药业",
+      "accounts_receivable_ratio": 61.42927583259446
+    },
+    {
+      "stock_code": "000790",
+      "stock_abbr": "华神科技",
+      "accounts_receivable_ratio": 59.06544530573807
+    },
+    {
+      "stock_code": "002166",
+      "stock_abbr": "莱茵生物",
+      "accounts_receivable_ratio": 58.524813800789566
+    },
+    {
+      "stock_code": "002390",
+      "stock_abbr": "信邦制药",
+      "accounts_receivable_ratio": 57.219117331495696
+    },
+    {
+      "stock_code": "000766",
+      "stock_abbr": "通化金马",
+      "accounts_receivable_ratio": 55.32343169371393
+    },
+    {
+      "stock_code": "603439",
+      "stock_abbr": "贵州三力",
+      "accounts_receivable_ratio": 52.870019648935006
+    },
+    {
+      "stock_code": "603139",
+      "stock_abbr": "康惠制药",
+      "accounts_receivable_ratio": 51.66514482625456
+    },
+    {
+      "stock_code": "002219",
+      "stock_abbr": "新里程",
+      "accounts_receivable_ratio": 51.546413153939156
+    },
+    {
+      "stock_code": "002864",
+      "stock_abbr": "盘龙药业",
+      "accounts_receivable_ratio": 51.202891417388166
+    },
+    {
+      "stock_code": "002198",
+      "stock_abbr": "嘉应制药",
+      "accounts_receivable_ratio": 46.2440447518809
+    },
+    {
+      "stock_code": "002873",
+      "stock_abbr": "新天药业",
+      "accounts_receivable_ratio": 45.215411407816156
+    },
+    {
+      "stock_code": "600252",
+      "stock_abbr": "中恒集团",
+      "accounts_receivable_ratio": 41.12005867996013
+    },
+    {
+      "stock_code": "300158",
+      "stock_abbr": "振东制药",
+      "accounts_receivable_ratio": 39.517056402270605
+    },
+    {
+      "stock_code": "600566",
+      "stock_abbr": "济川药业",
+      "accounts_receivable_ratio": 39.410188752252665
+    },
+    {
+      "stock_code": "300181",
+      "stock_abbr": "佐力药业",
+      "accounts_receivable_ratio": 39.234313857552664
+    },
+    {
+      "stock_code": "600129",
+      "stock_abbr": "太极集团",
+      "accounts_receivable_ratio": 35.81987140723186
+    },
+    {
+      "stock_code": "301111",
+      "stock_abbr": "粤万年青",
+      "accounts_receivable_ratio": 35.488535970515514
+    },
+    {
+      "stock_code": "000999",
+      "stock_abbr": "华润三九",
+      "accounts_receivable_ratio": 34.86729408067442
+    },
+    {
+      "stock_code": "600976",
+      "stock_abbr": "健民集团",
+      "accounts_receivable_ratio": 33.918712012641016
+    },
+    {
+      "stock_code": "002566",
+      "stock_abbr": "益盛药业",
+      "accounts_receivable_ratio": 33.839662157935216
+    },
+    {
+      "stock_code": "300534",
+      "stock_abbr": "陇神戎发",
+      "accounts_receivable_ratio": 33.49979099154237
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"603567\",\"stock_abbr\":\"珍宝岛\",\"accounts_receivable_ratio\":338.1023003581},{\"stock_code\":\"600671\",\"stock_abbr\":\"天目药业\",\"accounts_receivable_ratio\":96.1493367121},{\"stock_code\":\"600222\",\"stock_abbr\":\"太龙药业\",\"accounts_receivable_ratio\":83.5911527187},{\"stock_code\":\"300878\",\"stock_abbr\":\"维康药业\",\"accounts_receivable_ratio\":71.7735908271},{\"stock_code\":\"002082\",\"stock_abbr\":\"万邦德\",\"accounts_receivable_ratio\":71.5705883618},{\"stock_code\":\"002589\",\"stock_abbr\":\"瑞康医药\",\"accounts_receivable_ratio\":69.0508604878},{\"stock_code\":\"002424\",\"stock_abbr\":\"贵州百灵\",\"accounts_receivable_ratio\":68.5232417375},{\"stock_code\":\"600422\",\"stock_abbr\":\"昆药集团\",\"accounts_receivable_ratio\":65.6756052913},{\"stock_code\":\"600518\",\"stock_abbr\":\"康美药业\",\"accounts_receivable_ratio\":62.4710453057},{\"stock_code\":\"300026\",\"stock_abbr\":\"红日药业\",\"accounts_receivable_ratio\":61.4292758326},{\"stock_code\":\"000790\",\"stock_abbr\":\"华神科技\",\"accounts_receivable_ratio\":59.0654453057},{\"stock_code\":\"002166\",\"stock_abbr\":\"莱茵生物\",\"accounts_receivable_ratio\":58.5248138008},{\"stock_code\":\"002390\",\"stock_abbr\":\"信邦制药\",\"accounts_receivable_ratio\":57.2191173315},{\"stock_code\":\"000766\",\"stock_abbr\":\"通化金马\",\"accounts_receivable_ratio\":55.3234316937},{\"stock_code\":\"603439\",\"stock_abbr\":\"贵州三力\",\"accounts_receivable_ratio\":52.8700196489},{\"stock_code\":\"603139\",\"stock_abbr\":\"康惠制药\",\"accounts_receivable_ratio\":51.6651448263},{\"stock_code\":\"002219\",\"stock_abbr\":\"新里程\",\"accounts_receivable_ratio\":51.5464131539},{\"stock_code\":\"002864\",\"stock_abbr\":\"盘龙药业\",\"accounts_receivable_ratio\":51.2028914174},{\"stock_code\":\"002198\",\"stock_abbr\":\"嘉应制药\",\"accounts_receivable_ratio\":46.2440447519},{\"stock_code\":\"002873\",\"stock_abbr\":\"新天药业\",\"accounts_receivable_ratio\":45.2154114078}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2025年第三季度应收账款占营收比例超30%的公司",
+    "x_field": null,
+    "y_fields": [
+      "accounts_receivable_ratio"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": "accounts_receivable_ratio",
+    "sort_ascending": false,
+    "top_n": 15,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1017",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "2025年第三季度应收账款占营收比例超30%的公司",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 34,
+      "preview_rows": [
+        {
+          "stock_code": "603567",
+          "stock_abbr": "珍宝岛",
+          "accounts_receivable_ratio": 338.10230035814556
+        },
+        {
+          "stock_code": "600671",
+          "stock_abbr": "天目药业",
+          "accounts_receivable_ratio": 96.14933671205934
+        },
+        {
+          "stock_code": "600222",
+          "stock_abbr": "太龙药业",
+          "accounts_receivable_ratio": 83.59115271868657
+        },
+        {
+          "stock_code": "300878",
+          "stock_abbr": "维康药业",
+          "accounts_receivable_ratio": 71.77359082707453
+        },
+        {
+          "stock_code": "002082",
+          "stock_abbr": "万邦德",
+          "accounts_receivable_ratio": 71.57058836178315
+        },
+        {
+          "stock_code": "002589",
+          "stock_abbr": "瑞康医药",
+          "accounts_receivable_ratio": 69.05086048782508
+        },
+        {
+          "stock_code": "002424",
+          "stock_abbr": "贵州百灵",
+          "accounts_receivable_ratio": 68.523241737486
+        },
+        {
+          "stock_code": "600422",
+          "stock_abbr": "昆药集团",
+          "accounts_receivable_ratio": 65.67560529134848
+        },
+        {
+          "stock_code": "600518",
+          "stock_abbr": "康美药业",
+          "accounts_receivable_ratio": 62.471045305716736
+        },
+        {
+          "stock_code": "300026",
+          "stock_abbr": "红日药业",
+          "accounts_receivable_ratio": 61.42927583259446
+        },
+        {
+          "stock_code": "000790",
+          "stock_abbr": "华神科技",
+          "accounts_receivable_ratio": 59.06544530573807
+        },
+        {
+          "stock_code": "002166",
+          "stock_abbr": "莱茵生物",
+          "accounts_receivable_ratio": 58.524813800789566
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "accounts_receivable_ratio",
+      "sort_ascending": false,
+      "top_n": 15,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "accounts_receivable_ratio",
+        "data_type": "quantitative",
+        "label": "accounts_receivable_ratio",
+        "unit": "%"
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B1017_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1017_1.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT stock_code, stock_abbr, (asset_accounts_receivable / total_operating_revenue) * 100 AS accounts_receivable_ratio FROM financials_view WHERE report_period = '2025Q3' AND (asset_accounts_receivable / total_operating_revenue) > 0.3 ORDER BY accounts_receivable_ratio DESC",
+      "value_fields": [
+        "accounts_receivable_ratio"
+      ],
+      "value_labels": [
+        "accounts_receivable_ratio"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "accounts_receivable_ratio"
+        ],
+        "category_field": "stock_abbr",
+        "sort_by": "accounts_receivable_ratio",
+        "sort_ascending": false,
+        "top_n": 15
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1017_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1017_1.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "2025年第三季度，“资产-应收账款”占“营业总收入”比例超过30%的公司有哪些？请列出股票代码、简称、应收账款占比（%）。",
+      "A": {
+        "content": "2025年第三季度，应收账款占营业总收入比例超过30%的公司共有30家。具体名单及占比如下：\n\n1.  珍宝岛（603567）：338.10%\n2.  天目药业（600671）：96.15%\n3.  太龙药业（600222）：83.59%\n4.  维康药业（300878）：71.77%\n5.  万邦德（002082）：71.57%\n6.  瑞康医药（002589）：69.05%\n7.  贵州百灵（002424）：68.52%\n8.  昆药集团（600422）：65.68%\n9.  康美药业（600518）：62.47%\n10. 红日药业（300026）：61.43%\n11. 华神科技（000790）：59.07%\n12. 莱茵生物（002166）：58.52%\n13. 信邦制药（002390）：57.22%\n14. 通化金马（000766）：55.32%\n15. 贵州三力（603439）：52.87%\n16. 康惠制药（603139）：51.67%\n17. 新里程（002219）：51.55%\n18. 盘龙药业（002864）：51.20%\n19. 嘉应制药（002198）：46.24%\n20. 新天药业（002873）：45.22%\n21. 中恒集团（600252）：41.12%\n22. 振东制药（300158）：39.52%\n23. 济川药业（600566）：39.41%\n24. 佐力药业（300181）：39.23%\n25. 太极集团（600129）：35.82%\n26. 粤万年青（301111）：35.49%\n27. 华润三九（000999）：34.87%\n28. 健民集团（600976）：33.92%\n29. 益盛药业（002566）：33.84%\n30. 陇神戎发（300534）：33.50%\n\n其中，珍宝岛的占比高达338.10%，结果存在异常，建议复核口径或数据。",
+        "image": [
+          "./result/B1017_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"2025年第三季度，“资产-应收账款”占“营业总收入”比例超过30%的公司有哪些？请列出股票代码、简称、应收账款占比（%）。\", \"A\": {\"content\": \"2025年第三季度，应收账款占营业总收入比例超过30%的公司共有30家。具体名单及占比如下：\\n\\n1.  珍宝岛（603567）：338.10%\\n2.  天目药业（600671）：96.15%\\n3.  太龙药业（600222）：83.59%\\n4.  维康药业（300878）：71.77%\\n5.  万邦德（002082）：71.57%\\n6.  瑞康医药（002589）：69.05%\\n7.  贵州百灵（002424）：68.52%\\n8.  昆药集团（600422）：65.68%\\n9.  康美药业（600518）：62.47%\\n10. 红日药业（300026）：61.43%\\n11. 华神科技（000790）：59.07%\\n12. 莱茵生物（002166）：58.52%\\n13. 信邦制药（002390）：57.22%\\n14. 通化金马（000766）：55.32%\\n15. 贵州三力（603439）：52.87%\\n16. 康惠制药（603139）：51.67%\\n17. 新里程（002219）：51.55%\\n18. 盘龙药业（002864）：51.20%\\n19. 嘉应制药（002198）：46.24%\\n20. 新天药业（002873）：45.22%\\n21. 中恒集团（600252）：41.12%\\n22. 振东制药（300158）：39.52%\\n23. 济川药业（600566）：39.41%\\n24. 佐力药业（300181）：39.23%\\n25. 太极集团（600129）：35.82%\\n26. 粤万年青（301111）：35.49%\\n27. 华润三九（000999）：34.87%\\n28. 健民集团（600976）：33.92%\\n29. 益盛药业（002566）：33.84%\\n30. 陇神戎发（300534）：33.50%\\n\\n其中，珍宝岛的占比高达338.10%，结果存在异常，建议复核口径或数据。\", \"image\": [\"./result/B1017_1.jpg\"]}}]",
+  "notes": [
+    "查询计划要求筛选2025Q3报告期，计算应收账款占营业收入比例超过30%的公司。由于数据库中没有直接的应收账款占比字段，需要根据schema中的asset_accounts_receivable和total_operating_revenue计算。阈值30%对应比例值0.3。结果按占比降序排列，并返回股票代码、简称和计算出的占比（百分比形式）。"
+  ],
+  "final_status": "ok"
+}

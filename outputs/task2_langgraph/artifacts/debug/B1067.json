@@ -1,0 +1,84 @@
+{
+  "question_id": "B1067",
+  "question_type": "数据统计分析查询",
+  "raw_question": "中药公司的资产负债率情况如何 | 2025年第三季度，66家中药上市公司的资产负债率均值是多少",
+  "raw_question_json": "[{\"Q\":\"中药公司的资产负债率情况如何\"},{\"Q\":\"2025年第三季度，66家中药上市公司的资产负债率均值是多少\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "资产负债率"
+    ],
+    "chart_type": null,
+    "intent_type": "period_stat",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "period_stat",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "资产负债率"
+    ],
+    "chart_type": null,
+    "top_n": null,
+    "threshold": null,
+    "question": "2025年第三季度，66家中药上市公司的资产负债率均值是多少",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT AVG(asset_liability_ratio) AS avg_asset_liability_ratio FROM financials_view WHERE report_period = '2025Q3'",
+  "sql_history": [
+    "SELECT AVG(asset_liability_ratio) AS avg_asset_liability_ratio FROM financials_view WHERE report_period = '2025Q3'"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 1,
+  "result_rows": [
+    {
+      "avg_asset_liability_ratio": 32.13820992174203
+    }
+  ],
+  "context_companies": [],
+  "context_rows": [
+    {
+      "avg_asset_liability_ratio": 32.13820992174203
+    }
+  ],
+  "result_preview": "[{\"avg_asset_liability_ratio\":32.1382099217}]",
+  "chart_plan": {},
+  "chart_spec": {},
+  "all_chart_specs": [],
+  "all_chart_paths": [],
+  "graph_formats": [],
+  "turn_answers": [
+    {
+      "Q": "中药公司的资产负债率情况如何",
+      "A": {
+        "content": "请问您想了解哪家中药公司的资产负债率情况呢？",
+        "image": []
+      }
+    },
+    {
+      "Q": "2025年第三季度，66家中药上市公司的资产负债率均值是多少",
+      "A": {
+        "content": "2025年第三季度，66家中药上市公司的平均资产负债率为32.14%。",
+        "image": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"中药公司的资产负债率情况如何\", \"A\": {\"content\": \"请问您想了解哪家中药公司的资产负债率情况呢？\", \"image\": []}}, {\"Q\": \"2025年第三季度，66家中药上市公司的资产负债率均值是多少\", \"A\": {\"content\": \"2025年第三季度，66家中药上市公司的平均资产负债率为32.14%。\", \"image\": []}}]",
+  "notes": [
+    "查询计划要求计算2025年第三季度资产负债率的均值。由于companies为空，且问题明确是66家中药上市公司，但schema中没有行业字段，因此直接按报告期筛选并计算平均值。"
+  ],
+  "final_status": "ok"
+}

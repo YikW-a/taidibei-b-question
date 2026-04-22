@@ -1,0 +1,216 @@
+{
+  "question_id": "B1009",
+  "question_type": "数据统计分析查询",
+  "raw_question": "2025年第三季度，66家中药公司中“营业总收入”和“净利润”均排名前五的公司有哪些？请列出其股票代码、简称、营业总收入（万元）、净利润（万元）",
+  "raw_question_json": "[{\"Q\":\"2025年第三季度，66家中药公司中“营业总收入”和“净利润”均排名前五的公司有哪些？请列出其股票代码、简称、营业总收入（万元）、净利润（万元）\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入",
+      "净利润"
+    ],
+    "chart_type": null,
+    "intent_type": "ranking",
+    "top_n": 5,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "ranking",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入",
+      "净利润"
+    ],
+    "chart_type": "table",
+    "top_n": 5,
+    "threshold": null,
+    "question": "2025年第三季度，66家中药公司中“营业总收入”和“净利润”均排名前五的公司有哪些？请列出其股票代码、简称、营业总收入（万元）、净利润（万元）",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "WITH ranked_by_revenue AS (\n    SELECT stock_code, stock_abbr, total_operating_revenue AS 营业总收入, net_profit AS 净利润,\n           ROW_NUMBER() OVER (ORDER BY total_operating_revenue DESC) AS revenue_rank\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n), ranked_by_profit AS (\n    SELECT stock_code, stock_abbr, total_operating_revenue AS 营业总收入, net_profit AS 净利润,\n           ROW_NUMBER() OVER (ORDER BY net_profit DESC) AS profit_rank\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n)\nSELECT r.stock_code, r.stock_abbr, r.营业总收入, r.净利润\nFROM ranked_by_revenue r\nINNER JOIN ranked_by_profit p ON r.stock_code = p.stock_code\nWHERE r.revenue_rank <= 5 AND p.profit_rank <= 5\nORDER BY r.revenue_rank, p.profit_rank;",
+  "sql_history": [
+    "WITH ranked_by_revenue AS (\n    SELECT stock_code, stock_abbr, total_operating_revenue AS 营业总收入, net_profit AS 净利润,\n           ROW_NUMBER() OVER (ORDER BY total_operating_revenue DESC) AS revenue_rank\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n), ranked_by_profit AS (\n    SELECT stock_code, stock_abbr, total_operating_revenue AS 营业总收入, net_profit AS 净利润,\n           ROW_NUMBER() OVER (ORDER BY net_profit DESC) AS profit_rank\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n)\nSELECT r.stock_code, r.stock_abbr, r.营业总收入, r.净利润\nFROM ranked_by_revenue r\nINNER JOIN ranked_by_profit p ON r.stock_code = p.stock_code\nWHERE r.revenue_rank <= 5 AND p.profit_rank <= 5\nORDER BY r.revenue_rank, p.profit_rank;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 3,
+  "result_rows": [
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "营业总收入": 6160599.379554,
+      "净利润": 331005.207786
+    },
+    {
+      "stock_code": "000538",
+      "stock_abbr": "云南白药",
+      "营业总收入": 3065421.420901,
+      "净利润": 477711.965747
+    },
+    {
+      "stock_code": "000999",
+      "stock_abbr": "华润三九",
+      "营业总收入": 2198640.396207,
+      "净利润": 235282.69556599998
+    }
+  ],
+  "context_companies": [
+    "白云山",
+    "云南白药",
+    "华润三九"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "营业总收入": 6160599.379554,
+      "净利润": 331005.207786
+    },
+    {
+      "stock_code": "000538",
+      "stock_abbr": "云南白药",
+      "营业总收入": 3065421.420901,
+      "净利润": 477711.965747
+    },
+    {
+      "stock_code": "000999",
+      "stock_abbr": "华润三九",
+      "营业总收入": 2198640.396207,
+      "净利润": 235282.69556599998
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"600332\",\"stock_abbr\":\"白云山\",\"营业总收入\":6160599.3795539998,\"净利润\":331005.207786},{\"stock_code\":\"000538\",\"stock_abbr\":\"云南白药\",\"营业总收入\":3065421.420901,\"净利润\":477711.965747},{\"stock_code\":\"000999\",\"stock_abbr\":\"华润三九\",\"营业总收入\":2198640.3962070001,\"净利润\":235282.695566}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2025年第三季度中药公司营收与净利润双前五",
+    "x_field": null,
+    "y_fields": [
+      "stock_code"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": null,
+    "sort_ascending": true,
+    "top_n": 3,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1009",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "2025年第三季度中药公司营收与净利润双前五",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 3,
+      "preview_rows": [
+        {
+          "stock_code": "600332",
+          "stock_abbr": "白云山",
+          "营业总收入": 6160599.379554,
+          "净利润": 331005.207786
+        },
+        {
+          "stock_code": "000538",
+          "stock_abbr": "云南白药",
+          "营业总收入": 3065421.420901,
+          "净利润": 477711.965747
+        },
+        {
+          "stock_code": "000999",
+          "stock_abbr": "华润三九",
+          "营业总收入": 2198640.396207,
+          "净利润": 235282.69556599998
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": null,
+      "sort_ascending": true,
+      "top_n": 3,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "stock_code",
+        "data_type": "quantitative",
+        "label": "股票代码",
+        "unit": "万元"
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B1009_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1009_1.jpg"
+    },
+    "meta": {
+      "source_sql": "WITH ranked_by_revenue AS (\n    SELECT stock_code, stock_abbr, total_operating_revenue AS 营业总收入, net_profit AS 净利润,\n           ROW_NUMBER() OVER (ORDER BY total_operating_revenue DESC) AS revenue_rank\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n), ranked_by_profit AS (\n    SELECT stock_code, stock_abbr, total_operating_revenue AS 营业总收入, net_profit AS 净利润,\n           ROW_NUMBER() OVER (ORDER BY net_profit DESC) AS profit_rank\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n)\nSELECT r.stock_code, r.stock_abbr, r.营业总收入, r.净利润\nFROM ranked_by_revenue r\nINNER JOIN ranked_by_profit p ON r.stock_code = p.stock_code\nWHERE r.revenue_rank <= 5 AND p.profit_rank <= 5\nORDER BY r.revenue_rank, p.profit_rank;",
+      "value_fields": [
+        "stock_code"
+      ],
+      "value_labels": [
+        "股票代码"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "stock_code"
+        ],
+        "category_field": "stock_abbr",
+        "sort_by": null,
+        "sort_ascending": true,
+        "top_n": 3
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1009_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1009_1.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "2025年第三季度，66家中药公司中“营业总收入”和“净利润”均排名前五的公司有哪些？请列出其股票代码、简称、营业总收入（万元）、净利润（万元）",
+      "A": {
+        "content": "根据查询结果，在2025年第三季度，营业总收入和净利润均排名前五的中药公司共有3家，具体如下：\n\n1. **白云山 (600332)**：营业总收入为6,160,599.38万元，净利润为331,005.21万元。\n2. **云南白药 (000538)**：营业总收入为3,065,421.42万元，净利润为477,711.97万元。\n3. **华润三九 (000999)**：营业总收入为2,198,640.40万元，净利润为235,282.70万元。",
+        "image": [
+          "./result/B1009_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"2025年第三季度，66家中药公司中“营业总收入”和“净利润”均排名前五的公司有哪些？请列出其股票代码、简称、营业总收入（万元）、净利润（万元）\", \"A\": {\"content\": \"根据查询结果，在2025年第三季度，营业总收入和净利润均排名前五的中药公司共有3家，具体如下：\\n\\n1. **白云山 (600332)**：营业总收入为6,160,599.38万元，净利润为331,005.21万元。\\n2. **云南白药 (000538)**：营业总收入为3,065,421.42万元，净利润为477,711.97万元。\\n3. **华润三九 (000999)**：营业总收入为2,198,640.40万元，净利润为235,282.70万元。\", \"image\": [\"./result/B1009_1.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，这是一个排名问题，需要找出2025年第三季度在66家中药公司中营业总收入和净利润均排名前五的公司。由于查询计划中没有指定具体的公司列表，且问题明确是66家中药公司，但schema中没有行业字段，因此假设当前视图已包含这66家公司。我们分别对营业总收入（total_operating_revenue）和净利润（net_profit）进行降序排名，然后取两个排名都在前五的交集。结果返回股票代码、简称、营业总收入（万元）、净利润（万元）。"
+  ],
+  "final_status": "ok"
+}

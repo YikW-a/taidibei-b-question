@@ -1,0 +1,206 @@
+{
+  "question_id": "B1037",
+  "question_type": "数据基本查询",
+  "raw_question": "按2025年第三季度的销售净利率（净利润/营业总收入*100）分组，统计销售净利率在0-5%、5%-10%、10%以上三个区间的公司数量。",
+  "raw_question_json": "[{\"Q\":\"按2025年第三季度的销售净利率（净利润/营业总收入*100）分组，统计销售净利率在0-5%、5%-10%、10%以上三个区间的公司数量。\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入",
+      "净利润",
+      "销售净利率"
+    ],
+    "chart_type": null,
+    "intent_type": "period_stat",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "period_stat",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "销售净利率"
+    ],
+    "chart_type": "bar",
+    "top_n": null,
+    "threshold": null,
+    "question": "按2025年第三季度的销售净利率（净利润/营业总收入*100）分组，统计销售净利率在0-5%、5%-10%、10%以上三个区间的公司数量。",
+    "should_draw": true,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT CASE WHEN net_profit_margin >= 0 AND net_profit_margin < 5 THEN '0-5%' WHEN net_profit_margin >= 5 AND net_profit_margin < 10 THEN '5%-10%' WHEN net_profit_margin >= 10 THEN '10%以上' ELSE '其他' END AS profit_margin_group, COUNT(*) AS company_count FROM financials_view WHERE report_period = '2025Q3' AND net_profit_margin IS NOT NULL GROUP BY profit_margin_group ORDER BY profit_margin_group",
+  "sql_history": [
+    "SELECT CASE WHEN net_profit_margin >= 0 AND net_profit_margin < 5 THEN '0-5%' WHEN net_profit_margin >= 5 AND net_profit_margin < 10 THEN '5%-10%' WHEN net_profit_margin >= 10 THEN '10%以上' ELSE '其他' END AS profit_margin_group, COUNT(*) AS company_count FROM financials_view WHERE report_period = '2025Q3' AND net_profit_margin IS NOT NULL GROUP BY profit_margin_group ORDER BY profit_margin_group"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 4,
+  "result_rows": [
+    {
+      "profit_margin_group": "0-5%",
+      "company_count": 15
+    },
+    {
+      "profit_margin_group": "10%以上",
+      "company_count": 28
+    },
+    {
+      "profit_margin_group": "5%-10%",
+      "company_count": 15
+    },
+    {
+      "profit_margin_group": "其他",
+      "company_count": 9
+    }
+  ],
+  "context_companies": [],
+  "context_rows": [
+    {
+      "profit_margin_group": "0-5%",
+      "company_count": 15
+    },
+    {
+      "profit_margin_group": "10%以上",
+      "company_count": 28
+    },
+    {
+      "profit_margin_group": "5%-10%",
+      "company_count": 15
+    },
+    {
+      "profit_margin_group": "其他",
+      "company_count": 9
+    }
+  ],
+  "result_preview": "[{\"profit_margin_group\":\"0-5%\",\"company_count\":15},{\"profit_margin_group\":\"10%以上\",\"company_count\":28},{\"profit_margin_group\":\"5%-10%\",\"company_count\":15},{\"profit_margin_group\":\"其他\",\"company_count\":9}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2025年第三季度销售净利率区间公司数量",
+    "x_field": null,
+    "y_fields": [
+      "company_count"
+    ],
+    "category_field": "profit_margin_group",
+    "sort_by": "company_count",
+    "sort_ascending": true,
+    "top_n": 4,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1037",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "2025年第三季度销售净利率区间公司数量",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 4,
+      "preview_rows": [
+        {
+          "profit_margin_group": "0-5%",
+          "company_count": 15
+        },
+        {
+          "profit_margin_group": "10%以上",
+          "company_count": 28
+        },
+        {
+          "profit_margin_group": "5%-10%",
+          "company_count": 15
+        },
+        {
+          "profit_margin_group": "其他",
+          "company_count": 9
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "company_count",
+      "sort_ascending": true,
+      "top_n": 4,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "company_count",
+        "data_type": "quantitative",
+        "label": "company_count",
+        "unit": null
+      },
+      "category": {
+        "field": "profit_margin_group",
+        "data_type": "nominal",
+        "label": "profit_margin_group",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B1037_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1037_1.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT CASE WHEN net_profit_margin >= 0 AND net_profit_margin < 5 THEN '0-5%' WHEN net_profit_margin >= 5 AND net_profit_margin < 10 THEN '5%-10%' WHEN net_profit_margin >= 10 THEN '10%以上' ELSE '其他' END AS profit_margin_group, COUNT(*) AS company_count FROM financials_view WHERE report_period = '2025Q3' AND net_profit_margin IS NOT NULL GROUP BY profit_margin_group ORDER BY profit_margin_group",
+      "value_fields": [
+        "company_count"
+      ],
+      "value_labels": [
+        "company_count"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "company_count"
+        ],
+        "category_field": "profit_margin_group",
+        "sort_by": "company_count",
+        "sort_ascending": true,
+        "top_n": 4
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1037_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1037_1.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "按2025年第三季度的销售净利率（净利润/营业总收入*100）分组，统计销售净利率在0-5%、5%-10%、10%以上三个区间的公司数量。",
+      "A": {
+        "content": "根据2025年第三季度财报数据，按销售净利率分组统计的公司数量如下：\n- 销售净利率在0-5%区间的公司有15家。\n- 销售净利率在5%-10%区间的公司有15家。\n- 销售净利率在10%以上的公司有28家。\n此外，有9家公司的销售净利率未落入上述区间（归类为“其他”）。",
+        "image": [
+          "./result/B1037_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"按2025年第三季度的销售净利率（净利润/营业总收入*100）分组，统计销售净利率在0-5%、5%-10%、10%以上三个区间的公司数量。\", \"A\": {\"content\": \"根据2025年第三季度财报数据，按销售净利率分组统计的公司数量如下：\\n- 销售净利率在0-5%区间的公司有15家。\\n- 销售净利率在5%-10%区间的公司有15家。\\n- 销售净利率在10%以上的公司有28家。\\n此外，有9家公司的销售净利率未落入上述区间（归类为“其他”）。\", \"image\": [\"./result/B1037_1.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，需要统计2025Q3报告期的销售净利率分组数量。销售净利率对应字段为net_profit_margin，且该字段已经是百分比值。因此直接使用该字段进行区间分组（0-5%、5%-10%、10%以上），并统计公司数量。"
+  ],
+  "final_status": "ok"
+}

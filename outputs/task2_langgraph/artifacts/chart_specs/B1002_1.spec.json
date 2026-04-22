@@ -1,0 +1,114 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1002",
+  "image_index": 1,
+  "chart_type": "line",
+  "title": "金花股份利润总额变化趋势",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 12,
+    "preview_rows": [
+      {
+        "report_period": "2022FY",
+        "total_profit": 4905.154102
+      },
+      {
+        "report_period": "2023FY",
+        "total_profit": -4105.4617259999995
+      },
+      {
+        "report_period": "2023H1",
+        "total_profit": 506.584259
+      },
+      {
+        "report_period": "2023Q1",
+        "total_profit": 490.645995
+      },
+      {
+        "report_period": "2023Q3",
+        "total_profit": 193.603353
+      },
+      {
+        "report_period": "2024FY",
+        "total_profit": 4203.928014
+      },
+      {
+        "report_period": "2024H1",
+        "total_profit": 924.980958
+      },
+      {
+        "report_period": "2024Q1",
+        "total_profit": 2790.534078
+      },
+      {
+        "report_period": "2024Q3",
+        "total_profit": 3245.72417
+      },
+      {
+        "report_period": "2025H1",
+        "total_profit": 532.451361
+      },
+      {
+        "report_period": "2025Q1",
+        "total_profit": 63.094877000000004
+      },
+      {
+        "report_period": "2025Q3",
+        "total_profit": 3533.5900020000004
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "report_period",
+    "sort_ascending": true,
+    "top_n": null,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "total_profit",
+      "data_type": "quantitative",
+      "label": "total_profit",
+      "unit": null
+    },
+    "x": {
+      "field": "report_period",
+      "data_type": "temporal",
+      "label": "报告期",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": false
+  },
+  "output": {
+    "filename": "B1002_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1002_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT report_period, total_profit FROM financials_view WHERE stock_abbr = '金花股份' AND total_profit IS NOT NULL ORDER BY report_period",
+    "value_fields": [
+      "total_profit"
+    ],
+    "value_labels": [
+      "total_profit"
+    ],
+    "original_chart_plan": {
+      "chart_type": "line",
+      "x_field": "report_period",
+      "y_fields": [
+        "total_profit"
+      ],
+      "category_field": null,
+      "sort_by": "report_period",
+      "sort_ascending": true,
+      "top_n": null
+    }
+  }
+}

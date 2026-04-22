@@ -1,0 +1,114 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1057",
+  "image_index": 1,
+  "chart_type": "scatter",
+  "title": "分析2025年第三季度营业总收入与净利润的相关性... - 营业总收入",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 50,
+    "preview_rows": [
+      {
+        "营业总收入": 476637.0643520001,
+        "净利润": 127382.009544
+      },
+      {
+        "营业总收入": 3065421.420901,
+        "净利润": 477711.965747
+      },
+      {
+        "营业总收入": 22481.575188,
+        "净利润": -1482.060447
+      },
+      {
+        "营业总收入": 283345.176031,
+        "净利润": 37913.517706
+      },
+      {
+        "营业总收入": 89225.11293999999,
+        "净利润": 2496.346801
+      },
+      {
+        "营业总收入": 45738.460127,
+        "净利润": -9778.528761
+      },
+      {
+        "营业总收入": 162745.325626,
+        "净利润": 15153.160568000001
+      },
+      {
+        "营业总收入": 2198640.396207,
+        "净利润": 235282.69556599998
+      },
+      {
+        "营业总收入": 101770.643836,
+        "净利润": 446.777245
+      },
+      {
+        "营业总收入": 62461.33542999999,
+        "净利润": 6399.499235
+      },
+      {
+        "营业总收入": 127215.58173499999,
+        "净利润": 7039.5252980000005
+      },
+      {
+        "营业总收入": 29343.625195,
+        "净利润": 2179.4297699999997
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": null,
+    "sort_ascending": true,
+    "top_n": 50,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "净利润",
+      "data_type": "quantitative",
+      "label": "净利润",
+      "unit": "万元"
+    },
+    "x": {
+      "field": "营业总收入",
+      "data_type": "quantitative",
+      "label": "营业总收入",
+      "unit": "万元"
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": false
+  },
+  "output": {
+    "filename": "B1057_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1057_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT total_operating_revenue AS 营业总收入, net_profit AS 净利润 FROM financials_view WHERE report_period = '2025Q3' AND total_operating_revenue IS NOT NULL AND net_profit IS NOT NULL",
+    "value_fields": [
+      "净利润"
+    ],
+    "value_labels": [
+      "净利润"
+    ],
+    "original_chart_plan": {
+      "chart_type": "scatter",
+      "x_field": "营业总收入",
+      "y_fields": [
+        "净利润"
+      ],
+      "category_field": null,
+      "sort_by": null,
+      "sort_ascending": true,
+      "top_n": 50
+    }
+  }
+}

@@ -1,0 +1,271 @@
+{
+  "question_id": "B1042",
+  "question_type": "数据基本查询",
+  "raw_question": "统计2025年第三季度研发费用占营业总收入比例最高的5家公司，要求同时展示研发费用（万元）、营业总收入（万元）、研发费用占比（保留两位小数）",
+  "raw_question_json": "[{\"Q\":\"统计2025年第三季度研发费用占营业总收入比例最高的5家公司，要求同时展示研发费用（万元）、营业总收入（万元）、研发费用占比（保留两位小数）\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入",
+      "研发费用占比",
+      "研发费用"
+    ],
+    "chart_type": null,
+    "intent_type": "ranking",
+    "top_n": 5,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "ranking",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "研发费用",
+      "营业总收入",
+      "研发费用占比"
+    ],
+    "chart_type": "table",
+    "top_n": 5,
+    "threshold": null,
+    "question": "统计2025年第三季度研发费用占营业总收入比例最高的5家公司，要求同时展示研发费用（万元）、营业总收入（万元）、研发费用占比（保留两位小数）",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT stock_code, stock_abbr, operating_expense_rnd_expenses AS 研发费用, total_operating_revenue AS 营业总收入, ROUND(rnd_expense_ratio, 2) AS 研发费用占比 FROM financials_view WHERE report_period = '2025Q3' AND rnd_expense_ratio IS NOT NULL ORDER BY rnd_expense_ratio DESC LIMIT 5",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, operating_expense_rnd_expenses AS 研发费用, total_operating_revenue AS 营业总收入, ROUND(rnd_expense_ratio, 2) AS 研发费用占比 FROM financials_view WHERE report_period = '2025Q3' AND rnd_expense_ratio IS NOT NULL ORDER BY rnd_expense_ratio DESC LIMIT 5"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 5,
+  "result_rows": [
+    {
+      "stock_code": "300869",
+      "stock_abbr": "康泰医学",
+      "研发费用": 6907.073531999999,
+      "营业总收入": 34399.269271,
+      "研发费用占比": 20.08
+    },
+    {
+      "stock_code": "600557",
+      "stock_abbr": "康缘药业",
+      "研发费用": 35163.770225,
+      "营业总收入": 234268.838058,
+      "研发费用占比": 15.01
+    },
+    {
+      "stock_code": "603896",
+      "stock_abbr": "寿仙谷",
+      "研发费用": 4209.165884,
+      "营业总收入": 43013.821939999994,
+      "研发费用占比": 9.79
+    },
+    {
+      "stock_code": "002907",
+      "stock_abbr": "华森制药",
+      "研发费用": 5924.020624,
+      "营业总收入": 62591.202387,
+      "研发费用占比": 9.46
+    },
+    {
+      "stock_code": "002603",
+      "stock_abbr": "以岭药业",
+      "研发费用": 54401.286124,
+      "营业总收入": 586760.307361,
+      "研发费用占比": 9.27
+    }
+  ],
+  "context_companies": [
+    "康泰医学",
+    "康缘药业",
+    "寿仙谷",
+    "华森制药",
+    "以岭药业"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "300869",
+      "stock_abbr": "康泰医学",
+      "研发费用": 6907.073531999999,
+      "营业总收入": 34399.269271,
+      "研发费用占比": 20.08
+    },
+    {
+      "stock_code": "600557",
+      "stock_abbr": "康缘药业",
+      "研发费用": 35163.770225,
+      "营业总收入": 234268.838058,
+      "研发费用占比": 15.01
+    },
+    {
+      "stock_code": "603896",
+      "stock_abbr": "寿仙谷",
+      "研发费用": 4209.165884,
+      "营业总收入": 43013.821939999994,
+      "研发费用占比": 9.79
+    },
+    {
+      "stock_code": "002907",
+      "stock_abbr": "华森制药",
+      "研发费用": 5924.020624,
+      "营业总收入": 62591.202387,
+      "研发费用占比": 9.46
+    },
+    {
+      "stock_code": "002603",
+      "stock_abbr": "以岭药业",
+      "研发费用": 54401.286124,
+      "营业总收入": 586760.307361,
+      "研发费用占比": 9.27
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"300869\",\"stock_abbr\":\"康泰医学\",\"研发费用\":6907.073532,\"营业总收入\":34399.269271,\"研发费用占比\":20.08},{\"stock_code\":\"600557\",\"stock_abbr\":\"康缘药业\",\"研发费用\":35163.770225,\"营业总收入\":234268.838058,\"研发费用占比\":15.01},{\"stock_code\":\"603896\",\"stock_abbr\":\"寿仙谷\",\"研发费用\":4209.165884,\"营业总收入\":43013.82194,\"研发费用占比\":9.79},{\"stock_code\":\"002907\",\"stock_abbr\":\"华森制药\",\"研发费用\":5924.020624,\"营业总收入\":62591.202387,\"研发费用占比\":9.46},{\"stock_code\":\"002603\",\"stock_abbr\":\"以岭药业\",\"研发费用\":54401.286124,\"营业总收入\":586760.307361,\"研发费用占比\":9.27}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2025Q3研发费用占比Top5",
+    "x_field": null,
+    "y_fields": [
+      "研发费用占比"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": "研发费用占比",
+    "sort_ascending": false,
+    "top_n": 5,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1042",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "2025Q3研发费用占比Top5",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 5,
+      "preview_rows": [
+        {
+          "stock_code": "300869",
+          "stock_abbr": "康泰医学",
+          "研发费用": 6907.073531999999,
+          "营业总收入": 34399.269271,
+          "研发费用占比": 20.08
+        },
+        {
+          "stock_code": "600557",
+          "stock_abbr": "康缘药业",
+          "研发费用": 35163.770225,
+          "营业总收入": 234268.838058,
+          "研发费用占比": 15.01
+        },
+        {
+          "stock_code": "603896",
+          "stock_abbr": "寿仙谷",
+          "研发费用": 4209.165884,
+          "营业总收入": 43013.821939999994,
+          "研发费用占比": 9.79
+        },
+        {
+          "stock_code": "002907",
+          "stock_abbr": "华森制药",
+          "研发费用": 5924.020624,
+          "营业总收入": 62591.202387,
+          "研发费用占比": 9.46
+        },
+        {
+          "stock_code": "002603",
+          "stock_abbr": "以岭药业",
+          "研发费用": 54401.286124,
+          "营业总收入": 586760.307361,
+          "研发费用占比": 9.27
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "研发费用占比",
+      "sort_ascending": false,
+      "top_n": 5,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "研发费用占比",
+        "data_type": "quantitative",
+        "label": "研发费用占比",
+        "unit": "%"
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B1042_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1042_1.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT stock_code, stock_abbr, operating_expense_rnd_expenses AS 研发费用, total_operating_revenue AS 营业总收入, ROUND(rnd_expense_ratio, 2) AS 研发费用占比 FROM financials_view WHERE report_period = '2025Q3' AND rnd_expense_ratio IS NOT NULL ORDER BY rnd_expense_ratio DESC LIMIT 5",
+      "value_fields": [
+        "研发费用占比"
+      ],
+      "value_labels": [
+        "研发费用占比"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "研发费用占比"
+        ],
+        "category_field": "stock_abbr",
+        "sort_by": "研发费用占比",
+        "sort_ascending": false,
+        "top_n": 5
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1042_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1042_1.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "统计2025年第三季度研发费用占营业总收入比例最高的5家公司，要求同时展示研发费用（万元）、营业总收入（万元）、研发费用占比（保留两位小数）",
+      "A": {
+        "content": "2025年第三季度，研发费用占营业总收入比例最高的5家公司及其数据如下：\n\n1.  **康泰医学 (300869)**：研发费用6907.07万元，营业总收入34399.27万元，研发费用占比**20.08%**。\n2.  **康缘药业 (600557)**：研发费用35163.77万元，营业总收入234268.84万元，研发费用占比**15.01%**。\n3.  **寿仙谷 (603896)**：研发费用4209.17万元，营业总收入43013.82万元，研发费用占比**9.79%**。\n4.  **华森制药 (002907)**：研发费用5924.02万元，营业总收入62591.20万元，研发费用占比**9.46%**。\n5.  **以岭药业 (002603)**：研发费用54401.29万元，营业总收入586760.31万元，研发费用占比**9.27%**。",
+        "image": [
+          "./result/B1042_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"统计2025年第三季度研发费用占营业总收入比例最高的5家公司，要求同时展示研发费用（万元）、营业总收入（万元）、研发费用占比（保留两位小数）\", \"A\": {\"content\": \"2025年第三季度，研发费用占营业总收入比例最高的5家公司及其数据如下：\\n\\n1.  **康泰医学 (300869)**：研发费用6907.07万元，营业总收入34399.27万元，研发费用占比**20.08%**。\\n2.  **康缘药业 (600557)**：研发费用35163.77万元，营业总收入234268.84万元，研发费用占比**15.01%**。\\n3.  **寿仙谷 (603896)**：研发费用4209.17万元，营业总收入43013.82万元，研发费用占比**9.79%**。\\n4.  **华森制药 (002907)**：研发费用5924.02万元，营业总收入62591.20万元，研发费用占比**9.46%**。\\n5.  **以岭药业 (002603)**：研发费用54401.29万元，营业总收入586760.31万元，研发费用占比**9.27%**。\", \"image\": [\"./result/B1042_1.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，需要查询2025Q3期间，按研发费用占比（rnd_expense_ratio）降序排列，取前5名。同时展示研发费用（operating_expense_rnd_expenses）、营业总收入（total_operating_revenue）和研发费用占比（rnd_expense_ratio，保留两位小数）。由于是排名题，使用ORDER BY和LIMIT，并确保返回公司标识。"
+  ],
+  "final_status": "ok"
+}

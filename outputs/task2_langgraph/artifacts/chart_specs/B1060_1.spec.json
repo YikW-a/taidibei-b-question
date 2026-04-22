@@ -1,0 +1,150 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1060",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "2025Q3研发费用占比前十与后十公司净利润同比增长率对比",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 20,
+    "preview_rows": [
+      {
+        "group_label": "Bottom10_RD",
+        "stock_code": "600085",
+        "stock_abbr": "同仁堂",
+        "rnd_expense_ratio": 1.0740212573881234,
+        "net_profit_yoy_growth": -19.696158827992598
+      },
+      {
+        "group_label": "Bottom10_RD",
+        "stock_code": "000650",
+        "stock_abbr": "仁和药业",
+        "rnd_expense_ratio": 0.9318327723042413,
+        "net_profit_yoy_growth": -8.893441814723204
+      },
+      {
+        "group_label": "Bottom10_RD",
+        "stock_code": "600518",
+        "stock_abbr": "康美药业",
+        "rnd_expense_ratio": 0.825635256635213,
+        "net_profit_yoy_growth": 86.06034114359072
+      },
+      {
+        "group_label": "Bottom10_RD",
+        "stock_code": "000538",
+        "stock_abbr": "云南白药",
+        "rnd_expense_ratio": 0.7666097697618635,
+        "net_profit_yoy_growth": 10.612040866291357
+      },
+      {
+        "group_label": "Bottom10_RD",
+        "stock_code": "600332",
+        "stock_abbr": "白云山",
+        "rnd_expense_ratio": 0.7202572948707525,
+        "net_profit_yoy_growth": 3.303878274964479
+      },
+      {
+        "group_label": "Bottom10_RD",
+        "stock_code": "301331",
+        "stock_abbr": "恩威医药",
+        "rnd_expense_ratio": 0.675647049849262,
+        "net_profit_yoy_growth": 66.12807117938533
+      },
+      {
+        "group_label": "Bottom10_RD",
+        "stock_code": "002219",
+        "stock_abbr": "新里程",
+        "rnd_expense_ratio": 0.5385317624961006,
+        "net_profit_yoy_growth": -161.13902241191366
+      },
+      {
+        "group_label": "Bottom10_RD",
+        "stock_code": "002589",
+        "stock_abbr": "瑞康医药",
+        "rnd_expense_ratio": 0.3052944916139045,
+        "net_profit_yoy_growth": -39.18553565184416
+      },
+      {
+        "group_label": "Bottom10_RD",
+        "stock_code": "002390",
+        "stock_abbr": "信邦制药",
+        "rnd_expense_ratio": 0.10061795731203152,
+        "net_profit_yoy_growth": -13.732366587385068
+      },
+      {
+        "group_label": "Bottom10_RD",
+        "stock_code": "600671",
+        "stock_abbr": "天目药业",
+        "rnd_expense_ratio": 0.06719255236140267,
+        "net_profit_yoy_growth": 299.6262083844167
+      },
+      {
+        "group_label": "Top10_RD",
+        "stock_code": "300869",
+        "stock_abbr": "康泰医学",
+        "rnd_expense_ratio": 20.079128651209306,
+        "net_profit_yoy_growth": -5.080168886537761
+      },
+      {
+        "group_label": "Top10_RD",
+        "stock_code": "600557",
+        "stock_abbr": "康缘药业",
+        "rnd_expense_ratio": 15.010007526606758,
+        "net_profit_yoy_growth": -30.179506073687172
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": null,
+    "sort_ascending": true,
+    "top_n": 12,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "net_profit_yoy_growth",
+      "data_type": "quantitative",
+      "label": "net_profit_yoy_growth",
+      "unit": "%"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1060_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1060_1.jpg"
+  },
+  "meta": {
+    "source_sql": "WITH ranked AS (\n  SELECT\n    stock_code,\n    stock_abbr,\n    rnd_expense_ratio,\n    net_profit_yoy_growth,\n    ROW_NUMBER() OVER (ORDER BY rnd_expense_ratio DESC) AS rank_desc,\n    ROW_NUMBER() OVER (ORDER BY rnd_expense_ratio ASC) AS rank_asc\n  FROM financials_view\n  WHERE report_period = '2025Q3'\n    AND rnd_expense_ratio IS NOT NULL\n    AND net_profit_yoy_growth IS NOT NULL\n)\nSELECT\n  CASE\n    WHEN rank_desc <= 10 THEN 'Top10_RD'\n    WHEN rank_asc <= 10 THEN 'Bottom10_RD'\n  END AS group_label,\n  stock_code,\n  stock_abbr,\n  rnd_expense_ratio,\n  net_profit_yoy_growth\nFROM ranked\nWHERE rank_desc <= 10 OR rank_asc <= 10\nORDER BY group_label, rnd_expense_ratio DESC",
+    "value_fields": [
+      "net_profit_yoy_growth"
+    ],
+    "value_labels": [
+      "net_profit_yoy_growth"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "net_profit_yoy_growth"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": null,
+      "sort_ascending": true,
+      "top_n": 12
+    }
+  }
+}

@@ -1,0 +1,185 @@
+{
+  "question_id": "B1064",
+  "question_type": "数据统计分析查询",
+  "raw_question": "对比2025年第三季度销售费用率低于行业均值和高于行业均值公司的平均净利润率，用柱状图展示差异",
+  "raw_question_json": "[{\"Q\":\"对比2025年第三季度销售费用率低于行业均值和高于行业均值公司的平均净利润率，用柱状图展示差异\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "净利润",
+      "销售费用"
+    ],
+    "chart_type": "bar",
+    "intent_type": "trend_or_chart",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "comparison",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "净利润",
+      "销售费用"
+    ],
+    "chart_type": "bar",
+    "top_n": null,
+    "threshold": null,
+    "question": "对比2025年第三季度销售费用率低于行业均值和高于行业均值公司的平均净利润率，用柱状图展示差异",
+    "should_draw": true,
+    "needs_clarification": false,
+    "missing_slots": [],
+    "unsupported_metrics": [
+      "销售费用"
+    ]
+  },
+  "sql": "WITH industry_avg AS (\n    SELECT AVG(operating_expense_selling_expenses / NULLIF(total_operating_revenue, 0)) AS avg_selling_expense_ratio\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n),\ncompany_ratios AS (\n    SELECT stock_code, stock_abbr,\n           operating_expense_selling_expenses / NULLIF(total_operating_revenue, 0) AS selling_expense_ratio,\n           net_profit_margin\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n      AND total_operating_revenue IS NOT NULL\n      AND total_operating_revenue != 0\n      AND operating_expense_selling_expenses IS NOT NULL\n      AND net_profit_margin IS NOT NULL\n)\nSELECT CASE WHEN cr.selling_expense_ratio < ia.avg_selling_expense_ratio THEN '低于行业均值' ELSE '高于行业均值' END AS category,\n       AVG(cr.net_profit_margin) AS avg_net_profit_margin\nFROM company_ratios cr\nCROSS JOIN industry_avg ia\nGROUP BY category\nORDER BY category;",
+  "sql_history": [
+    "WITH industry_avg AS (\n    SELECT AVG(operating_expense_selling_expenses / NULLIF(total_operating_revenue, 0)) AS avg_selling_expense_ratio\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n),\ncompany_ratios AS (\n    SELECT stock_code, stock_abbr,\n           operating_expense_selling_expenses / NULLIF(total_operating_revenue, 0) AS selling_expense_ratio,\n           net_profit_margin\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n      AND total_operating_revenue IS NOT NULL\n      AND total_operating_revenue != 0\n      AND operating_expense_selling_expenses IS NOT NULL\n      AND net_profit_margin IS NOT NULL\n)\nSELECT CASE WHEN cr.selling_expense_ratio < ia.avg_selling_expense_ratio THEN '低于行业均值' ELSE '高于行业均值' END AS category,\n       AVG(cr.net_profit_margin) AS avg_net_profit_margin\nFROM company_ratios cr\nCROSS JOIN industry_avg ia\nGROUP BY category\nORDER BY category;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 2,
+  "result_rows": [
+    {
+      "category": "低于行业均值",
+      "avg_net_profit_margin": 5.810217278329095
+    },
+    {
+      "category": "高于行业均值",
+      "avg_net_profit_margin": 8.338991376663294
+    }
+  ],
+  "context_companies": [],
+  "context_rows": [
+    {
+      "category": "低于行业均值",
+      "avg_net_profit_margin": 5.810217278329095
+    },
+    {
+      "category": "高于行业均值",
+      "avg_net_profit_margin": 8.338991376663294
+    }
+  ],
+  "result_preview": "[{\"category\":\"低于行业均值\",\"avg_net_profit_margin\":5.8102172783},{\"category\":\"高于行业均值\",\"avg_net_profit_margin\":8.3389913767}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2025Q3销售费用率高低组平均净利润率对比",
+    "x_field": null,
+    "y_fields": [
+      "avg_net_profit_margin"
+    ],
+    "category_field": "category",
+    "sort_by": "avg_net_profit_margin",
+    "sort_ascending": true,
+    "top_n": 2,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1064",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "2025Q3销售费用率高低组平均净利润率对比",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 2,
+      "preview_rows": [
+        {
+          "category": "低于行业均值",
+          "avg_net_profit_margin": 5.810217278329095
+        },
+        {
+          "category": "高于行业均值",
+          "avg_net_profit_margin": 8.338991376663294
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "avg_net_profit_margin",
+      "sort_ascending": true,
+      "top_n": 2,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "avg_net_profit_margin",
+        "data_type": "quantitative",
+        "label": "行业平均销售净利率",
+        "unit": "%"
+      },
+      "category": {
+        "field": "category",
+        "data_type": "nominal",
+        "label": "category",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B1064_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1064_1.jpg"
+    },
+    "meta": {
+      "source_sql": "WITH industry_avg AS (\n    SELECT AVG(operating_expense_selling_expenses / NULLIF(total_operating_revenue, 0)) AS avg_selling_expense_ratio\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n),\ncompany_ratios AS (\n    SELECT stock_code, stock_abbr,\n           operating_expense_selling_expenses / NULLIF(total_operating_revenue, 0) AS selling_expense_ratio,\n           net_profit_margin\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n      AND total_operating_revenue IS NOT NULL\n      AND total_operating_revenue != 0\n      AND operating_expense_selling_expenses IS NOT NULL\n      AND net_profit_margin IS NOT NULL\n)\nSELECT CASE WHEN cr.selling_expense_ratio < ia.avg_selling_expense_ratio THEN '低于行业均值' ELSE '高于行业均值' END AS category,\n       AVG(cr.net_profit_margin) AS avg_net_profit_margin\nFROM company_ratios cr\nCROSS JOIN industry_avg ia\nGROUP BY category\nORDER BY category;",
+      "value_fields": [
+        "avg_net_profit_margin"
+      ],
+      "value_labels": [
+        "行业平均销售净利率"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "avg_net_profit_margin"
+        ],
+        "category_field": "category",
+        "sort_by": "avg_net_profit_margin",
+        "sort_ascending": true,
+        "top_n": 2
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1064_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1064_1.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "对比2025年第三季度销售费用率低于行业均值和高于行业均值公司的平均净利润率，用柱状图展示差异",
+      "A": {
+        "content": "在2025年第三季度，销售费用率低于行业均值的公司，其平均净利润率为5.81%；而销售费用率高于行业均值的公司，平均净利润率更高，为8.34%。",
+        "image": [
+          "./result/B1064_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"对比2025年第三季度销售费用率低于行业均值和高于行业均值公司的平均净利润率，用柱状图展示差异\", \"A\": {\"content\": \"在2025年第三季度，销售费用率低于行业均值的公司，其平均净利润率为5.81%；而销售费用率高于行业均值的公司，平均净利润率更高，为8.34%。\", \"image\": [\"./result/B1064_1.jpg\"]}}]",
+  "notes": [
+    "查询计划要求对比2025Q3销售费用率低于和高于行业均值的公司的平均净利润率。由于metrics中指定了“净利润”和“销售费用”，但“销售费用”在schema中对应operating_expense_selling_expenses，且需要计算销售费用率（销售费用/营业收入）。首先计算整个行业在2025Q3的平均销售费用率，然后为每家公司计算其销售费用率和净利润率（net_profit_margin）。接着根据每家公司的销售费用率是否低于行业均值进行分类，最后计算每个类别的平均净利润率。结果分为“低于行业均值”和“高于行业均值”两类，适合柱状图展示。"
+  ],
+  "final_status": "ok"
+}

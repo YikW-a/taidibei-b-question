@@ -1,0 +1,81 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1018",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "2025年第三季度净利润同比增长率波动最大的3家公司",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 3,
+    "preview_rows": [
+      {
+        "stock_code": "002728",
+        "stock_abbr": "特一药业",
+        "net_profit_yoy_growth": 985.1796452032535
+      },
+      {
+        "stock_code": "000790",
+        "stock_abbr": "华神科技",
+        "net_profit_yoy_growth": -736.1607869698042
+      },
+      {
+        "stock_code": "002198",
+        "stock_abbr": "嘉应制药",
+        "net_profit_yoy_growth": 658.498909607456
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "stock_code",
+    "sort_ascending": true,
+    "top_n": 3,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "net_profit_yoy_growth",
+      "data_type": "quantitative",
+      "label": "net_profit_yoy_growth",
+      "unit": "%"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1018_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1018_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT stock_code, stock_abbr, net_profit_yoy_growth FROM financials_view WHERE report_period = '2025Q3' AND net_profit_yoy_growth IS NOT NULL ORDER BY ABS(net_profit_yoy_growth) DESC LIMIT 3",
+    "value_fields": [
+      "net_profit_yoy_growth"
+    ],
+    "value_labels": [
+      "net_profit_yoy_growth"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "net_profit_yoy_growth"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": "stock_code",
+      "sort_ascending": true,
+      "top_n": 3
+    }
+  }
+}

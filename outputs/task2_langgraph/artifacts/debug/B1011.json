@@ -1,0 +1,237 @@
+{
+  "question_id": "B1011",
+  "question_type": "数据统计分析查询",
+  "raw_question": "2025年第三季度，资产负债率（负债总额/资产总额）超过60%的中药公司有哪些？请列出股票代码、简称、资产负债率（%）。",
+  "raw_question_json": "[{\"Q\":\"2025年第三季度，资产负债率（负债总额/资产总额）超过60%的中药公司有哪些？请列出股票代码、简称、资产负债率（%）。\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "资产负债率"
+    ],
+    "chart_type": null,
+    "intent_type": "filter",
+    "top_n": null,
+    "threshold": 60.0
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "filter",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "资产负债率"
+    ],
+    "chart_type": "table",
+    "top_n": null,
+    "threshold": 60.0,
+    "question": "2025年第三季度，资产负债率（负债总额/资产总额）超过60%的中药公司有哪些？请列出股票代码、简称、资产负债率（%）。",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT stock_code, stock_abbr, asset_liability_ratio FROM financials_view WHERE report_period = '2025Q3' AND asset_liability_ratio > 60.0",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, asset_liability_ratio FROM financials_view WHERE report_period = '2025Q3' AND asset_liability_ratio > 60.0"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 5,
+  "result_rows": [
+    {
+      "stock_code": "002219",
+      "stock_abbr": "新里程",
+      "asset_liability_ratio": 69.12801378944201
+    },
+    {
+      "stock_code": "002589",
+      "stock_abbr": "瑞康医药",
+      "asset_liability_ratio": 64.41909829327216
+    },
+    {
+      "stock_code": "600129",
+      "stock_abbr": "太极集团",
+      "asset_liability_ratio": 74.16156240808654
+    },
+    {
+      "stock_code": "600671",
+      "stock_abbr": "天目药业",
+      "asset_liability_ratio": 78.05655504780079
+    },
+    {
+      "stock_code": "603139",
+      "stock_abbr": "康惠制药",
+      "asset_liability_ratio": 60.48459682796709
+    }
+  ],
+  "context_companies": [
+    "新里程",
+    "瑞康医药",
+    "太极集团",
+    "天目药业",
+    "康惠制药"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "002219",
+      "stock_abbr": "新里程",
+      "asset_liability_ratio": 69.12801378944201
+    },
+    {
+      "stock_code": "002589",
+      "stock_abbr": "瑞康医药",
+      "asset_liability_ratio": 64.41909829327216
+    },
+    {
+      "stock_code": "600129",
+      "stock_abbr": "太极集团",
+      "asset_liability_ratio": 74.16156240808654
+    },
+    {
+      "stock_code": "600671",
+      "stock_abbr": "天目药业",
+      "asset_liability_ratio": 78.05655504780079
+    },
+    {
+      "stock_code": "603139",
+      "stock_abbr": "康惠制药",
+      "asset_liability_ratio": 60.48459682796709
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"002219\",\"stock_abbr\":\"新里程\",\"asset_liability_ratio\":69.1280137894},{\"stock_code\":\"002589\",\"stock_abbr\":\"瑞康医药\",\"asset_liability_ratio\":64.4190982933},{\"stock_code\":\"600129\",\"stock_abbr\":\"太极集团\",\"asset_liability_ratio\":74.1615624081},{\"stock_code\":\"600671\",\"stock_abbr\":\"天目药业\",\"asset_liability_ratio\":78.0565550478},{\"stock_code\":\"603139\",\"stock_abbr\":\"康惠制药\",\"asset_liability_ratio\":60.484596828}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2025年第三季度资产负债率>60%的中药公司",
+    "x_field": null,
+    "y_fields": [
+      "asset_liability_ratio"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": "asset_liability_ratio",
+    "sort_ascending": false,
+    "top_n": 5,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1011",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "2025年第三季度资产负债率>60%的中药公司",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 5,
+      "preview_rows": [
+        {
+          "stock_code": "002219",
+          "stock_abbr": "新里程",
+          "asset_liability_ratio": 69.12801378944201
+        },
+        {
+          "stock_code": "002589",
+          "stock_abbr": "瑞康医药",
+          "asset_liability_ratio": 64.41909829327216
+        },
+        {
+          "stock_code": "600129",
+          "stock_abbr": "太极集团",
+          "asset_liability_ratio": 74.16156240808654
+        },
+        {
+          "stock_code": "600671",
+          "stock_abbr": "天目药业",
+          "asset_liability_ratio": 78.05655504780079
+        },
+        {
+          "stock_code": "603139",
+          "stock_abbr": "康惠制药",
+          "asset_liability_ratio": 60.48459682796709
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "asset_liability_ratio",
+      "sort_ascending": false,
+      "top_n": 5,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "asset_liability_ratio",
+        "data_type": "quantitative",
+        "label": "asset_liability_ratio",
+        "unit": "%"
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B1011_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1011_1.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT stock_code, stock_abbr, asset_liability_ratio FROM financials_view WHERE report_period = '2025Q3' AND asset_liability_ratio > 60.0",
+      "value_fields": [
+        "asset_liability_ratio"
+      ],
+      "value_labels": [
+        "asset_liability_ratio"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "asset_liability_ratio"
+        ],
+        "category_field": "stock_abbr",
+        "sort_by": "asset_liability_ratio",
+        "sort_ascending": false,
+        "top_n": 5
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1011_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1011_1.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "2025年第三季度，资产负债率（负债总额/资产总额）超过60%的中药公司有哪些？请列出股票代码、简称、资产负债率（%）。",
+      "A": {
+        "content": "根据查询结果，2025年第三季度，资产负债率超过60%的中药公司共有5家，具体如下：\n- 股票代码002219，简称新里程，资产负债率69.13%\n- 股票代码002589，简称瑞康医药，资产负债率64.42%\n- 股票代码600129，简称太极集团，资产负债率74.16%\n- 股票代码600671，简称天目药业，资产负债率78.06%\n- 股票代码603139，简称康惠制药，资产负债率60.48%",
+        "image": [
+          "./result/B1011_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"2025年第三季度，资产负债率（负债总额/资产总额）超过60%的中药公司有哪些？请列出股票代码、简称、资产负债率（%）。\", \"A\": {\"content\": \"根据查询结果，2025年第三季度，资产负债率超过60%的中药公司共有5家，具体如下：\\n- 股票代码002219，简称新里程，资产负债率69.13%\\n- 股票代码002589，简称瑞康医药，资产负债率64.42%\\n- 股票代码600129，简称太极集团，资产负债率74.16%\\n- 股票代码600671，简称天目药业，资产负债率78.06%\\n- 股票代码603139，简称康惠制药，资产负债率60.48%\", \"image\": [\"./result/B1011_1.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，需要筛选2025Q3报告期、资产负债率超过60%的记录。由于查询计划中companies为空且未指定具体中药公司列表，这里直接使用资产负债率阈值过滤。题目要求列出股票代码、简称和资产负债率，因此SELECT这些字段。"
+  ],
+  "final_status": "ok"
+}

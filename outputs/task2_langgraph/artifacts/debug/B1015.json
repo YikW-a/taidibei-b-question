@@ -1,0 +1,76 @@
+{
+  "question_id": "B1015",
+  "question_type": "数据统计分析查询",
+  "raw_question": "2022-2025年第三季度，“加权平均净资产收益率（扣非）”连续四个报告期均超过10%的公司有哪些？请列出股票代码、简称及各期收益率。",
+  "raw_question_json": "[{\"Q\":\"2022-2025年第三季度，“加权平均净资产收益率（扣非）”连续四个报告期均超过10%的公司有哪些？请列出股票代码、简称及各期收益率。\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3",
+      "2022Q3",
+      "2023Q3",
+      "2024Q3"
+    ],
+    "metrics": [
+      "加权平均净资产收益率（扣非）",
+      "ROE"
+    ],
+    "chart_type": null,
+    "intent_type": "filter",
+    "top_n": null,
+    "threshold": 10.0
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "filter",
+    "companies": [],
+    "periods": [
+      "2022Q3",
+      "2023Q3",
+      "2024Q3",
+      "2025Q3"
+    ],
+    "metrics": [
+      "加权平均净资产收益率（扣非）"
+    ],
+    "chart_type": "table",
+    "top_n": null,
+    "threshold": 10.0,
+    "question": "2022-2025年第三季度，“加权平均净资产收益率（扣非）”连续四个报告期均超过10%的公司有哪些？请列出股票代码、简称及各期收益率。",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "WITH filtered AS ( SELECT stock_code, stock_abbr, report_period, roe_weighted_excl_non_recurring FROM financials_view WHERE report_period IN ('2022Q3', '2023Q3', '2024Q3', '2025Q3') AND roe_weighted_excl_non_recurring > 10.0), qualified AS ( SELECT stock_code, stock_abbr FROM filtered GROUP BY stock_code, stock_abbr HAVING COUNT(DISTINCT report_period) = 4) SELECT f.stock_code, f.stock_abbr, f.report_period, f.roe_weighted_excl_non_recurring FROM filtered f JOIN qualified q ON f.stock_code = q.stock_code ORDER BY f.stock_code, f.report_period",
+  "sql_history": [
+    "WITH filtered AS ( SELECT stock_code, stock_abbr, report_period, roe_weighted_excl_non_recurring FROM financials_view WHERE report_period IN ('2022Q3', '2023Q3', '2024Q3', '2025Q3') AND roe_weighted_excl_non_recurring > 10.0), qualified AS ( SELECT stock_code, stock_abbr FROM filtered GROUP BY stock_code, stock_abbr HAVING COUNT(DISTINCT report_period) = 4) SELECT f.stock_code, f.stock_abbr, f.report_period, f.roe_weighted_excl_non_recurring FROM filtered f JOIN qualified q ON f.stock_code = q.stock_code ORDER BY f.stock_code, f.report_period"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 0,
+  "result_rows": [],
+  "context_companies": [],
+  "context_rows": [],
+  "result_preview": "[]",
+  "chart_plan": {},
+  "chart_spec": {},
+  "all_chart_specs": [],
+  "all_chart_paths": [],
+  "graph_formats": [],
+  "turn_answers": [
+    {
+      "Q": "2022-2025年第三季度，“加权平均净资产收益率（扣非）”连续四个报告期均超过10%的公司有哪些？请列出股票代码、简称及各期收益率。",
+      "A": {
+        "content": "当前数据库中，没有公司在 2022Q3、2023Q3、2024Q3、2025Q3 这几个报告期内连续满足题目设定的 加权平均净资产收益率（扣非） 条件（阈值 10.0）。",
+        "image": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"2022-2025年第三季度，“加权平均净资产收益率（扣非）”连续四个报告期均超过10%的公司有哪些？请列出股票代码、简称及各期收益率。\", \"A\": {\"content\": \"当前数据库中，没有公司在 2022Q3、2023Q3、2024Q3、2025Q3 这几个报告期内连续满足题目设定的 加权平均净资产收益率（扣非） 条件（阈值 10.0）。\", \"image\": []}}]",
+  "notes": [
+    "Used deterministic SQL template for a known query pattern."
+  ],
+  "final_status": "ok"
+}

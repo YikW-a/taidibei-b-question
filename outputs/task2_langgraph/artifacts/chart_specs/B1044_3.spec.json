@@ -1,0 +1,104 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1044",
+  "image_index": 3,
+  "chart_type": "bar",
+  "title": "净利润同比增长率 vs 行业均值",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 5,
+    "preview_rows": [
+      {
+        "stock_code": "000538",
+        "stock_abbr": "云南白药",
+        "net_profit": 477711.965747,
+        "net_profit_yoy_growth": 10.612040866291357,
+        "avg_net_profit_yoy_growth": -17.35123578104227
+      },
+      {
+        "stock_code": "600332",
+        "stock_abbr": "白云山",
+        "net_profit": 331005.207786,
+        "net_profit_yoy_growth": 3.303878274964479,
+        "avg_net_profit_yoy_growth": -17.35123578104227
+      },
+      {
+        "stock_code": "000999",
+        "stock_abbr": "华润三九",
+        "net_profit": 235282.69556599998,
+        "net_profit_yoy_growth": -10.645630376719186,
+        "avg_net_profit_yoy_growth": -17.35123578104227
+      },
+      {
+        "stock_code": "600085",
+        "stock_abbr": "同仁堂",
+        "net_profit": 117755.58453,
+        "net_profit_yoy_growth": -19.696158827992598,
+        "avg_net_profit_yoy_growth": -17.35123578104227
+      },
+      {
+        "stock_code": "600129",
+        "stock_abbr": "太极集团",
+        "net_profit": 16590.530672,
+        "net_profit_yoy_growth": -70.33030884175541,
+        "avg_net_profit_yoy_growth": -17.35123578104227
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "net_profit",
+    "sort_ascending": false,
+    "top_n": 5,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "net_profit_yoy_growth",
+      "data_type": "quantitative",
+      "label": "net_profit_yoy_growth",
+      "unit": "%"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1044_3.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1044_3.jpg"
+  },
+  "meta": {
+    "source_sql": "WITH company_data AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        net_profit,\n        net_profit_yoy_growth\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n        AND stock_abbr IN ('白云山', '云南白药', '华润三九', '同仁堂', '太极集团')\n),\nindustry_avg AS (\n    SELECT \n        AVG(net_profit_yoy_growth) AS avg_net_profit_yoy_growth\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n        AND stock_abbr IN ('白云山', '云南白药', '华润三九', '同仁堂', '太极集团')\n)\nSELECT \n    c.stock_code,\n    c.stock_abbr,\n    c.net_profit,\n    c.net_profit_yoy_growth,\n    i.avg_net_profit_yoy_growth\nFROM company_data c\nCROSS JOIN industry_avg i\nORDER BY c.net_profit DESC\nLIMIT 5",
+    "value_fields": [
+      "net_profit_yoy_growth",
+      "avg_net_profit_yoy_growth"
+    ],
+    "value_labels": [
+      "net_profit_yoy_growth",
+      "avg_net_profit_yoy_growth"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "net_profit_yoy_growth",
+        "avg_net_profit_yoy_growth"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": "net_profit",
+      "sort_ascending": false,
+      "top_n": 5
+    }
+  }
+}

@@ -1,0 +1,126 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1017",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "2025年第三季度应收账款占营收比例超30%的公司",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 34,
+    "preview_rows": [
+      {
+        "stock_code": "603567",
+        "stock_abbr": "珍宝岛",
+        "accounts_receivable_ratio": 338.10230035814556
+      },
+      {
+        "stock_code": "600671",
+        "stock_abbr": "天目药业",
+        "accounts_receivable_ratio": 96.14933671205934
+      },
+      {
+        "stock_code": "600222",
+        "stock_abbr": "太龙药业",
+        "accounts_receivable_ratio": 83.59115271868657
+      },
+      {
+        "stock_code": "300878",
+        "stock_abbr": "维康药业",
+        "accounts_receivable_ratio": 71.77359082707453
+      },
+      {
+        "stock_code": "002082",
+        "stock_abbr": "万邦德",
+        "accounts_receivable_ratio": 71.57058836178315
+      },
+      {
+        "stock_code": "002589",
+        "stock_abbr": "瑞康医药",
+        "accounts_receivable_ratio": 69.05086048782508
+      },
+      {
+        "stock_code": "002424",
+        "stock_abbr": "贵州百灵",
+        "accounts_receivable_ratio": 68.523241737486
+      },
+      {
+        "stock_code": "600422",
+        "stock_abbr": "昆药集团",
+        "accounts_receivable_ratio": 65.67560529134848
+      },
+      {
+        "stock_code": "600518",
+        "stock_abbr": "康美药业",
+        "accounts_receivable_ratio": 62.471045305716736
+      },
+      {
+        "stock_code": "300026",
+        "stock_abbr": "红日药业",
+        "accounts_receivable_ratio": 61.42927583259446
+      },
+      {
+        "stock_code": "000790",
+        "stock_abbr": "华神科技",
+        "accounts_receivable_ratio": 59.06544530573807
+      },
+      {
+        "stock_code": "002166",
+        "stock_abbr": "莱茵生物",
+        "accounts_receivable_ratio": 58.524813800789566
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "accounts_receivable_ratio",
+    "sort_ascending": false,
+    "top_n": 15,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "accounts_receivable_ratio",
+      "data_type": "quantitative",
+      "label": "accounts_receivable_ratio",
+      "unit": "%"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1017_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1017_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT stock_code, stock_abbr, (asset_accounts_receivable / total_operating_revenue) * 100 AS accounts_receivable_ratio FROM financials_view WHERE report_period = '2025Q3' AND (asset_accounts_receivable / total_operating_revenue) > 0.3 ORDER BY accounts_receivable_ratio DESC",
+    "value_fields": [
+      "accounts_receivable_ratio"
+    ],
+    "value_labels": [
+      "accounts_receivable_ratio"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "accounts_receivable_ratio"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": "accounts_receivable_ratio",
+      "sort_ascending": false,
+      "top_n": 15
+    }
+  }
+}

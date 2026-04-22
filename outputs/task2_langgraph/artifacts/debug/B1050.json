@@ -1,0 +1,202 @@
+{
+  "question_id": "B1050",
+  "question_type": "数据统计分析查询",
+  "raw_question": "分析云南白药2022-2025年第三季度净利润的变化趋势，用折线图展示",
+  "raw_question_json": "[{\"Q\":\"分析云南白药2022-2025年第三季度净利润的变化趋势，用折线图展示\"}]",
+  "parsed_slots": {
+    "companies": [
+      "云南白药"
+    ],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3",
+      "2022Q3",
+      "2023Q3",
+      "2024Q3"
+    ],
+    "metrics": [
+      "净利润"
+    ],
+    "chart_type": "line",
+    "intent_type": "trend_or_chart",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "trend_or_chart",
+    "companies": [
+      "云南白药"
+    ],
+    "periods": [
+      "2022Q3",
+      "2023Q3",
+      "2024Q3",
+      "2025Q3"
+    ],
+    "metrics": [
+      "净利润"
+    ],
+    "chart_type": "line",
+    "top_n": null,
+    "threshold": null,
+    "question": "分析云南白药2022-2025年第三季度净利润的变化趋势，用折线图展示",
+    "should_draw": true,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT report_period, net_profit FROM financials_view WHERE stock_abbr = '云南白药' AND report_period IN ('2022Q3', '2023Q3', '2024Q3', '2025Q3') ORDER BY report_period",
+  "sql_history": [
+    "SELECT report_period, net_profit FROM financials_view WHERE stock_abbr = '云南白药' AND report_period IN ('2022Q3', '2023Q3', '2024Q3', '2025Q3') ORDER BY report_period"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 3,
+  "result_rows": [
+    {
+      "report_period": "2023Q3",
+      "net_profit": 412347.741445
+    },
+    {
+      "report_period": "2024Q3",
+      "net_profit": 432672.806805
+    },
+    {
+      "report_period": "2025Q3",
+      "net_profit": 477711.965747
+    }
+  ],
+  "context_companies": [],
+  "context_rows": [
+    {
+      "report_period": "2023Q3",
+      "net_profit": 412347.741445
+    },
+    {
+      "report_period": "2024Q3",
+      "net_profit": 432672.806805
+    },
+    {
+      "report_period": "2025Q3",
+      "net_profit": 477711.965747
+    }
+  ],
+  "result_preview": "[{\"report_period\":\"2023Q3\",\"net_profit\":412347.741445},{\"report_period\":\"2024Q3\",\"net_profit\":432672.806805},{\"report_period\":\"2025Q3\",\"net_profit\":477711.965747}]",
+  "chart_plan": {
+    "chart_type": "line",
+    "title": "云南白药2023-2025年第三季度净利润趋势",
+    "x_field": "report_period",
+    "y_fields": [
+      "net_profit"
+    ],
+    "category_field": null,
+    "sort_by": "report_period",
+    "sort_ascending": true,
+    "top_n": null,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1050",
+    "image_index": 1,
+    "chart_type": "line",
+    "title": "云南白药2023-2025年第三季度净利润趋势",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 3,
+      "preview_rows": [
+        {
+          "report_period": "2023Q3",
+          "net_profit": 412347.741445
+        },
+        {
+          "report_period": "2024Q3",
+          "net_profit": 432672.806805
+        },
+        {
+          "report_period": "2025Q3",
+          "net_profit": 477711.965747
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "report_period",
+      "sort_ascending": true,
+      "top_n": null,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "net_profit",
+        "data_type": "quantitative",
+        "label": "净利润",
+        "unit": "万元"
+      },
+      "x": {
+        "field": "report_period",
+        "data_type": "temporal",
+        "label": "报告期",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": false
+    },
+    "output": {
+      "filename": "B1050_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1050_1.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT report_period, net_profit FROM financials_view WHERE stock_abbr = '云南白药' AND report_period IN ('2022Q3', '2023Q3', '2024Q3', '2025Q3') ORDER BY report_period",
+      "value_fields": [
+        "net_profit"
+      ],
+      "value_labels": [
+        "净利润"
+      ],
+      "original_chart_plan": {
+        "chart_type": "line",
+        "x_field": "report_period",
+        "y_fields": [
+          "net_profit"
+        ],
+        "category_field": null,
+        "sort_by": "report_period",
+        "sort_ascending": true,
+        "top_n": null
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1050_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1050_1.jpg"
+  ],
+  "graph_formats": [
+    "折线图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "分析云南白药2022-2025年第三季度净利润的变化趋势，用折线图展示",
+      "A": {
+        "content": "云南白药2022-2025年第三季度的净利润呈现持续增长趋势。具体数据如下：  \n- 2023年第三季度净利润为41.23亿元  \n- 2024年第三季度净利润为43.27亿元  \n- 2025年第三季度净利润为47.77亿元  \n\n注：查询结果中未包含2022年第三季度的数据。",
+        "image": [
+          "./result/B1050_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"分析云南白药2022-2025年第三季度净利润的变化趋势，用折线图展示\", \"A\": {\"content\": \"云南白药2022-2025年第三季度的净利润呈现持续增长趋势。具体数据如下：  \\n- 2023年第三季度净利润为41.23亿元  \\n- 2024年第三季度净利润为43.27亿元  \\n- 2025年第三季度净利润为47.77亿元  \\n\\n注：查询结果中未包含2022年第三季度的数据。\", \"image\": [\"./result/B1050_1.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，需要查询云南白药在2022Q3、2023Q3、2024Q3、2025Q3四个报告期的净利润（net_profit）数据，并按报告期排序以展示趋势。"
+  ],
+  "final_status": "ok"
+}

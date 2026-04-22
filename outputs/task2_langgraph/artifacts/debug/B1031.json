@@ -1,0 +1,274 @@
+{
+  "question_id": "B1031",
+  "question_type": "数据基本查询",
+  "raw_question": "统计2025年第三季度净利润为负数的中药公司数量，并列出这些公司的股票代码和简称。",
+  "raw_question_json": "[{\"Q\":\"统计2025年第三季度净利润为负数的中药公司数量，并列出这些公司的股票代码和简称。\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "净利润"
+    ],
+    "chart_type": null,
+    "intent_type": "filter",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "filter",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "净利润"
+    ],
+    "chart_type": "table",
+    "top_n": null,
+    "threshold": 0,
+    "question": "统计2025年第三季度净利润为负数的中药公司数量，并列出这些公司的股票代码和简称。",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT stock_code, stock_abbr FROM financials_view WHERE report_period = '2025Q3' AND net_profit < 0",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr FROM financials_view WHERE report_period = '2025Q3' AND net_profit < 0"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 9,
+  "result_rows": [
+    {
+      "stock_code": "000590",
+      "stock_abbr": "启迪药业"
+    },
+    {
+      "stock_code": "000790",
+      "stock_abbr": "华神科技"
+    },
+    {
+      "stock_code": "002219",
+      "stock_abbr": "新里程"
+    },
+    {
+      "stock_code": "002737",
+      "stock_abbr": "葵花药业"
+    },
+    {
+      "stock_code": "300878",
+      "stock_abbr": "维康药业"
+    },
+    {
+      "stock_code": "301111",
+      "stock_abbr": "粤万年青"
+    },
+    {
+      "stock_code": "600594",
+      "stock_abbr": "益佰制药"
+    },
+    {
+      "stock_code": "603139",
+      "stock_abbr": "康惠制药"
+    },
+    {
+      "stock_code": "603567",
+      "stock_abbr": "珍宝岛"
+    }
+  ],
+  "context_companies": [
+    "启迪药业",
+    "华神科技",
+    "新里程",
+    "葵花药业",
+    "维康药业",
+    "粤万年青",
+    "益佰制药",
+    "康惠制药",
+    "珍宝岛"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "000590",
+      "stock_abbr": "启迪药业"
+    },
+    {
+      "stock_code": "000790",
+      "stock_abbr": "华神科技"
+    },
+    {
+      "stock_code": "002219",
+      "stock_abbr": "新里程"
+    },
+    {
+      "stock_code": "002737",
+      "stock_abbr": "葵花药业"
+    },
+    {
+      "stock_code": "300878",
+      "stock_abbr": "维康药业"
+    },
+    {
+      "stock_code": "301111",
+      "stock_abbr": "粤万年青"
+    },
+    {
+      "stock_code": "600594",
+      "stock_abbr": "益佰制药"
+    },
+    {
+      "stock_code": "603139",
+      "stock_abbr": "康惠制药"
+    },
+    {
+      "stock_code": "603567",
+      "stock_abbr": "珍宝岛"
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"000590\",\"stock_abbr\":\"启迪药业\"},{\"stock_code\":\"000790\",\"stock_abbr\":\"华神科技\"},{\"stock_code\":\"002219\",\"stock_abbr\":\"新里程\"},{\"stock_code\":\"002737\",\"stock_abbr\":\"葵花药业\"},{\"stock_code\":\"300878\",\"stock_abbr\":\"维康药业\"},{\"stock_code\":\"301111\",\"stock_abbr\":\"粤万年青\"},{\"stock_code\":\"600594\",\"stock_abbr\":\"益佰制药\"},{\"stock_code\":\"603139\",\"stock_abbr\":\"康惠制药\"},{\"stock_code\":\"603567\",\"stock_abbr\":\"珍宝岛\"}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2025年第三季度净利润为负的中药公司",
+    "x_field": null,
+    "y_fields": [
+      "stock_code"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": "stock_code",
+    "sort_ascending": true,
+    "top_n": 9,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1031",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "2025年第三季度净利润为负的中药公司",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 9,
+      "preview_rows": [
+        {
+          "stock_code": "000590",
+          "stock_abbr": "启迪药业"
+        },
+        {
+          "stock_code": "000790",
+          "stock_abbr": "华神科技"
+        },
+        {
+          "stock_code": "002219",
+          "stock_abbr": "新里程"
+        },
+        {
+          "stock_code": "002737",
+          "stock_abbr": "葵花药业"
+        },
+        {
+          "stock_code": "300878",
+          "stock_abbr": "维康药业"
+        },
+        {
+          "stock_code": "301111",
+          "stock_abbr": "粤万年青"
+        },
+        {
+          "stock_code": "600594",
+          "stock_abbr": "益佰制药"
+        },
+        {
+          "stock_code": "603139",
+          "stock_abbr": "康惠制药"
+        },
+        {
+          "stock_code": "603567",
+          "stock_abbr": "珍宝岛"
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "stock_code",
+      "sort_ascending": true,
+      "top_n": 9,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "stock_code",
+        "data_type": "quantitative",
+        "label": "股票代码",
+        "unit": "万元"
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B1031_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1031_1.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT stock_code, stock_abbr FROM financials_view WHERE report_period = '2025Q3' AND net_profit < 0",
+      "value_fields": [
+        "stock_code"
+      ],
+      "value_labels": [
+        "股票代码"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "stock_code"
+        ],
+        "category_field": "stock_abbr",
+        "sort_by": "stock_code",
+        "sort_ascending": true,
+        "top_n": 9
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1031_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1031_1.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "统计2025年第三季度净利润为负数的中药公司数量，并列出这些公司的股票代码和简称。",
+      "A": {
+        "content": "2025年第三季度净利润为负数的中药公司共有9家，具体名单如下：\n股票代码000590，启迪药业；\n股票代码000790，华神科技；\n股票代码002219，新里程；\n股票代码002737，葵花药业；\n股票代码300878，维康药业；\n股票代码301111，粤万年青；\n股票代码600594，益佰制药；\n股票代码603139，康惠制药；\n股票代码603567，珍宝岛。",
+        "image": [
+          "./result/B1031_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"统计2025年第三季度净利润为负数的中药公司数量，并列出这些公司的股票代码和简称。\", \"A\": {\"content\": \"2025年第三季度净利润为负数的中药公司共有9家，具体名单如下：\\n股票代码000590，启迪药业；\\n股票代码000790，华神科技；\\n股票代码002219，新里程；\\n股票代码002737，葵花药业；\\n股票代码300878，维康药业；\\n股票代码301111，粤万年青；\\n股票代码600594，益佰制药；\\n股票代码603139，康惠制药；\\n股票代码603567，珍宝岛。\", \"image\": [\"./result/B1031_1.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，需要筛选2025年第三季度（periods: [\"2025Q3\"]）净利润（metrics: [\"净利润\"]）为负数（threshold: 0）的公司。由于问题要求列出这些公司的股票代码和简称，因此选择stock_code和stock_abbr。净利润字段对应net_profit，条件为net_profit < 0。"
+  ],
+  "final_status": "ok"
+}

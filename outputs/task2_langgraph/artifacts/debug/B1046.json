@@ -1,0 +1,109 @@
+{
+  "question_id": "B1046",
+  "question_type": "数据基本查询",
+  "raw_question": "2025年第三季度经营性现金流量净额为负的公司有多少家 | 这些公司中，资产负债率超过60%的有几家",
+  "raw_question_json": "[{\"Q\":\"2025年第三季度经营性现金流量净额为负的公司有多少家\"},{\"Q\":\"这些公司中，资产负债率超过60%的有几家\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "资产负债率",
+      "经营性现金流量净额"
+    ],
+    "chart_type": null,
+    "intent_type": "filter",
+    "top_n": null,
+    "threshold": 60.0
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "filter",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "经营性现金流量净额",
+      "资产负债率"
+    ],
+    "chart_type": null,
+    "top_n": null,
+    "threshold": 60.0,
+    "question": "这些公司中，资产负债率超过60%的有几家",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT stock_code, stock_abbr, operating_cf_net_amount, asset_liability_ratio FROM financials_view WHERE report_period = '2025Q3' AND operating_cf_net_amount < 0 AND asset_liability_ratio > 60.0 ORDER BY asset_liability_ratio DESC, operating_cf_net_amount ASC",
+  "sql_history": [
+    "SELECT COUNT(DISTINCT stock_code) AS company_count FROM financials_view WHERE report_period = '2025Q3' AND operating_cf_net_amount < 0",
+    "SELECT stock_code, stock_abbr, operating_cf_net_amount, asset_liability_ratio FROM financials_view WHERE report_period = '2025Q3' AND operating_cf_net_amount < 0 AND asset_liability_ratio > 60.0 ORDER BY asset_liability_ratio DESC, operating_cf_net_amount ASC"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 2,
+  "result_rows": [
+    {
+      "stock_code": "600671",
+      "stock_abbr": "天目药业",
+      "operating_cf_net_amount": -3083.10888,
+      "asset_liability_ratio": 78.05655504780079
+    },
+    {
+      "stock_code": "603139",
+      "stock_abbr": "康惠制药",
+      "operating_cf_net_amount": -923.802967,
+      "asset_liability_ratio": 60.48459682796709
+    }
+  ],
+  "context_companies": [
+    "天目药业",
+    "康惠制药"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "600671",
+      "stock_abbr": "天目药业",
+      "operating_cf_net_amount": -3083.10888,
+      "asset_liability_ratio": 78.05655504780079
+    },
+    {
+      "stock_code": "603139",
+      "stock_abbr": "康惠制药",
+      "operating_cf_net_amount": -923.802967,
+      "asset_liability_ratio": 60.48459682796709
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"600671\",\"stock_abbr\":\"天目药业\",\"operating_cf_net_amount\":-3083.10888,\"asset_liability_ratio\":78.0565550478},{\"stock_code\":\"603139\",\"stock_abbr\":\"康惠制药\",\"operating_cf_net_amount\":-923.802967,\"asset_liability_ratio\":60.484596828}]",
+  "chart_plan": {},
+  "chart_spec": {},
+  "all_chart_specs": [],
+  "all_chart_paths": [],
+  "graph_formats": [],
+  "turn_answers": [
+    {
+      "Q": "2025年第三季度经营性现金流量净额为负的公司有多少家",
+      "A": {
+        "content": "2025年第三季度经营性现金流量净额为负的公司共有11家。",
+        "image": []
+      }
+    },
+    {
+      "Q": "这些公司中，资产负债率超过60%的有几家",
+      "A": {
+        "content": "根据查询结果，在2025年第三季度，经营性现金流量净额为负且资产负债率超过60%的公司共有2家，分别是：\n1.  天目药业（600671），资产负债率为78.06%。\n2.  康惠制药（603139），资产负债率为60.48%。",
+        "image": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"2025年第三季度经营性现金流量净额为负的公司有多少家\", \"A\": {\"content\": \"2025年第三季度经营性现金流量净额为负的公司共有11家。\", \"image\": []}}, {\"Q\": \"这些公司中，资产负债率超过60%的有几家\", \"A\": {\"content\": \"根据查询结果，在2025年第三季度，经营性现金流量净额为负且资产负债率超过60%的公司共有2家，分别是：\\n1.  天目药业（600671），资产负债率为78.06%。\\n2.  康惠制药（603139），资产负债率为60.48%。\", \"image\": []}}]",
+  "notes": [
+    "Used deterministic SQL template for a known query pattern.",
+    "Used deterministic SQL template for a known query pattern."
+  ],
+  "final_status": "ok"
+}

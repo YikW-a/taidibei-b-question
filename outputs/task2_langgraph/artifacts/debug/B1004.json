@@ -1,0 +1,205 @@
+{
+  "question_id": "B1004",
+  "question_type": "数据基本查询",
+  "raw_question": "2025年前三季度，公司实现收入超过200亿元的企业有哪些",
+  "raw_question_json": "[{\"Q\":\"2025年前三季度，公司实现收入超过200亿元的企业有哪些\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入"
+    ],
+    "chart_type": null,
+    "intent_type": "ranking",
+    "top_n": 3,
+    "threshold": 2000000.0
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "filter",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入"
+    ],
+    "chart_type": "table",
+    "top_n": 3,
+    "threshold": 2000000,
+    "question": "2025年前三季度，公司实现收入超过200亿元的企业有哪些",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT stock_code, stock_abbr, total_operating_revenue FROM financials_view WHERE report_period = '2025Q3' AND total_operating_revenue > 2000000 ORDER BY total_operating_revenue DESC LIMIT 3",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, total_operating_revenue FROM financials_view WHERE report_period = '2025Q3' AND total_operating_revenue > 2000000 ORDER BY total_operating_revenue DESC LIMIT 3"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 3,
+  "result_rows": [
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "total_operating_revenue": 6160599.379554
+    },
+    {
+      "stock_code": "000538",
+      "stock_abbr": "云南白药",
+      "total_operating_revenue": 3065421.420901
+    },
+    {
+      "stock_code": "000999",
+      "stock_abbr": "华润三九",
+      "total_operating_revenue": 2198640.396207
+    }
+  ],
+  "context_companies": [
+    "白云山",
+    "云南白药",
+    "华润三九"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "total_operating_revenue": 6160599.379554
+    },
+    {
+      "stock_code": "000538",
+      "stock_abbr": "云南白药",
+      "total_operating_revenue": 3065421.420901
+    },
+    {
+      "stock_code": "000999",
+      "stock_abbr": "华润三九",
+      "total_operating_revenue": 2198640.396207
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"600332\",\"stock_abbr\":\"白云山\",\"total_operating_revenue\":6160599.3795539998},{\"stock_code\":\"000538\",\"stock_abbr\":\"云南白药\",\"total_operating_revenue\":3065421.420901},{\"stock_code\":\"000999\",\"stock_abbr\":\"华润三九\",\"total_operating_revenue\":2198640.3962070001}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2025年前三季度收入超200亿元的企业",
+    "x_field": null,
+    "y_fields": [
+      "total_operating_revenue"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": null,
+    "sort_ascending": false,
+    "top_n": 3,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1004",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "2025年前三季度收入超200亿元的企业",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 3,
+      "preview_rows": [
+        {
+          "stock_code": "600332",
+          "stock_abbr": "白云山",
+          "total_operating_revenue": 6160599.379554
+        },
+        {
+          "stock_code": "000538",
+          "stock_abbr": "云南白药",
+          "total_operating_revenue": 3065421.420901
+        },
+        {
+          "stock_code": "000999",
+          "stock_abbr": "华润三九",
+          "total_operating_revenue": 2198640.396207
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": null,
+      "sort_ascending": false,
+      "top_n": 3,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "total_operating_revenue",
+        "data_type": "quantitative",
+        "label": "营业总收入",
+        "unit": "万元"
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B1004_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1004_1.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT stock_code, stock_abbr, total_operating_revenue FROM financials_view WHERE report_period = '2025Q3' AND total_operating_revenue > 2000000 ORDER BY total_operating_revenue DESC LIMIT 3",
+      "value_fields": [
+        "total_operating_revenue"
+      ],
+      "value_labels": [
+        "营业总收入"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "total_operating_revenue"
+        ],
+        "category_field": "stock_abbr",
+        "sort_by": null,
+        "sort_ascending": false,
+        "top_n": 3
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1004_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1004_1.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "2025年前三季度，公司实现收入超过200亿元的企业有哪些",
+      "A": {
+        "content": "根据查询结果，2025年前三季度营业收入超过200亿元的公司共有3家，分别是：\n1.  白云山（600332），营业收入约为616.06亿元。\n2.  云南白药（000538），营业收入约为306.54亿元。\n3.  华润三九（000999），营业收入约为219.86亿元。",
+        "image": [
+          "./result/B1004_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"2025年前三季度，公司实现收入超过200亿元的企业有哪些\", \"A\": {\"content\": \"根据查询结果，2025年前三季度营业收入超过200亿元的公司共有3家，分别是：\\n1.  白云山（600332），营业收入约为616.06亿元。\\n2.  云南白药（000538），营业收入约为306.54亿元。\\n3.  华润三九（000999），营业收入约为219.86亿元。\", \"image\": [\"./result/B1004_1.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，需要筛选2025Q3报告期、营业总收入（total_operating_revenue）超过200亿元（即2000000万元）的公司，并返回Top 3。因此使用WHERE条件过滤报告期和收入阈值，按收入降序排列并限制返回3条记录。"
+  ],
+  "final_status": "ok"
+}

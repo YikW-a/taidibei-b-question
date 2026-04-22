@@ -1,0 +1,225 @@
+{
+  "question_id": "B1019",
+  "question_type": "数据统计分析查询",
+  "raw_question": "2025年第三季度，“营业总支出-研发费用”占“营业总收入”比例排名前五的公司有哪些？请列出简称、研发费用占比（%）。",
+  "raw_question_json": "[{\"Q\":\"2025年第三季度，“营业总支出-研发费用”占“营业总收入”比例排名前五的公司有哪些？请列出简称、研发费用占比（%）。\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入",
+      "研发费用占比",
+      "研发费用"
+    ],
+    "chart_type": null,
+    "intent_type": "ranking",
+    "top_n": 5,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "ranking",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入",
+      "研发费用"
+    ],
+    "chart_type": "table",
+    "top_n": 5,
+    "threshold": null,
+    "question": "2025年第三季度，“营业总支出-研发费用”占“营业总收入”比例排名前五的公司有哪些？请列出简称、研发费用占比（%）。",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "WITH base AS (\n    SELECT\n        stock_abbr,\n        operating_expense_rnd_expenses AS rnd_expense,\n        total_operating_revenue AS operating_revenue\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n        AND operating_expense_rnd_expenses IS NOT NULL\n        AND total_operating_revenue IS NOT NULL\n        AND total_operating_revenue != 0\n)\nSELECT\n    stock_abbr,\n    (rnd_expense / operating_revenue) * 100 AS rnd_expense_ratio_percent\nFROM base\nORDER BY rnd_expense_ratio_percent DESC\nLIMIT 5",
+  "sql_history": [
+    "WITH base AS (\n    SELECT\n        stock_abbr,\n        operating_expense_rnd_expenses AS rnd_expense,\n        total_operating_revenue AS operating_revenue\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n        AND operating_expense_rnd_expenses IS NOT NULL\n        AND total_operating_revenue IS NOT NULL\n        AND total_operating_revenue != 0\n)\nSELECT\n    stock_abbr,\n    (rnd_expense / operating_revenue) * 100 AS rnd_expense_ratio_percent\nFROM base\nORDER BY rnd_expense_ratio_percent DESC\nLIMIT 5"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 5,
+  "result_rows": [
+    {
+      "stock_abbr": "康泰医学",
+      "rnd_expense_ratio_percent": 20.079128651209306
+    },
+    {
+      "stock_abbr": "康缘药业",
+      "rnd_expense_ratio_percent": 15.010007526606758
+    },
+    {
+      "stock_abbr": "寿仙谷",
+      "rnd_expense_ratio_percent": 9.78561237797322
+    },
+    {
+      "stock_abbr": "华森制药",
+      "rnd_expense_ratio_percent": 9.464621860708016
+    },
+    {
+      "stock_abbr": "以岭药业",
+      "rnd_expense_ratio_percent": 9.271466634932073
+    }
+  ],
+  "context_companies": [
+    "康泰医学",
+    "康缘药业",
+    "寿仙谷",
+    "华森制药",
+    "以岭药业"
+  ],
+  "context_rows": [
+    {
+      "stock_abbr": "康泰医学",
+      "rnd_expense_ratio_percent": 20.079128651209306
+    },
+    {
+      "stock_abbr": "康缘药业",
+      "rnd_expense_ratio_percent": 15.010007526606758
+    },
+    {
+      "stock_abbr": "寿仙谷",
+      "rnd_expense_ratio_percent": 9.78561237797322
+    },
+    {
+      "stock_abbr": "华森制药",
+      "rnd_expense_ratio_percent": 9.464621860708016
+    },
+    {
+      "stock_abbr": "以岭药业",
+      "rnd_expense_ratio_percent": 9.271466634932073
+    }
+  ],
+  "result_preview": "[{\"stock_abbr\":\"康泰医学\",\"rnd_expense_ratio_percent\":20.0791286512},{\"stock_abbr\":\"康缘药业\",\"rnd_expense_ratio_percent\":15.0100075266},{\"stock_abbr\":\"寿仙谷\",\"rnd_expense_ratio_percent\":9.785612378},{\"stock_abbr\":\"华森制药\",\"rnd_expense_ratio_percent\":9.4646218607},{\"stock_abbr\":\"以岭药业\",\"rnd_expense_ratio_percent\":9.2714666349}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2025年第三季度研发费用占比前五公司",
+    "x_field": null,
+    "y_fields": [
+      "rnd_expense_ratio_percent"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": null,
+    "sort_ascending": false,
+    "top_n": 5,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1019",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "2025年第三季度研发费用占比前五公司",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 5,
+      "preview_rows": [
+        {
+          "stock_abbr": "康泰医学",
+          "rnd_expense_ratio_percent": 20.079128651209306
+        },
+        {
+          "stock_abbr": "康缘药业",
+          "rnd_expense_ratio_percent": 15.010007526606758
+        },
+        {
+          "stock_abbr": "寿仙谷",
+          "rnd_expense_ratio_percent": 9.78561237797322
+        },
+        {
+          "stock_abbr": "华森制药",
+          "rnd_expense_ratio_percent": 9.464621860708016
+        },
+        {
+          "stock_abbr": "以岭药业",
+          "rnd_expense_ratio_percent": 9.271466634932073
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": null,
+      "sort_ascending": false,
+      "top_n": 5,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "rnd_expense_ratio_percent",
+        "data_type": "quantitative",
+        "label": "rnd_expense_ratio_percent",
+        "unit": "%"
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B1019_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1019_1.jpg"
+    },
+    "meta": {
+      "source_sql": "WITH base AS (\n    SELECT\n        stock_abbr,\n        operating_expense_rnd_expenses AS rnd_expense,\n        total_operating_revenue AS operating_revenue\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n        AND operating_expense_rnd_expenses IS NOT NULL\n        AND total_operating_revenue IS NOT NULL\n        AND total_operating_revenue != 0\n)\nSELECT\n    stock_abbr,\n    (rnd_expense / operating_revenue) * 100 AS rnd_expense_ratio_percent\nFROM base\nORDER BY rnd_expense_ratio_percent DESC\nLIMIT 5",
+      "value_fields": [
+        "rnd_expense_ratio_percent"
+      ],
+      "value_labels": [
+        "rnd_expense_ratio_percent"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "rnd_expense_ratio_percent"
+        ],
+        "category_field": "stock_abbr",
+        "sort_by": null,
+        "sort_ascending": false,
+        "top_n": 5
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1019_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1019_1.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "2025年第三季度，“营业总支出-研发费用”占“营业总收入”比例排名前五的公司有哪些？请列出简称、研发费用占比（%）。",
+      "A": {
+        "content": "康泰医学，rnd_expense_ratio_percent=20.08%\n康缘药业，rnd_expense_ratio_percent=15.01%\n寿仙谷，rnd_expense_ratio_percent=9.79%\n华森制药，rnd_expense_ratio_percent=9.46%\n以岭药业，rnd_expense_ratio_percent=9.27%",
+        "image": [
+          "./result/B1019_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"2025年第三季度，“营业总支出-研发费用”占“营业总收入”比例排名前五的公司有哪些？请列出简称、研发费用占比（%）。\", \"A\": {\"content\": \"康泰医学，rnd_expense_ratio_percent=20.08%\\n康缘药业，rnd_expense_ratio_percent=15.01%\\n寿仙谷，rnd_expense_ratio_percent=9.79%\\n华森制药，rnd_expense_ratio_percent=9.46%\\n以岭药业，rnd_expense_ratio_percent=9.27%\", \"image\": [\"./result/B1019_1.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，需要计算2025Q3期间，研发费用占营业总收入的比例，并取排名前五的公司。题目中的“营业总支出-研发费用”对应字段 operating_expense_rnd_expenses，“营业总收入”对应 total_operating_revenue。比例需要以百分比形式展示，因此计算 (rnd_expense / operating_revenue) * 100。按此比例降序排序并限制5条记录。"
+  ],
+  "final_status": "ok"
+}

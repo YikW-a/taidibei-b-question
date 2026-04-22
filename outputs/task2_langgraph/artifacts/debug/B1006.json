@@ -1,0 +1,205 @@
+{
+  "question_id": "B1006",
+  "question_type": "数据统计分析查询",
+  "raw_question": "分析一下千金药业2025收入情况，看看有什么变化。 | 绘制近3年的收入趋势图 | 绘制水平柱状图",
+  "raw_question_json": "[{\"Q\":\"分析一下千金药业2025收入情况，看看有什么变化。\"},{\"Q\":\"绘制近3年的收入趋势图\"},{\"Q\":\"绘制水平柱状图\"}]",
+  "parsed_slots": {
+    "companies": [
+      "千金药业"
+    ],
+    "stock_codes": [],
+    "periods": [],
+    "metrics": [
+      "营业总收入"
+    ],
+    "chart_type": "bar",
+    "intent_type": "trend_or_chart",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "trend_or_chart",
+    "companies": [
+      "千金药业"
+    ],
+    "periods": [
+      "2023FY",
+      "2024FY",
+      "2025FY"
+    ],
+    "metrics": [
+      "营业总收入"
+    ],
+    "chart_type": "barh",
+    "top_n": null,
+    "threshold": null,
+    "question": "绘制水平柱状图",
+    "should_draw": true,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT report_period, total_operating_revenue AS 营业总收入 FROM financials_view WHERE stock_abbr = '千金药业' AND report_period IN ('2023FY', '2024FY', '2025FY') ORDER BY report_period",
+  "sql_history": [
+    "SELECT report_period, total_operating_revenue AS 营业总收入 FROM financials_view WHERE stock_abbr = '千金药业' AND report_period >= '2023Q1' AND report_period <= '2025FY' ORDER BY report_period",
+    "SELECT report_period, total_operating_revenue AS 营业总收入 FROM financials_view WHERE stock_abbr = '千金药业' AND report_period IN ('2023FY', '2024FY', '2025FY') ORDER BY report_period"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 2,
+  "result_rows": [
+    {
+      "report_period": "2023FY",
+      "营业总收入": 379848.533031
+    },
+    {
+      "report_period": "2024FY",
+      "营业总收入": 362980.44921399996
+    }
+  ],
+  "context_companies": [],
+  "context_rows": [
+    {
+      "report_period": "2023FY",
+      "营业总收入": 379848.533031
+    },
+    {
+      "report_period": "2024FY",
+      "营业总收入": 362980.44921399996
+    }
+  ],
+  "result_preview": "[{\"report_period\":\"2023FY\",\"营业总收入\":379848.533031},{\"report_period\":\"2024FY\",\"营业总收入\":362980.449214}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "千金药业营业总收入",
+    "x_field": null,
+    "y_fields": [
+      "营业总收入"
+    ],
+    "category_field": "report_period",
+    "sort_by": "营业总收入",
+    "sort_ascending": false,
+    "top_n": 2,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1006",
+    "image_index": 3,
+    "chart_type": "bar",
+    "title": "千金药业营业总收入",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 2,
+      "preview_rows": [
+        {
+          "report_period": "2023FY",
+          "营业总收入": 379848.533031
+        },
+        {
+          "report_period": "2024FY",
+          "营业总收入": 362980.44921399996
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "营业总收入",
+      "sort_ascending": false,
+      "top_n": 2,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "营业总收入",
+        "data_type": "quantitative",
+        "label": "营业总收入",
+        "unit": "万元"
+      },
+      "category": {
+        "field": "report_period",
+        "data_type": "nominal",
+        "label": "报告期",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B1006_3.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1006_3.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT report_period, total_operating_revenue AS 营业总收入 FROM financials_view WHERE stock_abbr = '千金药业' AND report_period IN ('2023FY', '2024FY', '2025FY') ORDER BY report_period",
+      "value_fields": [
+        "营业总收入"
+      ],
+      "value_labels": [
+        "营业总收入"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "营业总收入"
+        ],
+        "category_field": "report_period",
+        "sort_by": "营业总收入",
+        "sort_ascending": false,
+        "top_n": 2
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1006_2.spec.json",
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1006_3.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1006_2.jpg",
+    "./result/B1006_3.jpg"
+  ],
+  "graph_formats": [
+    "折线图",
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "分析一下千金药业2025收入情况，看看有什么变化。",
+      "A": {
+        "content": "请问您想了解千金药业2025年哪个报告期的收入情况呢？比如第一季度、半年度或全年？",
+        "image": []
+      }
+    },
+    {
+      "Q": "绘制近3年的收入趋势图",
+      "A": {
+        "content": "根据查询结果，千金药业在2025年的收入数据缺失。  \n现有数据显示：  \n- **2023年**：一季度营业总收入为9.60亿元，三季度为27.79亿元。  \n- **2024年**：一季度为10.01亿元，上半年为19.24亿元，三季度为27.15亿元，全年为36.30亿元。  \n\n从2023年至2024年，千金药业的营业总收入整体呈增长趋势，其中2024年全年收入较2023年（全年数据未在结果中完整显示）有所提升。但无法分析2025年的变化。",
+        "image": [
+          "./result/B1006_2.jpg"
+        ]
+      }
+    },
+    {
+      "Q": "绘制水平柱状图",
+      "A": {
+        "content": "根据查询结果，千金药业在2023财年和2024财年的营业总收入分别为37.98亿元和36.30亿元，收入呈下降趋势。但查询结果中未包含2025财年的数据，因此无法分析其2025年的收入情况或绘制近三年的完整趋势图。",
+        "image": [
+          "./result/B1006_3.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"分析一下千金药业2025收入情况，看看有什么变化。\", \"A\": {\"content\": \"请问您想了解千金药业2025年哪个报告期的收入情况呢？比如第一季度、半年度或全年？\", \"image\": []}}, {\"Q\": \"绘制近3年的收入趋势图\", \"A\": {\"content\": \"根据查询结果，千金药业在2025年的收入数据缺失。  \\n现有数据显示：  \\n- **2023年**：一季度营业总收入为9.60亿元，三季度为27.79亿元。  \\n- **2024年**：一季度为10.01亿元，上半年为19.24亿元，三季度为27.15亿元，全年为36.30亿元。  \\n\\n从2023年至2024年，千金药业的营业总收入整体呈增长趋势，其中2024年全年收入较2023年（全年数据未在结果中完整显示）有所提升。但无法分析2025年的变化。\", \"image\": [\"./result/B1006_2.jpg\"]}}, {\"Q\": \"绘制水平柱状图\", \"A\": {\"content\": \"根据查询结果，千金药业在2023财年和2024财年的营业总收入分别为37.98亿元和36.30亿元，收入呈下降趋势。但查询结果中未包含2025财年的数据，因此无法分析其2025年的收入情况或绘制近三年的完整趋势图。\", \"image\": [\"./result/B1006_3.jpg\"]}}]",
+  "notes": [
+    "用户要求分析千金药业2025年收入情况并绘制近3年收入趋势图。查询计划指定了公司为'千金药业'，指标为'营业总收入'，意图为趋势图。因此，需要查询'千金药业'近3年（从2023年到2025年）的营业总收入（对应字段total_operating_revenue），并按报告期排序以展示趋势。",
+    "根据query_plan，需要查询千金药业在2023FY、2024FY、2025FY三个报告期的营业总收入，用于绘制近3年收入趋势的水平柱状图。使用total_operating_revenue字段，并按报告期排序。"
+  ],
+  "final_status": "ok"
+}

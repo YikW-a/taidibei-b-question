@@ -1,0 +1,141 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1033",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "2024年经营性现金流量净额大于净利润的公司",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 45,
+    "preview_rows": [
+      {
+        "stock_code": "000423",
+        "stock_abbr": "东阿阿胶",
+        "net_profit": 155700.077565,
+        "operating_cf_net_amount": 217081.00259299998
+      },
+      {
+        "stock_code": "000590",
+        "stock_abbr": "启迪药业",
+        "net_profit": -12547.152288,
+        "operating_cf_net_amount": 1738.797287
+      },
+      {
+        "stock_code": "000650",
+        "stock_abbr": "仁和药业",
+        "net_profit": 48191.167836,
+        "operating_cf_net_amount": 55725.808344000005
+      },
+      {
+        "stock_code": "000766",
+        "stock_abbr": "通化金马",
+        "net_profit": 5643.732561,
+        "operating_cf_net_amount": 16274.648978
+      },
+      {
+        "stock_code": "000790",
+        "stock_abbr": "华神科技",
+        "net_profit": -669.016626,
+        "operating_cf_net_amount": 6427.883137
+      },
+      {
+        "stock_code": "000999",
+        "stock_abbr": "华润三九",
+        "net_profit": 336788.89681999997,
+        "operating_cf_net_amount": 440219.938717
+      },
+      {
+        "stock_code": "002082",
+        "stock_abbr": "万邦德",
+        "net_profit": 5544.097143999999,
+        "operating_cf_net_amount": 12022.196149
+      },
+      {
+        "stock_code": "002107",
+        "stock_abbr": "沃华医药",
+        "net_profit": 3640.337934,
+        "operating_cf_net_amount": 9150.975131000001
+      },
+      {
+        "stock_code": "002166",
+        "stock_abbr": "莱茵生物",
+        "net_profit": 16300.877357,
+        "operating_cf_net_amount": 21794.283483000003
+      },
+      {
+        "stock_code": "002198",
+        "stock_abbr": "嘉应制药",
+        "net_profit": 2061.159955,
+        "operating_cf_net_amount": 6084.8965100000005
+      },
+      {
+        "stock_code": "002219",
+        "stock_abbr": "新里程",
+        "net_profit": 11476.552194,
+        "operating_cf_net_amount": 43850.58531
+      },
+      {
+        "stock_code": "002275",
+        "stock_abbr": "桂林三金",
+        "net_profit": 52153.356476,
+        "operating_cf_net_amount": 58833.15265599999
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "operating_cf_net_amount",
+    "sort_ascending": false,
+    "top_n": 12,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "net_profit",
+      "data_type": "quantitative",
+      "label": "净利润",
+      "unit": "万元"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1033_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1033_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT stock_code, stock_abbr, net_profit, operating_cf_net_amount FROM financials_view WHERE report_period = '2024FY' AND operating_cf_net_amount > net_profit",
+    "value_fields": [
+      "net_profit",
+      "operating_cf_net_amount"
+    ],
+    "value_labels": [
+      "净利润",
+      "operating_cf_net_amount"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "net_profit",
+        "operating_cf_net_amount"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": "operating_cf_net_amount",
+      "sort_ascending": false,
+      "top_n": 12
+    }
+  }
+}

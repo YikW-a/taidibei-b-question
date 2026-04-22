@@ -1,0 +1,102 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1045",
+  "image_index": 2,
+  "chart_type": "line",
+  "title": "云南白药与白云山资产负债率趋势对比",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 6,
+    "preview_rows": [
+      {
+        "stock_abbr": "云南白药",
+        "report_period": "2023Q3",
+        "asset_liability_ratio": 25.209627478423375
+      },
+      {
+        "stock_abbr": "云南白药",
+        "report_period": "2024Q3",
+        "asset_liability_ratio": 27.096655240586337
+      },
+      {
+        "stock_abbr": "云南白药",
+        "report_period": "2025Q3",
+        "asset_liability_ratio": 25.355694667162265
+      },
+      {
+        "stock_abbr": "白云山",
+        "report_period": "2023Q3",
+        "asset_liability_ratio": 51.07691115181305
+      },
+      {
+        "stock_abbr": "白云山",
+        "report_period": "2024Q3",
+        "asset_liability_ratio": 51.98684278127654
+      },
+      {
+        "stock_abbr": "白云山",
+        "report_period": "2025Q3",
+        "asset_liability_ratio": 51.92451215216034
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "report_period",
+    "sort_ascending": true,
+    "top_n": null,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "asset_liability_ratio",
+      "data_type": "quantitative",
+      "label": "asset_liability_ratio",
+      "unit": "%"
+    },
+    "x": {
+      "field": "report_period",
+      "data_type": "temporal",
+      "label": "报告期",
+      "unit": null
+    },
+    "series": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": true,
+    "rotate_xticks": 30,
+    "show_value_labels": false
+  },
+  "output": {
+    "filename": "B1045_2.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1045_2.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT stock_abbr, report_period, asset_liability_ratio FROM financials_view WHERE stock_abbr IN ('云南白药', '白云山') AND report_period IN ('2022Q3', '2023Q3', '2024Q3', '2025Q3') ORDER BY stock_abbr, report_period",
+    "value_fields": [
+      "asset_liability_ratio"
+    ],
+    "value_labels": [
+      "asset_liability_ratio"
+    ],
+    "original_chart_plan": {
+      "chart_type": "line",
+      "x_field": "report_period",
+      "y_fields": [
+        "asset_liability_ratio"
+      ],
+      "category_field": null,
+      "sort_by": "report_period",
+      "sort_ascending": true,
+      "top_n": null
+    }
+  }
+}

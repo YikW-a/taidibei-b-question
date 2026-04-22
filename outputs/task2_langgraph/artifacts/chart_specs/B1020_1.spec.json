@@ -1,0 +1,101 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1020",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "2025Q3未分配利润Top5公司及其2025年净利润占比",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 5,
+    "preview_rows": [
+      {
+        "stock_code": "600332",
+        "stock_abbr": "白云山",
+        "unappropriated_profit": 2382475.5853979997,
+        "net_profit_2025": null,
+        "net_profit_to_unappropriated_ratio_percent": null
+      },
+      {
+        "stock_code": "000538",
+        "stock_abbr": "云南白药",
+        "unappropriated_profit": 1782594.4281080002,
+        "net_profit_2025": null,
+        "net_profit_to_unappropriated_ratio_percent": null
+      },
+      {
+        "stock_code": "000999",
+        "stock_abbr": "华润三九",
+        "unappropriated_profit": 1725583.952706,
+        "net_profit_2025": null,
+        "net_profit_to_unappropriated_ratio_percent": null
+      },
+      {
+        "stock_code": "600436",
+        "stock_abbr": "片仔癀",
+        "unappropriated_profit": 1079313.2553299998,
+        "net_profit_2025": null,
+        "net_profit_to_unappropriated_ratio_percent": null
+      },
+      {
+        "stock_code": "600566",
+        "stock_abbr": "济川药业",
+        "unappropriated_profit": 928608.18395,
+        "net_profit_2025": null,
+        "net_profit_to_unappropriated_ratio_percent": null
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": null,
+    "sort_ascending": true,
+    "top_n": 5,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "stock_code",
+      "data_type": "quantitative",
+      "label": "股票代码",
+      "unit": "万元"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1020_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1020_1.jpg"
+  },
+  "meta": {
+    "source_sql": "WITH top_unappropriated AS (\n    SELECT stock_code, stock_abbr, equity_unappropriated_profit AS unappropriated_profit\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n    ORDER BY equity_unappropriated_profit DESC\n    LIMIT 5\n)\nSELECT \n    t.stock_code,\n    t.stock_abbr,\n    t.unappropriated_profit,\n    fv.net_profit AS net_profit_2025,\n    CASE \n        WHEN t.unappropriated_profit != 0 THEN (fv.net_profit / t.unappropriated_profit) * 100\n        ELSE NULL\n    END AS net_profit_to_unappropriated_ratio_percent\nFROM top_unappropriated t\nLEFT JOIN financials_view fv ON t.stock_code = fv.stock_code AND fv.report_period = '2025FY'\nORDER BY t.unappropriated_profit DESC;",
+    "value_fields": [
+      "stock_code"
+    ],
+    "value_labels": [
+      "股票代码"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "stock_code"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": null,
+      "sort_ascending": true,
+      "top_n": 5
+    }
+  }
+}

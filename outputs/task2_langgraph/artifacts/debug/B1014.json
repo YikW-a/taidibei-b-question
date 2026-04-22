@@ -1,0 +1,212 @@
+{
+  "question_id": "B1014",
+  "question_type": "数据统计分析查询",
+  "raw_question": "云南白药（000538）2025年第三季度的“营业总收入环比增长率”与2024年第三季度的环比增长率相比，变化了多少？请展示两年同期的环比数据。",
+  "raw_question_json": "[{\"Q\":\"云南白药（000538）2025年第三季度的“营业总收入环比增长率”与2024年第三季度的环比增长率相比，变化了多少？请展示两年同期的环比数据。\"}]",
+  "parsed_slots": {
+    "companies": [
+      "云南白药"
+    ],
+    "stock_codes": [
+      "000538"
+    ],
+    "periods": [
+      "2025Q3",
+      "2024Q3"
+    ],
+    "metrics": [
+      "营业总收入"
+    ],
+    "chart_type": null,
+    "intent_type": "single_company_metric",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "comparison",
+    "companies": [
+      "云南白药"
+    ],
+    "periods": [
+      "2025Q3",
+      "2024Q3"
+    ],
+    "metrics": [
+      "营业总收入环比增长率"
+    ],
+    "chart_type": "grouped_bar",
+    "top_n": null,
+    "threshold": null,
+    "question": "云南白药（000538）2025年第三季度的“营业总收入环比增长率”与2024年第三季度的环比增长率相比，变化了多少？请展示两年同期的环比数据。",
+    "should_draw": true,
+    "needs_clarification": false,
+    "missing_slots": [],
+    "unsupported_metrics": [
+      "营业总收入环比增长率"
+    ]
+  },
+  "sql": "SELECT stock_code, stock_abbr, report_period, operating_revenue_qoq_growth FROM financials_view WHERE stock_code = '000538' AND report_period IN ('2025Q3', '2024Q3') ORDER BY report_period DESC",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, report_period, operating_revenue_qoq_growth FROM financials_view WHERE stock_code = '000538' AND report_period IN ('2025Q3', '2024Q3') ORDER BY report_period DESC"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 2,
+  "result_rows": [
+    {
+      "stock_code": "000538",
+      "stock_abbr": "云南白药",
+      "report_period": "2025Q3",
+      "operating_revenue_qoq_growth": -9.780789638210841
+    },
+    {
+      "stock_code": "000538",
+      "stock_abbr": "云南白药",
+      "report_period": "2024Q3",
+      "operating_revenue_qoq_growth": -2.2841306637323444
+    }
+  ],
+  "context_companies": [
+    "云南白药"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "000538",
+      "stock_abbr": "云南白药",
+      "report_period": "2025Q3",
+      "operating_revenue_qoq_growth": -9.780789638210841
+    },
+    {
+      "stock_code": "000538",
+      "stock_abbr": "云南白药",
+      "report_period": "2024Q3",
+      "operating_revenue_qoq_growth": -2.2841306637323444
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"000538\",\"stock_abbr\":\"云南白药\",\"report_period\":\"2025Q3\",\"operating_revenue_qoq_growth\":-9.7807896382},{\"stock_code\":\"000538\",\"stock_abbr\":\"云南白药\",\"report_period\":\"2024Q3\",\"operating_revenue_qoq_growth\":-2.2841306637}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "云南白药（000538）营业总收入环比增长率（2024Q3 vs 2025Q3）",
+    "x_field": null,
+    "y_fields": [
+      "operating_revenue_qoq_growth"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": "stock_code",
+    "sort_ascending": true,
+    "top_n": 2,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1014",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "云南白药（000538）营业总收入环比增长率（2024Q3 vs 2025Q3）",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 2,
+      "preview_rows": [
+        {
+          "stock_code": "000538",
+          "stock_abbr": "云南白药",
+          "report_period": "2025Q3",
+          "operating_revenue_qoq_growth": -9.780789638210841
+        },
+        {
+          "stock_code": "000538",
+          "stock_abbr": "云南白药",
+          "report_period": "2024Q3",
+          "operating_revenue_qoq_growth": -2.2841306637323444
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "stock_code",
+      "sort_ascending": true,
+      "top_n": 2,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "operating_revenue_qoq_growth",
+        "data_type": "quantitative",
+        "label": "operating_revenue_qoq_growth",
+        "unit": "%"
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      },
+      "series": {
+        "field": "report_period",
+        "data_type": "nominal",
+        "label": "报告期",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": true,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B1014_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1014_1.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT stock_code, stock_abbr, report_period, operating_revenue_qoq_growth FROM financials_view WHERE stock_code = '000538' AND report_period IN ('2025Q3', '2024Q3') ORDER BY report_period DESC",
+      "value_fields": [
+        "operating_revenue_qoq_growth"
+      ],
+      "value_labels": [
+        "operating_revenue_qoq_growth"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "operating_revenue_qoq_growth"
+        ],
+        "category_field": "stock_abbr",
+        "sort_by": "stock_code",
+        "sort_ascending": true,
+        "top_n": 2
+      },
+      "category_aggregate": "min"
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1014_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1014_1.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "云南白药（000538）2025年第三季度的“营业总收入环比增长率”与2024年第三季度的环比增长率相比，变化了多少？请展示两年同期的环比数据。",
+      "A": {
+        "content": "云南白药（000538）2025年第三季度的营业总收入环比增长率为-9.78%，2024年第三季度为-2.28%。相比之下，2025年第三季度的环比降幅扩大了约7.5个百分点。",
+        "image": [
+          "./result/B1014_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"云南白药（000538）2025年第三季度的“营业总收入环比增长率”与2024年第三季度的环比增长率相比，变化了多少？请展示两年同期的环比数据。\", \"A\": {\"content\": \"云南白药（000538）2025年第三季度的营业总收入环比增长率为-9.78%，2024年第三季度为-2.28%。相比之下，2025年第三季度的环比降幅扩大了约7.5个百分点。\", \"image\": [\"./result/B1014_1.jpg\"]}}]",
+  "notes": [
+    "查询计划指定了公司为云南白药（代码000538），时期为2025Q3和2024Q3，指标为营业总收入环比增长率。该指标对应字段为operating_revenue_qoq_growth。使用IN筛选两个报告期，并按报告期降序排列以清晰展示。"
+  ],
+  "final_status": "ok"
+}

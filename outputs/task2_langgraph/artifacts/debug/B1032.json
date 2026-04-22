@@ -1,0 +1,884 @@
+{
+  "question_id": "B1032",
+  "question_type": "数据基本查询",
+  "raw_question": "关联核心业绩指标表和利润表，查询2025年第三季度每家公司的股票代码、简称、营业总收入（取自核心业绩指标表）、销售毛利率（利润表中（营业收入-营业成本）/营业收入*100），保留两位小数。",
+  "raw_question_json": "[{\"Q\":\"关联核心业绩指标表和利润表，查询2025年第三季度每家公司的股票代码、简称、营业总收入（取自核心业绩指标表）、销售毛利率（利润表中（营业收入-营业成本）/营业收入*100），保留两位小数。\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入",
+      "销售毛利率"
+    ],
+    "chart_type": null,
+    "intent_type": "period_stat",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "period_stat",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入",
+      "销售毛利率"
+    ],
+    "chart_type": "table",
+    "top_n": null,
+    "threshold": null,
+    "question": "关联核心业绩指标表和利润表，查询2025年第三季度每家公司的股票代码、简称、营业总收入（取自核心业绩指标表）、销售毛利率（利润表中（营业收入-营业成本）/营业收入*100），保留两位小数。",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT stock_code, stock_abbr, ROUND(total_operating_revenue_kpi, 2) AS total_operating_revenue_kpi, ROUND((total_operating_revenue_income - operating_expense_cost_of_sales) / total_operating_revenue_income * 100, 2) AS gross_profit_margin FROM financials_view WHERE report_period = '2025Q3'",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, ROUND(total_operating_revenue_kpi, 2) AS total_operating_revenue_kpi, ROUND((total_operating_revenue_income - operating_expense_cost_of_sales) / total_operating_revenue_income * 100, 2) AS gross_profit_margin FROM financials_view WHERE report_period = '2025Q3'"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 67,
+  "result_rows": [
+    {
+      "stock_code": "000423",
+      "stock_abbr": "东阿阿胶",
+      "total_operating_revenue_kpi": 476637.06,
+      "gross_profit_margin": 73.69
+    },
+    {
+      "stock_code": "000538",
+      "stock_abbr": "云南白药",
+      "total_operating_revenue_kpi": 3065421.42,
+      "gross_profit_margin": 30.06
+    },
+    {
+      "stock_code": "000590",
+      "stock_abbr": "启迪药业",
+      "total_operating_revenue_kpi": 22481.58,
+      "gross_profit_margin": 46.67
+    },
+    {
+      "stock_code": "000650",
+      "stock_abbr": "仁和药业",
+      "total_operating_revenue_kpi": 283345.18,
+      "gross_profit_margin": 36.43
+    },
+    {
+      "stock_code": "000766",
+      "stock_abbr": "通化金马",
+      "total_operating_revenue_kpi": 89225.11,
+      "gross_profit_margin": 72.58
+    },
+    {
+      "stock_code": "000790",
+      "stock_abbr": "华神科技",
+      "total_operating_revenue_kpi": 45738.46,
+      "gross_profit_margin": 45.48
+    },
+    {
+      "stock_code": "000989",
+      "stock_abbr": "九芝堂",
+      "total_operating_revenue_kpi": 162745.33,
+      "gross_profit_margin": 59.8
+    },
+    {
+      "stock_code": "000999",
+      "stock_abbr": "华润三九",
+      "total_operating_revenue_kpi": 2198640.4,
+      "gross_profit_margin": 53.52
+    },
+    {
+      "stock_code": "002082",
+      "stock_abbr": "万邦德",
+      "total_operating_revenue_kpi": 101770.64,
+      "gross_profit_margin": 32.3
+    },
+    {
+      "stock_code": "002107",
+      "stock_abbr": "沃华医药",
+      "total_operating_revenue_kpi": 62461.34,
+      "gross_profit_margin": 75.12
+    },
+    {
+      "stock_code": "002166",
+      "stock_abbr": "莱茵生物",
+      "total_operating_revenue_kpi": 127215.58,
+      "gross_profit_margin": 25.0
+    },
+    {
+      "stock_code": "002198",
+      "stock_abbr": "嘉应制药",
+      "total_operating_revenue_kpi": 29343.63,
+      "gross_profit_margin": 56.41
+    },
+    {
+      "stock_code": "002219",
+      "stock_abbr": "新里程",
+      "total_operating_revenue_kpi": 225609.55,
+      "gross_profit_margin": 26.92
+    },
+    {
+      "stock_code": "002275",
+      "stock_abbr": "桂林三金",
+      "total_operating_revenue_kpi": 146238.21,
+      "gross_profit_margin": 75.23
+    },
+    {
+      "stock_code": "002287",
+      "stock_abbr": "奇正藏药",
+      "total_operating_revenue_kpi": 152294.38,
+      "gross_profit_margin": 82.25
+    },
+    {
+      "stock_code": "002317",
+      "stock_abbr": "众生药业",
+      "total_operating_revenue_kpi": 188875.39,
+      "gross_profit_margin": 56.8
+    },
+    {
+      "stock_code": "002349",
+      "stock_abbr": "精华制药",
+      "total_operating_revenue_kpi": 109228.54,
+      "gross_profit_margin": 52.66
+    },
+    {
+      "stock_code": "002390",
+      "stock_abbr": "信邦制药",
+      "total_operating_revenue_kpi": 426628.53,
+      "gross_profit_margin": 17.44
+    },
+    {
+      "stock_code": "002424",
+      "stock_abbr": "贵州百灵",
+      "total_operating_revenue_kpi": 210157.59,
+      "gross_profit_margin": 52.91
+    },
+    {
+      "stock_code": "002566",
+      "stock_abbr": "益盛药业",
+      "total_operating_revenue_kpi": 47619.52,
+      "gross_profit_margin": 75.11
+    },
+    {
+      "stock_code": "002589",
+      "stock_abbr": "瑞康医药",
+      "total_operating_revenue_kpi": 540653.36,
+      "gross_profit_margin": 11.55
+    },
+    {
+      "stock_code": "002603",
+      "stock_abbr": "以岭药业",
+      "total_operating_revenue_kpi": 586760.31,
+      "gross_profit_margin": 60.53
+    },
+    {
+      "stock_code": "002728",
+      "stock_abbr": "特一药业",
+      "total_operating_revenue_kpi": 69185.06,
+      "gross_profit_margin": 56.94
+    },
+    {
+      "stock_code": "002737",
+      "stock_abbr": "葵花药业",
+      "total_operating_revenue_kpi": 168398.4,
+      "gross_profit_margin": 37.65
+    },
+    {
+      "stock_code": "002773",
+      "stock_abbr": "康弘药业",
+      "total_operating_revenue_kpi": 362386.57,
+      "gross_profit_margin": 90.33
+    },
+    {
+      "stock_code": "002864",
+      "stock_abbr": "盘龙药业",
+      "total_operating_revenue_kpi": 84145.24,
+      "gross_profit_margin": 52.69
+    },
+    {
+      "stock_code": "002873",
+      "stock_abbr": "新天药业",
+      "total_operating_revenue_kpi": 55863.3,
+      "gross_profit_margin": 71.79
+    },
+    {
+      "stock_code": "002907",
+      "stock_abbr": "华森制药",
+      "total_operating_revenue_kpi": 62591.2,
+      "gross_profit_margin": 58.22
+    },
+    {
+      "stock_code": "300026",
+      "stock_abbr": "红日药业",
+      "total_operating_revenue_kpi": 414856.29,
+      "gross_profit_margin": 52.19
+    },
+    {
+      "stock_code": "300158",
+      "stock_abbr": "振东制药",
+      "total_operating_revenue_kpi": 221450.71,
+      "gross_profit_margin": 52.93
+    },
+    {
+      "stock_code": "300181",
+      "stock_abbr": "佐力药业",
+      "total_operating_revenue_kpi": 227971.34,
+      "gross_profit_margin": 62.03
+    },
+    {
+      "stock_code": "300519",
+      "stock_abbr": "新光药业",
+      "total_operating_revenue_kpi": 20561.86,
+      "gross_profit_margin": 39.12
+    },
+    {
+      "stock_code": "300534",
+      "stock_abbr": "陇神戎发",
+      "total_operating_revenue_kpi": 64728.77,
+      "gross_profit_margin": 66.26
+    },
+    {
+      "stock_code": "300869",
+      "stock_abbr": "康泰医学",
+      "total_operating_revenue_kpi": 34399.27,
+      "gross_profit_margin": 54.73
+    },
+    {
+      "stock_code": "300878",
+      "stock_abbr": "维康药业",
+      "total_operating_revenue_kpi": 15131.78,
+      "gross_profit_margin": 15.34
+    },
+    {
+      "stock_code": "301111",
+      "stock_abbr": "粤万年青",
+      "total_operating_revenue_kpi": 22841.49,
+      "gross_profit_margin": 61.76
+    },
+    {
+      "stock_code": "301331",
+      "stock_abbr": "恩威医药",
+      "total_operating_revenue_kpi": 63685.36,
+      "gross_profit_margin": 48.22
+    },
+    {
+      "stock_code": "600080",
+      "stock_abbr": "金花股份",
+      "total_operating_revenue_kpi": 38390.84,
+      "gross_profit_margin": 76.55
+    },
+    {
+      "stock_code": "600085",
+      "stock_abbr": "同仁堂",
+      "total_operating_revenue_kpi": 1330791.48,
+      "gross_profit_margin": 43.86
+    },
+    {
+      "stock_code": "600129",
+      "stock_abbr": "太极集团",
+      "total_operating_revenue_kpi": 808773.7,
+      "gross_profit_margin": 28.56
+    },
+    {
+      "stock_code": "600222",
+      "stock_abbr": "太龙药业",
+      "total_operating_revenue_kpi": 118690.22,
+      "gross_profit_margin": 24.29
+    },
+    {
+      "stock_code": "600252",
+      "stock_abbr": "中恒集团",
+      "total_operating_revenue_kpi": 194813.1,
+      "gross_profit_margin": 31.92
+    },
+    {
+      "stock_code": "600285",
+      "stock_abbr": "羚锐制药",
+      "total_operating_revenue_kpi": 304136.16,
+      "gross_profit_margin": 81.02
+    },
+    {
+      "stock_code": "600329",
+      "stock_abbr": "达仁堂",
+      "total_operating_revenue_kpi": 366986.13,
+      "gross_profit_margin": 74.98
+    },
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "total_operating_revenue_kpi": 6160599.38,
+      "gross_profit_margin": 17.6
+    },
+    {
+      "stock_code": "600351",
+      "stock_abbr": "亚宝药业",
+      "total_operating_revenue_kpi": 170871.22,
+      "gross_profit_margin": 52.13
+    },
+    {
+      "stock_code": "600422",
+      "stock_abbr": "昆药集团",
+      "total_operating_revenue_kpi": 475120.61,
+      "gross_profit_margin": 39.42
+    },
+    {
+      "stock_code": "600436",
+      "stock_abbr": "片仔癀",
+      "total_operating_revenue_kpi": 744236.61,
+      "gross_profit_margin": 38.93
+    },
+    {
+      "stock_code": "600479",
+      "stock_abbr": "千金药业",
+      "total_operating_revenue_kpi": 271833.55,
+      "gross_profit_margin": 49.87
+    },
+    {
+      "stock_code": "600518",
+      "stock_abbr": "康美药业",
+      "total_operating_revenue_kpi": 395960.35,
+      "gross_profit_margin": 19.07
+    },
+    {
+      "stock_code": "600535",
+      "stock_abbr": "天士力",
+      "total_operating_revenue_kpi": 631067.29,
+      "gross_profit_margin": 66.99
+    },
+    {
+      "stock_code": "600557",
+      "stock_abbr": "康缘药业",
+      "total_operating_revenue_kpi": 234268.84,
+      "gross_profit_margin": 69.47
+    },
+    {
+      "stock_code": "600566",
+      "stock_abbr": "济川药业",
+      "total_operating_revenue_kpi": 393205.72,
+      "gross_profit_margin": 76.28
+    },
+    {
+      "stock_code": "600572",
+      "stock_abbr": "康恩贝",
+      "total_operating_revenue_kpi": 497558.02,
+      "gross_profit_margin": 53.78
+    },
+    {
+      "stock_code": "600594",
+      "stock_abbr": "益佰制药",
+      "total_operating_revenue_kpi": 144670.45,
+      "gross_profit_margin": 60.32
+    },
+    {
+      "stock_code": "600613",
+      "stock_abbr": "神奇制药",
+      "total_operating_revenue_kpi": 139786.2,
+      "gross_profit_margin": 47.06
+    },
+    {
+      "stock_code": "600671",
+      "stock_abbr": "天目药业",
+      "total_operating_revenue_kpi": 15894.04,
+      "gross_profit_margin": 46.38
+    },
+    {
+      "stock_code": "600750",
+      "stock_abbr": "江中药业",
+      "total_operating_revenue_kpi": 293317.22,
+      "gross_profit_margin": 66.05
+    },
+    {
+      "stock_code": "600771",
+      "stock_abbr": "广誉远",
+      "total_operating_revenue_kpi": 106072.28,
+      "gross_profit_margin": 67.81
+    },
+    {
+      "stock_code": "600976",
+      "stock_abbr": "健民集团",
+      "total_operating_revenue_kpi": 255193.42,
+      "gross_profit_margin": 59.2
+    },
+    {
+      "stock_code": "600993",
+      "stock_abbr": "马应龙",
+      "total_operating_revenue_kpi": 283728.19,
+      "gross_profit_margin": 49.09
+    },
+    {
+      "stock_code": "603139",
+      "stock_abbr": "康惠制药",
+      "total_operating_revenue_kpi": 35614.13,
+      "gross_profit_margin": 26.45
+    },
+    {
+      "stock_code": "603439",
+      "stock_abbr": "贵州三力",
+      "total_operating_revenue_kpi": 103849.84,
+      "gross_profit_margin": 68.65
+    },
+    {
+      "stock_code": "603567",
+      "stock_abbr": "珍宝岛",
+      "total_operating_revenue_kpi": 91818.6,
+      "gross_profit_margin": 35.75
+    },
+    {
+      "stock_code": "603858",
+      "stock_abbr": "步长制药",
+      "total_operating_revenue_kpi": 846858.13,
+      "gross_profit_margin": 62.31
+    },
+    {
+      "stock_code": "603896",
+      "stock_abbr": "寿仙谷",
+      "total_operating_revenue_kpi": 43013.82,
+      "gross_profit_margin": 79.06
+    },
+    {
+      "stock_code": "603998",
+      "stock_abbr": "方盛制药",
+      "total_operating_revenue_kpi": 125331.53,
+      "gross_profit_margin": 71.28
+    }
+  ],
+  "context_companies": [
+    "东阿阿胶",
+    "云南白药",
+    "启迪药业",
+    "仁和药业",
+    "通化金马",
+    "华神科技",
+    "九芝堂",
+    "华润三九",
+    "万邦德",
+    "沃华医药",
+    "莱茵生物",
+    "嘉应制药",
+    "新里程",
+    "桂林三金",
+    "奇正藏药",
+    "众生药业",
+    "精华制药",
+    "信邦制药",
+    "贵州百灵",
+    "益盛药业",
+    "瑞康医药",
+    "以岭药业",
+    "特一药业",
+    "葵花药业",
+    "康弘药业",
+    "盘龙药业",
+    "新天药业",
+    "华森制药",
+    "红日药业",
+    "振东制药",
+    "佐力药业",
+    "新光药业",
+    "陇神戎发",
+    "康泰医学",
+    "维康药业",
+    "粤万年青",
+    "恩威医药",
+    "金花股份",
+    "同仁堂",
+    "太极集团",
+    "太龙药业",
+    "中恒集团",
+    "羚锐制药",
+    "达仁堂",
+    "白云山",
+    "亚宝药业",
+    "昆药集团",
+    "片仔癀",
+    "千金药业",
+    "康美药业",
+    "天士力",
+    "康缘药业",
+    "济川药业",
+    "康恩贝",
+    "益佰制药",
+    "神奇制药",
+    "天目药业",
+    "江中药业",
+    "广誉远",
+    "健民集团",
+    "马应龙",
+    "康惠制药",
+    "贵州三力",
+    "珍宝岛",
+    "步长制药",
+    "寿仙谷",
+    "方盛制药"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "000423",
+      "stock_abbr": "东阿阿胶",
+      "total_operating_revenue_kpi": 476637.06,
+      "gross_profit_margin": 73.69
+    },
+    {
+      "stock_code": "000538",
+      "stock_abbr": "云南白药",
+      "total_operating_revenue_kpi": 3065421.42,
+      "gross_profit_margin": 30.06
+    },
+    {
+      "stock_code": "000590",
+      "stock_abbr": "启迪药业",
+      "total_operating_revenue_kpi": 22481.58,
+      "gross_profit_margin": 46.67
+    },
+    {
+      "stock_code": "000650",
+      "stock_abbr": "仁和药业",
+      "total_operating_revenue_kpi": 283345.18,
+      "gross_profit_margin": 36.43
+    },
+    {
+      "stock_code": "000766",
+      "stock_abbr": "通化金马",
+      "total_operating_revenue_kpi": 89225.11,
+      "gross_profit_margin": 72.58
+    },
+    {
+      "stock_code": "000790",
+      "stock_abbr": "华神科技",
+      "total_operating_revenue_kpi": 45738.46,
+      "gross_profit_margin": 45.48
+    },
+    {
+      "stock_code": "000989",
+      "stock_abbr": "九芝堂",
+      "total_operating_revenue_kpi": 162745.33,
+      "gross_profit_margin": 59.8
+    },
+    {
+      "stock_code": "000999",
+      "stock_abbr": "华润三九",
+      "total_operating_revenue_kpi": 2198640.4,
+      "gross_profit_margin": 53.52
+    },
+    {
+      "stock_code": "002082",
+      "stock_abbr": "万邦德",
+      "total_operating_revenue_kpi": 101770.64,
+      "gross_profit_margin": 32.3
+    },
+    {
+      "stock_code": "002107",
+      "stock_abbr": "沃华医药",
+      "total_operating_revenue_kpi": 62461.34,
+      "gross_profit_margin": 75.12
+    },
+    {
+      "stock_code": "002166",
+      "stock_abbr": "莱茵生物",
+      "total_operating_revenue_kpi": 127215.58,
+      "gross_profit_margin": 25.0
+    },
+    {
+      "stock_code": "002198",
+      "stock_abbr": "嘉应制药",
+      "total_operating_revenue_kpi": 29343.63,
+      "gross_profit_margin": 56.41
+    },
+    {
+      "stock_code": "002219",
+      "stock_abbr": "新里程",
+      "total_operating_revenue_kpi": 225609.55,
+      "gross_profit_margin": 26.92
+    },
+    {
+      "stock_code": "002275",
+      "stock_abbr": "桂林三金",
+      "total_operating_revenue_kpi": 146238.21,
+      "gross_profit_margin": 75.23
+    },
+    {
+      "stock_code": "002287",
+      "stock_abbr": "奇正藏药",
+      "total_operating_revenue_kpi": 152294.38,
+      "gross_profit_margin": 82.25
+    },
+    {
+      "stock_code": "002317",
+      "stock_abbr": "众生药业",
+      "total_operating_revenue_kpi": 188875.39,
+      "gross_profit_margin": 56.8
+    },
+    {
+      "stock_code": "002349",
+      "stock_abbr": "精华制药",
+      "total_operating_revenue_kpi": 109228.54,
+      "gross_profit_margin": 52.66
+    },
+    {
+      "stock_code": "002390",
+      "stock_abbr": "信邦制药",
+      "total_operating_revenue_kpi": 426628.53,
+      "gross_profit_margin": 17.44
+    },
+    {
+      "stock_code": "002424",
+      "stock_abbr": "贵州百灵",
+      "total_operating_revenue_kpi": 210157.59,
+      "gross_profit_margin": 52.91
+    },
+    {
+      "stock_code": "002566",
+      "stock_abbr": "益盛药业",
+      "total_operating_revenue_kpi": 47619.52,
+      "gross_profit_margin": 75.11
+    },
+    {
+      "stock_code": "002589",
+      "stock_abbr": "瑞康医药",
+      "total_operating_revenue_kpi": 540653.36,
+      "gross_profit_margin": 11.55
+    },
+    {
+      "stock_code": "002603",
+      "stock_abbr": "以岭药业",
+      "total_operating_revenue_kpi": 586760.31,
+      "gross_profit_margin": 60.53
+    },
+    {
+      "stock_code": "002728",
+      "stock_abbr": "特一药业",
+      "total_operating_revenue_kpi": 69185.06,
+      "gross_profit_margin": 56.94
+    },
+    {
+      "stock_code": "002737",
+      "stock_abbr": "葵花药业",
+      "total_operating_revenue_kpi": 168398.4,
+      "gross_profit_margin": 37.65
+    },
+    {
+      "stock_code": "002773",
+      "stock_abbr": "康弘药业",
+      "total_operating_revenue_kpi": 362386.57,
+      "gross_profit_margin": 90.33
+    },
+    {
+      "stock_code": "002864",
+      "stock_abbr": "盘龙药业",
+      "total_operating_revenue_kpi": 84145.24,
+      "gross_profit_margin": 52.69
+    },
+    {
+      "stock_code": "002873",
+      "stock_abbr": "新天药业",
+      "total_operating_revenue_kpi": 55863.3,
+      "gross_profit_margin": 71.79
+    },
+    {
+      "stock_code": "002907",
+      "stock_abbr": "华森制药",
+      "total_operating_revenue_kpi": 62591.2,
+      "gross_profit_margin": 58.22
+    },
+    {
+      "stock_code": "300026",
+      "stock_abbr": "红日药业",
+      "total_operating_revenue_kpi": 414856.29,
+      "gross_profit_margin": 52.19
+    },
+    {
+      "stock_code": "300158",
+      "stock_abbr": "振东制药",
+      "total_operating_revenue_kpi": 221450.71,
+      "gross_profit_margin": 52.93
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"000423\",\"stock_abbr\":\"东阿阿胶\",\"total_operating_revenue_kpi\":476637.06,\"gross_profit_margin\":73.69},{\"stock_code\":\"000538\",\"stock_abbr\":\"云南白药\",\"total_operating_revenue_kpi\":3065421.4199999999,\"gross_profit_margin\":30.06},{\"stock_code\":\"000590\",\"stock_abbr\":\"启迪药业\",\"total_operating_revenue_kpi\":22481.58,\"gross_profit_margin\":46.67},{\"stock_code\":\"000650\",\"stock_abbr\":\"仁和药业\",\"total_operating_revenue_kpi\":283345.18,\"gross_profit_margin\":36.43},{\"stock_code\":\"000766\",\"stock_abbr\":\"通化金马\",\"total_operating_revenue_kpi\":89225.11,\"gross_profit_margin\":72.58},{\"stock_code\":\"000790\",\"stock_abbr\":\"华神科技\",\"total_operating_revenue_kpi\":45738.46,\"gross_profit_margin\":45.48},{\"stock_code\":\"000989\",\"stock_abbr\":\"九芝堂\",\"total_operating_revenue_kpi\":162745.33,\"gross_profit_margin\":59.8},{\"stock_code\":\"000999\",\"stock_abbr\":\"华润三九\",\"total_operating_revenue_kpi\":2198640.3999999999,\"gross_profit_margin\":53.52},{\"stock_code\":\"002082\",\"stock_abbr\":\"万邦德\",\"total_operating_revenue_kpi\":101770.64,\"gross_profit_margin\":32.3},{\"stock_code\":\"002107\",\"stock_abbr\":\"沃华医药\",\"total_operating_revenue_kpi\":62461.34,\"gross_profit_margin\":75.12},{\"stock_code\":\"002166\",\"stock_abbr\":\"莱茵生物\",\"total_operating_revenue_kpi\":127215.58,\"gross_profit_margin\":25.0},{\"stock_code\":\"002198\",\"stock_abbr\":\"嘉应制药\",\"total_operating_revenue_kpi\":29343.63,\"gross_profit_margin\":56.41},{\"stock_code\":\"002219\",\"stock_abbr\":\"新里程\",\"total_operating_revenue_kpi\":225609.55,\"gross_profit_margin\":26.92},{\"stock_code\":\"002275\",\"stock_abbr\":\"桂林三金\",\"total_operating_revenue_kpi\":146238.21,\"gross_profit_margin\":75.23},{\"stock_code\":\"002287\",\"stock_abbr\":\"奇正藏药\",\"total_operating_revenue_kpi\":152294.38,\"gross_profit_margin\":82.25},{\"stock_code\":\"002317\",\"stock_abbr\":\"众生药业\",\"total_operating_revenue_kpi\":188875.39,\"gross_profit_margin\":56.8},{\"stock_code\":\"002349\",\"stock_abbr\":\"精华制药\",\"total_operating_revenue_kpi\":109228.54,\"gross_profit_margin\":52.66},{\"stock_code\":\"002390\",\"stock_abbr\":\"信邦制药\",\"total_operating_revenue_kpi\":426628.53,\"gross_profit_margin\":17.44},{\"stock_code\":\"002424\",\"stock_abbr\":\"贵州百灵\",\"total_operating_revenue_kpi\":210157.59,\"gross_profit_margin\":52.91},{\"stock_code\":\"002566\",\"stock_abbr\":\"益盛药业\",\"total_operating_revenue_kpi\":47619.52,\"gross_profit_margin\":75.11}]",
+  "chart_plan": {
+    "chart_type": "table",
+    "title": "2025年第三季度公司营业总收入与销售毛利率",
+    "x_field": null,
+    "y_fields": [
+      "total_operating_revenue_kpi",
+      "gross_profit_margin"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": null,
+    "sort_ascending": true,
+    "top_n": 12,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1032",
+    "image_index": 1,
+    "chart_type": "table",
+    "title": "2025年第三季度公司营业总收入与销售毛利率",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 50,
+      "preview_rows": [
+        {
+          "stock_code": "000423",
+          "stock_abbr": "东阿阿胶",
+          "total_operating_revenue_kpi": 476637.06,
+          "gross_profit_margin": 73.69
+        },
+        {
+          "stock_code": "000538",
+          "stock_abbr": "云南白药",
+          "total_operating_revenue_kpi": 3065421.42,
+          "gross_profit_margin": 30.06
+        },
+        {
+          "stock_code": "000590",
+          "stock_abbr": "启迪药业",
+          "total_operating_revenue_kpi": 22481.58,
+          "gross_profit_margin": 46.67
+        },
+        {
+          "stock_code": "000650",
+          "stock_abbr": "仁和药业",
+          "total_operating_revenue_kpi": 283345.18,
+          "gross_profit_margin": 36.43
+        },
+        {
+          "stock_code": "000766",
+          "stock_abbr": "通化金马",
+          "total_operating_revenue_kpi": 89225.11,
+          "gross_profit_margin": 72.58
+        },
+        {
+          "stock_code": "000790",
+          "stock_abbr": "华神科技",
+          "total_operating_revenue_kpi": 45738.46,
+          "gross_profit_margin": 45.48
+        },
+        {
+          "stock_code": "000989",
+          "stock_abbr": "九芝堂",
+          "total_operating_revenue_kpi": 162745.33,
+          "gross_profit_margin": 59.8
+        },
+        {
+          "stock_code": "000999",
+          "stock_abbr": "华润三九",
+          "total_operating_revenue_kpi": 2198640.4,
+          "gross_profit_margin": 53.52
+        },
+        {
+          "stock_code": "002082",
+          "stock_abbr": "万邦德",
+          "total_operating_revenue_kpi": 101770.64,
+          "gross_profit_margin": 32.3
+        },
+        {
+          "stock_code": "002107",
+          "stock_abbr": "沃华医药",
+          "total_operating_revenue_kpi": 62461.34,
+          "gross_profit_margin": 75.12
+        },
+        {
+          "stock_code": "002166",
+          "stock_abbr": "莱茵生物",
+          "total_operating_revenue_kpi": 127215.58,
+          "gross_profit_margin": 25.0
+        },
+        {
+          "stock_code": "002198",
+          "stock_abbr": "嘉应制药",
+          "total_operating_revenue_kpi": 29343.63,
+          "gross_profit_margin": 56.41
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": null,
+      "sort_ascending": true,
+      "top_n": 12,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "total_operating_revenue_kpi",
+        "data_type": "quantitative",
+        "label": "total_operating_revenue_kpi",
+        "unit": "万元"
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": false
+    },
+    "output": {
+      "filename": "B1032_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1032_1.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT stock_code, stock_abbr, ROUND(total_operating_revenue_kpi, 2) AS total_operating_revenue_kpi, ROUND((total_operating_revenue_income - operating_expense_cost_of_sales) / total_operating_revenue_income * 100, 2) AS gross_profit_margin FROM financials_view WHERE report_period = '2025Q3'",
+      "value_fields": [
+        "total_operating_revenue_kpi",
+        "gross_profit_margin"
+      ],
+      "value_labels": [
+        "total_operating_revenue_kpi",
+        "销售毛利率"
+      ],
+      "original_chart_plan": {
+        "chart_type": "table",
+        "x_field": null,
+        "y_fields": [
+          "total_operating_revenue_kpi",
+          "gross_profit_margin"
+        ],
+        "category_field": "stock_abbr",
+        "sort_by": null,
+        "sort_ascending": true,
+        "top_n": 12
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1032_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1032_1.jpg"
+  ],
+  "graph_formats": [
+    "表格图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "关联核心业绩指标表和利润表，查询2025年第三季度每家公司的股票代码、简称、营业总收入（取自核心业绩指标表）、销售毛利率（利润表中（营业收入-营业成本）/营业收入*100），保留两位小数。",
+      "A": {
+        "content": "2025年第三季度，查询结果共包含30家公司。具体股票代码、简称、营业总收入（万元）及销售毛利率（%）如下：\n\n- 000423 东阿阿胶：营业总收入476,637.06万元，销售毛利率73.69%\n- 000538 云南白药：营业总收入3,065,421.42万元，销售毛利率30.06%\n- 000590 启迪药业：营业总收入22,481.58万元，销售毛利率46.67%\n- 000650 仁和药业：营业总收入283,345.18万元，销售毛利率36.43%\n- 000766 通化金马：营业总收入89,225.11万元，销售毛利率72.58%\n- 000790 华神科技：营业总收入45,738.46万元，销售毛利率45.48%\n- 000989 九芝堂：营业总收入162,745.33万元，销售毛利率59.80%\n- 000999 华润三九：营业总收入2,198,640.40万元，销售毛利率53.52%\n- 002082 万邦德：营业总收入101,770.64万元，销售毛利率32.30%\n- 002107 沃华医药：营业总收入62,461.34万元，销售毛利率75.12%\n- 002166 莱茵生物：营业总收入127,215.58万元，销售毛利率25.00%\n- 002198 嘉应制药：营业总收入29,343.63万元，销售毛利率56.41%\n- 002219 新里程：营业总收入225,609.55万元，销售毛利率26.92%\n- 002275 桂林三金：营业总收入146,238.21万元，销售毛利率75.23%\n- 002287 奇正藏药：营业总收入152,294.38万元，销售毛利率82.25%\n- 002317 众生药业：营业总收入188,875.39万元，销售毛利率56.80%\n- 002349 精华制药：营业总收入109,228.54万元，销售毛利率52.66%\n- 002390 信邦制药：营业总收入426,628.53万元，销售毛利率17.44%\n- 002424 贵州百灵：营业总收入210,157.59万元，销售毛利率52.91%\n- 002566 益盛药业：营业总收入47,619.52万元，销售毛利率75.11%\n- 002589 瑞康医药：营业总收入540,653.36万元，销售毛利率11.55%\n- 002603 以岭药业：营业总收入586,760.31万元，销售毛利率60.53%\n- 002728 特一药业：营业总收入69,185.06万元，销售毛利率56.94%\n- 002737 葵花药业：营业总收入168,398.40万元，销售毛利率37.65%\n- 002773 康弘药业：营业总收入362,386.57万元，销售毛利率90.33%\n- 002864 盘龙药业：营业总收入84,145.24万元，销售毛利率52.69%\n- 002873 新天药业：营业总收入55,863.30万元，销售毛利率71.79%\n- 002907 华森制药：营业总收入62,591.20万元，销售毛利率58.22%\n- 300026 红日药业：营业总收入414,856.29万元，销售毛利率52.19%\n- 300158 振东制药：营业总收入221,450.71万元，销售毛利率52.93%",
+        "image": [
+          "./result/B1032_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"关联核心业绩指标表和利润表，查询2025年第三季度每家公司的股票代码、简称、营业总收入（取自核心业绩指标表）、销售毛利率（利润表中（营业收入-营业成本）/营业收入*100），保留两位小数。\", \"A\": {\"content\": \"2025年第三季度，查询结果共包含30家公司。具体股票代码、简称、营业总收入（万元）及销售毛利率（%）如下：\\n\\n- 000423 东阿阿胶：营业总收入476,637.06万元，销售毛利率73.69%\\n- 000538 云南白药：营业总收入3,065,421.42万元，销售毛利率30.06%\\n- 000590 启迪药业：营业总收入22,481.58万元，销售毛利率46.67%\\n- 000650 仁和药业：营业总收入283,345.18万元，销售毛利率36.43%\\n- 000766 通化金马：营业总收入89,225.11万元，销售毛利率72.58%\\n- 000790 华神科技：营业总收入45,738.46万元，销售毛利率45.48%\\n- 000989 九芝堂：营业总收入162,745.33万元，销售毛利率59.80%\\n- 000999 华润三九：营业总收入2,198,640.40万元，销售毛利率53.52%\\n- 002082 万邦德：营业总收入101,770.64万元，销售毛利率32.30%\\n- 002107 沃华医药：营业总收入62,461.34万元，销售毛利率75.12%\\n- 002166 莱茵生物：营业总收入127,215.58万元，销售毛利率25.00%\\n- 002198 嘉应制药：营业总收入29,343.63万元，销售毛利率56.41%\\n- 002219 新里程：营业总收入225,609.55万元，销售毛利率26.92%\\n- 002275 桂林三金：营业总收入146,238.21万元，销售毛利率75.23%\\n- 002287 奇正藏药：营业总收入152,294.38万元，销售毛利率82.25%\\n- 002317 众生药业：营业总收入188,875.39万元，销售毛利率56.80%\\n- 002349 精华制药：营业总收入109,228.54万元，销售毛利率52.66%\\n- 002390 信邦制药：营业总收入426,628.53万元，销售毛利率17.44%\\n- 002424 贵州百灵：营业总收入210,157.59万元，销售毛利率52.91%\\n- 002566 益盛药业：营业总收入47,619.52万元，销售毛利率75.11%\\n- 002589 瑞康医药：营业总收入540,653.36万元，销售毛利率11.55%\\n- 002603 以岭药业：营业总收入586,760.31万元，销售毛利率60.53%\\n- 002728 特一药业：营业总收入69,185.06万元，销售毛利率56.94%\\n- 002737 葵花药业：营业总收入168,398.40万元，销售毛利率37.65%\\n- 002773 康弘药业：营业总收入362,386.57万元，销售毛利率90.33%\\n- 002864 盘龙药业：营业总收入84,145.24万元，销售毛利率52.69%\\n- 002873 新天药业：营业总收入55,863.30万元，销售毛利率71.79%\\n- 002907 华森制药：营业总收入62,591.20万元，销售毛利率58.22%\\n- 300026 红日药业：营业总收入414,856.29万元，销售毛利率52.19%\\n- 300158 振东制药：营业总收入221,450.71万元，销售毛利率52.93%\", \"image\": [\"./result/B1032_1.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，需要查询2025Q3每家公司的股票代码、简称、营业总收入（取自核心业绩指标表）和销售毛利率。营业总收入使用total_operating_revenue_kpi字段，销售毛利率根据公式（营业收入-营业成本）/营业收入*100计算，其中营业收入使用total_operating_revenue_income，营业成本使用operating_expense_cost_of_sales。结果保留两位小数。"
+  ],
+  "final_status": "ok"
+}

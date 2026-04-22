@@ -1,0 +1,150 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1058",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "2025Q3短期借款与货币资金差额对比",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 18,
+    "preview_rows": [
+      {
+        "stock_code": "600129",
+        "stock_abbr": "太极集团",
+        "货币资金": 57765.358484000004,
+        "短期借款": 466812.756035,
+        "差额": 409047.397551
+      },
+      {
+        "stock_code": "603567",
+        "stock_abbr": "珍宝岛",
+        "货币资金": 20382.056049000003,
+        "短期借款": 146254.823221,
+        "差额": 125872.76717199999
+      },
+      {
+        "stock_code": "002589",
+        "stock_abbr": "瑞康医药",
+        "货币资金": 424108.343077,
+        "短期借款": 530203.0849489999,
+        "差额": 106094.74187199993
+      },
+      {
+        "stock_code": "002424",
+        "stock_abbr": "贵州百灵",
+        "货币资金": 18165.497616,
+        "短期借款": 97507.69967100001,
+        "差额": 79342.202055
+      },
+      {
+        "stock_code": "002219",
+        "stock_abbr": "新里程",
+        "货币资金": 30781.892533,
+        "短期借款": 100918.7311,
+        "差额": 70136.838567
+      },
+      {
+        "stock_code": "002287",
+        "stock_abbr": "奇正藏药",
+        "货币资金": 28368.424408999996,
+        "短期借款": 95537.94305,
+        "差额": 67169.518641
+      },
+      {
+        "stock_code": "002082",
+        "stock_abbr": "万邦德",
+        "货币资金": 8307.079597,
+        "短期借款": 69265.283016,
+        "差额": 60958.203419
+      },
+      {
+        "stock_code": "603439",
+        "stock_abbr": "贵州三力",
+        "货币资金": 26569.268923,
+        "短期借款": 57548.371308,
+        "差额": 30979.102385000002
+      },
+      {
+        "stock_code": "600222",
+        "stock_abbr": "太龙药业",
+        "货币资金": 34386.013543,
+        "短期借款": 63858.54461900001,
+        "差额": 29472.531076000007
+      },
+      {
+        "stock_code": "002166",
+        "stock_abbr": "莱茵生物",
+        "货币资金": 25537.904588999998,
+        "短期借款": 54075.324698000004,
+        "差额": 28537.420109000006
+      },
+      {
+        "stock_code": "603998",
+        "stock_abbr": "方盛制药",
+        "货币资金": 18009.309947,
+        "短期借款": 41346.842222,
+        "差额": 23337.532274999998
+      },
+      {
+        "stock_code": "002566",
+        "stock_abbr": "益盛药业",
+        "货币资金": 11584.746279,
+        "短期借款": 34823.111110000005,
+        "差额": 23238.364831000006
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "差额",
+    "sort_ascending": false,
+    "top_n": 15,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "差额",
+      "data_type": "quantitative",
+      "label": "差额",
+      "unit": "万元"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1058_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1058_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT stock_code, stock_abbr, asset_cash_and_cash_equivalents AS 货币资金, liability_short_term_loans AS 短期借款, (liability_short_term_loans - asset_cash_and_cash_equivalents) AS 差额 FROM financials_view WHERE report_period = '2025Q3' AND liability_short_term_loans > asset_cash_and_cash_equivalents ORDER BY 差额 DESC",
+    "value_fields": [
+      "差额"
+    ],
+    "value_labels": [
+      "差额"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "差额"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": "差额",
+      "sort_ascending": false,
+      "top_n": 15
+    }
+  }
+}

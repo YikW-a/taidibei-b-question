@@ -1,0 +1,321 @@
+{
+  "question_id": "B1062",
+  "question_type": "数据统计分析查询",
+  "raw_question": "分析2025年第三季度营业成本占营业总收入的比例排名后十的公司，用条形图展示占比数值",
+  "raw_question_json": "[{\"Q\":\"分析2025年第三季度营业成本占营业总收入的比例排名后十的公司，用条形图展示占比数值\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入"
+    ],
+    "chart_type": "bar",
+    "intent_type": "trend_or_chart",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "ranking",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业成本",
+      "营业总收入"
+    ],
+    "chart_type": "barh",
+    "top_n": 10,
+    "threshold": null,
+    "question": "分析2025年第三季度营业成本占营业总收入的比例排名后十的公司，用条形图展示占比数值",
+    "should_draw": true,
+    "needs_clarification": false,
+    "missing_slots": [],
+    "unsupported_metrics": [
+      "营业成本"
+    ]
+  },
+  "sql": "WITH cost_ratio AS (\n  SELECT stock_code, stock_abbr, report_period, operating_expense_cost_of_sales, total_operating_revenue,\n         CASE WHEN total_operating_revenue > 0 THEN operating_expense_cost_of_sales / total_operating_revenue ELSE NULL END AS cost_revenue_ratio\n  FROM financials_view\n  WHERE report_period = '2025Q3'\n    AND total_operating_revenue IS NOT NULL\n    AND operating_expense_cost_of_sales IS NOT NULL\n)\nSELECT stock_code, stock_abbr, cost_revenue_ratio\nFROM cost_ratio\nWHERE cost_revenue_ratio IS NOT NULL\nORDER BY cost_revenue_ratio DESC\nLIMIT 10",
+  "sql_history": [
+    "WITH cost_ratio AS (\n  SELECT stock_code, stock_abbr, report_period, operating_expense_cost_of_sales, total_operating_revenue,\n         CASE WHEN total_operating_revenue > 0 THEN operating_expense_cost_of_sales / total_operating_revenue ELSE NULL END AS cost_revenue_ratio\n  FROM financials_view\n  WHERE report_period = '2025Q3'\n    AND total_operating_revenue IS NOT NULL\n    AND operating_expense_cost_of_sales IS NOT NULL\n)\nSELECT stock_code, stock_abbr, cost_revenue_ratio\nFROM cost_ratio\nWHERE cost_revenue_ratio IS NOT NULL\nORDER BY cost_revenue_ratio DESC\nLIMIT 10"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 10,
+  "result_rows": [
+    {
+      "stock_code": "002589",
+      "stock_abbr": "瑞康医药",
+      "cost_revenue_ratio": 0.8845207448886292
+    },
+    {
+      "stock_code": "300878",
+      "stock_abbr": "维康药业",
+      "cost_revenue_ratio": 0.8465711405948348
+    },
+    {
+      "stock_code": "002390",
+      "stock_abbr": "信邦制药",
+      "cost_revenue_ratio": 0.8255836807506028
+    },
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "cost_revenue_ratio": 0.8239582603729517
+    },
+    {
+      "stock_code": "600518",
+      "stock_abbr": "康美药业",
+      "cost_revenue_ratio": 0.8093241219771902
+    },
+    {
+      "stock_code": "600222",
+      "stock_abbr": "太龙药业",
+      "cost_revenue_ratio": 0.7570994574793025
+    },
+    {
+      "stock_code": "002166",
+      "stock_abbr": "莱茵生物",
+      "cost_revenue_ratio": 0.7499874279374572
+    },
+    {
+      "stock_code": "603139",
+      "stock_abbr": "康惠制药",
+      "cost_revenue_ratio": 0.7355326143747279
+    },
+    {
+      "stock_code": "002219",
+      "stock_abbr": "新里程",
+      "cost_revenue_ratio": 0.7308260767975637
+    },
+    {
+      "stock_code": "600129",
+      "stock_abbr": "太极集团",
+      "cost_revenue_ratio": 0.7144061759919319
+    }
+  ],
+  "context_companies": [
+    "瑞康医药",
+    "维康药业",
+    "信邦制药",
+    "白云山",
+    "康美药业",
+    "太龙药业",
+    "莱茵生物",
+    "康惠制药",
+    "新里程",
+    "太极集团"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "002589",
+      "stock_abbr": "瑞康医药",
+      "cost_revenue_ratio": 0.8845207448886292
+    },
+    {
+      "stock_code": "300878",
+      "stock_abbr": "维康药业",
+      "cost_revenue_ratio": 0.8465711405948348
+    },
+    {
+      "stock_code": "002390",
+      "stock_abbr": "信邦制药",
+      "cost_revenue_ratio": 0.8255836807506028
+    },
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "cost_revenue_ratio": 0.8239582603729517
+    },
+    {
+      "stock_code": "600518",
+      "stock_abbr": "康美药业",
+      "cost_revenue_ratio": 0.8093241219771902
+    },
+    {
+      "stock_code": "600222",
+      "stock_abbr": "太龙药业",
+      "cost_revenue_ratio": 0.7570994574793025
+    },
+    {
+      "stock_code": "002166",
+      "stock_abbr": "莱茵生物",
+      "cost_revenue_ratio": 0.7499874279374572
+    },
+    {
+      "stock_code": "603139",
+      "stock_abbr": "康惠制药",
+      "cost_revenue_ratio": 0.7355326143747279
+    },
+    {
+      "stock_code": "002219",
+      "stock_abbr": "新里程",
+      "cost_revenue_ratio": 0.7308260767975637
+    },
+    {
+      "stock_code": "600129",
+      "stock_abbr": "太极集团",
+      "cost_revenue_ratio": 0.7144061759919319
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"002589\",\"stock_abbr\":\"瑞康医药\",\"cost_revenue_ratio\":0.8845207449},{\"stock_code\":\"300878\",\"stock_abbr\":\"维康药业\",\"cost_revenue_ratio\":0.8465711406},{\"stock_code\":\"002390\",\"stock_abbr\":\"信邦制药\",\"cost_revenue_ratio\":0.8255836808},{\"stock_code\":\"600332\",\"stock_abbr\":\"白云山\",\"cost_revenue_ratio\":0.8239582604},{\"stock_code\":\"600518\",\"stock_abbr\":\"康美药业\",\"cost_revenue_ratio\":0.809324122},{\"stock_code\":\"600222\",\"stock_abbr\":\"太龙药业\",\"cost_revenue_ratio\":0.7570994575},{\"stock_code\":\"002166\",\"stock_abbr\":\"莱茵生物\",\"cost_revenue_ratio\":0.7499874279},{\"stock_code\":\"603139\",\"stock_abbr\":\"康惠制药\",\"cost_revenue_ratio\":0.7355326144},{\"stock_code\":\"002219\",\"stock_abbr\":\"新里程\",\"cost_revenue_ratio\":0.7308260768},{\"stock_code\":\"600129\",\"stock_abbr\":\"太极集团\",\"cost_revenue_ratio\":0.714406176}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2025年第三季度营业成本占营业总收入比例排名后十",
+    "x_field": null,
+    "y_fields": [
+      "cost_revenue_ratio"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": null,
+    "sort_ascending": true,
+    "top_n": 10,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1062",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "2025年第三季度营业成本占营业总收入比例排名后十",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 10,
+      "preview_rows": [
+        {
+          "stock_code": "002589",
+          "stock_abbr": "瑞康医药",
+          "cost_revenue_ratio": 0.8845207448886292
+        },
+        {
+          "stock_code": "300878",
+          "stock_abbr": "维康药业",
+          "cost_revenue_ratio": 0.8465711405948348
+        },
+        {
+          "stock_code": "002390",
+          "stock_abbr": "信邦制药",
+          "cost_revenue_ratio": 0.8255836807506028
+        },
+        {
+          "stock_code": "600332",
+          "stock_abbr": "白云山",
+          "cost_revenue_ratio": 0.8239582603729517
+        },
+        {
+          "stock_code": "600518",
+          "stock_abbr": "康美药业",
+          "cost_revenue_ratio": 0.8093241219771902
+        },
+        {
+          "stock_code": "600222",
+          "stock_abbr": "太龙药业",
+          "cost_revenue_ratio": 0.7570994574793025
+        },
+        {
+          "stock_code": "002166",
+          "stock_abbr": "莱茵生物",
+          "cost_revenue_ratio": 0.7499874279374572
+        },
+        {
+          "stock_code": "603139",
+          "stock_abbr": "康惠制药",
+          "cost_revenue_ratio": 0.7355326143747279
+        },
+        {
+          "stock_code": "002219",
+          "stock_abbr": "新里程",
+          "cost_revenue_ratio": 0.7308260767975637
+        },
+        {
+          "stock_code": "600129",
+          "stock_abbr": "太极集团",
+          "cost_revenue_ratio": 0.7144061759919319
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": null,
+      "sort_ascending": true,
+      "top_n": 10,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "cost_revenue_ratio",
+        "data_type": "quantitative",
+        "label": "cost_revenue_ratio",
+        "unit": "%"
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B1062_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1062_1.jpg"
+    },
+    "meta": {
+      "source_sql": "WITH cost_ratio AS (\n  SELECT stock_code, stock_abbr, report_period, operating_expense_cost_of_sales, total_operating_revenue,\n         CASE WHEN total_operating_revenue > 0 THEN operating_expense_cost_of_sales / total_operating_revenue ELSE NULL END AS cost_revenue_ratio\n  FROM financials_view\n  WHERE report_period = '2025Q3'\n    AND total_operating_revenue IS NOT NULL\n    AND operating_expense_cost_of_sales IS NOT NULL\n)\nSELECT stock_code, stock_abbr, cost_revenue_ratio\nFROM cost_ratio\nWHERE cost_revenue_ratio IS NOT NULL\nORDER BY cost_revenue_ratio DESC\nLIMIT 10",
+      "value_fields": [
+        "cost_revenue_ratio"
+      ],
+      "value_labels": [
+        "cost_revenue_ratio"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "cost_revenue_ratio"
+        ],
+        "category_field": "stock_abbr",
+        "sort_by": null,
+        "sort_ascending": true,
+        "top_n": 10
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1062_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1062_1.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "分析2025年第三季度营业成本占营业总收入的比例排名后十的公司，用条形图展示占比数值",
+      "A": {
+        "content": "2025年第三季度，营业成本占营业总收入比例最高的后十家公司（即占比最高的前十名）及其比例如下：\n1. 瑞康医药（002589）：88.45%\n2. 维康药业（300878）：84.66%\n3. 信邦制药（002390）：82.56%\n4. 白云山（600332）：82.40%\n5. 康美药业（600518）：80.93%\n6. 太龙药业（600222）：75.71%\n7. 莱茵生物（002166）：75.00%\n8. 康惠制药（603139）：73.55%\n9. 新里程（002219）：73.08%\n10. 太极集团（600129）：71.44%\n\n这些公司的成本占比均超过70%，其中瑞康医药的占比最高，接近88.5%。",
+        "image": [
+          "./result/B1062_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"分析2025年第三季度营业成本占营业总收入的比例排名后十的公司，用条形图展示占比数值\", \"A\": {\"content\": \"2025年第三季度，营业成本占营业总收入比例最高的后十家公司（即占比最高的前十名）及其比例如下：\\n1. 瑞康医药（002589）：88.45%\\n2. 维康药业（300878）：84.66%\\n3. 信邦制药（002390）：82.56%\\n4. 白云山（600332）：82.40%\\n5. 康美药业（600518）：80.93%\\n6. 太龙药业（600222）：75.71%\\n7. 莱茵生物（002166）：75.00%\\n8. 康惠制药（603139）：73.55%\\n9. 新里程（002219）：73.08%\\n10. 太极集团（600129）：71.44%\\n\\n这些公司的成本占比均超过70%，其中瑞康医药的占比最高，接近88.5%。\", \"image\": [\"./result/B1062_1.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，需要计算2025Q3营业成本占营业总收入的比例，并取排名后十（即比例最高的十家公司）。由于查询计划中unsupported_metrics包含'营业成本'，但schema中有operating_expense_cost_of_sales字段，因此使用该字段代表营业成本。计算比例时需注意分母不为零，并按比例降序排列以获取最高的十家。结果包含公司代码和简称，用于条形图展示。"
+  ],
+  "final_status": "ok"
+}

@@ -4,13 +4,13 @@
 
 任务二当前主实现为：
 
-- [src/task2_langgraph](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task2_langgraph)
+- [src/task2_langgraph](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/src/task2_langgraph)
 
 它已经完全替代旧版普通任务二实现，当前仓库只保留 LangGraph 版本。
 
 主入口：
 
-- [run_task2_langgraph.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/run_task2_langgraph.py)
+- [run_task2_langgraph.py](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/run_task2_langgraph.py)
 
 任务二当前已经完成从“脚本化问数”到“**显式状态图工作流**”的迁移，现阶段重点不再是重构架构，而是：
 
@@ -35,9 +35,9 @@
 
 当前模块读取：
 
-- [附件4：问题汇总.xlsx](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/正式数据/附件4：问题汇总.xlsx)
-- [附件1：中药上市公司基本信息（截至到2025年12月22日）.xlsx](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/正式数据/附件1：中药上市公司基本信息（截至到2025年12月22日）.xlsx)
-- [outputs/task1/task1_financials.db](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/outputs/task1/task1_financials.db)
+- [附件4：问题汇总.xlsx](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件4：问题汇总.xlsx)
+- [附件1：中药上市公司基本信息（截至到2025年12月22日）.xlsx](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件1：中药上市公司基本信息（截至到2025年12月22日）.xlsx)
+- [outputs/task1/task1_financials.db](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task1/task1_financials.db)
 
 其中数据库会在运行时拼成统一宽表视图：
 
@@ -47,28 +47,43 @@
 
 ## 2.1 最新运行状态
 
-最近一轮 task2 全量结果已经做到：
+当前任务二正式输出目录为：
+
+- [outputs/task2_langgraph](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph)
+
+正式结果文件：
+
+- [result_2.xlsx](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/result_2.xlsx)
+- [task2_langgraph_results.csv](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/task2_langgraph_results.csv)
+- [task2_langgraph_summary.json](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/task2_langgraph_summary.json)
+- [任务二建模与求解（论文版）.md](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/docs/任务二建模与求解（论文版）.md)
+
+最近一轮正式结果已经做到：
 
 - `70` 题全部导出非空回答
 - 当前 summary 为：
-  - `ok = 61`
-  - `warning = 9`
+  - `ok = 69`
+  - `warning = 1`
   - `error = 0`
 
-也就是说，任务二现在的主要问题已经不是“跑不出来”或“空白结果”，而是：
+当前仅剩的 `warning` 为：
 
-- 少量复杂题的图表类型不够理想
-- 个别复杂 SQL / 解释型回答仍需收口
+- `B1063`
 
-最近还补了两类工程兜底：
+其原因不是 SQL bug 或回答链路失败，而是任务一数据库当前仅有 `1` 家公司同时具备 `2022Q3 / 2023Q3 / 2024Q3 / 2025Q3` 的完整可比营业总收入数据，因此无法形成题目要求的行业复合增长率分布直方图。
 
-1. 运行异常自动补结构化答案，避免导出空白
-2. 图表节点和回答节点失败时自动降级，不再整题炸掉
+最近这轮收口后，已经补齐的典型问题包括：
 
-另外，针对 `B1057` 这类题，最近补了：
-
-- 散点图 chart plan / chart spec / renderer 支持
-- 避免被错误退化成表格
+1. `B1008 / B1015 / B1039`
+   - 空结果不再一律报 warning，而是输出“数据库当前无符合条件记录”的有效回答。
+2. `B1034`
+   - 补齐 `Q2 / Q4` 单季度派生逻辑，并修正 `Q3` 环比必须使用“单季度值”而非累计值。
+3. `B1043`
+   - 用 SQLite 兼容的窗口函数中位数写法替代 `PERCENTILE_CONT`。
+4. `B1046`
+   - 第二问不再只给数量，能够列出两家公司名称及资产负债率。
+5. `B1066 / B1069`
+   - 多轮澄清与回答收口更自然，不再出现前一问完全失焦、后一问单独作答的割裂感。
 
 ---
 
@@ -127,9 +142,9 @@
 但还需要继续收口：
 
 1. 少数题型的图表表达
-2. 澄清门控过宽 / 过窄
-3. 个别回答完整性兜底
-4. 任务一脏数据导致的异常结果
+2. 个别多轮问题第一问的承接式回答风格
+3. 行业分布题对底层覆盖不足的解释方式
+4. 任务一数据覆盖边界导致的少量无解题
 
 当前暂不把性能优化作为主线，性能问题已记为后续待办。
 
@@ -174,24 +189,24 @@ python3 run_test_question_sets.py --skip-task3
 ## 6. 关键文件
 
 - 主入口：
-  - [run_task2_langgraph.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/run_task2_langgraph.py)
+  - [run_task2_langgraph.py](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/run_task2_langgraph.py)
 - 配置：
-  - [src/task2_langgraph/config/settings.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task2_langgraph/config/settings.py)
+  - [src/task2_langgraph/config/settings.py](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/src/task2_langgraph/config/settings.py)
 - 解析器：
-  - [src/task2_langgraph/services/parser.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task2_langgraph/services/parser.py)
+  - [src/task2_langgraph/services/parser.py](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/src/task2_langgraph/services/parser.py)
 - 运行时：
-  - [src/task2_langgraph/tools/runtime.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task2_langgraph/tools/runtime.py)
+  - [src/task2_langgraph/tools/runtime.py](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/src/task2_langgraph/tools/runtime.py)
 - 图表：
-  - [src/task2_langgraph/tools/charts.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task2_langgraph/tools/charts.py)
-  - [src/task2_langgraph/tools/chart_spec.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task2_langgraph/tools/chart_spec.py)
+  - [src/task2_langgraph/tools/charts.py](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/src/task2_langgraph/tools/charts.py)
+  - [src/task2_langgraph/tools/chart_spec.py](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/src/task2_langgraph/tools/chart_spec.py)
 - 节点：
-  - [src/task2_langgraph/nodes/workflow.py](/Users/yijiawen/YJW/竞赛/泰迪杯/最终选题/src/task2_langgraph/nodes/workflow.py)
+  - [src/task2_langgraph/nodes/workflow.py](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/src/task2_langgraph/nodes/workflow.py)
 
 ---
 
 ## 7. 当前判断
 
-**任务二已经达到可初步提交状态。**
+**任务二当前已经达到可正式提交状态。**
 
 当前后续工作的重点不是继续搭框架，而是：
 

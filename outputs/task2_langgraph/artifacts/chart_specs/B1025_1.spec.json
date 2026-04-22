@@ -1,0 +1,78 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1025",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "2025Q3 投资性现金流量净额为正的营收前三公司",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 3,
+    "preview_rows": [
+      {
+        "stock_abbr": "片仔癀",
+        "investing_cf_net_amount": 142777.203731
+      },
+      {
+        "stock_abbr": "天士力",
+        "investing_cf_net_amount": 14088.595025999999
+      },
+      {
+        "stock_abbr": "东阿阿胶",
+        "investing_cf_net_amount": 81312.033906
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": null,
+    "sort_ascending": true,
+    "top_n": 3,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "investing_cf_net_amount",
+      "data_type": "quantitative",
+      "label": "投资性现金流量净额",
+      "unit": "万元"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1025_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1025_1.jpg"
+  },
+  "meta": {
+    "source_sql": "WITH positive_investing AS (\n    SELECT stock_code, stock_abbr, investing_cf_net_amount, total_operating_revenue\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n      AND investing_cf_net_amount > 0\n)\nSELECT stock_abbr, investing_cf_net_amount\nFROM positive_investing\nORDER BY total_operating_revenue DESC\nLIMIT 3;",
+    "value_fields": [
+      "investing_cf_net_amount"
+    ],
+    "value_labels": [
+      "投资性现金流量净额"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "investing_cf_net_amount"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": null,
+      "sort_ascending": true,
+      "top_n": 3
+    }
+  }
+}

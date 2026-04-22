@@ -1,0 +1,81 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1023",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "2022-2025Q3营业总收入复合增长率前三名",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 3,
+    "preview_rows": [
+      {
+        "stock_code": "300534",
+        "stock_abbr": "陇神戎发",
+        "compound_growth_rate_percent": 16.13
+      },
+      {
+        "stock_code": "600671",
+        "stock_abbr": "天目药业",
+        "compound_growth_rate_percent": 13.43
+      },
+      {
+        "stock_code": "300181",
+        "stock_abbr": "佐力药业",
+        "compound_growth_rate_percent": 8.09
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": null,
+    "sort_ascending": false,
+    "top_n": 3,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "compound_growth_rate_percent",
+      "data_type": "quantitative",
+      "label": "compound_growth_rate_percent",
+      "unit": "%"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1023_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1023_1.jpg"
+  },
+  "meta": {
+    "source_sql": "WITH base AS (\n    SELECT\n        stock_code,\n        stock_abbr,\n        MAX(CASE WHEN report_period = '2022FY' THEN total_operating_revenue END) AS revenue_2022,\n        MAX(CASE WHEN report_period = '2025Q3' THEN total_operating_revenue END) AS revenue_2025q3\n    FROM financials_view\n    WHERE report_period IN ('2022FY', '2025Q3')\n    GROUP BY stock_code, stock_abbr\n    HAVING revenue_2022 IS NOT NULL AND revenue_2022 > 0 AND revenue_2025q3 IS NOT NULL\n)\nSELECT\n    stock_code,\n    stock_abbr,\n    ROUND(POWER(revenue_2025q3 / revenue_2022, 1.0 / 3.0) - 1, 4) * 100 AS compound_growth_rate_percent\nFROM base\nORDER BY compound_growth_rate_percent DESC\nLIMIT 3",
+    "value_fields": [
+      "compound_growth_rate_percent"
+    ],
+    "value_labels": [
+      "compound_growth_rate_percent"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "compound_growth_rate_percent"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": null,
+      "sort_ascending": false,
+      "top_n": 3
+    }
+  }
+}

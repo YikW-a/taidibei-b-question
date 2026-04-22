@@ -1,0 +1,138 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1043",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "2025Q3 净利润高于中位数且毛利率低于均值的公司",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 13,
+    "preview_rows": [
+      {
+        "stock_code": "000538",
+        "stock_abbr": "云南白药",
+        "net_profit": 477711.965747,
+        "gross_profit_margin": 30.05989436448057
+      },
+      {
+        "stock_code": "600332",
+        "stock_abbr": "白云山",
+        "net_profit": 331005.207786,
+        "gross_profit_margin": 17.604173963320054
+      },
+      {
+        "stock_code": "600436",
+        "stock_abbr": "片仔癀",
+        "net_profit": 212934.76773800002,
+        "gross_profit_margin": 38.929751841546285
+      },
+      {
+        "stock_code": "600085",
+        "stock_abbr": "同仁堂",
+        "net_profit": 117755.58453,
+        "gross_profit_margin": 43.86196562591137
+      },
+      {
+        "stock_code": "600993",
+        "stock_abbr": "马应龙",
+        "net_profit": 50101.071743,
+        "gross_profit_margin": 49.08522193717266
+      },
+      {
+        "stock_code": "000650",
+        "stock_abbr": "仁和药业",
+        "net_profit": 37913.517706,
+        "gross_profit_margin": 36.42594460500288
+      },
+      {
+        "stock_code": "600422",
+        "stock_abbr": "昆药集团",
+        "net_profit": 26936.779435000004,
+        "gross_profit_margin": 39.41940037641872
+      },
+      {
+        "stock_code": "600351",
+        "stock_abbr": "亚宝药业",
+        "net_profit": 21509.429385,
+        "gross_profit_margin": 52.134753777800114
+      },
+      {
+        "stock_code": "600479",
+        "stock_abbr": "千金药业",
+        "net_profit": 18735.517374000003,
+        "gross_profit_margin": 49.87408091159749
+      },
+      {
+        "stock_code": "002349",
+        "stock_abbr": "精华制药",
+        "net_profit": 17637.268212,
+        "gross_profit_margin": 52.659157812806555
+      },
+      {
+        "stock_code": "600129",
+        "stock_abbr": "太极集团",
+        "net_profit": 16590.530672,
+        "gross_profit_margin": 28.559382400806815
+      },
+      {
+        "stock_code": "002390",
+        "stock_abbr": "信邦制药",
+        "net_profit": 15232.4953,
+        "gross_profit_margin": 17.44163192493972
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "net_profit",
+    "sort_ascending": false,
+    "top_n": 13,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "net_profit",
+      "data_type": "quantitative",
+      "label": "净利润",
+      "unit": "万元"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1043_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1043_1.jpg"
+  },
+  "meta": {
+    "source_sql": "WITH ranked AS ( SELECT stock_code, stock_abbr, net_profit, gross_profit_margin, ROW_NUMBER() OVER (ORDER BY net_profit) AS rn, COUNT(*) OVER () AS cnt FROM financials_view WHERE report_period = '2025Q3'), median_rows AS ( SELECT AVG(net_profit) AS median_net_profit FROM ranked WHERE rn IN ((cnt + 1) / 2, (cnt + 2) / 2)), industry_avg AS ( SELECT AVG(gross_profit_margin) AS avg_gross_margin FROM ranked) SELECT r.stock_code, r.stock_abbr, r.net_profit, r.gross_profit_margin FROM ranked r CROSS JOIN median_rows m CROSS JOIN industry_avg a WHERE r.net_profit > m.median_net_profit AND r.gross_profit_margin < a.avg_gross_margin ORDER BY r.net_profit DESC",
+    "value_fields": [
+      "net_profit"
+    ],
+    "value_labels": [
+      "净利润"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "net_profit"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": "net_profit",
+      "sort_ascending": false,
+      "top_n": 13
+    }
+  }
+}

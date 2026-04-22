@@ -1,0 +1,84 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1059",
+  "image_index": 1,
+  "chart_type": "line",
+  "title": "片仔癀2022-2025年第三季度扣非净利润占净利润比例变化",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 3,
+    "preview_rows": [
+      {
+        "report_period": "2023Q3",
+        "net_profit_excl_non_recurring": 244082.852221,
+        "net_profit": 240464.84146,
+        "ratio": 101.50459033388539
+      },
+      {
+        "report_period": "2024Q3",
+        "net_profit_excl_non_recurring": 271548.637265,
+        "net_profit": 268668.474325,
+        "ratio": 101.07201373262573
+      },
+      {
+        "report_period": "2025Q3",
+        "net_profit_excl_non_recurring": 189064.540872,
+        "net_profit": 212934.76773800002,
+        "ratio": 88.7898875699949
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "report_period",
+    "sort_ascending": true,
+    "top_n": null,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "ratio",
+      "data_type": "quantitative",
+      "label": "ratio",
+      "unit": "%"
+    },
+    "x": {
+      "field": "report_period",
+      "data_type": "temporal",
+      "label": "报告期",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": false
+  },
+  "output": {
+    "filename": "B1059_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1059_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT report_period, net_profit_excl_non_recurring, net_profit, (net_profit_excl_non_recurring / NULLIF(net_profit, 0)) * 100 AS ratio FROM financials_view WHERE stock_abbr = '片仔癀' AND report_period IN ('2022Q3', '2023Q3', '2024Q3', '2025Q3') ORDER BY report_period",
+    "value_fields": [
+      "ratio"
+    ],
+    "value_labels": [
+      "ratio"
+    ],
+    "original_chart_plan": {
+      "chart_type": "line",
+      "x_field": "report_period",
+      "y_fields": [
+        "ratio"
+      ],
+      "category_field": null,
+      "sort_by": "report_period",
+      "sort_ascending": true,
+      "top_n": null
+    }
+  }
+}

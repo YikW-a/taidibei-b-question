@@ -1,0 +1,101 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1042",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "2025Q3研发费用占比Top5",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 5,
+    "preview_rows": [
+      {
+        "stock_code": "300869",
+        "stock_abbr": "康泰医学",
+        "研发费用": 6907.073531999999,
+        "营业总收入": 34399.269271,
+        "研发费用占比": 20.08
+      },
+      {
+        "stock_code": "600557",
+        "stock_abbr": "康缘药业",
+        "研发费用": 35163.770225,
+        "营业总收入": 234268.838058,
+        "研发费用占比": 15.01
+      },
+      {
+        "stock_code": "603896",
+        "stock_abbr": "寿仙谷",
+        "研发费用": 4209.165884,
+        "营业总收入": 43013.821939999994,
+        "研发费用占比": 9.79
+      },
+      {
+        "stock_code": "002907",
+        "stock_abbr": "华森制药",
+        "研发费用": 5924.020624,
+        "营业总收入": 62591.202387,
+        "研发费用占比": 9.46
+      },
+      {
+        "stock_code": "002603",
+        "stock_abbr": "以岭药业",
+        "研发费用": 54401.286124,
+        "营业总收入": 586760.307361,
+        "研发费用占比": 9.27
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "研发费用占比",
+    "sort_ascending": false,
+    "top_n": 5,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "研发费用占比",
+      "data_type": "quantitative",
+      "label": "研发费用占比",
+      "unit": "%"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1042_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1042_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT stock_code, stock_abbr, operating_expense_rnd_expenses AS 研发费用, total_operating_revenue AS 营业总收入, ROUND(rnd_expense_ratio, 2) AS 研发费用占比 FROM financials_view WHERE report_period = '2025Q3' AND rnd_expense_ratio IS NOT NULL ORDER BY rnd_expense_ratio DESC LIMIT 5",
+    "value_fields": [
+      "研发费用占比"
+    ],
+    "value_labels": [
+      "研发费用占比"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "研发费用占比"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": "研发费用占比",
+      "sort_ascending": false,
+      "top_n": 5
+    }
+  }
+}

@@ -1,0 +1,250 @@
+{
+  "question_id": "B1024",
+  "question_type": "数据统计分析查询",
+  "raw_question": "2025年第三季度，“扣非净利润”与“净利润”的差值绝对值最大的5家公司是哪些？请列出简称、净利润（万元）、扣非净利润（万元）及差值。",
+  "raw_question_json": "[{\"Q\":\"2025年第三季度，“扣非净利润”与“净利润”的差值绝对值最大的5家公司是哪些？请列出简称、净利润（万元）、扣非净利润（万元）及差值。\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "净利润"
+    ],
+    "chart_type": null,
+    "intent_type": "filter",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "ranking",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "净利润",
+      "扣非净利润"
+    ],
+    "chart_type": "table",
+    "top_n": 5,
+    "threshold": null,
+    "question": "2025年第三季度，“扣非净利润”与“净利润”的差值绝对值最大的5家公司是哪些？请列出简称、净利润（万元）、扣非净利润（万元）及差值。",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": [],
+    "unsupported_metrics": [
+      "扣非净利润"
+    ]
+  },
+  "sql": "WITH diff_cte AS (\n    SELECT\n        stock_abbr,\n        net_profit AS 净利润,\n        net_profit_excl_non_recurring AS 扣非净利润,\n        ABS(net_profit - net_profit_excl_non_recurring) AS 差值\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n        AND net_profit IS NOT NULL\n        AND net_profit_excl_non_recurring IS NOT NULL\n)\nSELECT\n    stock_abbr AS 简称,\n    净利润,\n    扣非净利润,\n    差值\nFROM diff_cte\nORDER BY 差值 DESC\nLIMIT 5",
+  "sql_history": [
+    "WITH diff_cte AS (\n    SELECT\n        stock_abbr,\n        net_profit AS 净利润,\n        net_profit_excl_non_recurring AS 扣非净利润,\n        ABS(net_profit - net_profit_excl_non_recurring) AS 差值\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n        AND net_profit IS NOT NULL\n        AND net_profit_excl_non_recurring IS NOT NULL\n)\nSELECT\n    stock_abbr AS 简称,\n    净利润,\n    扣非净利润,\n    差值\nFROM diff_cte\nORDER BY 差值 DESC\nLIMIT 5"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 5,
+  "result_rows": [
+    {
+      "简称": "云南白药",
+      "净利润": 477711.965747,
+      "扣非净利润": 108902.38374300001,
+      "差值": 368809.58200399997
+    },
+    {
+      "简称": "华润三九",
+      "净利润": 235282.69556599998,
+      "扣非净利润": 218.6279,
+      "差值": 235064.067666
+    },
+    {
+      "简称": "达仁堂",
+      "净利润": 215218.218452,
+      "扣非净利润": 81812.965748,
+      "差值": 133405.25270399998
+    },
+    {
+      "简称": "东阿阿胶",
+      "净利润": 127382.009544,
+      "扣非净利润": 36762.210951,
+      "差值": 90619.798593
+    },
+    {
+      "简称": "奇正藏药",
+      "净利润": 42351.903245999994,
+      "扣非净利润": -754.4342429999999,
+      "差值": 43106.337489
+    }
+  ],
+  "context_companies": [],
+  "context_rows": [
+    {
+      "简称": "云南白药",
+      "净利润": 477711.965747,
+      "扣非净利润": 108902.38374300001,
+      "差值": 368809.58200399997
+    },
+    {
+      "简称": "华润三九",
+      "净利润": 235282.69556599998,
+      "扣非净利润": 218.6279,
+      "差值": 235064.067666
+    },
+    {
+      "简称": "达仁堂",
+      "净利润": 215218.218452,
+      "扣非净利润": 81812.965748,
+      "差值": 133405.25270399998
+    },
+    {
+      "简称": "东阿阿胶",
+      "净利润": 127382.009544,
+      "扣非净利润": 36762.210951,
+      "差值": 90619.798593
+    },
+    {
+      "简称": "奇正藏药",
+      "净利润": 42351.903245999994,
+      "扣非净利润": -754.4342429999999,
+      "差值": 43106.337489
+    }
+  ],
+  "result_preview": "[{\"简称\":\"云南白药\",\"净利润\":477711.965747,\"扣非净利润\":108902.383743,\"差值\":368809.582004},{\"简称\":\"华润三九\",\"净利润\":235282.695566,\"扣非净利润\":218.6279,\"差值\":235064.067666},{\"简称\":\"达仁堂\",\"净利润\":215218.218452,\"扣非净利润\":81812.965748,\"差值\":133405.252704},{\"简称\":\"东阿阿胶\",\"净利润\":127382.009544,\"扣非净利润\":36762.210951,\"差值\":90619.798593},{\"简称\":\"奇正藏药\",\"净利润\":42351.903246,\"扣非净利润\":-754.434243,\"差值\":43106.337489}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2025Q3 扣非净利润与净利润差值最大的5家公司",
+    "x_field": null,
+    "y_fields": [
+      "差值"
+    ],
+    "category_field": "简称",
+    "sort_by": "差值",
+    "sort_ascending": false,
+    "top_n": null,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1024",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "2025Q3 扣非净利润与净利润差值最大的5家公司",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 5,
+      "preview_rows": [
+        {
+          "简称": "云南白药",
+          "净利润": 477711.965747,
+          "扣非净利润": 108902.38374300001,
+          "差值": 368809.58200399997
+        },
+        {
+          "简称": "华润三九",
+          "净利润": 235282.69556599998,
+          "扣非净利润": 218.6279,
+          "差值": 235064.067666
+        },
+        {
+          "简称": "达仁堂",
+          "净利润": 215218.218452,
+          "扣非净利润": 81812.965748,
+          "差值": 133405.25270399998
+        },
+        {
+          "简称": "东阿阿胶",
+          "净利润": 127382.009544,
+          "扣非净利润": 36762.210951,
+          "差值": 90619.798593
+        },
+        {
+          "简称": "奇正藏药",
+          "净利润": 42351.903245999994,
+          "扣非净利润": -754.4342429999999,
+          "差值": 43106.337489
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "差值",
+      "sort_ascending": false,
+      "top_n": null,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "差值",
+        "data_type": "quantitative",
+        "label": "差值",
+        "unit": "万元"
+      },
+      "category": {
+        "field": "简称",
+        "data_type": "nominal",
+        "label": "简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B1024_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1024_1.jpg"
+    },
+    "meta": {
+      "source_sql": "WITH diff_cte AS (\n    SELECT\n        stock_abbr,\n        net_profit AS 净利润,\n        net_profit_excl_non_recurring AS 扣非净利润,\n        ABS(net_profit - net_profit_excl_non_recurring) AS 差值\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n        AND net_profit IS NOT NULL\n        AND net_profit_excl_non_recurring IS NOT NULL\n)\nSELECT\n    stock_abbr AS 简称,\n    净利润,\n    扣非净利润,\n    差值\nFROM diff_cte\nORDER BY 差值 DESC\nLIMIT 5",
+      "value_fields": [
+        "差值"
+      ],
+      "value_labels": [
+        "差值"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "差值"
+        ],
+        "category_field": "简称",
+        "sort_by": "差值",
+        "sort_ascending": false,
+        "top_n": null
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1024_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1024_1.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "2025年第三季度，“扣非净利润”与“净利润”的差值绝对值最大的5家公司是哪些？请列出简称、净利润（万元）、扣非净利润（万元）及差值。",
+      "A": {
+        "content": "2025年第三季度，扣非净利润与净利润差值绝对值最大的5家公司如下：\n1. 云南白药：净利润为477,711.97万元，扣非净利润为108,902.38万元，差值为368,809.58万元。\n2. 华润三九：净利润为235,282.70万元，扣非净利润为218.63万元，差值为235,064.07万元。\n3. 达仁堂：净利润为215,218.22万元，扣非净利润为81,812.97万元，差值为133,405.25万元。\n4. 东阿阿胶：净利润为127,382.01万元，扣非净利润为36,762.21万元，差值为90,619.80万元。\n5. 奇正藏药：净利润为42,351.90万元，扣非净利润为-754.43万元，差值为43,106.34万元。",
+        "image": [
+          "./result/B1024_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"2025年第三季度，“扣非净利润”与“净利润”的差值绝对值最大的5家公司是哪些？请列出简称、净利润（万元）、扣非净利润（万元）及差值。\", \"A\": {\"content\": \"2025年第三季度，扣非净利润与净利润差值绝对值最大的5家公司如下：\\n1. 云南白药：净利润为477,711.97万元，扣非净利润为108,902.38万元，差值为368,809.58万元。\\n2. 华润三九：净利润为235,282.70万元，扣非净利润为218.63万元，差值为235,064.07万元。\\n3. 达仁堂：净利润为215,218.22万元，扣非净利润为81,812.97万元，差值为133,405.25万元。\\n4. 东阿阿胶：净利润为127,382.01万元，扣非净利润为36,762.21万元，差值为90,619.80万元。\\n5. 奇正藏药：净利润为42,351.90万元，扣非净利润为-754.43万元，差值为43,106.34万元。\", \"image\": [\"./result/B1024_1.jpg\"]}}]",
+  "notes": [
+    "查询计划要求：排名题，期间为2025Q3，指标为净利润和扣非净利润，取Top 5。扣非净利润对应字段为 net_profit_excl_non_recurring。需要计算两者差值的绝对值，并按该差值降序排列取前5名。结果需包含简称、净利润、扣非净利润及差值。"
+  ],
+  "final_status": "ok"
+}

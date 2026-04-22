@@ -1,0 +1,457 @@
+{
+  "question_id": "B1007",
+  "question_type": "数据统计分析查询",
+  "raw_question": "哪些企业是亏钱的？ | “亏钱”在业务场景中，指的是经审计财务报表的核心利润指标为负的数据。",
+  "raw_question_json": "[{\"Q\":\"哪些企业是亏钱的？\"},{\"Q\":\"“亏钱”在业务场景中，指的是经审计财务报表的核心利润指标为负的数据。\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [],
+    "metrics": [
+      "净利润"
+    ],
+    "chart_type": null,
+    "intent_type": "filter",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "filter",
+    "companies": [],
+    "periods": [],
+    "metrics": [
+      "净利润"
+    ],
+    "chart_type": "table",
+    "top_n": null,
+    "threshold": 0,
+    "question": "“亏钱”在业务场景中，指的是经审计财务报表的核心利润指标为负的数据。",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT DISTINCT stock_code, stock_abbr FROM financials_view WHERE net_profit < 0",
+  "sql_history": [
+    "SELECT DISTINCT stock_code, stock_abbr, report_period, net_profit FROM financials_view WHERE net_profit < 0 ORDER BY report_period DESC, stock_code",
+    "SELECT DISTINCT stock_code, stock_abbr FROM financials_view WHERE net_profit < 0"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 27,
+  "result_rows": [
+    {
+      "stock_code": "000590",
+      "stock_abbr": "启迪药业"
+    },
+    {
+      "stock_code": "000790",
+      "stock_abbr": "华神科技"
+    },
+    {
+      "stock_code": "002082",
+      "stock_abbr": "万邦德"
+    },
+    {
+      "stock_code": "002219",
+      "stock_abbr": "新里程"
+    },
+    {
+      "stock_code": "002317",
+      "stock_abbr": "众生药业"
+    },
+    {
+      "stock_code": "002424",
+      "stock_abbr": "贵州百灵"
+    },
+    {
+      "stock_code": "002589",
+      "stock_abbr": "瑞康医药"
+    },
+    {
+      "stock_code": "002603",
+      "stock_abbr": "以岭药业"
+    },
+    {
+      "stock_code": "002737",
+      "stock_abbr": "葵花药业"
+    },
+    {
+      "stock_code": "002898",
+      "stock_abbr": "赛隆药业"
+    },
+    {
+      "stock_code": "300147",
+      "stock_abbr": "香雪制药"
+    },
+    {
+      "stock_code": "300158",
+      "stock_abbr": "振东制药"
+    },
+    {
+      "stock_code": "300391",
+      "stock_abbr": "长药控股"
+    },
+    {
+      "stock_code": "300869",
+      "stock_abbr": "康泰医学"
+    },
+    {
+      "stock_code": "300878",
+      "stock_abbr": "维康药业"
+    },
+    {
+      "stock_code": "301111",
+      "stock_abbr": "粤万年青"
+    },
+    {
+      "stock_code": "600080",
+      "stock_abbr": "金花股份"
+    },
+    {
+      "stock_code": "600222",
+      "stock_abbr": "太龙药业"
+    },
+    {
+      "stock_code": "600252",
+      "stock_abbr": "中恒集团"
+    },
+    {
+      "stock_code": "600518",
+      "stock_abbr": "康美药业"
+    },
+    {
+      "stock_code": "600535",
+      "stock_abbr": "天士力"
+    },
+    {
+      "stock_code": "600594",
+      "stock_abbr": "益佰制药"
+    },
+    {
+      "stock_code": "600671",
+      "stock_abbr": "天目药业"
+    },
+    {
+      "stock_code": "600771",
+      "stock_abbr": "广誉远"
+    },
+    {
+      "stock_code": "603139",
+      "stock_abbr": "康惠制药"
+    },
+    {
+      "stock_code": "603567",
+      "stock_abbr": "珍宝岛"
+    },
+    {
+      "stock_code": "603858",
+      "stock_abbr": "步长制药"
+    }
+  ],
+  "context_companies": [
+    "启迪药业",
+    "华神科技",
+    "万邦德",
+    "新里程",
+    "众生药业",
+    "贵州百灵",
+    "瑞康医药",
+    "以岭药业",
+    "葵花药业",
+    "赛隆药业",
+    "香雪制药",
+    "振东制药",
+    "长药控股",
+    "康泰医学",
+    "维康药业",
+    "粤万年青",
+    "金花股份",
+    "太龙药业",
+    "中恒集团",
+    "康美药业",
+    "天士力",
+    "益佰制药",
+    "天目药业",
+    "广誉远",
+    "康惠制药",
+    "珍宝岛",
+    "步长制药"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "000590",
+      "stock_abbr": "启迪药业"
+    },
+    {
+      "stock_code": "000790",
+      "stock_abbr": "华神科技"
+    },
+    {
+      "stock_code": "002082",
+      "stock_abbr": "万邦德"
+    },
+    {
+      "stock_code": "002219",
+      "stock_abbr": "新里程"
+    },
+    {
+      "stock_code": "002317",
+      "stock_abbr": "众生药业"
+    },
+    {
+      "stock_code": "002424",
+      "stock_abbr": "贵州百灵"
+    },
+    {
+      "stock_code": "002589",
+      "stock_abbr": "瑞康医药"
+    },
+    {
+      "stock_code": "002603",
+      "stock_abbr": "以岭药业"
+    },
+    {
+      "stock_code": "002737",
+      "stock_abbr": "葵花药业"
+    },
+    {
+      "stock_code": "002898",
+      "stock_abbr": "赛隆药业"
+    },
+    {
+      "stock_code": "300147",
+      "stock_abbr": "香雪制药"
+    },
+    {
+      "stock_code": "300158",
+      "stock_abbr": "振东制药"
+    },
+    {
+      "stock_code": "300391",
+      "stock_abbr": "长药控股"
+    },
+    {
+      "stock_code": "300869",
+      "stock_abbr": "康泰医学"
+    },
+    {
+      "stock_code": "300878",
+      "stock_abbr": "维康药业"
+    },
+    {
+      "stock_code": "301111",
+      "stock_abbr": "粤万年青"
+    },
+    {
+      "stock_code": "600080",
+      "stock_abbr": "金花股份"
+    },
+    {
+      "stock_code": "600222",
+      "stock_abbr": "太龙药业"
+    },
+    {
+      "stock_code": "600252",
+      "stock_abbr": "中恒集团"
+    },
+    {
+      "stock_code": "600518",
+      "stock_abbr": "康美药业"
+    },
+    {
+      "stock_code": "600535",
+      "stock_abbr": "天士力"
+    },
+    {
+      "stock_code": "600594",
+      "stock_abbr": "益佰制药"
+    },
+    {
+      "stock_code": "600671",
+      "stock_abbr": "天目药业"
+    },
+    {
+      "stock_code": "600771",
+      "stock_abbr": "广誉远"
+    },
+    {
+      "stock_code": "603139",
+      "stock_abbr": "康惠制药"
+    },
+    {
+      "stock_code": "603567",
+      "stock_abbr": "珍宝岛"
+    },
+    {
+      "stock_code": "603858",
+      "stock_abbr": "步长制药"
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"000590\",\"stock_abbr\":\"启迪药业\"},{\"stock_code\":\"000790\",\"stock_abbr\":\"华神科技\"},{\"stock_code\":\"002082\",\"stock_abbr\":\"万邦德\"},{\"stock_code\":\"002219\",\"stock_abbr\":\"新里程\"},{\"stock_code\":\"002317\",\"stock_abbr\":\"众生药业\"},{\"stock_code\":\"002424\",\"stock_abbr\":\"贵州百灵\"},{\"stock_code\":\"002589\",\"stock_abbr\":\"瑞康医药\"},{\"stock_code\":\"002603\",\"stock_abbr\":\"以岭药业\"},{\"stock_code\":\"002737\",\"stock_abbr\":\"葵花药业\"},{\"stock_code\":\"002898\",\"stock_abbr\":\"赛隆药业\"},{\"stock_code\":\"300147\",\"stock_abbr\":\"香雪制药\"},{\"stock_code\":\"300158\",\"stock_abbr\":\"振东制药\"},{\"stock_code\":\"300391\",\"stock_abbr\":\"长药控股\"},{\"stock_code\":\"300869\",\"stock_abbr\":\"康泰医学\"},{\"stock_code\":\"300878\",\"stock_abbr\":\"维康药业\"},{\"stock_code\":\"301111\",\"stock_abbr\":\"粤万年青\"},{\"stock_code\":\"600080\",\"stock_abbr\":\"金花股份\"},{\"stock_code\":\"600222\",\"stock_abbr\":\"太龙药业\"},{\"stock_code\":\"600252\",\"stock_abbr\":\"中恒集团\"},{\"stock_code\":\"600518\",\"stock_abbr\":\"康美药业\"}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "净利润为负的上市公司列表",
+    "x_field": null,
+    "y_fields": [
+      "stock_code"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": "stock_code",
+    "sort_ascending": true,
+    "top_n": 15,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1007",
+    "image_index": 2,
+    "chart_type": "bar",
+    "title": "净利润为负的上市公司列表",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 27,
+      "preview_rows": [
+        {
+          "stock_code": "000590",
+          "stock_abbr": "启迪药业"
+        },
+        {
+          "stock_code": "000790",
+          "stock_abbr": "华神科技"
+        },
+        {
+          "stock_code": "002082",
+          "stock_abbr": "万邦德"
+        },
+        {
+          "stock_code": "002219",
+          "stock_abbr": "新里程"
+        },
+        {
+          "stock_code": "002317",
+          "stock_abbr": "众生药业"
+        },
+        {
+          "stock_code": "002424",
+          "stock_abbr": "贵州百灵"
+        },
+        {
+          "stock_code": "002589",
+          "stock_abbr": "瑞康医药"
+        },
+        {
+          "stock_code": "002603",
+          "stock_abbr": "以岭药业"
+        },
+        {
+          "stock_code": "002737",
+          "stock_abbr": "葵花药业"
+        },
+        {
+          "stock_code": "002898",
+          "stock_abbr": "赛隆药业"
+        },
+        {
+          "stock_code": "300147",
+          "stock_abbr": "香雪制药"
+        },
+        {
+          "stock_code": "300158",
+          "stock_abbr": "振东制药"
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "stock_code",
+      "sort_ascending": true,
+      "top_n": 15,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "stock_code",
+        "data_type": "quantitative",
+        "label": "股票代码",
+        "unit": "万元"
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B1007_2.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1007_2.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT DISTINCT stock_code, stock_abbr FROM financials_view WHERE net_profit < 0",
+      "value_fields": [
+        "stock_code"
+      ],
+      "value_labels": [
+        "股票代码"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "stock_code"
+        ],
+        "category_field": "stock_abbr",
+        "sort_by": "stock_code",
+        "sort_ascending": true,
+        "top_n": 15
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1007_1.spec.json",
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1007_2.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1007_1.jpg",
+    "./result/B1007_2.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "哪些企业是亏钱的？",
+      "A": {
+        "content": "根据查询结果，在2024年第三季度至2025年第三季度期间，出现净利润为负（即亏钱）的企业包括：启迪药业、华神科技、新里程、葵花药业、维康药业、粤万年青、益佰制药、康惠制药、珍宝岛、赛隆药业、香雪制药、长药控股、天目药业。这些公司在不同报告期出现了亏损。",
+        "image": [
+          "./result/B1007_1.jpg"
+        ]
+      }
+    },
+    {
+      "Q": "“亏钱”在业务场景中，指的是经审计财务报表的核心利润指标为负的数据。",
+      "A": {
+        "content": "根据查询结果，共有27家企业净利润为负，即处于“亏钱”状态。这些企业包括：启迪药业、华神科技、万邦德、新里程、众生药业、贵州百灵、瑞康医药、以岭药业、葵花药业、赛隆药业、香雪制药、振东制药、长药控股、康泰医学、维康药业、粤万年青、金花股份、太龙药业、中恒集团、康美药业、天士力、益佰制药、天目药业、广誉远、康惠制药、珍宝岛、步长制药。",
+        "image": [
+          "./result/B1007_2.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"哪些企业是亏钱的？\", \"A\": {\"content\": \"根据查询结果，在2024年第三季度至2025年第三季度期间，出现净利润为负（即亏钱）的企业包括：启迪药业、华神科技、新里程、葵花药业、维康药业、粤万年青、益佰制药、康惠制药、珍宝岛、赛隆药业、香雪制药、长药控股、天目药业。这些公司在不同报告期出现了亏损。\", \"image\": [\"./result/B1007_1.jpg\"]}}, {\"Q\": \"“亏钱”在业务场景中，指的是经审计财务报表的核心利润指标为负的数据。\", \"A\": {\"content\": \"根据查询结果，共有27家企业净利润为负，即处于“亏钱”状态。这些企业包括：启迪药业、华神科技、万邦德、新里程、众生药业、贵州百灵、瑞康医药、以岭药业、葵花药业、赛隆药业、香雪制药、振东制药、长药控股、康泰医学、维康药业、粤万年青、金花股份、太龙药业、中恒集团、康美药业、天士力、益佰制药、天目药业、广誉远、康惠制药、珍宝岛、步长制药。\", \"image\": [\"./result/B1007_2.jpg\"]}}]",
+  "notes": [
+    "问题询问哪些企业亏钱，即净利润为负。根据查询计划，这是一个过滤查询，指标为净利润，阈值为0（即小于0）。由于查询计划中缺少报告期（missing_slots: [\"period\"]），且用户未指定具体时期，因此查询所有报告期。为了清晰展示，选择 DISTINCT 的公司和报告期组合，并按报告期和股票代码排序。",
+    "根据查询计划，意图是筛选净利润为负（即亏钱）的企业。查询计划中 metrics 为 ['净利润']，threshold 为 0，表示筛选 net_profit < 0。由于问题问的是'哪些企业'，需要返回公司标识，且不需要指定具体报告期或公司范围，因此使用 DISTINCT 确保每个公司只出现一次。"
+  ],
+  "final_status": "ok"
+}

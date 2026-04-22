@@ -1,0 +1,82 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1052",
+  "image_index": 1,
+  "chart_type": "pie",
+  "title": "2025Q3中药公司资产负债率分布",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 4,
+    "preview_rows": [
+      {
+        "liability_ratio_group": "0-30%",
+        "company_count": 20
+      },
+      {
+        "liability_ratio_group": "30%-50%",
+        "company_count": 15
+      },
+      {
+        "liability_ratio_group": "50%-70%",
+        "company_count": 1
+      },
+      {
+        "liability_ratio_group": "70%以上",
+        "company_count": 1
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "company_count",
+    "sort_ascending": true,
+    "top_n": 4,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "company_count",
+      "data_type": "quantitative",
+      "label": "company_count",
+      "unit": null
+    },
+    "category": {
+      "field": "liability_ratio_group",
+      "data_type": "nominal",
+      "label": "liability_ratio_group",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 0,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1052_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1052_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT CASE WHEN asset_liability_ratio < 30 THEN '0-30%' WHEN asset_liability_ratio >= 30 AND asset_liability_ratio < 50 THEN '30%-50%' WHEN asset_liability_ratio >= 50 AND asset_liability_ratio < 70 THEN '50%-70%' ELSE '70%以上' END AS liability_ratio_group, COUNT(*) AS company_count FROM financials_view WHERE report_period = '2025Q3' AND stock_abbr IN ('云南白药', '片仔癀', '同仁堂', '白云山', '华润三九', '东阿阿胶', '以岭药业', '天士力', '九芝堂', '太极集团', '中新药业', '康恩贝', '江中药业', '马应龙', '广誉远', '健民集团', '千金药业', '桂林三金', '贵州百灵', '振东制药', '红日药业', '香雪制药', '上海凯宝', '康缘药业', '益佰制药', '众生药业', '华海药业', '浙江震元', '太安堂', '嘉应制药', '紫鑫药业', '吉林敖东', '羚锐制药', '康弘药业', '奇正藏药', '西藏药业', '易明医药', '维康药业', '寿仙谷', '佐力药业', '陇神戎发', '新天药业', '盘龙药业', '特一药业', '贵州三力', '万邦德', '葫芦娃', '粤万年青', '贵州茅台', '五粮液', '泸州老窖', '洋河股份', '山西汾酒', '古井贡酒', '今世缘', '口子窖', '老白干酒', '舍得酒业', '水井坊', '迎驾贡酒', '金徽酒', '伊力特', '青青稞酒', '金种子酒') GROUP BY liability_ratio_group ORDER BY liability_ratio_group",
+    "value_fields": [
+      "company_count"
+    ],
+    "value_labels": [
+      "company_count"
+    ],
+    "original_chart_plan": {
+      "chart_type": "pie",
+      "x_field": null,
+      "y_fields": [
+        "company_count"
+      ],
+      "category_field": "liability_ratio_group",
+      "sort_by": "company_count",
+      "sort_ascending": true,
+      "top_n": 4
+    }
+  }
+}

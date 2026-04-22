@@ -1,0 +1,311 @@
+{
+  "question_id": "B1012",
+  "question_type": "数据统计分析查询",
+  "raw_question": "2025年第三季度，“经营性现金流量净额”为负数且“净利润”为正数的公司有哪些？请列出其股票代码、简称、经营性现金流净额（万元）、净利润（万元）。",
+  "raw_question_json": "[{\"Q\":\"2025年第三季度，“经营性现金流量净额”为负数且“净利润”为正数的公司有哪些？请列出其股票代码、简称、经营性现金流净额（万元）、净利润（万元）。\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "净利润",
+      "经营性现金流量净额"
+    ],
+    "chart_type": null,
+    "intent_type": "filter",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "filter",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "经营性现金流量净额",
+      "净利润"
+    ],
+    "chart_type": "table",
+    "top_n": null,
+    "threshold": null,
+    "question": "2025年第三季度，“经营性现金流量净额”为负数且“净利润”为正数的公司有哪些？请列出其股票代码、简称、经营性现金流净额（万元）、净利润（万元）。",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT stock_code, stock_abbr, operating_cf_net_amount, net_profit FROM financials_view WHERE report_period = '2025Q3' AND operating_cf_net_amount < 0 AND net_profit > 0",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, operating_cf_net_amount, net_profit FROM financials_view WHERE report_period = '2025Q3' AND operating_cf_net_amount < 0 AND net_profit > 0"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 8,
+  "result_rows": [
+    {
+      "stock_code": "002198",
+      "stock_abbr": "嘉应制药",
+      "operating_cf_net_amount": -7122.719233,
+      "net_profit": 2179.4297699999997
+    },
+    {
+      "stock_code": "300158",
+      "stock_abbr": "振东制药",
+      "operating_cf_net_amount": -60273.685057,
+      "net_profit": 2036.406993
+    },
+    {
+      "stock_code": "300534",
+      "stock_abbr": "陇神戎发",
+      "operating_cf_net_amount": -8081.569731999999,
+      "net_profit": 2702.9405739999997
+    },
+    {
+      "stock_code": "600080",
+      "stock_abbr": "金花股份",
+      "operating_cf_net_amount": -5772.128863,
+      "net_profit": 3448.124386
+    },
+    {
+      "stock_code": "600222",
+      "stock_abbr": "太龙药业",
+      "operating_cf_net_amount": -8898.904118,
+      "net_profit": 2532.546125
+    },
+    {
+      "stock_code": "600252",
+      "stock_abbr": "中恒集团",
+      "operating_cf_net_amount": -15639.667388999998,
+      "net_profit": 2464.037494
+    },
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "operating_cf_net_amount": -197197.35860799998,
+      "net_profit": 331005.207786
+    },
+    {
+      "stock_code": "600671",
+      "stock_abbr": "天目药业",
+      "operating_cf_net_amount": -3083.10888,
+      "net_profit": 1420.87966
+    }
+  ],
+  "context_companies": [
+    "嘉应制药",
+    "振东制药",
+    "陇神戎发",
+    "金花股份",
+    "太龙药业",
+    "中恒集团",
+    "白云山",
+    "天目药业"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "002198",
+      "stock_abbr": "嘉应制药",
+      "operating_cf_net_amount": -7122.719233,
+      "net_profit": 2179.4297699999997
+    },
+    {
+      "stock_code": "300158",
+      "stock_abbr": "振东制药",
+      "operating_cf_net_amount": -60273.685057,
+      "net_profit": 2036.406993
+    },
+    {
+      "stock_code": "300534",
+      "stock_abbr": "陇神戎发",
+      "operating_cf_net_amount": -8081.569731999999,
+      "net_profit": 2702.9405739999997
+    },
+    {
+      "stock_code": "600080",
+      "stock_abbr": "金花股份",
+      "operating_cf_net_amount": -5772.128863,
+      "net_profit": 3448.124386
+    },
+    {
+      "stock_code": "600222",
+      "stock_abbr": "太龙药业",
+      "operating_cf_net_amount": -8898.904118,
+      "net_profit": 2532.546125
+    },
+    {
+      "stock_code": "600252",
+      "stock_abbr": "中恒集团",
+      "operating_cf_net_amount": -15639.667388999998,
+      "net_profit": 2464.037494
+    },
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "operating_cf_net_amount": -197197.35860799998,
+      "net_profit": 331005.207786
+    },
+    {
+      "stock_code": "600671",
+      "stock_abbr": "天目药业",
+      "operating_cf_net_amount": -3083.10888,
+      "net_profit": 1420.87966
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"002198\",\"stock_abbr\":\"嘉应制药\",\"operating_cf_net_amount\":-7122.719233,\"net_profit\":2179.42977},{\"stock_code\":\"300158\",\"stock_abbr\":\"振东制药\",\"operating_cf_net_amount\":-60273.685057,\"net_profit\":2036.406993},{\"stock_code\":\"300534\",\"stock_abbr\":\"陇神戎发\",\"operating_cf_net_amount\":-8081.569732,\"net_profit\":2702.940574},{\"stock_code\":\"600080\",\"stock_abbr\":\"金花股份\",\"operating_cf_net_amount\":-5772.128863,\"net_profit\":3448.124386},{\"stock_code\":\"600222\",\"stock_abbr\":\"太龙药业\",\"operating_cf_net_amount\":-8898.904118,\"net_profit\":2532.546125},{\"stock_code\":\"600252\",\"stock_abbr\":\"中恒集团\",\"operating_cf_net_amount\":-15639.667389,\"net_profit\":2464.037494},{\"stock_code\":\"600332\",\"stock_abbr\":\"白云山\",\"operating_cf_net_amount\":-197197.358608,\"net_profit\":331005.207786},{\"stock_code\":\"600671\",\"stock_abbr\":\"天目药业\",\"operating_cf_net_amount\":-3083.10888,\"net_profit\":1420.87966}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2025年第三季度，经营性现金流为负但净利润为正的公司",
+    "x_field": null,
+    "y_fields": [
+      "stock_code"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": "stock_code",
+    "sort_ascending": true,
+    "top_n": 8,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1012",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "2025年第三季度，经营性现金流为负但净利润为正的公司",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 8,
+      "preview_rows": [
+        {
+          "stock_code": "002198",
+          "stock_abbr": "嘉应制药",
+          "operating_cf_net_amount": -7122.719233,
+          "net_profit": 2179.4297699999997
+        },
+        {
+          "stock_code": "300158",
+          "stock_abbr": "振东制药",
+          "operating_cf_net_amount": -60273.685057,
+          "net_profit": 2036.406993
+        },
+        {
+          "stock_code": "300534",
+          "stock_abbr": "陇神戎发",
+          "operating_cf_net_amount": -8081.569731999999,
+          "net_profit": 2702.9405739999997
+        },
+        {
+          "stock_code": "600080",
+          "stock_abbr": "金花股份",
+          "operating_cf_net_amount": -5772.128863,
+          "net_profit": 3448.124386
+        },
+        {
+          "stock_code": "600222",
+          "stock_abbr": "太龙药业",
+          "operating_cf_net_amount": -8898.904118,
+          "net_profit": 2532.546125
+        },
+        {
+          "stock_code": "600252",
+          "stock_abbr": "中恒集团",
+          "operating_cf_net_amount": -15639.667388999998,
+          "net_profit": 2464.037494
+        },
+        {
+          "stock_code": "600332",
+          "stock_abbr": "白云山",
+          "operating_cf_net_amount": -197197.35860799998,
+          "net_profit": 331005.207786
+        },
+        {
+          "stock_code": "600671",
+          "stock_abbr": "天目药业",
+          "operating_cf_net_amount": -3083.10888,
+          "net_profit": 1420.87966
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "stock_code",
+      "sort_ascending": true,
+      "top_n": 8,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "stock_code",
+        "data_type": "quantitative",
+        "label": "股票代码",
+        "unit": "万元"
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B1012_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1012_1.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT stock_code, stock_abbr, operating_cf_net_amount, net_profit FROM financials_view WHERE report_period = '2025Q3' AND operating_cf_net_amount < 0 AND net_profit > 0",
+      "value_fields": [
+        "stock_code"
+      ],
+      "value_labels": [
+        "股票代码"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "stock_code"
+        ],
+        "category_field": "stock_abbr",
+        "sort_by": "stock_code",
+        "sort_ascending": true,
+        "top_n": 8
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1012_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1012_1.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "2025年第三季度，“经营性现金流量净额”为负数且“净利润”为正数的公司有哪些？请列出其股票代码、简称、经营性现金流净额（万元）、净利润（万元）。",
+      "A": {
+        "content": "2025年第三季度，经营性现金流量净额为负数且净利润为正数的公司共有8家，具体如下：\n\n- 股票代码 002198，简称 嘉应制药，经营性现金流净额 -7,122.72 万元，净利润 2,179.43 万元\n- 股票代码 300158，简称 振东制药，经营性现金流净额 -60,273.69 万元，净利润 2,036.41 万元\n- 股票代码 300534，简称 陇神戎发，经营性现金流净额 -8,081.57 万元，净利润 2,702.94 万元\n- 股票代码 600080，简称 金花股份，经营性现金流净额 -5,772.13 万元，净利润 3,448.12 万元\n- 股票代码 600222，简称 太龙药业，经营性现金流净额 -8,898.90 万元，净利润 2,532.55 万元\n- 股票代码 600252，简称 中恒集团，经营性现金流净额 -15,639.67 万元，净利润 2,464.04 万元\n- 股票代码 600332，简称 白云山，经营性现金流净额 -197,197.36 万元，净利润 331,005.21 万元\n- 股票代码 600671，简称 天目药业，经营性现金流净额 -3,083.11 万元，净利润 1,420.88 万元",
+        "image": [
+          "./result/B1012_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"2025年第三季度，“经营性现金流量净额”为负数且“净利润”为正数的公司有哪些？请列出其股票代码、简称、经营性现金流净额（万元）、净利润（万元）。\", \"A\": {\"content\": \"2025年第三季度，经营性现金流量净额为负数且净利润为正数的公司共有8家，具体如下：\\n\\n- 股票代码 002198，简称 嘉应制药，经营性现金流净额 -7,122.72 万元，净利润 2,179.43 万元\\n- 股票代码 300158，简称 振东制药，经营性现金流净额 -60,273.69 万元，净利润 2,036.41 万元\\n- 股票代码 300534，简称 陇神戎发，经营性现金流净额 -8,081.57 万元，净利润 2,702.94 万元\\n- 股票代码 600080，简称 金花股份，经营性现金流净额 -5,772.13 万元，净利润 3,448.12 万元\\n- 股票代码 600222，简称 太龙药业，经营性现金流净额 -8,898.90 万元，净利润 2,532.55 万元\\n- 股票代码 600252，简称 中恒集团，经营性现金流净额 -15,639.67 万元，净利润 2,464.04 万元\\n- 股票代码 600332，简称 白云山，经营性现金流净额 -197,197.36 万元，净利润 331,005.21 万元\\n- 股票代码 600671，简称 天目药业，经营性现金流净额 -3,083.11 万元，净利润 1,420.88 万元\", \"image\": [\"./result/B1012_1.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，需要筛选2025年第三季度（periods: ['2025Q3']）的数据，并找出经营性现金流量净额为负数（operating_cf_net_amount < 0）且净利润为正数（net_profit > 0）的公司。查询结果需要包含股票代码、简称、经营性现金流净额和净利润。"
+  ],
+  "final_status": "ok"
+}

@@ -1,0 +1,190 @@
+{
+  "question_id": "B1061",
+  "question_type": "数据统计分析查询",
+  "raw_question": "查询2025年第三季度投资性现金流量净额的正负分布情况，用柱状图展示正负公司的数量及净额均值",
+  "raw_question_json": "[{\"Q\":\"查询2025年第三季度投资性现金流量净额的正负分布情况，用柱状图展示正负公司的数量及净额均值\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "投资性现金流量净额"
+    ],
+    "chart_type": "bar",
+    "intent_type": "trend_or_chart",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "trend_or_chart",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "投资性现金流量净额"
+    ],
+    "chart_type": "bar",
+    "top_n": null,
+    "threshold": null,
+    "question": "查询2025年第三季度投资性现金流量净额的正负分布情况，用柱状图展示正负公司的数量及净额均值",
+    "should_draw": true,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT CASE WHEN investing_cf_net_amount >= 0 THEN '正' ELSE '负' END AS sign, COUNT(*) AS company_count, AVG(investing_cf_net_amount) AS avg_amount FROM financials_view WHERE report_period = '2025Q3' AND investing_cf_net_amount IS NOT NULL GROUP BY CASE WHEN investing_cf_net_amount >= 0 THEN '正' ELSE '负' END",
+  "sql_history": [
+    "SELECT CASE WHEN investing_cf_net_amount >= 0 THEN '正' ELSE '负' END AS sign, COUNT(*) AS company_count, AVG(investing_cf_net_amount) AS avg_amount FROM financials_view WHERE report_period = '2025Q3' AND investing_cf_net_amount IS NOT NULL GROUP BY CASE WHEN investing_cf_net_amount >= 0 THEN '正' ELSE '负' END"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 2,
+  "result_rows": [
+    {
+      "sign": "正",
+      "company_count": 12,
+      "avg_amount": 26017.230923916664
+    },
+    {
+      "sign": "负",
+      "company_count": 55,
+      "avg_amount": -56767.169685
+    }
+  ],
+  "context_companies": [],
+  "context_rows": [
+    {
+      "sign": "正",
+      "company_count": 12,
+      "avg_amount": 26017.230923916664
+    },
+    {
+      "sign": "负",
+      "company_count": 55,
+      "avg_amount": -56767.169685
+    }
+  ],
+  "result_preview": "[{\"sign\":\"正\",\"company_count\":12,\"avg_amount\":26017.2309239167},{\"sign\":\"负\",\"company_count\":55,\"avg_amount\":-56767.169685}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2025Q3投资性现金流量净额正负分布",
+    "x_field": null,
+    "y_fields": [
+      "company_count",
+      "avg_amount"
+    ],
+    "category_field": "sign",
+    "sort_by": "company_count",
+    "sort_ascending": true,
+    "top_n": 2,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1061",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "2025Q3投资性现金流量净额正负分布",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 2,
+      "preview_rows": [
+        {
+          "sign": "正",
+          "company_count": 12,
+          "avg_amount": 26017.230923916664
+        },
+        {
+          "sign": "负",
+          "company_count": 55,
+          "avg_amount": -56767.169685
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "company_count",
+      "sort_ascending": true,
+      "top_n": 2,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "company_count",
+        "data_type": "quantitative",
+        "label": "company_count",
+        "unit": null
+      },
+      "category": {
+        "field": "sign",
+        "data_type": "nominal",
+        "label": "sign",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B1061_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1061_1.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT CASE WHEN investing_cf_net_amount >= 0 THEN '正' ELSE '负' END AS sign, COUNT(*) AS company_count, AVG(investing_cf_net_amount) AS avg_amount FROM financials_view WHERE report_period = '2025Q3' AND investing_cf_net_amount IS NOT NULL GROUP BY CASE WHEN investing_cf_net_amount >= 0 THEN '正' ELSE '负' END",
+      "value_fields": [
+        "company_count",
+        "avg_amount"
+      ],
+      "value_labels": [
+        "company_count",
+        "avg_amount"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "company_count",
+          "avg_amount"
+        ],
+        "category_field": "sign",
+        "sort_by": "company_count",
+        "sort_ascending": true,
+        "top_n": 2
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1061_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1061_1.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "查询2025年第三季度投资性现金流量净额的正负分布情况，用柱状图展示正负公司的数量及净额均值",
+      "A": {
+        "content": "根据2025年第三季度财报数据，投资性现金流量净额为正的公司有12家，其平均净额约为2.60亿元；为负的公司有55家，其平均净额约为-5.68亿元。",
+        "image": [
+          "./result/B1061_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"查询2025年第三季度投资性现金流量净额的正负分布情况，用柱状图展示正负公司的数量及净额均值\", \"A\": {\"content\": \"根据2025年第三季度财报数据，投资性现金流量净额为正的公司有12家，其平均净额约为2.60亿元；为负的公司有55家，其平均净额约为-5.68亿元。\", \"image\": [\"./result/B1061_1.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，需要分析2025Q3投资性现金流量净额的正负分布。使用investing_cf_net_amount字段，按正负分组统计公司数量和净额均值。"
+  ],
+  "final_status": "ok"
+}

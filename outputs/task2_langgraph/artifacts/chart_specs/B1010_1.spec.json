@@ -1,0 +1,90 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1010",
+  "image_index": 1,
+  "chart_type": "line",
+  "title": "白云山（600332）营业总收入同比增长率趋势",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 4,
+    "preview_rows": [
+      {
+        "stock_code": "600332",
+        "stock_abbr": "白云山",
+        "report_period": "2022FY",
+        "营业总收入同比增长率": 2.5706398350572206
+      },
+      {
+        "stock_code": "600332",
+        "stock_abbr": "白云山",
+        "report_period": "2023FY",
+        "营业总收入同比增长率": 6.678022504978267
+      },
+      {
+        "stock_code": "600332",
+        "stock_abbr": "白云山",
+        "report_period": "2024FY",
+        "营业总收入同比增长率": -0.6920224134086848
+      },
+      {
+        "stock_code": "600332",
+        "stock_abbr": "白云山",
+        "report_period": "2025Q3",
+        "营业总收入同比增长率": 4.310859259082497
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "report_period",
+    "sort_ascending": true,
+    "top_n": null,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "营业总收入同比增长率",
+      "data_type": "quantitative",
+      "label": "营业总收入同比增长率",
+      "unit": "%"
+    },
+    "x": {
+      "field": "report_period",
+      "data_type": "temporal",
+      "label": "报告期",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": false
+  },
+  "output": {
+    "filename": "B1010_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1010_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT stock_code, stock_abbr, report_period, operating_revenue_yoy_growth AS 营业总收入同比增长率 FROM financials_view WHERE stock_code = '600332' AND report_period IN ('2022FY', '2023FY', '2024FY', '2025Q3') ORDER BY report_period",
+    "value_fields": [
+      "营业总收入同比增长率"
+    ],
+    "value_labels": [
+      "营业总收入同比增长率"
+    ],
+    "original_chart_plan": {
+      "chart_type": "line",
+      "x_field": "report_period",
+      "y_fields": [
+        "营业总收入同比增长率"
+      ],
+      "category_field": null,
+      "sort_by": "report_period",
+      "sort_ascending": true,
+      "top_n": null
+    }
+  }
+}

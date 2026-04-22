@@ -1,0 +1,116 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1049",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "2025年第三季度中药公司营业总收入前十",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 10,
+    "preview_rows": [
+      {
+        "stock_code": "600332",
+        "stock_abbr": "白云山",
+        "total_operating_revenue": 6160599.379554
+      },
+      {
+        "stock_code": "000538",
+        "stock_abbr": "云南白药",
+        "total_operating_revenue": 3065421.420901
+      },
+      {
+        "stock_code": "000999",
+        "stock_abbr": "华润三九",
+        "total_operating_revenue": 2198640.396207
+      },
+      {
+        "stock_code": "600085",
+        "stock_abbr": "同仁堂",
+        "total_operating_revenue": 1330791.480027
+      },
+      {
+        "stock_code": "603858",
+        "stock_abbr": "步长制药",
+        "total_operating_revenue": 846858.131922
+      },
+      {
+        "stock_code": "600129",
+        "stock_abbr": "太极集团",
+        "total_operating_revenue": 808773.698907
+      },
+      {
+        "stock_code": "600436",
+        "stock_abbr": "片仔癀",
+        "total_operating_revenue": 744236.610835
+      },
+      {
+        "stock_code": "600535",
+        "stock_abbr": "天士力",
+        "total_operating_revenue": 631067.2857390001
+      },
+      {
+        "stock_code": "002603",
+        "stock_abbr": "以岭药业",
+        "total_operating_revenue": 586760.307361
+      },
+      {
+        "stock_code": "002589",
+        "stock_abbr": "瑞康医药",
+        "total_operating_revenue": 540653.364977
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": null,
+    "sort_ascending": false,
+    "top_n": 10,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "total_operating_revenue",
+      "data_type": "quantitative",
+      "label": "营业总收入",
+      "unit": "万元"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1049_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1049_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT stock_code, stock_abbr, total_operating_revenue FROM financials_view WHERE report_period = '2025Q3' ORDER BY total_operating_revenue DESC LIMIT 10",
+    "value_fields": [
+      "total_operating_revenue"
+    ],
+    "value_labels": [
+      "营业总收入"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "total_operating_revenue"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": null,
+      "sort_ascending": false,
+      "top_n": 10
+    }
+  }
+}

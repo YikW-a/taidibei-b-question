@@ -1,0 +1,74 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1064",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "2025Q3销售费用率高低组平均净利润率对比",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 2,
+    "preview_rows": [
+      {
+        "category": "低于行业均值",
+        "avg_net_profit_margin": 5.810217278329095
+      },
+      {
+        "category": "高于行业均值",
+        "avg_net_profit_margin": 8.338991376663294
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "avg_net_profit_margin",
+    "sort_ascending": true,
+    "top_n": 2,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "avg_net_profit_margin",
+      "data_type": "quantitative",
+      "label": "行业平均销售净利率",
+      "unit": "%"
+    },
+    "category": {
+      "field": "category",
+      "data_type": "nominal",
+      "label": "category",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1064_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1064_1.jpg"
+  },
+  "meta": {
+    "source_sql": "WITH industry_avg AS (\n    SELECT AVG(operating_expense_selling_expenses / NULLIF(total_operating_revenue, 0)) AS avg_selling_expense_ratio\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n),\ncompany_ratios AS (\n    SELECT stock_code, stock_abbr,\n           operating_expense_selling_expenses / NULLIF(total_operating_revenue, 0) AS selling_expense_ratio,\n           net_profit_margin\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n      AND total_operating_revenue IS NOT NULL\n      AND total_operating_revenue != 0\n      AND operating_expense_selling_expenses IS NOT NULL\n      AND net_profit_margin IS NOT NULL\n)\nSELECT CASE WHEN cr.selling_expense_ratio < ia.avg_selling_expense_ratio THEN '低于行业均值' ELSE '高于行业均值' END AS category,\n       AVG(cr.net_profit_margin) AS avg_net_profit_margin\nFROM company_ratios cr\nCROSS JOIN industry_avg ia\nGROUP BY category\nORDER BY category;",
+    "value_fields": [
+      "avg_net_profit_margin"
+    ],
+    "value_labels": [
+      "行业平均销售净利率"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "avg_net_profit_margin"
+      ],
+      "category_field": "category",
+      "sort_by": "avg_net_profit_margin",
+      "sort_ascending": true,
+      "top_n": 2
+    }
+  }
+}

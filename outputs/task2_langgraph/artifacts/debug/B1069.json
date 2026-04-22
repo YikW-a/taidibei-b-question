@@ -1,0 +1,95 @@
+{
+  "question_id": "B1069",
+  "question_type": "数据统计分析查询",
+  "raw_question": "2025年的财务数据怎么样？ | 2025年第三季度，66家中药上市公司的营业总收入、净利润均值分别是多少？与2024年同期相比增长率如何？",
+  "raw_question_json": "[{\"Q\":\"2025年的财务数据怎么样？\"},{\"Q\":\"2025年第三季度，66家中药上市公司的营业总收入、净利润均值分别是多少？与2024年同期相比增长率如何？\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3",
+      "2025FY",
+      "2024FY"
+    ],
+    "metrics": [
+      "营业总收入",
+      "净利润"
+    ],
+    "chart_type": null,
+    "intent_type": "period_stat",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "period_stat",
+    "companies": [],
+    "periods": [
+      "2025Q3",
+      "2024Q3"
+    ],
+    "metrics": [
+      "营业总收入",
+      "净利润"
+    ],
+    "chart_type": null,
+    "top_n": null,
+    "threshold": null,
+    "question": "2025年第三季度，66家中药上市公司的营业总收入、净利润均值分别是多少？与2024年同期相比增长率如何？",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "WITH current_period AS ( SELECT AVG(total_operating_revenue) AS avg_total_operating_revenue_curr, AVG(net_profit) AS avg_net_profit_curr FROM financials_view WHERE report_period = '2025Q3'), previous_period AS ( SELECT AVG(total_operating_revenue) AS avg_total_operating_revenue_prev, AVG(net_profit) AS avg_net_profit_prev FROM financials_view WHERE report_period = '2024Q3') SELECT avg_total_operating_revenue_curr, avg_net_profit_curr, ROUND(((avg_total_operating_revenue_curr - avg_total_operating_revenue_prev) / ABS(avg_total_operating_revenue_prev)) * 100, 2) AS total_operating_revenue_yoy_growth, ROUND(((avg_net_profit_curr - avg_net_profit_prev) / ABS(avg_net_profit_prev)) * 100, 2) AS net_profit_yoy_growth FROM current_period CROSS JOIN previous_period WHERE avg_total_operating_revenue_prev IS NOT NULL AND avg_total_operating_revenue_prev != 0 AND avg_net_profit_prev IS NOT NULL AND avg_net_profit_prev != 0",
+  "sql_history": [
+    "WITH current_period AS ( SELECT AVG(total_operating_revenue) AS avg_total_operating_revenue_curr, AVG(net_profit) AS avg_net_profit_curr FROM financials_view WHERE report_period = '2025Q3'), previous_period AS ( SELECT AVG(total_operating_revenue) AS avg_total_operating_revenue_prev, AVG(net_profit) AS avg_net_profit_prev FROM financials_view WHERE report_period = '2024Q3') SELECT avg_total_operating_revenue_curr, avg_net_profit_curr, ROUND(((avg_total_operating_revenue_curr - avg_total_operating_revenue_prev) / ABS(avg_total_operating_revenue_prev)) * 100, 2) AS total_operating_revenue_yoy_growth, ROUND(((avg_net_profit_curr - avg_net_profit_prev) / ABS(avg_net_profit_prev)) * 100, 2) AS net_profit_yoy_growth FROM current_period CROSS JOIN previous_period WHERE avg_total_operating_revenue_prev IS NOT NULL AND avg_total_operating_revenue_prev != 0 AND avg_net_profit_prev IS NOT NULL AND avg_net_profit_prev != 0"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 1,
+  "result_rows": [
+    {
+      "avg_total_operating_revenue_curr": 400146.2766487164,
+      "avg_net_profit_curr": 42913.39512591044,
+      "total_operating_revenue_yoy_growth": -1.28,
+      "net_profit_yoy_growth": -0.54
+    }
+  ],
+  "context_companies": [],
+  "context_rows": [
+    {
+      "avg_total_operating_revenue_curr": 400146.2766487164,
+      "avg_net_profit_curr": 42913.39512591044,
+      "total_operating_revenue_yoy_growth": -1.28,
+      "net_profit_yoy_growth": -0.54
+    }
+  ],
+  "result_preview": "[{\"avg_total_operating_revenue_curr\":400146.2766487164,\"avg_net_profit_curr\":42913.3951259104,\"total_operating_revenue_yoy_growth\":-1.28,\"net_profit_yoy_growth\":-0.54}]",
+  "chart_plan": {},
+  "chart_spec": {},
+  "all_chart_specs": [],
+  "all_chart_paths": [],
+  "graph_formats": [],
+  "turn_answers": [
+    {
+      "Q": "2025年的财务数据怎么样？",
+      "A": {
+        "content": "请问您想了解2025年哪个具体的财务指标呢？比如营业总收入、净利润，还是其他指标？",
+        "image": []
+      }
+    },
+    {
+      "Q": "2025年第三季度，66家中药上市公司的营业总收入、净利润均值分别是多少？与2024年同期相比增长率如何？",
+      "A": {
+        "content": "2025年第三季度，66家中药上市公司的平均营业总收入约为40.01亿元，平均净利润约为4.29亿元。与2024年同期相比，平均营业总收入下降了1.28%，平均净利润下降了0.54%。",
+        "image": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"2025年的财务数据怎么样？\", \"A\": {\"content\": \"请问您想了解2025年哪个具体的财务指标呢？比如营业总收入、净利润，还是其他指标？\", \"image\": []}}, {\"Q\": \"2025年第三季度，66家中药上市公司的营业总收入、净利润均值分别是多少？与2024年同期相比增长率如何？\", \"A\": {\"content\": \"2025年第三季度，66家中药上市公司的平均营业总收入约为40.01亿元，平均净利润约为4.29亿元。与2024年同期相比，平均营业总收入下降了1.28%，平均净利润下降了0.54%。\", \"image\": []}}]",
+  "notes": [
+    "Used deterministic SQL template for a known query pattern."
+  ],
+  "final_status": "ok"
+}

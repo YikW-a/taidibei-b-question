@@ -1,0 +1,552 @@
+{
+  "question_id": "B1055",
+  "question_type": "数据统计分析查询",
+  "raw_question": "对比2024年和2025年第三季度净利润同比增长率前十公司的名单变化，用双条形图展示两年排名及增长率",
+  "raw_question_json": "[{\"Q\":\"对比2024年和2025年第三季度净利润同比增长率前十公司的名单变化，用双条形图展示两年排名及增长率\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3",
+      "2024FY"
+    ],
+    "metrics": [
+      "净利润",
+      "同比增长率"
+    ],
+    "chart_type": "bar",
+    "intent_type": "trend_or_chart",
+    "top_n": 10,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "ranking",
+    "companies": [],
+    "periods": [
+      "2024Q3",
+      "2025Q3"
+    ],
+    "metrics": [
+      "净利润同比增长率"
+    ],
+    "chart_type": "grouped_bar",
+    "top_n": 10,
+    "threshold": null,
+    "question": "对比2024年和2025年第三季度净利润同比增长率前十公司的名单变化，用双条形图展示两年排名及增长率",
+    "should_draw": true,
+    "needs_clarification": false,
+    "missing_slots": [],
+    "unsupported_metrics": [
+      "净利润同比增长率"
+    ]
+  },
+  "sql": "WITH ranked_2024 AS (\n    SELECT stock_code, stock_abbr, report_period, net_profit_yoy_growth AS net_profit_yoy_growth_rate,\n           ROW_NUMBER() OVER (ORDER BY net_profit_yoy_growth DESC) AS rank\n    FROM financials_view\n    WHERE report_period = '2024Q3'\n      AND net_profit_yoy_growth IS NOT NULL\n), ranked_2025 AS (\n    SELECT stock_code, stock_abbr, report_period, net_profit_yoy_growth AS net_profit_yoy_growth_rate,\n           ROW_NUMBER() OVER (ORDER BY net_profit_yoy_growth DESC) AS rank\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n      AND net_profit_yoy_growth IS NOT NULL\n)\nSELECT '2024Q3' AS report_period, stock_code, stock_abbr, net_profit_yoy_growth_rate, rank\nFROM ranked_2024\nWHERE rank <= 10\nUNION ALL\nSELECT '2025Q3' AS report_period, stock_code, stock_abbr, net_profit_yoy_growth_rate, rank\nFROM ranked_2025\nWHERE rank <= 10\nORDER BY report_period, rank",
+  "sql_history": [
+    "WITH ranked_2024 AS (\n    SELECT stock_code, stock_abbr, report_period, net_profit_yoy_growth AS net_profit_yoy_growth_rate,\n           ROW_NUMBER() OVER (ORDER BY net_profit_yoy_growth DESC) AS rank\n    FROM financials_view\n    WHERE report_period = '2024Q3'\n      AND net_profit_yoy_growth IS NOT NULL\n), ranked_2025 AS (\n    SELECT stock_code, stock_abbr, report_period, net_profit_yoy_growth AS net_profit_yoy_growth_rate,\n           ROW_NUMBER() OVER (ORDER BY net_profit_yoy_growth DESC) AS rank\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n      AND net_profit_yoy_growth IS NOT NULL\n)\nSELECT '2024Q3' AS report_period, stock_code, stock_abbr, net_profit_yoy_growth_rate, rank\nFROM ranked_2024\nWHERE rank <= 10\nUNION ALL\nSELECT '2025Q3' AS report_period, stock_code, stock_abbr, net_profit_yoy_growth_rate, rank\nFROM ranked_2025\nWHERE rank <= 10\nORDER BY report_period, rank"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 20,
+  "result_rows": [
+    {
+      "report_period": "2024Q3",
+      "stock_code": "300158",
+      "stock_abbr": "振东制药",
+      "net_profit_yoy_growth_rate": 984.479046489349,
+      "rank": 1
+    },
+    {
+      "report_period": "2024Q3",
+      "stock_code": "600080",
+      "stock_abbr": "金花股份",
+      "net_profit_yoy_growth_rate": 807.5946290625814,
+      "rank": 2
+    },
+    {
+      "report_period": "2024Q3",
+      "stock_code": "002082",
+      "stock_abbr": "万邦德",
+      "net_profit_yoy_growth_rate": 517.0911892249761,
+      "rank": 3
+    },
+    {
+      "report_period": "2024Q3",
+      "stock_code": "600222",
+      "stock_abbr": "太龙药业",
+      "net_profit_yoy_growth_rate": 253.41439188226468,
+      "rank": 4
+    },
+    {
+      "report_period": "2024Q3",
+      "stock_code": "600518",
+      "stock_abbr": "康美药业",
+      "net_profit_yoy_growth_rate": 105.53496795625207,
+      "rank": 5
+    },
+    {
+      "report_period": "2024Q3",
+      "stock_code": "002166",
+      "stock_abbr": "莱茵生物",
+      "net_profit_yoy_growth_rate": 99.57179748212958,
+      "rank": 6
+    },
+    {
+      "report_period": "2024Q3",
+      "stock_code": "002589",
+      "stock_abbr": "瑞康医药",
+      "net_profit_yoy_growth_rate": 87.72989549777405,
+      "rank": 7
+    },
+    {
+      "report_period": "2024Q3",
+      "stock_code": "600671",
+      "stock_abbr": "天目药业",
+      "net_profit_yoy_growth_rate": 86.33637685323507,
+      "rank": 8
+    },
+    {
+      "report_period": "2024Q3",
+      "stock_code": "603567",
+      "stock_abbr": "珍宝岛",
+      "net_profit_yoy_growth_rate": 82.13941795055905,
+      "rank": 9
+    },
+    {
+      "report_period": "2024Q3",
+      "stock_code": "002907",
+      "stock_abbr": "华森制药",
+      "net_profit_yoy_growth_rate": 66.55907170061606,
+      "rank": 10
+    },
+    {
+      "report_period": "2025Q3",
+      "stock_code": "002728",
+      "stock_abbr": "特一药业",
+      "net_profit_yoy_growth_rate": 985.1796452032535,
+      "rank": 1
+    },
+    {
+      "report_period": "2025Q3",
+      "stock_code": "002198",
+      "stock_abbr": "嘉应制药",
+      "net_profit_yoy_growth_rate": 658.498909607456,
+      "rank": 2
+    },
+    {
+      "report_period": "2025Q3",
+      "stock_code": "600671",
+      "stock_abbr": "天目药业",
+      "net_profit_yoy_growth_rate": 299.6262083844167,
+      "rank": 3
+    },
+    {
+      "report_period": "2025Q3",
+      "stock_code": "603858",
+      "stock_abbr": "步长制药",
+      "net_profit_yoy_growth_rate": 263.1097634092608,
+      "rank": 4
+    },
+    {
+      "report_period": "2025Q3",
+      "stock_code": "002107",
+      "stock_abbr": "沃华医药",
+      "net_profit_yoy_growth_rate": 192.81517145896942,
+      "rank": 5
+    },
+    {
+      "report_period": "2025Q3",
+      "stock_code": "600329",
+      "stock_abbr": "达仁堂",
+      "net_profit_yoy_growth_rate": 170.59938256580205,
+      "rank": 6
+    },
+    {
+      "report_period": "2025Q3",
+      "stock_code": "600518",
+      "stock_abbr": "康美药业",
+      "net_profit_yoy_growth_rate": 86.06034114359072,
+      "rank": 7
+    },
+    {
+      "report_period": "2025Q3",
+      "stock_code": "002603",
+      "stock_abbr": "以岭药业",
+      "net_profit_yoy_growth_rate": 81.51487891696773,
+      "rank": 8
+    },
+    {
+      "report_period": "2025Q3",
+      "stock_code": "002317",
+      "stock_abbr": "众生药业",
+      "net_profit_yoy_growth_rate": 80.63137180894428,
+      "rank": 9
+    },
+    {
+      "report_period": "2025Q3",
+      "stock_code": "301331",
+      "stock_abbr": "恩威医药",
+      "net_profit_yoy_growth_rate": 66.12807117938533,
+      "rank": 10
+    }
+  ],
+  "context_companies": [
+    "振东制药",
+    "金花股份",
+    "万邦德",
+    "太龙药业",
+    "康美药业",
+    "莱茵生物",
+    "瑞康医药",
+    "天目药业",
+    "珍宝岛",
+    "华森制药",
+    "特一药业",
+    "嘉应制药",
+    "步长制药",
+    "沃华医药",
+    "达仁堂",
+    "以岭药业",
+    "众生药业",
+    "恩威医药"
+  ],
+  "context_rows": [
+    {
+      "report_period": "2024Q3",
+      "stock_code": "300158",
+      "stock_abbr": "振东制药",
+      "net_profit_yoy_growth_rate": 984.479046489349,
+      "rank": 1
+    },
+    {
+      "report_period": "2024Q3",
+      "stock_code": "600080",
+      "stock_abbr": "金花股份",
+      "net_profit_yoy_growth_rate": 807.5946290625814,
+      "rank": 2
+    },
+    {
+      "report_period": "2024Q3",
+      "stock_code": "002082",
+      "stock_abbr": "万邦德",
+      "net_profit_yoy_growth_rate": 517.0911892249761,
+      "rank": 3
+    },
+    {
+      "report_period": "2024Q3",
+      "stock_code": "600222",
+      "stock_abbr": "太龙药业",
+      "net_profit_yoy_growth_rate": 253.41439188226468,
+      "rank": 4
+    },
+    {
+      "report_period": "2024Q3",
+      "stock_code": "600518",
+      "stock_abbr": "康美药业",
+      "net_profit_yoy_growth_rate": 105.53496795625207,
+      "rank": 5
+    },
+    {
+      "report_period": "2024Q3",
+      "stock_code": "002166",
+      "stock_abbr": "莱茵生物",
+      "net_profit_yoy_growth_rate": 99.57179748212958,
+      "rank": 6
+    },
+    {
+      "report_period": "2024Q3",
+      "stock_code": "002589",
+      "stock_abbr": "瑞康医药",
+      "net_profit_yoy_growth_rate": 87.72989549777405,
+      "rank": 7
+    },
+    {
+      "report_period": "2024Q3",
+      "stock_code": "600671",
+      "stock_abbr": "天目药业",
+      "net_profit_yoy_growth_rate": 86.33637685323507,
+      "rank": 8
+    },
+    {
+      "report_period": "2024Q3",
+      "stock_code": "603567",
+      "stock_abbr": "珍宝岛",
+      "net_profit_yoy_growth_rate": 82.13941795055905,
+      "rank": 9
+    },
+    {
+      "report_period": "2024Q3",
+      "stock_code": "002907",
+      "stock_abbr": "华森制药",
+      "net_profit_yoy_growth_rate": 66.55907170061606,
+      "rank": 10
+    },
+    {
+      "report_period": "2025Q3",
+      "stock_code": "002728",
+      "stock_abbr": "特一药业",
+      "net_profit_yoy_growth_rate": 985.1796452032535,
+      "rank": 1
+    },
+    {
+      "report_period": "2025Q3",
+      "stock_code": "002198",
+      "stock_abbr": "嘉应制药",
+      "net_profit_yoy_growth_rate": 658.498909607456,
+      "rank": 2
+    },
+    {
+      "report_period": "2025Q3",
+      "stock_code": "600671",
+      "stock_abbr": "天目药业",
+      "net_profit_yoy_growth_rate": 299.6262083844167,
+      "rank": 3
+    },
+    {
+      "report_period": "2025Q3",
+      "stock_code": "603858",
+      "stock_abbr": "步长制药",
+      "net_profit_yoy_growth_rate": 263.1097634092608,
+      "rank": 4
+    },
+    {
+      "report_period": "2025Q3",
+      "stock_code": "002107",
+      "stock_abbr": "沃华医药",
+      "net_profit_yoy_growth_rate": 192.81517145896942,
+      "rank": 5
+    },
+    {
+      "report_period": "2025Q3",
+      "stock_code": "600329",
+      "stock_abbr": "达仁堂",
+      "net_profit_yoy_growth_rate": 170.59938256580205,
+      "rank": 6
+    },
+    {
+      "report_period": "2025Q3",
+      "stock_code": "600518",
+      "stock_abbr": "康美药业",
+      "net_profit_yoy_growth_rate": 86.06034114359072,
+      "rank": 7
+    },
+    {
+      "report_period": "2025Q3",
+      "stock_code": "002603",
+      "stock_abbr": "以岭药业",
+      "net_profit_yoy_growth_rate": 81.51487891696773,
+      "rank": 8
+    },
+    {
+      "report_period": "2025Q3",
+      "stock_code": "002317",
+      "stock_abbr": "众生药业",
+      "net_profit_yoy_growth_rate": 80.63137180894428,
+      "rank": 9
+    },
+    {
+      "report_period": "2025Q3",
+      "stock_code": "301331",
+      "stock_abbr": "恩威医药",
+      "net_profit_yoy_growth_rate": 66.12807117938533,
+      "rank": 10
+    }
+  ],
+  "result_preview": "[{\"report_period\":\"2024Q3\",\"stock_code\":\"300158\",\"stock_abbr\":\"振东制药\",\"net_profit_yoy_growth_rate\":984.4790464893,\"rank\":1},{\"report_period\":\"2024Q3\",\"stock_code\":\"600080\",\"stock_abbr\":\"金花股份\",\"net_profit_yoy_growth_rate\":807.5946290626,\"rank\":2},{\"report_period\":\"2024Q3\",\"stock_code\":\"002082\",\"stock_abbr\":\"万邦德\",\"net_profit_yoy_growth_rate\":517.091189225,\"rank\":3},{\"report_period\":\"2024Q3\",\"stock_code\":\"600222\",\"stock_abbr\":\"太龙药业\",\"net_profit_yoy_growth_rate\":253.4143918823,\"rank\":4},{\"report_period\":\"2024Q3\",\"stock_code\":\"600518\",\"stock_abbr\":\"康美药业\",\"net_profit_yoy_growth_rate\":105.5349679563,\"rank\":5},{\"report_period\":\"2024Q3\",\"stock_code\":\"002166\",\"stock_abbr\":\"莱茵生物\",\"net_profit_yoy_growth_rate\":99.5717974821,\"rank\":6},{\"report_period\":\"2024Q3\",\"stock_code\":\"002589\",\"stock_abbr\":\"瑞康医药\",\"net_profit_yoy_growth_rate\":87.7298954978,\"rank\":7},{\"report_period\":\"2024Q3\",\"stock_code\":\"600671\",\"stock_abbr\":\"天目药业\",\"net_profit_yoy_growth_rate\":86.3363768532,\"rank\":8},{\"report_period\":\"2024Q3\",\"stock_code\":\"603567\",\"stock_abbr\":\"珍宝岛\",\"net_profit_yoy_growth_rate\":82.1394179506,\"rank\":9},{\"report_period\":\"2024Q3\",\"stock_code\":\"002907\",\"stock_abbr\":\"华森制药\",\"net_profit_yoy_growth_rate\":66.5590717006,\"rank\":10},{\"report_period\":\"2025Q3\",\"stock_code\":\"002728\",\"stock_abbr\":\"特一药业\",\"net_profit_yoy_growth_rate\":985.1796452033,\"rank\":1},{\"report_period\":\"2025Q3\",\"stock_code\":\"002198\",\"stock_abbr\":\"嘉应制药\",\"net_profit_yoy_growth_rate\":658.4989096075,\"rank\":2},{\"report_period\":\"2025Q3\",\"stock_code\":\"600671\",\"stock_abbr\":\"天目药业\",\"net_profit_yoy_growth_rate\":299.6262083844,\"rank\":3},{\"report_period\":\"2025Q3\",\"stock_code\":\"603858\",\"stock_abbr\":\"步长制药\",\"net_profit_yoy_growth_rate\":263.1097634093,\"rank\":4},{\"report_period\":\"2025Q3\",\"stock_code\":\"002107\",\"stock_abbr\":\"沃华医药\",\"net_profit_yoy_growth_rate\":192.815171459,\"rank\":5},{\"report_period\":\"2025Q3\",\"stock_code\":\"600329\",\"stock_abbr\":\"达仁堂\",\"net_profit_yoy_growth_rate\":170.5993825658,\"rank\":6},{\"report_period\":\"2025Q3\",\"stock_code\":\"600518\",\"stock_abbr\":\"康美药业\",\"net_profit_yoy_growth_rate\":86.0603411436,\"rank\":7},{\"report_period\":\"2025Q3\",\"stock_code\":\"002603\",\"stock_abbr\":\"以岭药业\",\"net_profit_yoy_growth_rate\":81.514878917,\"rank\":8},{\"report_period\":\"2025Q3\",\"stock_code\":\"002317\",\"stock_abbr\":\"众生药业\",\"net_profit_yoy_growth_rate\":80.6313718089,\"rank\":9},{\"report_period\":\"2025Q3\",\"stock_code\":\"301331\",\"stock_abbr\":\"恩威医药\",\"net_profit_yoy_growth_rate\":66.1280711794,\"rank\":10}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2024与2025年Q3净利润同比增长率前十对比",
+    "x_field": null,
+    "y_fields": [
+      "net_profit_yoy_growth_rate"
+    ],
+    "category_field": "report_period",
+    "sort_by": "rank",
+    "sort_ascending": true,
+    "top_n": 10,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1055",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "2024与2025年Q3净利润同比增长率前十对比",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 20,
+      "preview_rows": [
+        {
+          "report_period": "2024Q3",
+          "stock_code": "300158",
+          "stock_abbr": "振东制药",
+          "net_profit_yoy_growth_rate": 984.479046489349,
+          "rank": 1
+        },
+        {
+          "report_period": "2024Q3",
+          "stock_code": "600080",
+          "stock_abbr": "金花股份",
+          "net_profit_yoy_growth_rate": 807.5946290625814,
+          "rank": 2
+        },
+        {
+          "report_period": "2024Q3",
+          "stock_code": "002082",
+          "stock_abbr": "万邦德",
+          "net_profit_yoy_growth_rate": 517.0911892249761,
+          "rank": 3
+        },
+        {
+          "report_period": "2024Q3",
+          "stock_code": "600222",
+          "stock_abbr": "太龙药业",
+          "net_profit_yoy_growth_rate": 253.41439188226468,
+          "rank": 4
+        },
+        {
+          "report_period": "2024Q3",
+          "stock_code": "600518",
+          "stock_abbr": "康美药业",
+          "net_profit_yoy_growth_rate": 105.53496795625207,
+          "rank": 5
+        },
+        {
+          "report_period": "2024Q3",
+          "stock_code": "002166",
+          "stock_abbr": "莱茵生物",
+          "net_profit_yoy_growth_rate": 99.57179748212958,
+          "rank": 6
+        },
+        {
+          "report_period": "2024Q3",
+          "stock_code": "002589",
+          "stock_abbr": "瑞康医药",
+          "net_profit_yoy_growth_rate": 87.72989549777405,
+          "rank": 7
+        },
+        {
+          "report_period": "2024Q3",
+          "stock_code": "600671",
+          "stock_abbr": "天目药业",
+          "net_profit_yoy_growth_rate": 86.33637685323507,
+          "rank": 8
+        },
+        {
+          "report_period": "2024Q3",
+          "stock_code": "603567",
+          "stock_abbr": "珍宝岛",
+          "net_profit_yoy_growth_rate": 82.13941795055905,
+          "rank": 9
+        },
+        {
+          "report_period": "2024Q3",
+          "stock_code": "002907",
+          "stock_abbr": "华森制药",
+          "net_profit_yoy_growth_rate": 66.55907170061606,
+          "rank": 10
+        },
+        {
+          "report_period": "2025Q3",
+          "stock_code": "002728",
+          "stock_abbr": "特一药业",
+          "net_profit_yoy_growth_rate": 985.1796452032535,
+          "rank": 1
+        },
+        {
+          "report_period": "2025Q3",
+          "stock_code": "002198",
+          "stock_abbr": "嘉应制药",
+          "net_profit_yoy_growth_rate": 658.498909607456,
+          "rank": 2
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "rank",
+      "sort_ascending": true,
+      "top_n": 10,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "net_profit_yoy_growth_rate",
+        "data_type": "quantitative",
+        "label": "净利润同比增长率",
+        "unit": "%"
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      },
+      "series": {
+        "field": "report_period",
+        "data_type": "nominal",
+        "label": "报告期",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": true,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B1055_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1055_1.jpg"
+    },
+    "meta": {
+      "source_sql": "WITH ranked_2024 AS (\n    SELECT stock_code, stock_abbr, report_period, net_profit_yoy_growth AS net_profit_yoy_growth_rate,\n           ROW_NUMBER() OVER (ORDER BY net_profit_yoy_growth DESC) AS rank\n    FROM financials_view\n    WHERE report_period = '2024Q3'\n      AND net_profit_yoy_growth IS NOT NULL\n), ranked_2025 AS (\n    SELECT stock_code, stock_abbr, report_period, net_profit_yoy_growth AS net_profit_yoy_growth_rate,\n           ROW_NUMBER() OVER (ORDER BY net_profit_yoy_growth DESC) AS rank\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n      AND net_profit_yoy_growth IS NOT NULL\n)\nSELECT '2024Q3' AS report_period, stock_code, stock_abbr, net_profit_yoy_growth_rate, rank\nFROM ranked_2024\nWHERE rank <= 10\nUNION ALL\nSELECT '2025Q3' AS report_period, stock_code, stock_abbr, net_profit_yoy_growth_rate, rank\nFROM ranked_2025\nWHERE rank <= 10\nORDER BY report_period, rank",
+      "value_fields": [
+        "net_profit_yoy_growth_rate"
+      ],
+      "value_labels": [
+        "净利润同比增长率"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "net_profit_yoy_growth_rate"
+        ],
+        "category_field": "report_period",
+        "sort_by": "rank",
+        "sort_ascending": true,
+        "top_n": 10
+      },
+      "category_aggregate": "max"
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1055_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1055_1.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "对比2024年和2025年第三季度净利润同比增长率前十公司的名单变化，用双条形图展示两年排名及增长率",
+      "A": {
+        "content": "2024年第三季度和2025年第三季度净利润同比增长率前十的公司名单发生了显著变化。\n\n**2024年Q3前十公司**（按排名顺序）：\n1.  振东制药 (300158)，增长率 984.48%\n2.  金花股份 (600080)，增长率 807.59%\n3.  万邦德 (002082)，增长率 517.09%\n4.  太龙药业 (600222)，增长率 253.41%\n5.  康美药业 (600518)，增长率 105.53%\n6.  莱茵生物 (002166)，增长率 99.57%\n7.  瑞康医药 (002589)，增长率 87.73%\n8.  天目药业 (600671)，增长率 86.34%\n9.  珍宝岛 (603567)，增长率 82.14%\n10. 华森制药 (002907)，增长率 66.56%\n\n**2025年Q3前十公司**（按排名顺序）：\n1.  特一药业 (002728)，增长率 985.18%\n2.  嘉应制药 (002198)，增长率 658.50%\n3.  天目药业 (600671)，增长率 299.63%\n4.  步长制药 (603858)，增长率 263.11%\n5.  沃华医药 (002107)，增长率 192.82%\n6.  达仁堂 (600329)，增长率 170.60%\n7.  康美药业 (600518)，增长率 86.06%\n8.  以岭药业 (002603)，增长率 81.51%\n9.  众生药业 (002317)，增长率 80.63%\n10. 恩威医药 (301331)，增长率 66.13%\n\n**主要变化**：\n*   **榜首易主**：2024年的榜首振东制药（增长率984.48%）在2025年未进入前十，被特一药业（增长率985.18%）取代。\n*   **留存公司**：仅有**天目药业**和**康美药业**两家公司同时出现在两个年度的前十榜单中。天目药业排名从第8位升至第3位，增长率从86.34%大幅提升至299.63%；康美药业排名从第5位降至第7位，增长率从105.53%降至86.06%。\n*   **新晋公司**：2025年榜单中，特一药业、嘉应制药、步长制药、沃华医药、达仁堂、以岭药业、众生药业、恩威医药均为新进入前十的公司。\n*   **增长率水平**：2025年榜首的增长率（985.18%）与2024年榜首（984.48%）基本持平，但前十名的整体增长率门槛（约66%）和头部集中度有所变化。\n\n（注：部分公司的净利润同比增长率数值极高，结果存在异常，建议复核口径或数据。）",
+        "image": [
+          "./result/B1055_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"对比2024年和2025年第三季度净利润同比增长率前十公司的名单变化，用双条形图展示两年排名及增长率\", \"A\": {\"content\": \"2024年第三季度和2025年第三季度净利润同比增长率前十的公司名单发生了显著变化。\\n\\n**2024年Q3前十公司**（按排名顺序）：\\n1.  振东制药 (300158)，增长率 984.48%\\n2.  金花股份 (600080)，增长率 807.59%\\n3.  万邦德 (002082)，增长率 517.09%\\n4.  太龙药业 (600222)，增长率 253.41%\\n5.  康美药业 (600518)，增长率 105.53%\\n6.  莱茵生物 (002166)，增长率 99.57%\\n7.  瑞康医药 (002589)，增长率 87.73%\\n8.  天目药业 (600671)，增长率 86.34%\\n9.  珍宝岛 (603567)，增长率 82.14%\\n10. 华森制药 (002907)，增长率 66.56%\\n\\n**2025年Q3前十公司**（按排名顺序）：\\n1.  特一药业 (002728)，增长率 985.18%\\n2.  嘉应制药 (002198)，增长率 658.50%\\n3.  天目药业 (600671)，增长率 299.63%\\n4.  步长制药 (603858)，增长率 263.11%\\n5.  沃华医药 (002107)，增长率 192.82%\\n6.  达仁堂 (600329)，增长率 170.60%\\n7.  康美药业 (600518)，增长率 86.06%\\n8.  以岭药业 (002603)，增长率 81.51%\\n9.  众生药业 (002317)，增长率 80.63%\\n10. 恩威医药 (301331)，增长率 66.13%\\n\\n**主要变化**：\\n*   **榜首易主**：2024年的榜首振东制药（增长率984.48%）在2025年未进入前十，被特一药业（增长率985.18%）取代。\\n*   **留存公司**：仅有**天目药业**和**康美药业**两家公司同时出现在两个年度的前十榜单中。天目药业排名从第8位升至第3位，增长率从86.34%大幅提升至299.63%；康美药业排名从第5位降至第7位，增长率从105.53%降至86.06%。\\n*   **新晋公司**：2025年榜单中，特一药业、嘉应制药、步长制药、沃华医药、达仁堂、以岭药业、众生药业、恩威医药均为新进入前十的公司。\\n*   **增长率水平**：2025年榜首的增长率（985.18%）与2024年榜首（984.48%）基本持平，但前十名的整体增长率门槛（约66%）和头部集中度有所变化。\\n\\n（注：部分公司的净利润同比增长率数值极高，结果存在异常，建议复核口径或数据。）\", \"image\": [\"./result/B1055_1.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，需要对比2024Q3和2025Q3两个报告期的净利润同比增长率前十公司。使用两个CTE分别计算各期的排名，选取前10名，然后合并结果。字段使用net_profit_yoy_growth作为净利润同比增长率，并返回公司代码、简称、增长率及排名，以便绘制双条形图。"
+  ],
+  "final_status": "ok"
+}

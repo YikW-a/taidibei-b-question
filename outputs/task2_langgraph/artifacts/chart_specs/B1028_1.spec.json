@@ -1,0 +1,126 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1028",
+  "image_index": 1,
+  "chart_type": "line",
+  "title": "白云山、云南白药、片仔癀2022-2025年第三季度净利润趋势",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 9,
+    "preview_rows": [
+      {
+        "stock_code": "000538",
+        "stock_abbr": "云南白药",
+        "report_period": "2023Q3",
+        "net_profit": 412347.741445
+      },
+      {
+        "stock_code": "000538",
+        "stock_abbr": "云南白药",
+        "report_period": "2024Q3",
+        "net_profit": 432672.806805
+      },
+      {
+        "stock_code": "000538",
+        "stock_abbr": "云南白药",
+        "report_period": "2025Q3",
+        "net_profit": 477711.965747
+      },
+      {
+        "stock_code": "600436",
+        "stock_abbr": "片仔癀",
+        "report_period": "2023Q3",
+        "net_profit": 240464.84146
+      },
+      {
+        "stock_code": "600436",
+        "stock_abbr": "片仔癀",
+        "report_period": "2024Q3",
+        "net_profit": 268668.474325
+      },
+      {
+        "stock_code": "600436",
+        "stock_abbr": "片仔癀",
+        "report_period": "2025Q3",
+        "net_profit": 212934.76773800002
+      },
+      {
+        "stock_code": "600332",
+        "stock_abbr": "白云山",
+        "report_period": "2023Q3",
+        "net_profit": 379125.018992
+      },
+      {
+        "stock_code": "600332",
+        "stock_abbr": "白云山",
+        "report_period": "2024Q3",
+        "net_profit": 315897.699891
+      },
+      {
+        "stock_code": "600332",
+        "stock_abbr": "白云山",
+        "report_period": "2025Q3",
+        "net_profit": 331005.207786
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "report_period",
+    "sort_ascending": true,
+    "top_n": null,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "net_profit",
+      "data_type": "quantitative",
+      "label": "净利润",
+      "unit": "万元"
+    },
+    "x": {
+      "field": "report_period",
+      "data_type": "temporal",
+      "label": "报告期",
+      "unit": null
+    },
+    "series": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": true,
+    "rotate_xticks": 30,
+    "show_value_labels": false
+  },
+  "output": {
+    "filename": "B1028_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1028_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT stock_code, stock_abbr, report_period, net_profit FROM financials_view WHERE stock_abbr IN ('白云山', '云南白药', '片仔癀') AND report_period IN ('2022Q3', '2023Q3', '2024Q3', '2025Q3') ORDER BY stock_abbr, report_period",
+    "value_fields": [
+      "net_profit"
+    ],
+    "value_labels": [
+      "净利润"
+    ],
+    "original_chart_plan": {
+      "chart_type": "line",
+      "x_field": "report_period",
+      "y_fields": [
+        "net_profit"
+      ],
+      "category_field": null,
+      "sort_by": "report_period",
+      "sort_ascending": true,
+      "top_n": null
+    }
+  }
+}

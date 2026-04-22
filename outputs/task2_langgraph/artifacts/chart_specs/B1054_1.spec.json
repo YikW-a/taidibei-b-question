@@ -1,0 +1,82 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1054",
+  "image_index": 1,
+  "chart_type": "line",
+  "title": "2022-2025年第三季度中药行业平均研发费用占比趋势",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 4,
+    "preview_rows": [
+      {
+        "report_period": "2022Q3",
+        "avg_rnd_expense_ratio": 5.917017401341837
+      },
+      {
+        "report_period": "2023Q3",
+        "avg_rnd_expense_ratio": 3.4902816010071813
+      },
+      {
+        "report_period": "2024Q3",
+        "avg_rnd_expense_ratio": 3.9480089813230554
+      },
+      {
+        "report_period": "2025Q3",
+        "avg_rnd_expense_ratio": 4.015595132237802
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "report_period",
+    "sort_ascending": true,
+    "top_n": null,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "avg_rnd_expense_ratio",
+      "data_type": "quantitative",
+      "label": "avg_rnd_expense_ratio",
+      "unit": "%"
+    },
+    "x": {
+      "field": "report_period",
+      "data_type": "temporal",
+      "label": "报告期",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": false
+  },
+  "output": {
+    "filename": "B1054_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1054_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT report_period, AVG(rnd_expense_ratio) AS avg_rnd_expense_ratio FROM financials_view WHERE report_period IN ('2022Q3', '2023Q3', '2024Q3', '2025Q3') GROUP BY report_period ORDER BY report_period",
+    "value_fields": [
+      "avg_rnd_expense_ratio"
+    ],
+    "value_labels": [
+      "avg_rnd_expense_ratio"
+    ],
+    "original_chart_plan": {
+      "chart_type": "line",
+      "x_field": "report_period",
+      "y_fields": [
+        "avg_rnd_expense_ratio"
+      ],
+      "category_field": null,
+      "sort_by": "report_period",
+      "sort_ascending": true,
+      "top_n": null
+    }
+  }
+}

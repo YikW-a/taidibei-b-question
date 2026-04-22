@@ -1,0 +1,989 @@
+{
+  "question_id": "B1053",
+  "question_type": "数据统计分析查询",
+  "raw_question": "查询2025年第三季度经营性现金流量净额与净利润的比值分布，用直方图展示",
+  "raw_question_json": "[{\"Q\":\"查询2025年第三季度经营性现金流量净额与净利润的比值分布，用直方图展示\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "净利润",
+      "经营性现金流量净额"
+    ],
+    "chart_type": "hist",
+    "intent_type": "trend_or_chart",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "trend_or_chart",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "净利润",
+      "经营性现金流量净额"
+    ],
+    "chart_type": "hist",
+    "top_n": null,
+    "threshold": null,
+    "question": "查询2025年第三季度经营性现金流量净额与净利润的比值分布，用直方图展示",
+    "should_draw": true,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT stock_code, stock_abbr, operating_cf_net_amount, net_profit, (operating_cf_net_amount / NULLIF(net_profit, 0)) AS ratio FROM financials_view WHERE report_period = '2025Q3' AND operating_cf_net_amount IS NOT NULL AND net_profit IS NOT NULL",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, operating_cf_net_amount, net_profit, (operating_cf_net_amount / NULLIF(net_profit, 0)) AS ratio FROM financials_view WHERE report_period = '2025Q3' AND operating_cf_net_amount IS NOT NULL AND net_profit IS NOT NULL"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 67,
+  "result_rows": [
+    {
+      "stock_code": "000423",
+      "stock_abbr": "东阿阿胶",
+      "operating_cf_net_amount": 130973.86755999998,
+      "net_profit": 127382.009544,
+      "ratio": 1.0281975298463109
+    },
+    {
+      "stock_code": "000538",
+      "stock_abbr": "云南白药",
+      "operating_cf_net_amount": 445596.951154,
+      "net_profit": 477711.965747,
+      "ratio": 0.9327732673750769
+    },
+    {
+      "stock_code": "000590",
+      "stock_abbr": "启迪药业",
+      "operating_cf_net_amount": 3313.172789,
+      "net_profit": -1482.060447,
+      "ratio": -2.2355179882889082
+    },
+    {
+      "stock_code": "000650",
+      "stock_abbr": "仁和药业",
+      "operating_cf_net_amount": 84048.426313,
+      "net_profit": 37913.517706,
+      "ratio": 2.216845900840769
+    },
+    {
+      "stock_code": "000766",
+      "stock_abbr": "通化金马",
+      "operating_cf_net_amount": 7081.302195,
+      "net_profit": 2496.346801,
+      "ratio": 2.8366660402165813
+    },
+    {
+      "stock_code": "000790",
+      "stock_abbr": "华神科技",
+      "operating_cf_net_amount": -1034.070071,
+      "net_profit": -9778.528761,
+      "ratio": 0.10574904428611111
+    },
+    {
+      "stock_code": "000989",
+      "stock_abbr": "九芝堂",
+      "operating_cf_net_amount": 31099.852211,
+      "net_profit": 15153.160568000001,
+      "ratio": 2.0523673639858178
+    },
+    {
+      "stock_code": "000999",
+      "stock_abbr": "华润三九",
+      "operating_cf_net_amount": 292535.980357,
+      "net_profit": 235282.69556599998,
+      "ratio": 1.2433382729370326
+    },
+    {
+      "stock_code": "002082",
+      "stock_abbr": "万邦德",
+      "operating_cf_net_amount": 3657.303131,
+      "net_profit": 446.777245,
+      "ratio": 8.185965538598547
+    },
+    {
+      "stock_code": "002107",
+      "stock_abbr": "沃华医药",
+      "operating_cf_net_amount": 10870.125284,
+      "net_profit": 6399.499235,
+      "ratio": 1.6985899810018494
+    },
+    {
+      "stock_code": "002166",
+      "stock_abbr": "莱茵生物",
+      "operating_cf_net_amount": 34645.770223,
+      "net_profit": 7039.5252980000005,
+      "ratio": 4.921606039663386
+    },
+    {
+      "stock_code": "002198",
+      "stock_abbr": "嘉应制药",
+      "operating_cf_net_amount": -7122.719233,
+      "net_profit": 2179.4297699999997,
+      "ratio": -3.268157263447861
+    },
+    {
+      "stock_code": "002219",
+      "stock_abbr": "新里程",
+      "operating_cf_net_amount": 15095.606708000001,
+      "net_profit": -3846.8212240000003,
+      "ratio": -3.9241768278233873
+    },
+    {
+      "stock_code": "002275",
+      "stock_abbr": "桂林三金",
+      "operating_cf_net_amount": 43164.518897,
+      "net_profit": 38522.716713,
+      "ratio": 1.1204951929684015
+    },
+    {
+      "stock_code": "002287",
+      "stock_abbr": "奇正藏药",
+      "operating_cf_net_amount": 50253.874319,
+      "net_profit": 42351.903245999994,
+      "ratio": 1.1865788894327038
+    },
+    {
+      "stock_code": "002317",
+      "stock_abbr": "众生药业",
+      "operating_cf_net_amount": 15498.512574,
+      "net_profit": 25057.803092,
+      "ratio": 0.6185104303476662
+    },
+    {
+      "stock_code": "002349",
+      "stock_abbr": "精华制药",
+      "operating_cf_net_amount": 22455.970016,
+      "net_profit": 17637.268212,
+      "ratio": 1.2732113469092377
+    },
+    {
+      "stock_code": "002390",
+      "stock_abbr": "信邦制药",
+      "operating_cf_net_amount": 46158.230236,
+      "net_profit": 15232.4953,
+      "ratio": 3.0302474628697245
+    },
+    {
+      "stock_code": "002424",
+      "stock_abbr": "贵州百灵",
+      "operating_cf_net_amount": 53570.592789999995,
+      "net_profit": 5681.443227000001,
+      "ratio": 9.429046573134046
+    },
+    {
+      "stock_code": "002566",
+      "stock_abbr": "益盛药业",
+      "operating_cf_net_amount": 4154.884403,
+      "net_profit": 2412.83185,
+      "ratio": 1.7219950088938025
+    },
+    {
+      "stock_code": "002589",
+      "stock_abbr": "瑞康医药",
+      "operating_cf_net_amount": 4057.6182689999996,
+      "net_profit": 1213.662607,
+      "ratio": 3.3432835827659306
+    },
+    {
+      "stock_code": "002603",
+      "stock_abbr": "以岭药业",
+      "operating_cf_net_amount": 127823.896904,
+      "net_profit": 100040.467191,
+      "ratio": 1.2777219108738778
+    },
+    {
+      "stock_code": "002728",
+      "stock_abbr": "特一药业",
+      "operating_cf_net_amount": 19119.344751,
+      "net_profit": 6521.712979,
+      "ratio": 2.9316446173826627
+    },
+    {
+      "stock_code": "002737",
+      "stock_abbr": "葵花药业",
+      "operating_cf_net_amount": 22032.39922,
+      "net_profit": -3353.869369,
+      "ratio": -6.56924787341054
+    },
+    {
+      "stock_code": "002773",
+      "stock_abbr": "康弘药业",
+      "operating_cf_net_amount": 140827.568802,
+      "net_profit": 103290.656453,
+      "ratio": 1.3634105313879992
+    },
+    {
+      "stock_code": "002864",
+      "stock_abbr": "盘龙药业",
+      "operating_cf_net_amount": 8915.594833,
+      "net_profit": 8980.587428,
+      "ratio": 0.9927629906705918
+    },
+    {
+      "stock_code": "002873",
+      "stock_abbr": "新天药业",
+      "operating_cf_net_amount": 11599.592234,
+      "net_profit": 1618.094017,
+      "ratio": 7.168676301953102
+    },
+    {
+      "stock_code": "002907",
+      "stock_abbr": "华森制药",
+      "operating_cf_net_amount": 2479.241987,
+      "net_profit": 7245.560589,
+      "ratio": 0.34217393623951103
+    },
+    {
+      "stock_code": "300026",
+      "stock_abbr": "红日药业",
+      "operating_cf_net_amount": 53683.663649,
+      "net_profit": 8076.293464,
+      "ratio": 6.647066985405423
+    },
+    {
+      "stock_code": "300158",
+      "stock_abbr": "振东制药",
+      "operating_cf_net_amount": -60273.685057,
+      "net_profit": 2036.406993,
+      "ratio": -29.598054447949934
+    },
+    {
+      "stock_code": "300181",
+      "stock_abbr": "佐力药业",
+      "operating_cf_net_amount": 26600.144172,
+      "net_profit": 50997.44788,
+      "ratio": 0.5215975559128313
+    },
+    {
+      "stock_code": "300519",
+      "stock_abbr": "新光药业",
+      "operating_cf_net_amount": 5058.805601,
+      "net_profit": 4533.617834000001,
+      "ratio": 1.1158429727052286
+    },
+    {
+      "stock_code": "300534",
+      "stock_abbr": "陇神戎发",
+      "operating_cf_net_amount": -8081.569731999999,
+      "net_profit": 2702.9405739999997,
+      "ratio": -2.9899176510715253
+    },
+    {
+      "stock_code": "300869",
+      "stock_abbr": "康泰医学",
+      "operating_cf_net_amount": 1960.089357,
+      "net_profit": 939.98424,
+      "ratio": 2.0852364046018472
+    },
+    {
+      "stock_code": "300878",
+      "stock_abbr": "维康药业",
+      "operating_cf_net_amount": 4298.146828,
+      "net_profit": -12385.457987,
+      "ratio": -0.34703172321212605
+    },
+    {
+      "stock_code": "301111",
+      "stock_abbr": "粤万年青",
+      "operating_cf_net_amount": -182.04511399999998,
+      "net_profit": -812.952108,
+      "ratio": 0.22393092066377912
+    },
+    {
+      "stock_code": "301331",
+      "stock_abbr": "恩威医药",
+      "operating_cf_net_amount": 7620.203501000001,
+      "net_profit": 3658.466167,
+      "ratio": 2.0828957145307396
+    },
+    {
+      "stock_code": "600080",
+      "stock_abbr": "金花股份",
+      "operating_cf_net_amount": -5772.128863,
+      "net_profit": 3448.124386,
+      "ratio": -1.6739909054429338
+    },
+    {
+      "stock_code": "600085",
+      "stock_abbr": "同仁堂",
+      "operating_cf_net_amount": 198786.343281,
+      "net_profit": 117755.58453,
+      "ratio": 1.688126674199101
+    },
+    {
+      "stock_code": "600129",
+      "stock_abbr": "太极集团",
+      "operating_cf_net_amount": 16637.262371,
+      "net_profit": 16590.530672,
+      "ratio": 1.002816769392366
+    },
+    {
+      "stock_code": "600222",
+      "stock_abbr": "太龙药业",
+      "operating_cf_net_amount": -8898.904118,
+      "net_profit": 2532.546125,
+      "ratio": -3.513817193753974
+    },
+    {
+      "stock_code": "600252",
+      "stock_abbr": "中恒集团",
+      "operating_cf_net_amount": -15639.667388999998,
+      "net_profit": 2464.037494,
+      "ratio": -6.347171026042836
+    },
+    {
+      "stock_code": "600285",
+      "stock_abbr": "羚锐制药",
+      "operating_cf_net_amount": 49038.765636000004,
+      "net_profit": 65093.260977,
+      "ratio": 0.7533616368263886
+    },
+    {
+      "stock_code": "600329",
+      "stock_abbr": "达仁堂",
+      "operating_cf_net_amount": 59032.994727,
+      "net_profit": 215218.218452,
+      "ratio": 0.274293668777702
+    },
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "operating_cf_net_amount": -197197.35860799998,
+      "net_profit": 331005.207786,
+      "ratio": -0.5957530394370446
+    },
+    {
+      "stock_code": "600351",
+      "stock_abbr": "亚宝药业",
+      "operating_cf_net_amount": 45666.207339,
+      "net_profit": 21509.429385,
+      "ratio": 2.1230785122940627
+    },
+    {
+      "stock_code": "600422",
+      "stock_abbr": "昆药集团",
+      "operating_cf_net_amount": 17616.366724,
+      "net_profit": 26936.779435000004,
+      "ratio": 0.653989344439238
+    },
+    {
+      "stock_code": "600436",
+      "stock_abbr": "片仔癀",
+      "operating_cf_net_amount": 48673.738218,
+      "net_profit": 212934.76773800002,
+      "ratio": 0.22858520820747
+    },
+    {
+      "stock_code": "600479",
+      "stock_abbr": "千金药业",
+      "operating_cf_net_amount": 24296.83759,
+      "net_profit": 18735.517374000003,
+      "ratio": 1.296833020673219
+    },
+    {
+      "stock_code": "600518",
+      "stock_abbr": "康美药业",
+      "operating_cf_net_amount": 13784.24998,
+      "net_profit": 1308.230931,
+      "ratio": 10.536557157736244
+    },
+    {
+      "stock_code": "600535",
+      "stock_abbr": "天士力",
+      "operating_cf_net_amount": 87261.729966,
+      "net_profit": 98437.321094,
+      "ratio": 0.8864699790303295
+    },
+    {
+      "stock_code": "600557",
+      "stock_abbr": "康缘药业",
+      "operating_cf_net_amount": 34612.490638,
+      "net_profit": 19964.174677000003,
+      "ratio": 1.7337301039484387
+    },
+    {
+      "stock_code": "600566",
+      "stock_abbr": "济川药业",
+      "operating_cf_net_amount": 70351.13694,
+      "net_profit": 102246.342687,
+      "ratio": 0.6880552897169271
+    },
+    {
+      "stock_code": "600572",
+      "stock_abbr": "康恩贝",
+      "operating_cf_net_amount": 53153.455939,
+      "net_profit": 58403.473645000005,
+      "ratio": 0.9101077833501524
+    },
+    {
+      "stock_code": "600594",
+      "stock_abbr": "益佰制药",
+      "operating_cf_net_amount": 20379.822534,
+      "net_profit": -8656.262179000001,
+      "ratio": -2.3543444170904655
+    },
+    {
+      "stock_code": "600613",
+      "stock_abbr": "神奇制药",
+      "operating_cf_net_amount": 15730.775734,
+      "net_profit": 5030.160435,
+      "ratio": 3.1272910550814275
+    },
+    {
+      "stock_code": "600671",
+      "stock_abbr": "天目药业",
+      "operating_cf_net_amount": -3083.10888,
+      "net_profit": 1420.87966,
+      "ratio": -2.1698592546535576
+    },
+    {
+      "stock_code": "600750",
+      "stock_abbr": "江中药业",
+      "operating_cf_net_amount": 97377.430208,
+      "net_profit": 68345.004289,
+      "ratio": 1.4247922173833665
+    },
+    {
+      "stock_code": "600771",
+      "stock_abbr": "广誉远",
+      "operating_cf_net_amount": 20128.492731,
+      "net_profit": 7888.398722,
+      "ratio": 2.5516576228409362
+    },
+    {
+      "stock_code": "600976",
+      "stock_abbr": "健民集团",
+      "operating_cf_net_amount": 13905.034538,
+      "net_profit": 28573.732193,
+      "ratio": 0.48663697287001445
+    },
+    {
+      "stock_code": "600993",
+      "stock_abbr": "马应龙",
+      "operating_cf_net_amount": 44980.161275,
+      "net_profit": 50101.071743,
+      "ratio": 0.8977884047217916
+    },
+    {
+      "stock_code": "603139",
+      "stock_abbr": "康惠制药",
+      "operating_cf_net_amount": -923.802967,
+      "net_profit": -13250.394158,
+      "ratio": 0.06971890465931904
+    },
+    {
+      "stock_code": "603439",
+      "stock_abbr": "贵州三力",
+      "operating_cf_net_amount": 5006.363517,
+      "net_profit": 8078.697331,
+      "ratio": 0.6196993539774438
+    },
+    {
+      "stock_code": "603567",
+      "stock_abbr": "珍宝岛",
+      "operating_cf_net_amount": 22327.190947,
+      "net_profit": -37309.834572,
+      "ratio": -0.5984264257166109
+    },
+    {
+      "stock_code": "603858",
+      "stock_abbr": "步长制药",
+      "operating_cf_net_amount": 81509.191271,
+      "net_profit": 86832.371842,
+      "ratio": 0.9386958981071479
+    },
+    {
+      "stock_code": "603896",
+      "stock_abbr": "寿仙谷",
+      "operating_cf_net_amount": 14393.456116999998,
+      "net_profit": 7634.1743129999995,
+      "ratio": 1.8853978867747132
+    },
+    {
+      "stock_code": "603998",
+      "stock_abbr": "方盛制药",
+      "operating_cf_net_amount": 22487.624574,
+      "net_profit": 26828.328789,
+      "ratio": 0.8382044498880694
+    }
+  ],
+  "context_companies": [
+    "东阿阿胶",
+    "云南白药",
+    "启迪药业",
+    "仁和药业",
+    "通化金马",
+    "华神科技",
+    "九芝堂",
+    "华润三九",
+    "万邦德",
+    "沃华医药",
+    "莱茵生物",
+    "嘉应制药",
+    "新里程",
+    "桂林三金",
+    "奇正藏药",
+    "众生药业",
+    "精华制药",
+    "信邦制药",
+    "贵州百灵",
+    "益盛药业",
+    "瑞康医药",
+    "以岭药业",
+    "特一药业",
+    "葵花药业",
+    "康弘药业",
+    "盘龙药业",
+    "新天药业",
+    "华森制药",
+    "红日药业",
+    "振东制药",
+    "佐力药业",
+    "新光药业",
+    "陇神戎发",
+    "康泰医学",
+    "维康药业",
+    "粤万年青",
+    "恩威医药",
+    "金花股份",
+    "同仁堂",
+    "太极集团",
+    "太龙药业",
+    "中恒集团",
+    "羚锐制药",
+    "达仁堂",
+    "白云山",
+    "亚宝药业",
+    "昆药集团",
+    "片仔癀",
+    "千金药业",
+    "康美药业",
+    "天士力",
+    "康缘药业",
+    "济川药业",
+    "康恩贝",
+    "益佰制药",
+    "神奇制药",
+    "天目药业",
+    "江中药业",
+    "广誉远",
+    "健民集团",
+    "马应龙",
+    "康惠制药",
+    "贵州三力",
+    "珍宝岛",
+    "步长制药",
+    "寿仙谷",
+    "方盛制药"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "000423",
+      "stock_abbr": "东阿阿胶",
+      "operating_cf_net_amount": 130973.86755999998,
+      "net_profit": 127382.009544,
+      "ratio": 1.0281975298463109
+    },
+    {
+      "stock_code": "000538",
+      "stock_abbr": "云南白药",
+      "operating_cf_net_amount": 445596.951154,
+      "net_profit": 477711.965747,
+      "ratio": 0.9327732673750769
+    },
+    {
+      "stock_code": "000590",
+      "stock_abbr": "启迪药业",
+      "operating_cf_net_amount": 3313.172789,
+      "net_profit": -1482.060447,
+      "ratio": -2.2355179882889082
+    },
+    {
+      "stock_code": "000650",
+      "stock_abbr": "仁和药业",
+      "operating_cf_net_amount": 84048.426313,
+      "net_profit": 37913.517706,
+      "ratio": 2.216845900840769
+    },
+    {
+      "stock_code": "000766",
+      "stock_abbr": "通化金马",
+      "operating_cf_net_amount": 7081.302195,
+      "net_profit": 2496.346801,
+      "ratio": 2.8366660402165813
+    },
+    {
+      "stock_code": "000790",
+      "stock_abbr": "华神科技",
+      "operating_cf_net_amount": -1034.070071,
+      "net_profit": -9778.528761,
+      "ratio": 0.10574904428611111
+    },
+    {
+      "stock_code": "000989",
+      "stock_abbr": "九芝堂",
+      "operating_cf_net_amount": 31099.852211,
+      "net_profit": 15153.160568000001,
+      "ratio": 2.0523673639858178
+    },
+    {
+      "stock_code": "000999",
+      "stock_abbr": "华润三九",
+      "operating_cf_net_amount": 292535.980357,
+      "net_profit": 235282.69556599998,
+      "ratio": 1.2433382729370326
+    },
+    {
+      "stock_code": "002082",
+      "stock_abbr": "万邦德",
+      "operating_cf_net_amount": 3657.303131,
+      "net_profit": 446.777245,
+      "ratio": 8.185965538598547
+    },
+    {
+      "stock_code": "002107",
+      "stock_abbr": "沃华医药",
+      "operating_cf_net_amount": 10870.125284,
+      "net_profit": 6399.499235,
+      "ratio": 1.6985899810018494
+    },
+    {
+      "stock_code": "002166",
+      "stock_abbr": "莱茵生物",
+      "operating_cf_net_amount": 34645.770223,
+      "net_profit": 7039.5252980000005,
+      "ratio": 4.921606039663386
+    },
+    {
+      "stock_code": "002198",
+      "stock_abbr": "嘉应制药",
+      "operating_cf_net_amount": -7122.719233,
+      "net_profit": 2179.4297699999997,
+      "ratio": -3.268157263447861
+    },
+    {
+      "stock_code": "002219",
+      "stock_abbr": "新里程",
+      "operating_cf_net_amount": 15095.606708000001,
+      "net_profit": -3846.8212240000003,
+      "ratio": -3.9241768278233873
+    },
+    {
+      "stock_code": "002275",
+      "stock_abbr": "桂林三金",
+      "operating_cf_net_amount": 43164.518897,
+      "net_profit": 38522.716713,
+      "ratio": 1.1204951929684015
+    },
+    {
+      "stock_code": "002287",
+      "stock_abbr": "奇正藏药",
+      "operating_cf_net_amount": 50253.874319,
+      "net_profit": 42351.903245999994,
+      "ratio": 1.1865788894327038
+    },
+    {
+      "stock_code": "002317",
+      "stock_abbr": "众生药业",
+      "operating_cf_net_amount": 15498.512574,
+      "net_profit": 25057.803092,
+      "ratio": 0.6185104303476662
+    },
+    {
+      "stock_code": "002349",
+      "stock_abbr": "精华制药",
+      "operating_cf_net_amount": 22455.970016,
+      "net_profit": 17637.268212,
+      "ratio": 1.2732113469092377
+    },
+    {
+      "stock_code": "002390",
+      "stock_abbr": "信邦制药",
+      "operating_cf_net_amount": 46158.230236,
+      "net_profit": 15232.4953,
+      "ratio": 3.0302474628697245
+    },
+    {
+      "stock_code": "002424",
+      "stock_abbr": "贵州百灵",
+      "operating_cf_net_amount": 53570.592789999995,
+      "net_profit": 5681.443227000001,
+      "ratio": 9.429046573134046
+    },
+    {
+      "stock_code": "002566",
+      "stock_abbr": "益盛药业",
+      "operating_cf_net_amount": 4154.884403,
+      "net_profit": 2412.83185,
+      "ratio": 1.7219950088938025
+    },
+    {
+      "stock_code": "002589",
+      "stock_abbr": "瑞康医药",
+      "operating_cf_net_amount": 4057.6182689999996,
+      "net_profit": 1213.662607,
+      "ratio": 3.3432835827659306
+    },
+    {
+      "stock_code": "002603",
+      "stock_abbr": "以岭药业",
+      "operating_cf_net_amount": 127823.896904,
+      "net_profit": 100040.467191,
+      "ratio": 1.2777219108738778
+    },
+    {
+      "stock_code": "002728",
+      "stock_abbr": "特一药业",
+      "operating_cf_net_amount": 19119.344751,
+      "net_profit": 6521.712979,
+      "ratio": 2.9316446173826627
+    },
+    {
+      "stock_code": "002737",
+      "stock_abbr": "葵花药业",
+      "operating_cf_net_amount": 22032.39922,
+      "net_profit": -3353.869369,
+      "ratio": -6.56924787341054
+    },
+    {
+      "stock_code": "002773",
+      "stock_abbr": "康弘药业",
+      "operating_cf_net_amount": 140827.568802,
+      "net_profit": 103290.656453,
+      "ratio": 1.3634105313879992
+    },
+    {
+      "stock_code": "002864",
+      "stock_abbr": "盘龙药业",
+      "operating_cf_net_amount": 8915.594833,
+      "net_profit": 8980.587428,
+      "ratio": 0.9927629906705918
+    },
+    {
+      "stock_code": "002873",
+      "stock_abbr": "新天药业",
+      "operating_cf_net_amount": 11599.592234,
+      "net_profit": 1618.094017,
+      "ratio": 7.168676301953102
+    },
+    {
+      "stock_code": "002907",
+      "stock_abbr": "华森制药",
+      "operating_cf_net_amount": 2479.241987,
+      "net_profit": 7245.560589,
+      "ratio": 0.34217393623951103
+    },
+    {
+      "stock_code": "300026",
+      "stock_abbr": "红日药业",
+      "operating_cf_net_amount": 53683.663649,
+      "net_profit": 8076.293464,
+      "ratio": 6.647066985405423
+    },
+    {
+      "stock_code": "300158",
+      "stock_abbr": "振东制药",
+      "operating_cf_net_amount": -60273.685057,
+      "net_profit": 2036.406993,
+      "ratio": -29.598054447949934
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"000423\",\"stock_abbr\":\"东阿阿胶\",\"operating_cf_net_amount\":130973.86756,\"net_profit\":127382.009544,\"ratio\":1.0281975298},{\"stock_code\":\"000538\",\"stock_abbr\":\"云南白药\",\"operating_cf_net_amount\":445596.951154,\"net_profit\":477711.965747,\"ratio\":0.9327732674},{\"stock_code\":\"000590\",\"stock_abbr\":\"启迪药业\",\"operating_cf_net_amount\":3313.172789,\"net_profit\":-1482.060447,\"ratio\":-2.2355179883},{\"stock_code\":\"000650\",\"stock_abbr\":\"仁和药业\",\"operating_cf_net_amount\":84048.426313,\"net_profit\":37913.517706,\"ratio\":2.2168459008},{\"stock_code\":\"000766\",\"stock_abbr\":\"通化金马\",\"operating_cf_net_amount\":7081.302195,\"net_profit\":2496.346801,\"ratio\":2.8366660402},{\"stock_code\":\"000790\",\"stock_abbr\":\"华神科技\",\"operating_cf_net_amount\":-1034.070071,\"net_profit\":-9778.528761,\"ratio\":0.1057490443},{\"stock_code\":\"000989\",\"stock_abbr\":\"九芝堂\",\"operating_cf_net_amount\":31099.852211,\"net_profit\":15153.160568,\"ratio\":2.052367364},{\"stock_code\":\"000999\",\"stock_abbr\":\"华润三九\",\"operating_cf_net_amount\":292535.980357,\"net_profit\":235282.695566,\"ratio\":1.2433382729},{\"stock_code\":\"002082\",\"stock_abbr\":\"万邦德\",\"operating_cf_net_amount\":3657.303131,\"net_profit\":446.777245,\"ratio\":8.1859655386},{\"stock_code\":\"002107\",\"stock_abbr\":\"沃华医药\",\"operating_cf_net_amount\":10870.125284,\"net_profit\":6399.499235,\"ratio\":1.698589981},{\"stock_code\":\"002166\",\"stock_abbr\":\"莱茵生物\",\"operating_cf_net_amount\":34645.770223,\"net_profit\":7039.525298,\"ratio\":4.9216060397},{\"stock_code\":\"002198\",\"stock_abbr\":\"嘉应制药\",\"operating_cf_net_amount\":-7122.719233,\"net_profit\":2179.42977,\"ratio\":-3.2681572634},{\"stock_code\":\"002219\",\"stock_abbr\":\"新里程\",\"operating_cf_net_amount\":15095.606708,\"net_profit\":-3846.821224,\"ratio\":-3.9241768278},{\"stock_code\":\"002275\",\"stock_abbr\":\"桂林三金\",\"operating_cf_net_amount\":43164.518897,\"net_profit\":38522.716713,\"ratio\":1.120495193},{\"stock_code\":\"002287\",\"stock_abbr\":\"奇正藏药\",\"operating_cf_net_amount\":50253.874319,\"net_profit\":42351.903246,\"ratio\":1.1865788894},{\"stock_code\":\"002317\",\"stock_abbr\":\"众生药业\",\"operating_cf_net_amount\":15498.512574,\"net_profit\":25057.803092,\"ratio\":0.6185104303},{\"stock_code\":\"002349\",\"stock_abbr\":\"精华制药\",\"operating_cf_net_amount\":22455.970016,\"net_profit\":17637.268212,\"ratio\":1.2732113469},{\"stock_code\":\"002390\",\"stock_abbr\":\"信邦制药\",\"operating_cf_net_amount\":46158.230236,\"net_profit\":15232.4953,\"ratio\":3.0302474629},{\"stock_code\":\"002424\",\"stock_abbr\":\"贵州百灵\",\"operating_cf_net_amount\":53570.59279,\"net_profit\":5681.443227,\"ratio\":9.4290465731},{\"stock_code\":\"002566\",\"stock_abbr\":\"益盛药业\",\"operating_cf_net_amount\":4154.884403,\"net_profit\":2412.83185,\"ratio\":1.7219950089}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2025Q3 经营性现金流量净额/净利润比值分布",
+    "x_field": null,
+    "y_fields": [
+      "ratio"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": "ratio",
+    "sort_ascending": false,
+    "top_n": 15,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1053",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "2025Q3 经营性现金流量净额/净利润比值分布",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 50,
+      "preview_rows": [
+        {
+          "stock_code": "000423",
+          "stock_abbr": "东阿阿胶",
+          "operating_cf_net_amount": 130973.86755999998,
+          "net_profit": 127382.009544,
+          "ratio": 1.0281975298463109
+        },
+        {
+          "stock_code": "000538",
+          "stock_abbr": "云南白药",
+          "operating_cf_net_amount": 445596.951154,
+          "net_profit": 477711.965747,
+          "ratio": 0.9327732673750769
+        },
+        {
+          "stock_code": "000590",
+          "stock_abbr": "启迪药业",
+          "operating_cf_net_amount": 3313.172789,
+          "net_profit": -1482.060447,
+          "ratio": -2.2355179882889082
+        },
+        {
+          "stock_code": "000650",
+          "stock_abbr": "仁和药业",
+          "operating_cf_net_amount": 84048.426313,
+          "net_profit": 37913.517706,
+          "ratio": 2.216845900840769
+        },
+        {
+          "stock_code": "000766",
+          "stock_abbr": "通化金马",
+          "operating_cf_net_amount": 7081.302195,
+          "net_profit": 2496.346801,
+          "ratio": 2.8366660402165813
+        },
+        {
+          "stock_code": "000790",
+          "stock_abbr": "华神科技",
+          "operating_cf_net_amount": -1034.070071,
+          "net_profit": -9778.528761,
+          "ratio": 0.10574904428611111
+        },
+        {
+          "stock_code": "000989",
+          "stock_abbr": "九芝堂",
+          "operating_cf_net_amount": 31099.852211,
+          "net_profit": 15153.160568000001,
+          "ratio": 2.0523673639858178
+        },
+        {
+          "stock_code": "000999",
+          "stock_abbr": "华润三九",
+          "operating_cf_net_amount": 292535.980357,
+          "net_profit": 235282.69556599998,
+          "ratio": 1.2433382729370326
+        },
+        {
+          "stock_code": "002082",
+          "stock_abbr": "万邦德",
+          "operating_cf_net_amount": 3657.303131,
+          "net_profit": 446.777245,
+          "ratio": 8.185965538598547
+        },
+        {
+          "stock_code": "002107",
+          "stock_abbr": "沃华医药",
+          "operating_cf_net_amount": 10870.125284,
+          "net_profit": 6399.499235,
+          "ratio": 1.6985899810018494
+        },
+        {
+          "stock_code": "002166",
+          "stock_abbr": "莱茵生物",
+          "operating_cf_net_amount": 34645.770223,
+          "net_profit": 7039.5252980000005,
+          "ratio": 4.921606039663386
+        },
+        {
+          "stock_code": "002198",
+          "stock_abbr": "嘉应制药",
+          "operating_cf_net_amount": -7122.719233,
+          "net_profit": 2179.4297699999997,
+          "ratio": -3.268157263447861
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "ratio",
+      "sort_ascending": false,
+      "top_n": 15,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "ratio",
+        "data_type": "quantitative",
+        "label": "ratio",
+        "unit": "%"
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B1053_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1053_1.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT stock_code, stock_abbr, operating_cf_net_amount, net_profit, (operating_cf_net_amount / NULLIF(net_profit, 0)) AS ratio FROM financials_view WHERE report_period = '2025Q3' AND operating_cf_net_amount IS NOT NULL AND net_profit IS NOT NULL",
+      "value_fields": [
+        "ratio"
+      ],
+      "value_labels": [
+        "ratio"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "ratio"
+        ],
+        "category_field": "stock_abbr",
+        "sort_by": "ratio",
+        "sort_ascending": false,
+        "top_n": 15
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1053_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1053_1.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "查询2025年第三季度经营性现金流量净额与净利润的比值分布，用直方图展示",
+      "A": {
+        "content": "根据查询结果，2025年第三季度经营性现金流量净额与净利润的比值分布如下（按比值从低到高排列）：\n\n1.  **振东制药 (300158)**：比值为 -29.60，净利润为正但经营性现金流为负。\n2.  **葵花药业 (002737)**：比值为 -6.57，净利润为负。\n3.  **新里程 (002219)**：比值为 -3.92，净利润为负。\n4.  **嘉应制药 (002198)**：比值为 -3.27，净利润为正但经营性现金流为负。\n5.  **启迪药业 (000590)**：比值为 -2.24，净利润为负。\n6.  **华神科技 (000790)**：比值为 0.11，净利润为负。\n7.  **华森制药 (002907)**：比值为 0.34。\n8.  **众生药业 (002317)**：比值为 0.62。\n9.  **云南白药 (000538)**：比值为 0.93。\n10. **盘龙药业 (002864)**：比值为 0.99。\n11. **东阿阿胶 (000423)**：比值为 1.03。\n12. **桂林三金 (002275)**：比值为 1.12。\n13. **奇正藏药 (002287)**：比值为 1.19。\n14. **华润三九 (000999)**：比值为 1.24。\n15. **精华制药 (002349)**：比值为 1.27。\n16. **以岭药业 (002603)**：比值为 1.28。\n17. **康弘药业 (002773)**：比值为 1.36。\n18. **沃华医药 (002107)**：比值为 1.70。\n19. **益盛药业 (002566)**：比值为 1.72。\n20. **仁和药业 (000650)**：比值为 2.22。\n21. **九芝堂 (000989)**：比值为 2.05。\n22. **通化金马 (000766)**：比值为 2.84。\n23. **特一药业 (002728)**：比值为 2.93。\n24. **信邦制药 (002390)**：比值为 3.03。\n25. **瑞康医药 (002589)**：比值为 3.34。\n26. **莱茵生物 (002166)**：比值为 4.92。\n27. **红日药业 (300026)**：比值为 6.65。\n28. **新天药业 (002873)**：比值为 7.17。\n29. **万邦德 (002082)**：比值为 8.19。\n30. **贵州百灵 (002424)**：比值为 9.43。\n\n从分布看，比值主要集中在0.5至3.0之间，部分公司比值较高（超过5），少数公司因净利润为负或经营性现金流为负导致比值为负值或异常低。",
+        "image": [
+          "./result/B1053_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"查询2025年第三季度经营性现金流量净额与净利润的比值分布，用直方图展示\", \"A\": {\"content\": \"根据查询结果，2025年第三季度经营性现金流量净额与净利润的比值分布如下（按比值从低到高排列）：\\n\\n1.  **振东制药 (300158)**：比值为 -29.60，净利润为正但经营性现金流为负。\\n2.  **葵花药业 (002737)**：比值为 -6.57，净利润为负。\\n3.  **新里程 (002219)**：比值为 -3.92，净利润为负。\\n4.  **嘉应制药 (002198)**：比值为 -3.27，净利润为正但经营性现金流为负。\\n5.  **启迪药业 (000590)**：比值为 -2.24，净利润为负。\\n6.  **华神科技 (000790)**：比值为 0.11，净利润为负。\\n7.  **华森制药 (002907)**：比值为 0.34。\\n8.  **众生药业 (002317)**：比值为 0.62。\\n9.  **云南白药 (000538)**：比值为 0.93。\\n10. **盘龙药业 (002864)**：比值为 0.99。\\n11. **东阿阿胶 (000423)**：比值为 1.03。\\n12. **桂林三金 (002275)**：比值为 1.12。\\n13. **奇正藏药 (002287)**：比值为 1.19。\\n14. **华润三九 (000999)**：比值为 1.24。\\n15. **精华制药 (002349)**：比值为 1.27。\\n16. **以岭药业 (002603)**：比值为 1.28。\\n17. **康弘药业 (002773)**：比值为 1.36。\\n18. **沃华医药 (002107)**：比值为 1.70。\\n19. **益盛药业 (002566)**：比值为 1.72。\\n20. **仁和药业 (000650)**：比值为 2.22。\\n21. **九芝堂 (000989)**：比值为 2.05。\\n22. **通化金马 (000766)**：比值为 2.84。\\n23. **特一药业 (002728)**：比值为 2.93。\\n24. **信邦制药 (002390)**：比值为 3.03。\\n25. **瑞康医药 (002589)**：比值为 3.34。\\n26. **莱茵生物 (002166)**：比值为 4.92。\\n27. **红日药业 (300026)**：比值为 6.65。\\n28. **新天药业 (002873)**：比值为 7.17。\\n29. **万邦德 (002082)**：比值为 8.19。\\n30. **贵州百灵 (002424)**：比值为 9.43。\\n\\n从分布看，比值主要集中在0.5至3.0之间，部分公司比值较高（超过5），少数公司因净利润为负或经营性现金流为负导致比值为负值或异常低。\", \"image\": [\"./result/B1053_1.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，需要获取2025年第三季度所有公司的经营性现金流量净额和净利润，并计算比值用于直方图展示。查询返回了必要的字段和计算出的比值，并过滤了空值。"
+  ],
+  "final_status": "ok"
+}

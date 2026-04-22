@@ -1,0 +1,114 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1007",
+  "image_index": 2,
+  "chart_type": "bar",
+  "title": "净利润为负的上市公司列表",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 27,
+    "preview_rows": [
+      {
+        "stock_code": "000590",
+        "stock_abbr": "启迪药业"
+      },
+      {
+        "stock_code": "000790",
+        "stock_abbr": "华神科技"
+      },
+      {
+        "stock_code": "002082",
+        "stock_abbr": "万邦德"
+      },
+      {
+        "stock_code": "002219",
+        "stock_abbr": "新里程"
+      },
+      {
+        "stock_code": "002317",
+        "stock_abbr": "众生药业"
+      },
+      {
+        "stock_code": "002424",
+        "stock_abbr": "贵州百灵"
+      },
+      {
+        "stock_code": "002589",
+        "stock_abbr": "瑞康医药"
+      },
+      {
+        "stock_code": "002603",
+        "stock_abbr": "以岭药业"
+      },
+      {
+        "stock_code": "002737",
+        "stock_abbr": "葵花药业"
+      },
+      {
+        "stock_code": "002898",
+        "stock_abbr": "赛隆药业"
+      },
+      {
+        "stock_code": "300147",
+        "stock_abbr": "香雪制药"
+      },
+      {
+        "stock_code": "300158",
+        "stock_abbr": "振东制药"
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "stock_code",
+    "sort_ascending": true,
+    "top_n": 15,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "stock_code",
+      "data_type": "quantitative",
+      "label": "股票代码",
+      "unit": "万元"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1007_2.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1007_2.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT DISTINCT stock_code, stock_abbr FROM financials_view WHERE net_profit < 0",
+    "value_fields": [
+      "stock_code"
+    ],
+    "value_labels": [
+      "股票代码"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "stock_code"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": "stock_code",
+      "sort_ascending": true,
+      "top_n": 15
+    }
+  }
+}

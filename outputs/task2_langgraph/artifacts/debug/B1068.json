@@ -1,0 +1,236 @@
+{
+  "question_id": "B1068",
+  "question_type": "数据统计分析查询",
+  "raw_question": "分析中药行业的盈利能力 | 2025年第三季度，66家中药上市公司的平均销售毛利率、销售净利率分别是多少？请结合数值分析行业整体盈利能力",
+  "raw_question_json": "[{\"Q\":\"分析中药行业的盈利能力\"},{\"Q\":\"2025年第三季度，66家中药上市公司的平均销售毛利率、销售净利率分别是多少？请结合数值分析行业整体盈利能力\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "销售毛利率",
+      "销售净利率"
+    ],
+    "chart_type": null,
+    "intent_type": "period_stat",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "period_stat",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "销售毛利率",
+      "销售净利率"
+    ],
+    "chart_type": "table",
+    "top_n": null,
+    "threshold": null,
+    "question": "2025年第三季度，66家中药上市公司的平均销售毛利率、销售净利率分别是多少？请结合数值分析行业整体盈利能力",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT AVG(gross_profit_margin) AS avg_gross_profit_margin, AVG(net_profit_margin) AS avg_net_profit_margin FROM financials_view WHERE report_period = '2025Q3'",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, report_period, net_profit_margin, roe, gross_profit_margin, net_profit, total_operating_revenue FROM financials_view WHERE stock_abbr IN ('云南白药', '片仔癀', '同仁堂', '白云山', '华润三九', '东阿阿胶', '以岭药业', '天士力', '康恩贝', '九芝堂', '马应龙', '广誉远', '贵州百灵', '太极集团', '中新药业', '羚锐制药', '健民集团', '千金药业', '桂林三金', '奇正藏药', '佛慈制药', '沃华医药', '嘉应制药', '太安堂', '紫鑫药业', '益盛药业', '香雪制药', '康缘药业', '红日药业', '振东制药', '上海凯宝', '福瑞股份', '众生药业', '精华制药', '汉森制药', '贵州三力', '维康药业', '特一药业', '新天药业', '盘龙药业', '寿仙谷', '康惠制药', '陇神戎发', '佐力药业', '易明医药', '大理药业', '华森制药', '龙津药业', '步长制药', '济川药业', '葵花药业', '仁和药业', '华海药业', '浙江震元', '金陵药业', '康弘药业', '信邦制药', '益佰制药', '中恒集团', '昆药集团', '江中药业', '千金药业', '健民集团', '广誉远') ORDER BY report_period DESC, stock_abbr",
+    "SELECT AVG(gross_profit_margin) AS avg_gross_profit_margin, AVG(net_profit_margin) AS avg_net_profit_margin FROM financials_view WHERE report_period = '2025Q3'"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 1,
+  "result_rows": [
+    {
+      "avg_gross_profit_margin": 52.72351254856017,
+      "avg_net_profit_margin": 7.319933157931603
+    }
+  ],
+  "context_companies": [
+    "东阿阿胶",
+    "中恒集团",
+    "九芝堂",
+    "云南白药",
+    "仁和药业",
+    "以岭药业",
+    "众生药业",
+    "佐力药业",
+    "信邦制药",
+    "健民集团",
+    "千金药业",
+    "华森制药",
+    "华润三九",
+    "同仁堂",
+    "嘉应制药",
+    "天士力",
+    "太极集团",
+    "奇正藏药",
+    "寿仙谷",
+    "广誉远",
+    "康弘药业",
+    "康恩贝",
+    "康惠制药",
+    "康缘药业",
+    "振东制药",
+    "新天药业",
+    "昆药集团",
+    "桂林三金",
+    "步长制药",
+    "江中药业",
+    "沃华医药",
+    "济川药业",
+    "片仔癀",
+    "特一药业",
+    "白云山",
+    "益佰制药",
+    "益盛药业",
+    "盘龙药业",
+    "精华制药",
+    "红日药业",
+    "维康药业",
+    "羚锐制药",
+    "葵花药业",
+    "贵州三力",
+    "贵州百灵",
+    "陇神戎发",
+    "马应龙",
+    "香雪制药"
+  ],
+  "context_rows": [
+    {
+      "avg_gross_profit_margin": 52.72351254856017,
+      "avg_net_profit_margin": 7.319933157931603
+    }
+  ],
+  "result_preview": "[{\"avg_gross_profit_margin\":52.7235125486,\"avg_net_profit_margin\":7.3199331579}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2025年第三季度中药行业平均盈利能力",
+    "x_field": null,
+    "y_fields": [
+      "avg_gross_profit_margin",
+      "avg_net_profit_margin"
+    ],
+    "category_field": "avg_gross_profit_margin",
+    "sort_by": "avg_gross_profit_margin",
+    "sort_ascending": true,
+    "top_n": 1,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1068",
+    "image_index": 2,
+    "chart_type": "bar",
+    "title": "2025年第三季度中药行业平均盈利能力",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 1,
+      "preview_rows": [
+        {
+          "avg_gross_profit_margin": 52.72351254856017,
+          "avg_net_profit_margin": 7.319933157931603
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "avg_gross_profit_margin",
+      "sort_ascending": true,
+      "top_n": 1,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "avg_gross_profit_margin",
+        "data_type": "quantitative",
+        "label": "行业平均销售毛利率",
+        "unit": "%"
+      },
+      "category": {
+        "field": "avg_gross_profit_margin",
+        "data_type": "nominal",
+        "label": "行业平均销售毛利率",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B1068_2.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1068_2.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT AVG(gross_profit_margin) AS avg_gross_profit_margin, AVG(net_profit_margin) AS avg_net_profit_margin FROM financials_view WHERE report_period = '2025Q3'",
+      "value_fields": [
+        "avg_gross_profit_margin",
+        "avg_net_profit_margin"
+      ],
+      "value_labels": [
+        "行业平均销售毛利率",
+        "行业平均销售净利率"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "avg_gross_profit_margin",
+          "avg_net_profit_margin"
+        ],
+        "category_field": "avg_gross_profit_margin",
+        "sort_by": "avg_gross_profit_margin",
+        "sort_ascending": true,
+        "top_n": 1
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1068_1.spec.json",
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1068_2.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1068_1.jpg",
+    "./result/B1068_2.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "分析中药行业的盈利能力",
+      "A": {
+        "content": "基于2025年第三季度财报数据，中药行业部分代表性公司的盈利能力分析如下：\n\n**毛利率方面**：多数公司毛利率较高，显示较强的产品定价或成本控制能力。康弘药业毛利率接近100%（99.999%），奇正藏药（82.25%）、寿仙谷（79.06%）、桂林三金（75.23%）、东阿阿胶（73.69%）毛利率均超过70%。但也有部分公司毛利率较低，如信邦制药（17.44%）、康惠制药（26.45%）。\n\n**净利率方面**：公司间差异显著。康弘药业（28.50%）、奇正藏药（27.81%）、东阿阿胶（26.73%）、桂林三金（26.34%）、江中药业（23.30%）净利率领先。而康惠制药净利率为负（-37.21%），振东制药（0.92%）、太极集团（2.05%）、新天药业（2.90%）净利率较低。\n\n**净资产收益率（ROE）方面**：以岭药业（9.35%）、同仁堂（5.49%）表现突出。佐力药业（5.20%）、东阿阿胶（4.41%）、江中药业（4.14%）也较好。康惠制药ROE为负（-11.23%），中恒集团（-0.04%）亦为负值。\n\n**盈利规模（净利润）方面**：云南白药净利润最高（47.77亿元），华润三九（23.53亿元）、以岭药业（10.00亿元）紧随其后。康惠制药、振东制药、新天药业等公司净利润规模较小或为负。\n\n**总结**：中药行业盈利能力分化明显。头部公司如云南白药、华润三九、以岭药业等在保持较高盈利水平的同时规模领先；东阿阿胶、奇正藏药、康弘药业等则展现出极高的利润率。部分公司如康惠制药则处于亏损状态。",
+        "image": [
+          "./result/B1068_1.jpg"
+        ]
+      }
+    },
+    {
+      "Q": "2025年第三季度，66家中药上市公司的平均销售毛利率、销售净利率分别是多少？请结合数值分析行业整体盈利能力",
+      "A": {
+        "content": "2025年第三季度，66家中药上市公司的平均销售毛利率为52.72%，平均销售净利率为7.32%。\n\n分析表明，行业整体销售毛利率较高，超过50%，说明中药产品的附加值或成本控制能力较强。然而，销售净利率显著低于毛利率，仅为7.32%，反映出从毛利到最终净利润的过程中，公司的期间费用（如销售、管理、研发费用）或营业外支出占比较高，对整体盈利形成了较大侵蚀。",
+        "image": [
+          "./result/B1068_2.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"分析中药行业的盈利能力\", \"A\": {\"content\": \"基于2025年第三季度财报数据，中药行业部分代表性公司的盈利能力分析如下：\\n\\n**毛利率方面**：多数公司毛利率较高，显示较强的产品定价或成本控制能力。康弘药业毛利率接近100%（99.999%），奇正藏药（82.25%）、寿仙谷（79.06%）、桂林三金（75.23%）、东阿阿胶（73.69%）毛利率均超过70%。但也有部分公司毛利率较低，如信邦制药（17.44%）、康惠制药（26.45%）。\\n\\n**净利率方面**：公司间差异显著。康弘药业（28.50%）、奇正藏药（27.81%）、东阿阿胶（26.73%）、桂林三金（26.34%）、江中药业（23.30%）净利率领先。而康惠制药净利率为负（-37.21%），振东制药（0.92%）、太极集团（2.05%）、新天药业（2.90%）净利率较低。\\n\\n**净资产收益率（ROE）方面**：以岭药业（9.35%）、同仁堂（5.49%）表现突出。佐力药业（5.20%）、东阿阿胶（4.41%）、江中药业（4.14%）也较好。康惠制药ROE为负（-11.23%），中恒集团（-0.04%）亦为负值。\\n\\n**盈利规模（净利润）方面**：云南白药净利润最高（47.77亿元），华润三九（23.53亿元）、以岭药业（10.00亿元）紧随其后。康惠制药、振东制药、新天药业等公司净利润规模较小或为负。\\n\\n**总结**：中药行业盈利能力分化明显。头部公司如云南白药、华润三九、以岭药业等在保持较高盈利水平的同时规模领先；东阿阿胶、奇正藏药、康弘药业等则展现出极高的利润率。部分公司如康惠制药则处于亏损状态。\", \"image\": [\"./result/B1068_1.jpg\"]}}, {\"Q\": \"2025年第三季度，66家中药上市公司的平均销售毛利率、销售净利率分别是多少？请结合数值分析行业整体盈利能力\", \"A\": {\"content\": \"2025年第三季度，66家中药上市公司的平均销售毛利率为52.72%，平均销售净利率为7.32%。\\n\\n分析表明，行业整体销售毛利率较高，超过50%，说明中药产品的附加值或成本控制能力较强。然而，销售净利率显著低于毛利率，仅为7.32%，反映出从毛利到最终净利润的过程中，公司的期间费用（如销售、管理、研发费用）或营业外支出占比较高，对整体盈利形成了较大侵蚀。\", \"image\": [\"./result/B1068_2.jpg\"]}}]",
+  "notes": [
+    "用户问题为“分析中药行业的盈利能力”，但查询计划中缺少具体的指标（missing_slots: [\"metric\"]）。为了提供一个有意义的分析起点，我选择了盈利能力相关的典型指标（净利率、ROE、毛利率、净利润、营业收入），并假设需要查看中药行业主要公司的数据。由于没有明确的报告期要求，我按最新报告期排序，以便用户查看最新情况。公司列表基于常见的66家中药上市公司进行了筛选。",
+    "根据查询计划，需要计算2025Q3期间指定指标（销售毛利率、销售净利率）的平均值。由于问题明确是66家中药上市公司的平均值，且查询计划中companies为空，表明不需要具体公司筛选，只需按报告期过滤并计算整体平均值。"
+  ],
+  "final_status": "ok"
+}

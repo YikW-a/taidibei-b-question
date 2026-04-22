@@ -1,0 +1,156 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1038",
+  "image_index": 1,
+  "chart_type": "table",
+  "title": "2025Q3 营收>10亿、负债率<40%、经营现金流为正的公司",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 31,
+    "preview_rows": [
+      {
+        "stock_code": "000423",
+        "stock_abbr": "东阿阿胶",
+        "营业总收入": 476637.0643520001,
+        "资产负债率": 21.77099258118006,
+        "经营性现金流量净额": 130973.86755999998
+      },
+      {
+        "stock_code": "000538",
+        "stock_abbr": "云南白药",
+        "营业总收入": 3065421.420901,
+        "资产负债率": 25.355694667162265,
+        "经营性现金流量净额": 445596.951154
+      },
+      {
+        "stock_code": "000650",
+        "stock_abbr": "仁和药业",
+        "营业总收入": 283345.176031,
+        "资产负债率": 13.083525787883216,
+        "经营性现金流量净额": 84048.426313
+      },
+      {
+        "stock_code": "000989",
+        "stock_abbr": "九芝堂",
+        "营业总收入": 162745.325626,
+        "资产负债率": 22.76911839762985,
+        "经营性现金流量净额": 31099.852211
+      },
+      {
+        "stock_code": "000999",
+        "stock_abbr": "华润三九",
+        "营业总收入": 2198640.396207,
+        "资产负债率": 33.916604355194785,
+        "经营性现金流量净额": 292535.980357
+      },
+      {
+        "stock_code": "002082",
+        "stock_abbr": "万邦德",
+        "营业总收入": 101770.643836,
+        "资产负债率": 39.08874449203515,
+        "经营性现金流量净额": 3657.303131
+      },
+      {
+        "stock_code": "002166",
+        "stock_abbr": "莱茵生物",
+        "营业总收入": 127215.58173499999,
+        "资产负债率": 36.56445652386523,
+        "经营性现金流量净额": 34645.770223
+      },
+      {
+        "stock_code": "002275",
+        "stock_abbr": "桂林三金",
+        "营业总收入": 146238.20745,
+        "资产负债率": 24.532612141838708,
+        "经营性现金流量净额": 43164.518897
+      },
+      {
+        "stock_code": "002287",
+        "stock_abbr": "奇正藏药",
+        "营业总收入": 152294.381843,
+        "资产负债率": 26.92433134492657,
+        "经营性现金流量净额": 50253.874319
+      },
+      {
+        "stock_code": "002317",
+        "stock_abbr": "众生药业",
+        "营业总收入": 188875.38756,
+        "资产负债率": 20.15570227729993,
+        "经营性现金流量净额": 15498.512574
+      },
+      {
+        "stock_code": "002349",
+        "stock_abbr": "精华制药",
+        "营业总收入": 109228.53899500001,
+        "资产负债率": 11.282156876193234,
+        "经营性现金流量净额": 22455.970016
+      },
+      {
+        "stock_code": "002390",
+        "stock_abbr": "信邦制药",
+        "营业总收入": 426628.528811,
+        "资产负债率": 18.831576602937062,
+        "经营性现金流量净额": 46158.230236
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": null,
+    "sort_ascending": true,
+    "top_n": 12,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "营业总收入",
+      "data_type": "quantitative",
+      "label": "营业总收入",
+      "unit": "万元"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": false
+  },
+  "output": {
+    "filename": "B1038_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1038_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT stock_code, stock_abbr, total_operating_revenue AS 营业总收入, asset_liability_ratio AS 资产负债率, operating_cf_net_amount AS 经营性现金流量净额 FROM financials_view WHERE report_period = '2025Q3' AND total_operating_revenue > 100000 AND asset_liability_ratio < 40 AND operating_cf_net_amount > 0",
+    "value_fields": [
+      "营业总收入",
+      "资产负债率",
+      "经营性现金流量净额"
+    ],
+    "value_labels": [
+      "营业总收入",
+      "资产负债率",
+      "经营性现金流量净额"
+    ],
+    "original_chart_plan": {
+      "chart_type": "table",
+      "x_field": null,
+      "y_fields": [
+        "营业总收入",
+        "资产负债率",
+        "经营性现金流量净额"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": null,
+      "sort_ascending": true,
+      "top_n": 12
+    }
+  }
+}

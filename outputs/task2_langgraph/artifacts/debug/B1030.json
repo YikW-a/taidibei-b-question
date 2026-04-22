@@ -1,0 +1,112 @@
+{
+  "question_id": "B1030",
+  "question_type": "数据基本查询",
+  "raw_question": "从资产负债表中提取片仔癀（600436）2022年全年的资产总额、负债总额、股东权益总额（单位：万元）",
+  "raw_question_json": "[{\"Q\":\"从资产负债表中提取片仔癀（600436）2022年全年的资产总额、负债总额、股东权益总额（单位：万元）\"}]",
+  "parsed_slots": {
+    "companies": [
+      "片仔癀"
+    ],
+    "stock_codes": [
+      "600436"
+    ],
+    "periods": [
+      "2022FY"
+    ],
+    "metrics": [],
+    "chart_type": null,
+    "intent_type": "generic",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "single_company_metric",
+    "companies": [
+      "片仔癀"
+    ],
+    "periods": [
+      "2022FY"
+    ],
+    "metrics": [
+      "资产总额",
+      "负债总额",
+      "股东权益总额"
+    ],
+    "chart_type": "table",
+    "top_n": null,
+    "threshold": null,
+    "question": "从资产负债表中提取片仔癀（600436）2022年全年的资产总额、负债总额、股东权益总额（单位：万元）",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": [],
+    "unsupported_metrics": [
+      "资产总额",
+      "负债总额",
+      "股东权益总额"
+    ]
+  },
+  "sql": "SELECT stock_code, stock_abbr, report_period, asset_total_assets, liability_total_liabilities, equity_total_equity FROM financials_view WHERE stock_code = '600436' AND report_period = '2022FY'",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, report_period, asset_total_assets, liability_total_liabilities, equity_total_equity FROM financials_view WHERE stock_code = '600436' AND report_period = '2022FY'"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 1,
+  "result_rows": [
+    {
+      "stock_code": "600436",
+      "stock_abbr": "片仔癀",
+      "report_period": "2022FY",
+      "asset_total_assets": 1460384.451845,
+      "liability_total_liabilities": 277990.528131,
+      "equity_total_equity": 1182393.923714
+    }
+  ],
+  "context_companies": [
+    "片仔癀"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "600436",
+      "stock_abbr": "片仔癀",
+      "report_period": "2022FY",
+      "asset_total_assets": 1460384.451845,
+      "liability_total_liabilities": 277990.528131,
+      "equity_total_equity": 1182393.923714
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"600436\",\"stock_abbr\":\"片仔癀\",\"report_period\":\"2022FY\",\"asset_total_assets\":1460384.451845,\"liability_total_liabilities\":277990.528131,\"equity_total_equity\":1182393.923714}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "片仔癀（600436）2022年资产负债与股东权益（万元）",
+    "x_field": null,
+    "y_fields": [
+      "stock_code"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": "stock_code",
+    "sort_ascending": true,
+    "top_n": 1,
+    "should_draw": true
+  },
+  "chart_spec": {},
+  "all_chart_specs": [],
+  "all_chart_paths": [],
+  "graph_formats": [],
+  "turn_answers": [
+    {
+      "Q": "从资产负债表中提取片仔癀（600436）2022年全年的资产总额、负债总额、股东权益总额（单位：万元）",
+      "A": {
+        "content": "片仔癀（600436）2022年全年的资产总额为1,460,384.45万元，负债总额为277,990.53万元，股东权益总额为1,182,393.92万元。",
+        "image": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"从资产负债表中提取片仔癀（600436）2022年全年的资产总额、负债总额、股东权益总额（单位：万元）\", \"A\": {\"content\": \"片仔癀（600436）2022年全年的资产总额为1,460,384.45万元，负债总额为277,990.53万元，股东权益总额为1,182,393.92万元。\", \"image\": []}}]",
+  "notes": [
+    "根据查询计划，需要查询片仔癀（600436）2022年全年的资产总额、负债总额、股东权益总额。对应的字段分别是 asset_total_assets、liability_total_liabilities、equity_total_equity。报告期使用 '2022FY'。"
+  ],
+  "final_status": "ok"
+}

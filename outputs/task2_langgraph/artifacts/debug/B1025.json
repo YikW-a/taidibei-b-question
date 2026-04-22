@@ -1,0 +1,196 @@
+{
+  "question_id": "B1025",
+  "question_type": "数据统计分析查询",
+  "raw_question": "2025年第三季度，“投资性现金流量净额”为正数（即投资现金流入大于流出）的公司有多少家？请列出其中营收排名前三的公司简称及投资现金流净额（万元）。",
+  "raw_question_json": "[{\"Q\":\"2025年第三季度，“投资性现金流量净额”为正数（即投资现金流入大于流出）的公司有多少家？请列出其中营收排名前三的公司简称及投资现金流净额（万元）。\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "投资性现金流量净额"
+    ],
+    "chart_type": null,
+    "intent_type": "ranking",
+    "top_n": 3,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "ranking",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "投资性现金流量净额"
+    ],
+    "chart_type": "table",
+    "top_n": 3,
+    "threshold": 0,
+    "question": "2025年第三季度，“投资性现金流量净额”为正数（即投资现金流入大于流出）的公司有多少家？请列出其中营收排名前三的公司简称及投资现金流净额（万元）。",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "WITH positive_investing AS (\n    SELECT stock_code, stock_abbr, investing_cf_net_amount, total_operating_revenue\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n      AND investing_cf_net_amount > 0\n)\nSELECT stock_abbr, investing_cf_net_amount\nFROM positive_investing\nORDER BY total_operating_revenue DESC\nLIMIT 3;",
+  "sql_history": [
+    "WITH positive_investing AS (\n    SELECT stock_code, stock_abbr, investing_cf_net_amount, total_operating_revenue\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n      AND investing_cf_net_amount > 0\n)\nSELECT stock_abbr, investing_cf_net_amount\nFROM positive_investing\nORDER BY total_operating_revenue DESC\nLIMIT 3;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 3,
+  "result_rows": [
+    {
+      "stock_abbr": "片仔癀",
+      "investing_cf_net_amount": 142777.203731
+    },
+    {
+      "stock_abbr": "天士力",
+      "investing_cf_net_amount": 14088.595025999999
+    },
+    {
+      "stock_abbr": "东阿阿胶",
+      "investing_cf_net_amount": 81312.033906
+    }
+  ],
+  "context_companies": [
+    "片仔癀",
+    "天士力",
+    "东阿阿胶"
+  ],
+  "context_rows": [
+    {
+      "stock_abbr": "片仔癀",
+      "investing_cf_net_amount": 142777.203731
+    },
+    {
+      "stock_abbr": "天士力",
+      "investing_cf_net_amount": 14088.595025999999
+    },
+    {
+      "stock_abbr": "东阿阿胶",
+      "investing_cf_net_amount": 81312.033906
+    }
+  ],
+  "result_preview": "[{\"stock_abbr\":\"片仔癀\",\"investing_cf_net_amount\":142777.203731},{\"stock_abbr\":\"天士力\",\"investing_cf_net_amount\":14088.595026},{\"stock_abbr\":\"东阿阿胶\",\"investing_cf_net_amount\":81312.033906}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2025Q3 投资性现金流量净额为正的营收前三公司",
+    "x_field": null,
+    "y_fields": [
+      "investing_cf_net_amount"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": null,
+    "sort_ascending": true,
+    "top_n": 3,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1025",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "2025Q3 投资性现金流量净额为正的营收前三公司",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 3,
+      "preview_rows": [
+        {
+          "stock_abbr": "片仔癀",
+          "investing_cf_net_amount": 142777.203731
+        },
+        {
+          "stock_abbr": "天士力",
+          "investing_cf_net_amount": 14088.595025999999
+        },
+        {
+          "stock_abbr": "东阿阿胶",
+          "investing_cf_net_amount": 81312.033906
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": null,
+      "sort_ascending": true,
+      "top_n": 3,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "investing_cf_net_amount",
+        "data_type": "quantitative",
+        "label": "投资性现金流量净额",
+        "unit": "万元"
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B1025_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1025_1.jpg"
+    },
+    "meta": {
+      "source_sql": "WITH positive_investing AS (\n    SELECT stock_code, stock_abbr, investing_cf_net_amount, total_operating_revenue\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n      AND investing_cf_net_amount > 0\n)\nSELECT stock_abbr, investing_cf_net_amount\nFROM positive_investing\nORDER BY total_operating_revenue DESC\nLIMIT 3;",
+      "value_fields": [
+        "investing_cf_net_amount"
+      ],
+      "value_labels": [
+        "投资性现金流量净额"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "investing_cf_net_amount"
+        ],
+        "category_field": "stock_abbr",
+        "sort_by": null,
+        "sort_ascending": true,
+        "top_n": 3
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1025_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1025_1.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "2025年第三季度，“投资性现金流量净额”为正数（即投资现金流入大于流出）的公司有多少家？请列出其中营收排名前三的公司简称及投资现金流净额（万元）。",
+      "A": {
+        "content": "2025年第三季度，投资性现金流量净额为正数的公司中，按营收排名前三的分别是：  \n1. **片仔癀**，投资现金流净额为 **142,777.20 万元**。  \n2. **天士力**，投资现金流净额为 **14,088.60 万元**。  \n3. **东阿阿胶**，投资现金流净额为 **81,312.03 万元**。",
+        "image": [
+          "./result/B1025_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"2025年第三季度，“投资性现金流量净额”为正数（即投资现金流入大于流出）的公司有多少家？请列出其中营收排名前三的公司简称及投资现金流净额（万元）。\", \"A\": {\"content\": \"2025年第三季度，投资性现金流量净额为正数的公司中，按营收排名前三的分别是：  \\n1. **片仔癀**，投资现金流净额为 **142,777.20 万元**。  \\n2. **天士力**，投资现金流净额为 **14,088.60 万元**。  \\n3. **东阿阿胶**，投资现金流净额为 **81,312.03 万元**。\", \"image\": [\"./result/B1025_1.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，需要处理2025Q3期间，投资性现金流量净额（investing_cf_net_amount）为正数的公司，并从中找出营收（total_operating_revenue）排名前三的公司。首先筛选出符合正数条件的公司，然后按营收降序排列，取前三名。"
+  ],
+  "final_status": "ok"
+}

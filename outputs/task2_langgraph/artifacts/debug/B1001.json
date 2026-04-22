@@ -1,0 +1,96 @@
+{
+  "question_id": "B1001",
+  "question_type": "数据基本查询",
+  "raw_question": "金花股份利润总额是多少 | 2025年第三季度的",
+  "raw_question_json": "[{\"Q\":\"金花股份利润总额是多少\"},{\"Q\":\"2025年第三季度的\"}]",
+  "parsed_slots": {
+    "companies": [
+      "金花股份"
+    ],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "利润总额"
+    ],
+    "chart_type": null,
+    "intent_type": "single_company_metric",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "single_company_metric",
+    "companies": [
+      "金花股份"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "利润总额"
+    ],
+    "chart_type": null,
+    "top_n": null,
+    "threshold": null,
+    "question": "2025年第三季度的",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT stock_code, stock_abbr, report_period, total_profit FROM financials_view WHERE stock_abbr = '金花股份' AND report_period = '2025Q3'",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, report_period, total_profit FROM financials_view WHERE stock_abbr = '金花股份' AND report_period = '2025Q3'"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 1,
+  "result_rows": [
+    {
+      "stock_code": "600080",
+      "stock_abbr": "金花股份",
+      "report_period": "2025Q3",
+      "total_profit": 3533.5900020000004
+    }
+  ],
+  "context_companies": [
+    "金花股份"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "600080",
+      "stock_abbr": "金花股份",
+      "report_period": "2025Q3",
+      "total_profit": 3533.5900020000004
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"600080\",\"stock_abbr\":\"金花股份\",\"report_period\":\"2025Q3\",\"total_profit\":3533.590002}]",
+  "chart_plan": {},
+  "chart_spec": {},
+  "all_chart_specs": [],
+  "all_chart_paths": [],
+  "graph_formats": [],
+  "turn_answers": [
+    {
+      "Q": "金花股份利润总额是多少",
+      "A": {
+        "content": "请问您想查询金花股份哪个报告期的利润总额呢？",
+        "image": []
+      }
+    },
+    {
+      "Q": "2025年第三季度的",
+      "A": {
+        "content": "金花股份（600080）在2025年第三季度的利润总额为3533.59万元。",
+        "image": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"金花股份利润总额是多少\", \"A\": {\"content\": \"请问您想查询金花股份哪个报告期的利润总额呢？\", \"image\": []}}, {\"Q\": \"2025年第三季度的\", \"A\": {\"content\": \"金花股份（600080）在2025年第三季度的利润总额为3533.59万元。\", \"image\": []}}]",
+  "notes": [
+    "查询计划要求查询金花股份在2025年第三季度的利润总额。根据schema，利润总额对应字段为total_profit。因此，使用stock_abbr和report_period进行精确筛选。"
+  ],
+  "final_status": "ok"
+}

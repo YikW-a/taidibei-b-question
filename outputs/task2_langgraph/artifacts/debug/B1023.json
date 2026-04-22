@@ -1,0 +1,209 @@
+{
+  "question_id": "B1023",
+  "question_type": "数据统计分析查询",
+  "raw_question": "计算2022年财报至2025年第三季度，66家公司的营业总收入复合增长率，排名前三的公司是哪些？请展示复合增长率（%）。",
+  "raw_question_json": "[{\"Q\":\"计算2022年财报至2025年第三季度，66家公司的营业总收入复合增长率，排名前三的公司是哪些？请展示复合增长率（%）。\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3",
+      "2022FY"
+    ],
+    "metrics": [
+      "营业总收入",
+      "复合增长率"
+    ],
+    "chart_type": null,
+    "intent_type": "ranking",
+    "top_n": 3,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "ranking",
+    "companies": [],
+    "periods": [
+      "2022FY",
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入",
+      "复合增长率"
+    ],
+    "chart_type": "barh",
+    "top_n": 3,
+    "threshold": null,
+    "question": "计算2022年财报至2025年第三季度，66家公司的营业总收入复合增长率，排名前三的公司是哪些？请展示复合增长率（%）。",
+    "should_draw": true,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "WITH base AS (\n    SELECT\n        stock_code,\n        stock_abbr,\n        MAX(CASE WHEN report_period = '2022FY' THEN total_operating_revenue END) AS revenue_2022,\n        MAX(CASE WHEN report_period = '2025Q3' THEN total_operating_revenue END) AS revenue_2025q3\n    FROM financials_view\n    WHERE report_period IN ('2022FY', '2025Q3')\n    GROUP BY stock_code, stock_abbr\n    HAVING revenue_2022 IS NOT NULL AND revenue_2022 > 0 AND revenue_2025q3 IS NOT NULL\n)\nSELECT\n    stock_code,\n    stock_abbr,\n    ROUND(POWER(revenue_2025q3 / revenue_2022, 1.0 / 3.0) - 1, 4) * 100 AS compound_growth_rate_percent\nFROM base\nORDER BY compound_growth_rate_percent DESC\nLIMIT 3",
+  "sql_history": [
+    "WITH base AS (\n    SELECT\n        stock_code,\n        stock_abbr,\n        MAX(CASE WHEN report_period = '2022FY' THEN total_operating_revenue END) AS revenue_2022,\n        MAX(CASE WHEN report_period = '2025Q3' THEN total_operating_revenue END) AS revenue_2025q3\n    FROM financials_view\n    WHERE report_period IN ('2022FY', '2025Q3')\n    GROUP BY stock_code, stock_abbr\n    HAVING revenue_2022 IS NOT NULL AND revenue_2022 > 0 AND revenue_2025q3 IS NOT NULL\n)\nSELECT\n    stock_code,\n    stock_abbr,\n    ROUND(POWER(revenue_2025q3 / revenue_2022, 1.0 / 3.0) - 1, 4) * 100 AS compound_growth_rate_percent\nFROM base\nORDER BY compound_growth_rate_percent DESC\nLIMIT 3"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 3,
+  "result_rows": [
+    {
+      "stock_code": "300534",
+      "stock_abbr": "陇神戎发",
+      "compound_growth_rate_percent": 16.13
+    },
+    {
+      "stock_code": "600671",
+      "stock_abbr": "天目药业",
+      "compound_growth_rate_percent": 13.43
+    },
+    {
+      "stock_code": "300181",
+      "stock_abbr": "佐力药业",
+      "compound_growth_rate_percent": 8.09
+    }
+  ],
+  "context_companies": [
+    "陇神戎发",
+    "天目药业",
+    "佐力药业"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "300534",
+      "stock_abbr": "陇神戎发",
+      "compound_growth_rate_percent": 16.13
+    },
+    {
+      "stock_code": "600671",
+      "stock_abbr": "天目药业",
+      "compound_growth_rate_percent": 13.43
+    },
+    {
+      "stock_code": "300181",
+      "stock_abbr": "佐力药业",
+      "compound_growth_rate_percent": 8.09
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"300534\",\"stock_abbr\":\"陇神戎发\",\"compound_growth_rate_percent\":16.13},{\"stock_code\":\"600671\",\"stock_abbr\":\"天目药业\",\"compound_growth_rate_percent\":13.43},{\"stock_code\":\"300181\",\"stock_abbr\":\"佐力药业\",\"compound_growth_rate_percent\":8.09}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2022-2025Q3营业总收入复合增长率前三名",
+    "x_field": null,
+    "y_fields": [
+      "compound_growth_rate_percent"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": null,
+    "sort_ascending": false,
+    "top_n": 3,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1023",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "2022-2025Q3营业总收入复合增长率前三名",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 3,
+      "preview_rows": [
+        {
+          "stock_code": "300534",
+          "stock_abbr": "陇神戎发",
+          "compound_growth_rate_percent": 16.13
+        },
+        {
+          "stock_code": "600671",
+          "stock_abbr": "天目药业",
+          "compound_growth_rate_percent": 13.43
+        },
+        {
+          "stock_code": "300181",
+          "stock_abbr": "佐力药业",
+          "compound_growth_rate_percent": 8.09
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": null,
+      "sort_ascending": false,
+      "top_n": 3,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "compound_growth_rate_percent",
+        "data_type": "quantitative",
+        "label": "compound_growth_rate_percent",
+        "unit": "%"
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B1023_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1023_1.jpg"
+    },
+    "meta": {
+      "source_sql": "WITH base AS (\n    SELECT\n        stock_code,\n        stock_abbr,\n        MAX(CASE WHEN report_period = '2022FY' THEN total_operating_revenue END) AS revenue_2022,\n        MAX(CASE WHEN report_period = '2025Q3' THEN total_operating_revenue END) AS revenue_2025q3\n    FROM financials_view\n    WHERE report_period IN ('2022FY', '2025Q3')\n    GROUP BY stock_code, stock_abbr\n    HAVING revenue_2022 IS NOT NULL AND revenue_2022 > 0 AND revenue_2025q3 IS NOT NULL\n)\nSELECT\n    stock_code,\n    stock_abbr,\n    ROUND(POWER(revenue_2025q3 / revenue_2022, 1.0 / 3.0) - 1, 4) * 100 AS compound_growth_rate_percent\nFROM base\nORDER BY compound_growth_rate_percent DESC\nLIMIT 3",
+      "value_fields": [
+        "compound_growth_rate_percent"
+      ],
+      "value_labels": [
+        "compound_growth_rate_percent"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "compound_growth_rate_percent"
+        ],
+        "category_field": "stock_abbr",
+        "sort_by": null,
+        "sort_ascending": false,
+        "top_n": 3
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1023_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1023_1.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "计算2022年财报至2025年第三季度，66家公司的营业总收入复合增长率，排名前三的公司是哪些？请展示复合增长率（%）。",
+      "A": {
+        "content": "根据2022年财报至2025年第三季度数据，营业总收入复合增长率排名前三的公司如下：\n\n1.  **陇神戎发**（股票代码：300534），复合增长率为 **16.13%**。\n2.  **天目药业**（股票代码：600671），复合增长率为 **13.43%**。\n3.  **佐力药业**（股票代码：300181），复合增长率为 **8.09%**。",
+        "image": [
+          "./result/B1023_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"计算2022年财报至2025年第三季度，66家公司的营业总收入复合增长率，排名前三的公司是哪些？请展示复合增长率（%）。\", \"A\": {\"content\": \"根据2022年财报至2025年第三季度数据，营业总收入复合增长率排名前三的公司如下：\\n\\n1.  **陇神戎发**（股票代码：300534），复合增长率为 **16.13%**。\\n2.  **天目药业**（股票代码：600671），复合增长率为 **13.43%**。\\n3.  **佐力药业**（股票代码：300181），复合增长率为 **8.09%**。\", \"image\": [\"./result/B1023_1.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，需要计算66家公司从2022FY到2025Q3的营业总收入复合增长率并取前三名。使用WITH子句分别提取两个报告期的收入，然后计算复合增长率（CAGR公式：(终值/初值)^(1/年数)-1），年数按3年计算（2022-2025）。乘以100转换为百分比格式，按降序排序并限制3条记录。"
+  ],
+  "final_status": "ok"
+}

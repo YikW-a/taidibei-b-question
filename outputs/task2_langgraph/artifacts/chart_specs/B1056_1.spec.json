@@ -1,0 +1,91 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1056",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "2025年第三季度存货周转率最高的五家公司",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 5,
+    "preview_rows": [
+      {
+        "stock_code": "002219",
+        "stock_abbr": "新里程",
+        "inventory_turnover_ratio": 8.317054850720826
+      },
+      {
+        "stock_code": "002589",
+        "stock_abbr": "瑞康医药",
+        "inventory_turnover_ratio": 6.901450813746646
+      },
+      {
+        "stock_code": "600332",
+        "stock_abbr": "白云山",
+        "inventory_turnover_ratio": 4.5810131954034405
+      },
+      {
+        "stock_code": "000650",
+        "stock_abbr": "仁和药业",
+        "inventory_turnover_ratio": 4.506489479654515
+      },
+      {
+        "stock_code": "600993",
+        "stock_abbr": "马应龙",
+        "inventory_turnover_ratio": 4.393744634388417
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "inventory_turnover_ratio",
+    "sort_ascending": false,
+    "top_n": 5,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "inventory_turnover_ratio",
+      "data_type": "quantitative",
+      "label": "inventory_turnover_ratio",
+      "unit": "%"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1056_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1056_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT stock_code, stock_abbr, inventory_turnover_ratio FROM financials_view WHERE report_period = '2025Q3' AND inventory_turnover_ratio IS NOT NULL ORDER BY inventory_turnover_ratio DESC LIMIT 5",
+    "value_fields": [
+      "inventory_turnover_ratio"
+    ],
+    "value_labels": [
+      "inventory_turnover_ratio"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "inventory_turnover_ratio"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": "inventory_turnover_ratio",
+      "sort_ascending": false,
+      "top_n": 5
+    }
+  }
+}

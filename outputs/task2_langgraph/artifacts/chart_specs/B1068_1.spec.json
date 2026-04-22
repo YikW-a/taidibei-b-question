@@ -1,0 +1,199 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1068",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "中药行业盈利能力指标对比",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 50,
+    "preview_rows": [
+      {
+        "stock_code": "000423",
+        "stock_abbr": "东阿阿胶",
+        "report_period": "2025Q3",
+        "net_profit_margin": 26.725158211768317,
+        "roe": 4.41,
+        "gross_profit_margin": 73.68527545449713,
+        "net_profit": 127382.009544,
+        "total_operating_revenue": 476637.0643520001
+      },
+      {
+        "stock_code": "600252",
+        "stock_abbr": "中恒集团",
+        "report_period": "2025Q3",
+        "net_profit_margin": 1.2648212340112657,
+        "roe": -0.04,
+        "gross_profit_margin": 31.922905863964278,
+        "net_profit": 2464.037494,
+        "total_operating_revenue": 194813.103049
+      },
+      {
+        "stock_code": "000989",
+        "stock_abbr": "九芝堂",
+        "report_period": "2025Q3",
+        "net_profit_margin": 9.310965159652579,
+        "roe": 0.27,
+        "gross_profit_margin": 59.80491707311483,
+        "net_profit": 15153.160568000001,
+        "total_operating_revenue": 162745.325626
+      },
+      {
+        "stock_code": "000538",
+        "stock_abbr": "云南白药",
+        "report_period": "2025Q3",
+        "net_profit_margin": 15.583892070754471,
+        "roe": 2.8,
+        "gross_profit_margin": 30.05989436448057,
+        "net_profit": 477711.965747,
+        "total_operating_revenue": 3065421.420901
+      },
+      {
+        "stock_code": "000650",
+        "stock_abbr": "仁和药业",
+        "report_period": "2025Q3",
+        "net_profit_margin": 13.38068226079557,
+        "roe": 1.43,
+        "gross_profit_margin": 36.42594460500288,
+        "net_profit": 37913.517706,
+        "total_operating_revenue": 283345.176031
+      },
+      {
+        "stock_code": "002603",
+        "stock_abbr": "以岭药业",
+        "report_period": "2025Q3",
+        "net_profit_margin": 17.049630988322946,
+        "roe": 9.35162870027705,
+        "gross_profit_margin": 60.531245635278154,
+        "net_profit": 100040.467191,
+        "total_operating_revenue": 586760.307361
+      },
+      {
+        "stock_code": "002317",
+        "stock_abbr": "众生药业",
+        "report_period": "2025Q3",
+        "net_profit_margin": 13.26684403707174,
+        "roe": 1.61,
+        "gross_profit_margin": 56.79544742584458,
+        "net_profit": 25057.803092,
+        "total_operating_revenue": 188875.38756
+      },
+      {
+        "stock_code": "300181",
+        "stock_abbr": "佐力药业",
+        "report_period": "2025Q3",
+        "net_profit_margin": 22.370113832575385,
+        "roe": 5.2,
+        "gross_profit_margin": 62.028791747591505,
+        "net_profit": 50997.44788,
+        "total_operating_revenue": 227971.33828499998
+      },
+      {
+        "stock_code": "002390",
+        "stock_abbr": "信邦制药",
+        "report_period": "2025Q3",
+        "net_profit_margin": 3.570435231430133,
+        "roe": 0.66,
+        "gross_profit_margin": 17.44163192493972,
+        "net_profit": 15232.4953,
+        "total_operating_revenue": 426628.528811
+      },
+      {
+        "stock_code": "600976",
+        "stock_abbr": "健民集团",
+        "report_period": "2025Q3",
+        "net_profit_margin": 11.196892336201516,
+        "roe": 2.55,
+        "gross_profit_margin": 59.19978518279443,
+        "net_profit": 28573.732193,
+        "total_operating_revenue": 255193.417379
+      },
+      {
+        "stock_code": "600479",
+        "stock_abbr": "千金药业",
+        "report_period": "2025Q3",
+        "net_profit_margin": 6.892275457838067,
+        "roe": 2.41,
+        "gross_profit_margin": 49.87408091159749,
+        "net_profit": 18735.517374000003,
+        "total_operating_revenue": 271833.55465999997
+      },
+      {
+        "stock_code": "002907",
+        "stock_abbr": "华森制药",
+        "report_period": "2025Q3",
+        "net_profit_margin": 11.576004794093683,
+        "roe": 1.1,
+        "gross_profit_margin": 58.220407568921615,
+        "net_profit": 7245.560589,
+        "total_operating_revenue": 62591.202387
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "net_profit_margin",
+    "sort_ascending": false,
+    "top_n": 12,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "net_profit_margin",
+      "data_type": "quantitative",
+      "label": "销售净利率",
+      "unit": "%"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    },
+    "series": {
+      "field": "report_period",
+      "data_type": "nominal",
+      "label": "报告期",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": true,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1068_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1068_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT stock_code, stock_abbr, report_period, net_profit_margin, roe, gross_profit_margin, net_profit, total_operating_revenue FROM financials_view WHERE stock_abbr IN ('云南白药', '片仔癀', '同仁堂', '白云山', '华润三九', '东阿阿胶', '以岭药业', '天士力', '康恩贝', '九芝堂', '马应龙', '广誉远', '贵州百灵', '太极集团', '中新药业', '羚锐制药', '健民集团', '千金药业', '桂林三金', '奇正藏药', '佛慈制药', '沃华医药', '嘉应制药', '太安堂', '紫鑫药业', '益盛药业', '香雪制药', '康缘药业', '红日药业', '振东制药', '上海凯宝', '福瑞股份', '众生药业', '精华制药', '汉森制药', '贵州三力', '维康药业', '特一药业', '新天药业', '盘龙药业', '寿仙谷', '康惠制药', '陇神戎发', '佐力药业', '易明医药', '大理药业', '华森制药', '龙津药业', '步长制药', '济川药业', '葵花药业', '仁和药业', '华海药业', '浙江震元', '金陵药业', '康弘药业', '信邦制药', '益佰制药', '中恒集团', '昆药集团', '江中药业', '千金药业', '健民集团', '广誉远') ORDER BY report_period DESC, stock_abbr",
+    "value_fields": [
+      "net_profit_margin",
+      "roe",
+      "gross_profit_margin"
+    ],
+    "value_labels": [
+      "销售净利率",
+      "roe",
+      "销售毛利率"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "net_profit_margin",
+        "roe",
+        "gross_profit_margin"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": "net_profit_margin",
+      "sort_ascending": false,
+      "top_n": 12
+    },
+    "category_aggregate": "max"
+  }
+}

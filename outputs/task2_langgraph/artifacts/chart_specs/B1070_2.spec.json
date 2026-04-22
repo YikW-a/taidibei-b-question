@@ -1,0 +1,126 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1070",
+  "image_index": 2,
+  "chart_type": "bar",
+  "title": "2025年第三季度净利润同比增长率超过20%的中药公司",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 14,
+    "preview_rows": [
+      {
+        "stock_code": "000590",
+        "stock_abbr": "启迪药业",
+        "net_profit_yoy_growth": 46.64858494533798
+      },
+      {
+        "stock_code": "002107",
+        "stock_abbr": "沃华医药",
+        "net_profit_yoy_growth": 192.81517145896942
+      },
+      {
+        "stock_code": "002198",
+        "stock_abbr": "嘉应制药",
+        "net_profit_yoy_growth": 658.498909607456
+      },
+      {
+        "stock_code": "002317",
+        "stock_abbr": "众生药业",
+        "net_profit_yoy_growth": 80.63137180894428
+      },
+      {
+        "stock_code": "002603",
+        "stock_abbr": "以岭药业",
+        "net_profit_yoy_growth": 81.51487891696773
+      },
+      {
+        "stock_code": "002728",
+        "stock_abbr": "特一药业",
+        "net_profit_yoy_growth": 985.1796452032535
+      },
+      {
+        "stock_code": "300181",
+        "stock_abbr": "佐力药业",
+        "net_profit_yoy_growth": 21.22909186681436
+      },
+      {
+        "stock_code": "301331",
+        "stock_abbr": "恩威医药",
+        "net_profit_yoy_growth": 66.12807117938533
+      },
+      {
+        "stock_code": "600329",
+        "stock_abbr": "达仁堂",
+        "net_profit_yoy_growth": 170.59938256580205
+      },
+      {
+        "stock_code": "600479",
+        "stock_abbr": "千金药业",
+        "net_profit_yoy_growth": 21.028667276468486
+      },
+      {
+        "stock_code": "600518",
+        "stock_abbr": "康美药业",
+        "net_profit_yoy_growth": 86.06034114359072
+      },
+      {
+        "stock_code": "600594",
+        "stock_abbr": "益佰制药",
+        "net_profit_yoy_growth": 47.986192957110234
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "net_profit_yoy_growth",
+    "sort_ascending": false,
+    "top_n": 14,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "net_profit_yoy_growth",
+      "data_type": "quantitative",
+      "label": "net_profit_yoy_growth",
+      "unit": "%"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1070_2.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1070_2.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT stock_code, stock_abbr, net_profit_yoy_growth FROM financials_view WHERE report_period = '2025Q3' AND net_profit_yoy_growth > 20",
+    "value_fields": [
+      "net_profit_yoy_growth"
+    ],
+    "value_labels": [
+      "net_profit_yoy_growth"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "net_profit_yoy_growth"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": "net_profit_yoy_growth",
+      "sort_ascending": false,
+      "top_n": 14
+    }
+  }
+}

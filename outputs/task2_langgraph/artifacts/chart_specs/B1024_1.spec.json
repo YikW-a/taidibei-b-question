@@ -1,0 +1,96 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1024",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "2025Q3 扣非净利润与净利润差值最大的5家公司",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 5,
+    "preview_rows": [
+      {
+        "简称": "云南白药",
+        "净利润": 477711.965747,
+        "扣非净利润": 108902.38374300001,
+        "差值": 368809.58200399997
+      },
+      {
+        "简称": "华润三九",
+        "净利润": 235282.69556599998,
+        "扣非净利润": 218.6279,
+        "差值": 235064.067666
+      },
+      {
+        "简称": "达仁堂",
+        "净利润": 215218.218452,
+        "扣非净利润": 81812.965748,
+        "差值": 133405.25270399998
+      },
+      {
+        "简称": "东阿阿胶",
+        "净利润": 127382.009544,
+        "扣非净利润": 36762.210951,
+        "差值": 90619.798593
+      },
+      {
+        "简称": "奇正藏药",
+        "净利润": 42351.903245999994,
+        "扣非净利润": -754.4342429999999,
+        "差值": 43106.337489
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "差值",
+    "sort_ascending": false,
+    "top_n": null,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "差值",
+      "data_type": "quantitative",
+      "label": "差值",
+      "unit": "万元"
+    },
+    "category": {
+      "field": "简称",
+      "data_type": "nominal",
+      "label": "简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1024_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1024_1.jpg"
+  },
+  "meta": {
+    "source_sql": "WITH diff_cte AS (\n    SELECT\n        stock_abbr,\n        net_profit AS 净利润,\n        net_profit_excl_non_recurring AS 扣非净利润,\n        ABS(net_profit - net_profit_excl_non_recurring) AS 差值\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n        AND net_profit IS NOT NULL\n        AND net_profit_excl_non_recurring IS NOT NULL\n)\nSELECT\n    stock_abbr AS 简称,\n    净利润,\n    扣非净利润,\n    差值\nFROM diff_cte\nORDER BY 差值 DESC\nLIMIT 5",
+    "value_fields": [
+      "差值"
+    ],
+    "value_labels": [
+      "差值"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "差值"
+      ],
+      "category_field": "简称",
+      "sort_by": "差值",
+      "sort_ascending": false,
+      "top_n": null
+    }
+  }
+}

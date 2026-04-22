@@ -1,0 +1,237 @@
+{
+  "question_id": "B1056",
+  "question_type": "数据统计分析查询",
+  "raw_question": "查询2025年第三季度存货周转率最高的五家公司，用条形图展示其周转率数值",
+  "raw_question_json": "[{\"Q\":\"查询2025年第三季度存货周转率最高的五家公司，用条形图展示其周转率数值\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "存货周转率"
+    ],
+    "chart_type": "bar",
+    "intent_type": "trend_or_chart",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "ranking",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "存货周转率"
+    ],
+    "chart_type": "barh",
+    "top_n": 5,
+    "threshold": null,
+    "question": "查询2025年第三季度存货周转率最高的五家公司，用条形图展示其周转率数值",
+    "should_draw": true,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT stock_code, stock_abbr, inventory_turnover_ratio FROM financials_view WHERE report_period = '2025Q3' AND inventory_turnover_ratio IS NOT NULL ORDER BY inventory_turnover_ratio DESC LIMIT 5",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, inventory_turnover_ratio FROM financials_view WHERE report_period = '2025Q3' AND inventory_turnover_ratio IS NOT NULL ORDER BY inventory_turnover_ratio DESC LIMIT 5"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 5,
+  "result_rows": [
+    {
+      "stock_code": "002219",
+      "stock_abbr": "新里程",
+      "inventory_turnover_ratio": 8.317054850720826
+    },
+    {
+      "stock_code": "002589",
+      "stock_abbr": "瑞康医药",
+      "inventory_turnover_ratio": 6.901450813746646
+    },
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "inventory_turnover_ratio": 4.5810131954034405
+    },
+    {
+      "stock_code": "000650",
+      "stock_abbr": "仁和药业",
+      "inventory_turnover_ratio": 4.506489479654515
+    },
+    {
+      "stock_code": "600993",
+      "stock_abbr": "马应龙",
+      "inventory_turnover_ratio": 4.393744634388417
+    }
+  ],
+  "context_companies": [
+    "新里程",
+    "瑞康医药",
+    "白云山",
+    "仁和药业",
+    "马应龙"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "002219",
+      "stock_abbr": "新里程",
+      "inventory_turnover_ratio": 8.317054850720826
+    },
+    {
+      "stock_code": "002589",
+      "stock_abbr": "瑞康医药",
+      "inventory_turnover_ratio": 6.901450813746646
+    },
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "inventory_turnover_ratio": 4.5810131954034405
+    },
+    {
+      "stock_code": "000650",
+      "stock_abbr": "仁和药业",
+      "inventory_turnover_ratio": 4.506489479654515
+    },
+    {
+      "stock_code": "600993",
+      "stock_abbr": "马应龙",
+      "inventory_turnover_ratio": 4.393744634388417
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"002219\",\"stock_abbr\":\"新里程\",\"inventory_turnover_ratio\":8.3170548507},{\"stock_code\":\"002589\",\"stock_abbr\":\"瑞康医药\",\"inventory_turnover_ratio\":6.9014508137},{\"stock_code\":\"600332\",\"stock_abbr\":\"白云山\",\"inventory_turnover_ratio\":4.5810131954},{\"stock_code\":\"000650\",\"stock_abbr\":\"仁和药业\",\"inventory_turnover_ratio\":4.5064894797},{\"stock_code\":\"600993\",\"stock_abbr\":\"马应龙\",\"inventory_turnover_ratio\":4.3937446344}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2025年第三季度存货周转率最高的五家公司",
+    "x_field": null,
+    "y_fields": [
+      "inventory_turnover_ratio"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": "inventory_turnover_ratio",
+    "sort_ascending": false,
+    "top_n": 5,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1056",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "2025年第三季度存货周转率最高的五家公司",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 5,
+      "preview_rows": [
+        {
+          "stock_code": "002219",
+          "stock_abbr": "新里程",
+          "inventory_turnover_ratio": 8.317054850720826
+        },
+        {
+          "stock_code": "002589",
+          "stock_abbr": "瑞康医药",
+          "inventory_turnover_ratio": 6.901450813746646
+        },
+        {
+          "stock_code": "600332",
+          "stock_abbr": "白云山",
+          "inventory_turnover_ratio": 4.5810131954034405
+        },
+        {
+          "stock_code": "000650",
+          "stock_abbr": "仁和药业",
+          "inventory_turnover_ratio": 4.506489479654515
+        },
+        {
+          "stock_code": "600993",
+          "stock_abbr": "马应龙",
+          "inventory_turnover_ratio": 4.393744634388417
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "inventory_turnover_ratio",
+      "sort_ascending": false,
+      "top_n": 5,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "inventory_turnover_ratio",
+        "data_type": "quantitative",
+        "label": "inventory_turnover_ratio",
+        "unit": "%"
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B1056_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1056_1.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT stock_code, stock_abbr, inventory_turnover_ratio FROM financials_view WHERE report_period = '2025Q3' AND inventory_turnover_ratio IS NOT NULL ORDER BY inventory_turnover_ratio DESC LIMIT 5",
+      "value_fields": [
+        "inventory_turnover_ratio"
+      ],
+      "value_labels": [
+        "inventory_turnover_ratio"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "inventory_turnover_ratio"
+        ],
+        "category_field": "stock_abbr",
+        "sort_by": "inventory_turnover_ratio",
+        "sort_ascending": false,
+        "top_n": 5
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1056_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1056_1.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "查询2025年第三季度存货周转率最高的五家公司，用条形图展示其周转率数值",
+      "A": {
+        "content": "2025年第三季度存货周转率最高的五家公司及其数值如下：\n1. 新里程（002219）：8.32\n2. 瑞康医药（002589）：6.90\n3. 白云山（600332）：4.58\n4. 仁和药业（000650）：4.51\n5. 马应龙（600993）：4.39",
+        "image": [
+          "./result/B1056_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"查询2025年第三季度存货周转率最高的五家公司，用条形图展示其周转率数值\", \"A\": {\"content\": \"2025年第三季度存货周转率最高的五家公司及其数值如下：\\n1. 新里程（002219）：8.32\\n2. 瑞康医药（002589）：6.90\\n3. 白云山（600332）：4.58\\n4. 仁和药业（000650）：4.51\\n5. 马应龙（600993）：4.39\", \"image\": [\"./result/B1056_1.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，意图是排名，需要查询2025Q3的存货周转率最高的5家公司，用条形图展示。因此直接筛选报告期为2025Q3，按存货周转率降序排列，取前5条记录。"
+  ],
+  "final_status": "ok"
+}

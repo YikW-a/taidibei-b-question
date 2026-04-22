@@ -1,0 +1,211 @@
+{
+  "question_id": "B1054",
+  "question_type": "数据统计分析查询",
+  "raw_question": "分析2022-2025年第三季度中药行业平均研发费用占比的变化趋势，用折线图展示",
+  "raw_question_json": "[{\"Q\":\"分析2022-2025年第三季度中药行业平均研发费用占比的变化趋势，用折线图展示\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3",
+      "2022Q3",
+      "2023Q3",
+      "2024Q3"
+    ],
+    "metrics": [
+      "研发费用占比",
+      "研发费用"
+    ],
+    "chart_type": "line",
+    "intent_type": "trend_or_chart",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "trend_or_chart",
+    "companies": [],
+    "periods": [
+      "2022Q3",
+      "2023Q3",
+      "2024Q3",
+      "2025Q3"
+    ],
+    "metrics": [
+      "研发费用占比"
+    ],
+    "chart_type": "line",
+    "top_n": null,
+    "threshold": null,
+    "question": "分析2022-2025年第三季度中药行业平均研发费用占比的变化趋势，用折线图展示",
+    "should_draw": true,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT report_period, AVG(rnd_expense_ratio) AS avg_rnd_expense_ratio FROM financials_view WHERE report_period IN ('2022Q3', '2023Q3', '2024Q3', '2025Q3') GROUP BY report_period ORDER BY report_period",
+  "sql_history": [
+    "SELECT report_period, AVG(rnd_expense_ratio) AS avg_rnd_expense_ratio FROM financials_view WHERE report_period IN ('2022Q3', '2023Q3', '2024Q3', '2025Q3') GROUP BY report_period ORDER BY report_period"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 4,
+  "result_rows": [
+    {
+      "report_period": "2022Q3",
+      "avg_rnd_expense_ratio": 5.917017401341837
+    },
+    {
+      "report_period": "2023Q3",
+      "avg_rnd_expense_ratio": 3.4902816010071813
+    },
+    {
+      "report_period": "2024Q3",
+      "avg_rnd_expense_ratio": 3.9480089813230554
+    },
+    {
+      "report_period": "2025Q3",
+      "avg_rnd_expense_ratio": 4.015595132237802
+    }
+  ],
+  "context_companies": [],
+  "context_rows": [
+    {
+      "report_period": "2022Q3",
+      "avg_rnd_expense_ratio": 5.917017401341837
+    },
+    {
+      "report_period": "2023Q3",
+      "avg_rnd_expense_ratio": 3.4902816010071813
+    },
+    {
+      "report_period": "2024Q3",
+      "avg_rnd_expense_ratio": 3.9480089813230554
+    },
+    {
+      "report_period": "2025Q3",
+      "avg_rnd_expense_ratio": 4.015595132237802
+    }
+  ],
+  "result_preview": "[{\"report_period\":\"2022Q3\",\"avg_rnd_expense_ratio\":5.9170174013},{\"report_period\":\"2023Q3\",\"avg_rnd_expense_ratio\":3.490281601},{\"report_period\":\"2024Q3\",\"avg_rnd_expense_ratio\":3.9480089813},{\"report_period\":\"2025Q3\",\"avg_rnd_expense_ratio\":4.0155951322}]",
+  "chart_plan": {
+    "chart_type": "line",
+    "title": "2022-2025年第三季度中药行业平均研发费用占比趋势",
+    "x_field": "report_period",
+    "y_fields": [
+      "avg_rnd_expense_ratio"
+    ],
+    "category_field": null,
+    "sort_by": "report_period",
+    "sort_ascending": true,
+    "top_n": null,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1054",
+    "image_index": 1,
+    "chart_type": "line",
+    "title": "2022-2025年第三季度中药行业平均研发费用占比趋势",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 4,
+      "preview_rows": [
+        {
+          "report_period": "2022Q3",
+          "avg_rnd_expense_ratio": 5.917017401341837
+        },
+        {
+          "report_period": "2023Q3",
+          "avg_rnd_expense_ratio": 3.4902816010071813
+        },
+        {
+          "report_period": "2024Q3",
+          "avg_rnd_expense_ratio": 3.9480089813230554
+        },
+        {
+          "report_period": "2025Q3",
+          "avg_rnd_expense_ratio": 4.015595132237802
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "report_period",
+      "sort_ascending": true,
+      "top_n": null,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "avg_rnd_expense_ratio",
+        "data_type": "quantitative",
+        "label": "avg_rnd_expense_ratio",
+        "unit": "%"
+      },
+      "x": {
+        "field": "report_period",
+        "data_type": "temporal",
+        "label": "报告期",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": false
+    },
+    "output": {
+      "filename": "B1054_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1054_1.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT report_period, AVG(rnd_expense_ratio) AS avg_rnd_expense_ratio FROM financials_view WHERE report_period IN ('2022Q3', '2023Q3', '2024Q3', '2025Q3') GROUP BY report_period ORDER BY report_period",
+      "value_fields": [
+        "avg_rnd_expense_ratio"
+      ],
+      "value_labels": [
+        "avg_rnd_expense_ratio"
+      ],
+      "original_chart_plan": {
+        "chart_type": "line",
+        "x_field": "report_period",
+        "y_fields": [
+          "avg_rnd_expense_ratio"
+        ],
+        "category_field": null,
+        "sort_by": "report_period",
+        "sort_ascending": true,
+        "top_n": null
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1054_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1054_1.jpg"
+  ],
+  "graph_formats": [
+    "折线图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "分析2022-2025年第三季度中药行业平均研发费用占比的变化趋势，用折线图展示",
+      "A": {
+        "content": "2022年至2025年第三季度，中药行业平均研发费用占比的变化趋势呈现先降后升的波动形态。具体来看，2022年第三季度平均占比为5.92%，2023年第三季度显著下降至3.49%，随后在2024年第三季度回升至3.95%，2025年第三季度进一步微升至4.02%。",
+        "image": [
+          "./result/B1054_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"分析2022-2025年第三季度中药行业平均研发费用占比的变化趋势，用折线图展示\", \"A\": {\"content\": \"2022年至2025年第三季度，中药行业平均研发费用占比的变化趋势呈现先降后升的波动形态。具体来看，2022年第三季度平均占比为5.92%，2023年第三季度显著下降至3.49%，随后在2024年第三季度回升至3.95%，2025年第三季度进一步微升至4.02%。\", \"image\": [\"./result/B1054_1.jpg\"]}}]",
+  "notes": [
+    "查询计划要求分析2022-2025年第三季度中药行业平均研发费用占比的变化趋势，用折线图展示。根据query_plan，periods为['2022Q3', '2023Q3', '2024Q3', '2025Q3']，metrics为['研发费用占比']，对应字段为rnd_expense_ratio。由于是行业平均趋势，不需要按公司分组，直接按报告期分组计算平均值即可。注意报告期使用标准格式，并按时间排序以支持折线图绘制。"
+  ],
+  "final_status": "ok"
+}

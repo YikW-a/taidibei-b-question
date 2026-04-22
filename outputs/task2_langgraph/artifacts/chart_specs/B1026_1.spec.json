@@ -1,0 +1,93 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1026",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "2025Q3 销售费用占比低于行业均值公司中净利润Top3",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 3,
+    "preview_rows": [
+      {
+        "stock_code": "000538",
+        "stock_abbr": "云南白药",
+        "net_profit": 477711.965747,
+        "total_operating_revenue": 3065421.420901,
+        "operating_expense_selling_expenses": 371529.978611,
+        "selling_expense_ratio": 0.12120029437968713,
+        "industry_avg_selling_expense_ratio": 0.29228042235669655
+      },
+      {
+        "stock_code": "600332",
+        "stock_abbr": "白云山",
+        "net_profit": 331005.207786,
+        "total_operating_revenue": 6160599.379554,
+        "operating_expense_selling_expenses": 431586.980987,
+        "selling_expense_ratio": 0.07005600500811092,
+        "industry_avg_selling_expense_ratio": 0.29228042235669655
+      },
+      {
+        "stock_code": "000999",
+        "stock_abbr": "华润三九",
+        "net_profit": 235282.69556599998,
+        "total_operating_revenue": 2198640.396207,
+        "operating_expense_selling_expenses": 612817.802429,
+        "selling_expense_ratio": 0.2787257995833275,
+        "industry_avg_selling_expense_ratio": 0.29228042235669655
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "net_profit",
+    "sort_ascending": false,
+    "top_n": 3,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "net_profit",
+      "data_type": "quantitative",
+      "label": "净利润",
+      "unit": "万元"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1026_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1026_1.jpg"
+  },
+  "meta": {
+    "source_sql": "WITH industry_avg AS (\n    SELECT AVG(operating_expense_selling_expenses / total_operating_revenue) AS avg_selling_expense_ratio\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n),\nfiltered_companies AS (\n    SELECT fv.stock_code, fv.stock_abbr, fv.net_profit, fv.total_operating_revenue, fv.operating_expense_selling_expenses,\n           (fv.operating_expense_selling_expenses / fv.total_operating_revenue) AS selling_expense_ratio\n    FROM financials_view fv\n    CROSS JOIN industry_avg ia\n    WHERE fv.report_period = '2025Q3'\n      AND fv.total_operating_revenue > 0\n      AND (fv.operating_expense_selling_expenses / fv.total_operating_revenue) < ia.avg_selling_expense_ratio\n)\nSELECT fc.stock_code, fc.stock_abbr, fc.net_profit, fc.total_operating_revenue, fc.operating_expense_selling_expenses,\n       fc.selling_expense_ratio, ia.avg_selling_expense_ratio AS industry_avg_selling_expense_ratio\nFROM filtered_companies fc\nCROSS JOIN industry_avg ia\nORDER BY fc.net_profit DESC\nLIMIT 3",
+    "value_fields": [
+      "net_profit"
+    ],
+    "value_labels": [
+      "净利润"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "net_profit"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": "net_profit",
+      "sort_ascending": false,
+      "top_n": 3
+    }
+  }
+}

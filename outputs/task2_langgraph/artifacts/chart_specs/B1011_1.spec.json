@@ -1,0 +1,91 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1011",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "2025年第三季度资产负债率>60%的中药公司",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 5,
+    "preview_rows": [
+      {
+        "stock_code": "002219",
+        "stock_abbr": "新里程",
+        "asset_liability_ratio": 69.12801378944201
+      },
+      {
+        "stock_code": "002589",
+        "stock_abbr": "瑞康医药",
+        "asset_liability_ratio": 64.41909829327216
+      },
+      {
+        "stock_code": "600129",
+        "stock_abbr": "太极集团",
+        "asset_liability_ratio": 74.16156240808654
+      },
+      {
+        "stock_code": "600671",
+        "stock_abbr": "天目药业",
+        "asset_liability_ratio": 78.05655504780079
+      },
+      {
+        "stock_code": "603139",
+        "stock_abbr": "康惠制药",
+        "asset_liability_ratio": 60.48459682796709
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "asset_liability_ratio",
+    "sort_ascending": false,
+    "top_n": 5,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "asset_liability_ratio",
+      "data_type": "quantitative",
+      "label": "asset_liability_ratio",
+      "unit": "%"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1011_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1011_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT stock_code, stock_abbr, asset_liability_ratio FROM financials_view WHERE report_period = '2025Q3' AND asset_liability_ratio > 60.0",
+    "value_fields": [
+      "asset_liability_ratio"
+    ],
+    "value_labels": [
+      "asset_liability_ratio"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "asset_liability_ratio"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": "asset_liability_ratio",
+      "sort_ascending": false,
+      "top_n": 5
+    }
+  }
+}

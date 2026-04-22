@@ -1,0 +1,421 @@
+{
+  "question_id": "B1021",
+  "question_type": "数据统计分析查询",
+  "raw_question": "2025年第三季度，“负债-短期借款”金额超过“资产-货币资金”金额的公司有哪些？请列出简称、短期借款（万元）、货币资金（万元）。",
+  "raw_question_json": "[{\"Q\":\"2025年第三季度，“负债-短期借款”金额超过“资产-货币资金”金额的公司有哪些？请列出简称、短期借款（万元）、货币资金（万元）。\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "货币资金",
+      "短期借款"
+    ],
+    "chart_type": null,
+    "intent_type": "filter",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "filter",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "短期借款",
+      "货币资金"
+    ],
+    "chart_type": "table",
+    "top_n": null,
+    "threshold": null,
+    "question": "2025年第三季度，“负债-短期借款”金额超过“资产-货币资金”金额的公司有哪些？请列出简称、短期借款（万元）、货币资金（万元）。",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT stock_abbr, liability_short_term_loans, asset_cash_and_cash_equivalents FROM financials_view WHERE report_period = '2025Q3' AND liability_short_term_loans > asset_cash_and_cash_equivalents",
+  "sql_history": [
+    "SELECT stock_abbr, liability_short_term_loans, asset_cash_and_cash_equivalents FROM financials_view WHERE report_period = '2025Q3' AND liability_short_term_loans > asset_cash_and_cash_equivalents"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 18,
+  "result_rows": [
+    {
+      "stock_abbr": "华神科技",
+      "liability_short_term_loans": 24253.59125,
+      "asset_cash_and_cash_equivalents": 14857.557724
+    },
+    {
+      "stock_abbr": "万邦德",
+      "liability_short_term_loans": 69265.283016,
+      "asset_cash_and_cash_equivalents": 8307.079597
+    },
+    {
+      "stock_abbr": "莱茵生物",
+      "liability_short_term_loans": 54075.324698000004,
+      "asset_cash_and_cash_equivalents": 25537.904588999998
+    },
+    {
+      "stock_abbr": "新里程",
+      "liability_short_term_loans": 100918.7311,
+      "asset_cash_and_cash_equivalents": 30781.892533
+    },
+    {
+      "stock_abbr": "奇正藏药",
+      "liability_short_term_loans": 95537.94305,
+      "asset_cash_and_cash_equivalents": 28368.424408999996
+    },
+    {
+      "stock_abbr": "贵州百灵",
+      "liability_short_term_loans": 97507.69967100001,
+      "asset_cash_and_cash_equivalents": 18165.497616
+    },
+    {
+      "stock_abbr": "益盛药业",
+      "liability_short_term_loans": 34823.111110000005,
+      "asset_cash_and_cash_equivalents": 11584.746279
+    },
+    {
+      "stock_abbr": "瑞康医药",
+      "liability_short_term_loans": 530203.0849489999,
+      "asset_cash_and_cash_equivalents": 424108.343077
+    },
+    {
+      "stock_abbr": "特一药业",
+      "liability_short_term_loans": 26000.0,
+      "asset_cash_and_cash_equivalents": 21539.840879
+    },
+    {
+      "stock_abbr": "太极集团",
+      "liability_short_term_loans": 466812.756035,
+      "asset_cash_and_cash_equivalents": 57765.358484000004
+    },
+    {
+      "stock_abbr": "太龙药业",
+      "liability_short_term_loans": 63858.54461900001,
+      "asset_cash_and_cash_equivalents": 34386.013543
+    },
+    {
+      "stock_abbr": "羚锐制药",
+      "liability_short_term_loans": 51668.426592,
+      "asset_cash_and_cash_equivalents": 45965.629081
+    },
+    {
+      "stock_abbr": "昆药集团",
+      "liability_short_term_loans": 85253.916799,
+      "asset_cash_and_cash_equivalents": 79404.459936
+    },
+    {
+      "stock_abbr": "天目药业",
+      "liability_short_term_loans": 15618.094,
+      "asset_cash_and_cash_equivalents": 1174.034634
+    },
+    {
+      "stock_abbr": "康惠制药",
+      "liability_short_term_loans": 23545.297801,
+      "asset_cash_and_cash_equivalents": 7849.490873000001
+    },
+    {
+      "stock_abbr": "贵州三力",
+      "liability_short_term_loans": 57548.371308,
+      "asset_cash_and_cash_equivalents": 26569.268923
+    },
+    {
+      "stock_abbr": "珍宝岛",
+      "liability_short_term_loans": 146254.823221,
+      "asset_cash_and_cash_equivalents": 20382.056049000003
+    },
+    {
+      "stock_abbr": "方盛制药",
+      "liability_short_term_loans": 41346.842222,
+      "asset_cash_and_cash_equivalents": 18009.309947
+    }
+  ],
+  "context_companies": [
+    "华神科技",
+    "万邦德",
+    "莱茵生物",
+    "新里程",
+    "奇正藏药",
+    "贵州百灵",
+    "益盛药业",
+    "瑞康医药",
+    "特一药业",
+    "太极集团",
+    "太龙药业",
+    "羚锐制药",
+    "昆药集团",
+    "天目药业",
+    "康惠制药",
+    "贵州三力",
+    "珍宝岛",
+    "方盛制药"
+  ],
+  "context_rows": [
+    {
+      "stock_abbr": "华神科技",
+      "liability_short_term_loans": 24253.59125,
+      "asset_cash_and_cash_equivalents": 14857.557724
+    },
+    {
+      "stock_abbr": "万邦德",
+      "liability_short_term_loans": 69265.283016,
+      "asset_cash_and_cash_equivalents": 8307.079597
+    },
+    {
+      "stock_abbr": "莱茵生物",
+      "liability_short_term_loans": 54075.324698000004,
+      "asset_cash_and_cash_equivalents": 25537.904588999998
+    },
+    {
+      "stock_abbr": "新里程",
+      "liability_short_term_loans": 100918.7311,
+      "asset_cash_and_cash_equivalents": 30781.892533
+    },
+    {
+      "stock_abbr": "奇正藏药",
+      "liability_short_term_loans": 95537.94305,
+      "asset_cash_and_cash_equivalents": 28368.424408999996
+    },
+    {
+      "stock_abbr": "贵州百灵",
+      "liability_short_term_loans": 97507.69967100001,
+      "asset_cash_and_cash_equivalents": 18165.497616
+    },
+    {
+      "stock_abbr": "益盛药业",
+      "liability_short_term_loans": 34823.111110000005,
+      "asset_cash_and_cash_equivalents": 11584.746279
+    },
+    {
+      "stock_abbr": "瑞康医药",
+      "liability_short_term_loans": 530203.0849489999,
+      "asset_cash_and_cash_equivalents": 424108.343077
+    },
+    {
+      "stock_abbr": "特一药业",
+      "liability_short_term_loans": 26000.0,
+      "asset_cash_and_cash_equivalents": 21539.840879
+    },
+    {
+      "stock_abbr": "太极集团",
+      "liability_short_term_loans": 466812.756035,
+      "asset_cash_and_cash_equivalents": 57765.358484000004
+    },
+    {
+      "stock_abbr": "太龙药业",
+      "liability_short_term_loans": 63858.54461900001,
+      "asset_cash_and_cash_equivalents": 34386.013543
+    },
+    {
+      "stock_abbr": "羚锐制药",
+      "liability_short_term_loans": 51668.426592,
+      "asset_cash_and_cash_equivalents": 45965.629081
+    },
+    {
+      "stock_abbr": "昆药集团",
+      "liability_short_term_loans": 85253.916799,
+      "asset_cash_and_cash_equivalents": 79404.459936
+    },
+    {
+      "stock_abbr": "天目药业",
+      "liability_short_term_loans": 15618.094,
+      "asset_cash_and_cash_equivalents": 1174.034634
+    },
+    {
+      "stock_abbr": "康惠制药",
+      "liability_short_term_loans": 23545.297801,
+      "asset_cash_and_cash_equivalents": 7849.490873000001
+    },
+    {
+      "stock_abbr": "贵州三力",
+      "liability_short_term_loans": 57548.371308,
+      "asset_cash_and_cash_equivalents": 26569.268923
+    },
+    {
+      "stock_abbr": "珍宝岛",
+      "liability_short_term_loans": 146254.823221,
+      "asset_cash_and_cash_equivalents": 20382.056049000003
+    },
+    {
+      "stock_abbr": "方盛制药",
+      "liability_short_term_loans": 41346.842222,
+      "asset_cash_and_cash_equivalents": 18009.309947
+    }
+  ],
+  "result_preview": "[{\"stock_abbr\":\"华神科技\",\"liability_short_term_loans\":24253.59125,\"asset_cash_and_cash_equivalents\":14857.557724},{\"stock_abbr\":\"万邦德\",\"liability_short_term_loans\":69265.283016,\"asset_cash_and_cash_equivalents\":8307.079597},{\"stock_abbr\":\"莱茵生物\",\"liability_short_term_loans\":54075.324698,\"asset_cash_and_cash_equivalents\":25537.904589},{\"stock_abbr\":\"新里程\",\"liability_short_term_loans\":100918.7311,\"asset_cash_and_cash_equivalents\":30781.892533},{\"stock_abbr\":\"奇正藏药\",\"liability_short_term_loans\":95537.94305,\"asset_cash_and_cash_equivalents\":28368.424409},{\"stock_abbr\":\"贵州百灵\",\"liability_short_term_loans\":97507.699671,\"asset_cash_and_cash_equivalents\":18165.497616},{\"stock_abbr\":\"益盛药业\",\"liability_short_term_loans\":34823.11111,\"asset_cash_and_cash_equivalents\":11584.746279},{\"stock_abbr\":\"瑞康医药\",\"liability_short_term_loans\":530203.0849489999,\"asset_cash_and_cash_equivalents\":424108.343077},{\"stock_abbr\":\"特一药业\",\"liability_short_term_loans\":26000.0,\"asset_cash_and_cash_equivalents\":21539.840879},{\"stock_abbr\":\"太极集团\",\"liability_short_term_loans\":466812.756035,\"asset_cash_and_cash_equivalents\":57765.358484},{\"stock_abbr\":\"太龙药业\",\"liability_short_term_loans\":63858.544619,\"asset_cash_and_cash_equivalents\":34386.013543},{\"stock_abbr\":\"羚锐制药\",\"liability_short_term_loans\":51668.426592,\"asset_cash_and_cash_equivalents\":45965.629081},{\"stock_abbr\":\"昆药集团\",\"liability_short_term_loans\":85253.916799,\"asset_cash_and_cash_equivalents\":79404.459936},{\"stock_abbr\":\"天目药业\",\"liability_short_term_loans\":15618.094,\"asset_cash_and_cash_equivalents\":1174.034634},{\"stock_abbr\":\"康惠制药\",\"liability_short_term_loans\":23545.297801,\"asset_cash_and_cash_equivalents\":7849.490873},{\"stock_abbr\":\"贵州三力\",\"liability_short_term_loans\":57548.371308,\"asset_cash_and_cash_equivalents\":26569.268923},{\"stock_abbr\":\"珍宝岛\",\"liability_short_term_loans\":146254.823221,\"asset_cash_and_cash_equivalents\":20382.056049},{\"stock_abbr\":\"方盛制药\",\"liability_short_term_loans\":41346.842222,\"asset_cash_and_cash_equivalents\":18009.309947}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2025Q3短期借款超过货币资金的公司",
+    "x_field": null,
+    "y_fields": [
+      "liability_short_term_loans",
+      "asset_cash_and_cash_equivalents"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": "liability_short_term_loans",
+    "sort_ascending": false,
+    "top_n": 15,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1021",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "2025Q3短期借款超过货币资金的公司",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 18,
+      "preview_rows": [
+        {
+          "stock_abbr": "华神科技",
+          "liability_short_term_loans": 24253.59125,
+          "asset_cash_and_cash_equivalents": 14857.557724
+        },
+        {
+          "stock_abbr": "万邦德",
+          "liability_short_term_loans": 69265.283016,
+          "asset_cash_and_cash_equivalents": 8307.079597
+        },
+        {
+          "stock_abbr": "莱茵生物",
+          "liability_short_term_loans": 54075.324698000004,
+          "asset_cash_and_cash_equivalents": 25537.904588999998
+        },
+        {
+          "stock_abbr": "新里程",
+          "liability_short_term_loans": 100918.7311,
+          "asset_cash_and_cash_equivalents": 30781.892533
+        },
+        {
+          "stock_abbr": "奇正藏药",
+          "liability_short_term_loans": 95537.94305,
+          "asset_cash_and_cash_equivalents": 28368.424408999996
+        },
+        {
+          "stock_abbr": "贵州百灵",
+          "liability_short_term_loans": 97507.69967100001,
+          "asset_cash_and_cash_equivalents": 18165.497616
+        },
+        {
+          "stock_abbr": "益盛药业",
+          "liability_short_term_loans": 34823.111110000005,
+          "asset_cash_and_cash_equivalents": 11584.746279
+        },
+        {
+          "stock_abbr": "瑞康医药",
+          "liability_short_term_loans": 530203.0849489999,
+          "asset_cash_and_cash_equivalents": 424108.343077
+        },
+        {
+          "stock_abbr": "特一药业",
+          "liability_short_term_loans": 26000.0,
+          "asset_cash_and_cash_equivalents": 21539.840879
+        },
+        {
+          "stock_abbr": "太极集团",
+          "liability_short_term_loans": 466812.756035,
+          "asset_cash_and_cash_equivalents": 57765.358484000004
+        },
+        {
+          "stock_abbr": "太龙药业",
+          "liability_short_term_loans": 63858.54461900001,
+          "asset_cash_and_cash_equivalents": 34386.013543
+        },
+        {
+          "stock_abbr": "羚锐制药",
+          "liability_short_term_loans": 51668.426592,
+          "asset_cash_and_cash_equivalents": 45965.629081
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "liability_short_term_loans",
+      "sort_ascending": false,
+      "top_n": 15,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "liability_short_term_loans",
+        "data_type": "quantitative",
+        "label": "短期借款",
+        "unit": "万元"
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B1021_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1021_1.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT stock_abbr, liability_short_term_loans, asset_cash_and_cash_equivalents FROM financials_view WHERE report_period = '2025Q3' AND liability_short_term_loans > asset_cash_and_cash_equivalents",
+      "value_fields": [
+        "liability_short_term_loans",
+        "asset_cash_and_cash_equivalents"
+      ],
+      "value_labels": [
+        "短期借款",
+        "货币资金"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "liability_short_term_loans",
+          "asset_cash_and_cash_equivalents"
+        ],
+        "category_field": "stock_abbr",
+        "sort_by": "liability_short_term_loans",
+        "sort_ascending": false,
+        "top_n": 15
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1021_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1021_1.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "2025年第三季度，“负债-短期借款”金额超过“资产-货币资金”金额的公司有哪些？请列出简称、短期借款（万元）、货币资金（万元）。",
+      "A": {
+        "content": "根据查询结果，2025年第三季度“负债-短期借款”金额超过“资产-货币资金”金额的公司共有18家。具体名单及数值如下：\n\n1.  华神科技：短期借款24,253.59万元，货币资金14,857.56万元\n2.  万邦德：短期借款69,265.28万元，货币资金8,307.08万元\n3.  莱茵生物：短期借款54,075.32万元，货币资金25,537.90万元\n4.  新里程：短期借款100,918.73万元，货币资金30,781.89万元\n5.  奇正藏药：短期借款95,537.94万元，货币资金28,368.42万元\n6.  贵州百灵：短期借款97,507.70万元，货币资金18,165.50万元\n7.  益盛药业：短期借款34,823.11万元，货币资金11,584.75万元\n8.  瑞康医药：短期借款530,203.08万元，货币资金424,108.34万元\n9.  特一药业：短期借款26,000.00万元，货币资金21,539.84万元\n10. 太极集团：短期借款466,812.76万元，货币资金57,765.36万元\n11. 太龙药业：短期借款63,858.54万元，货币资金34,386.01万元\n12. 羚锐制药：短期借款51,668.43万元，货币资金45,965.63万元\n13. 昆药集团：短期借款85,253.92万元，货币资金79,404.46万元\n14. 天目药业：短期借款15,618.09万元，货币资金1,174.03万元\n15. 康惠制药：短期借款23,545.30万元，货币资金7,849.49万元\n16. 贵州三力：短期借款57,548.37万元，货币资金26,569.27万元\n17. 珍宝岛：短期借款146,254.82万元，货币资金20,382.06万元\n18. 方盛制药：短期借款41,346.84万元，货币资金18,009.31万元",
+        "image": [
+          "./result/B1021_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"2025年第三季度，“负债-短期借款”金额超过“资产-货币资金”金额的公司有哪些？请列出简称、短期借款（万元）、货币资金（万元）。\", \"A\": {\"content\": \"根据查询结果，2025年第三季度“负债-短期借款”金额超过“资产-货币资金”金额的公司共有18家。具体名单及数值如下：\\n\\n1.  华神科技：短期借款24,253.59万元，货币资金14,857.56万元\\n2.  万邦德：短期借款69,265.28万元，货币资金8,307.08万元\\n3.  莱茵生物：短期借款54,075.32万元，货币资金25,537.90万元\\n4.  新里程：短期借款100,918.73万元，货币资金30,781.89万元\\n5.  奇正藏药：短期借款95,537.94万元，货币资金28,368.42万元\\n6.  贵州百灵：短期借款97,507.70万元，货币资金18,165.50万元\\n7.  益盛药业：短期借款34,823.11万元，货币资金11,584.75万元\\n8.  瑞康医药：短期借款530,203.08万元，货币资金424,108.34万元\\n9.  特一药业：短期借款26,000.00万元，货币资金21,539.84万元\\n10. 太极集团：短期借款466,812.76万元，货币资金57,765.36万元\\n11. 太龙药业：短期借款63,858.54万元，货币资金34,386.01万元\\n12. 羚锐制药：短期借款51,668.43万元，货币资金45,965.63万元\\n13. 昆药集团：短期借款85,253.92万元，货币资金79,404.46万元\\n14. 天目药业：短期借款15,618.09万元，货币资金1,174.03万元\\n15. 康惠制药：短期借款23,545.30万元，货币资金7,849.49万元\\n16. 贵州三力：短期借款57,548.37万元，货币资金26,569.27万元\\n17. 珍宝岛：短期借款146,254.82万元，货币资金20,382.06万元\\n18. 方盛制药：短期借款41,346.84万元，货币资金18,009.31万元\", \"image\": [\"./result/B1021_1.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，需要筛选2025Q3报告期，且短期借款（liability_short_term_loans）大于货币资金（asset_cash_and_cash_equivalents）的公司。直接使用等值比较筛选报告期，并返回要求的列。"
+  ],
+  "final_status": "ok"
+}

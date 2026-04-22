@@ -1,0 +1,102 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1031",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "2025年第三季度净利润为负的中药公司",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 9,
+    "preview_rows": [
+      {
+        "stock_code": "000590",
+        "stock_abbr": "启迪药业"
+      },
+      {
+        "stock_code": "000790",
+        "stock_abbr": "华神科技"
+      },
+      {
+        "stock_code": "002219",
+        "stock_abbr": "新里程"
+      },
+      {
+        "stock_code": "002737",
+        "stock_abbr": "葵花药业"
+      },
+      {
+        "stock_code": "300878",
+        "stock_abbr": "维康药业"
+      },
+      {
+        "stock_code": "301111",
+        "stock_abbr": "粤万年青"
+      },
+      {
+        "stock_code": "600594",
+        "stock_abbr": "益佰制药"
+      },
+      {
+        "stock_code": "603139",
+        "stock_abbr": "康惠制药"
+      },
+      {
+        "stock_code": "603567",
+        "stock_abbr": "珍宝岛"
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "stock_code",
+    "sort_ascending": true,
+    "top_n": 9,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "stock_code",
+      "data_type": "quantitative",
+      "label": "股票代码",
+      "unit": "万元"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1031_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1031_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT stock_code, stock_abbr FROM financials_view WHERE report_period = '2025Q3' AND net_profit < 0",
+    "value_fields": [
+      "stock_code"
+    ],
+    "value_labels": [
+      "股票代码"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "stock_code"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": "stock_code",
+      "sort_ascending": true,
+      "top_n": 9
+    }
+  }
+}

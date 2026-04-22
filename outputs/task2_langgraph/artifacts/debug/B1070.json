@@ -1,0 +1,380 @@
+{
+  "question_id": "B1070",
+  "question_type": "数据统计分析查询",
+  "raw_question": "查询净利润同比增长的公司 | 2025年第三季度，66家中药上市公司中，净利润同比增长率超过20%的公司有哪些？列出股票代码、简称及具体增长率",
+  "raw_question_json": "[{\"Q\":\"查询净利润同比增长的公司\"},{\"Q\":\"2025年第三季度，66家中药上市公司中，净利润同比增长率超过20%的公司有哪些？列出股票代码、简称及具体增长率\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "净利润",
+      "同比增长率"
+    ],
+    "chart_type": null,
+    "intent_type": "filter",
+    "top_n": null,
+    "threshold": 20.0
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "filter",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "净利润",
+      "同比增长率"
+    ],
+    "chart_type": "table",
+    "top_n": null,
+    "threshold": 20.0,
+    "question": "2025年第三季度，66家中药上市公司中，净利润同比增长率超过20%的公司有哪些？列出股票代码、简称及具体增长率",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT stock_code, stock_abbr, net_profit_yoy_growth FROM financials_view WHERE report_period = '2025Q3' AND net_profit_yoy_growth > 20",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, net_profit_yoy_growth FROM financials_view WHERE report_period = '2025Q3' AND net_profit_yoy_growth > 20"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 14,
+  "result_rows": [
+    {
+      "stock_code": "000590",
+      "stock_abbr": "启迪药业",
+      "net_profit_yoy_growth": 46.64858494533798
+    },
+    {
+      "stock_code": "002107",
+      "stock_abbr": "沃华医药",
+      "net_profit_yoy_growth": 192.81517145896942
+    },
+    {
+      "stock_code": "002198",
+      "stock_abbr": "嘉应制药",
+      "net_profit_yoy_growth": 658.498909607456
+    },
+    {
+      "stock_code": "002317",
+      "stock_abbr": "众生药业",
+      "net_profit_yoy_growth": 80.63137180894428
+    },
+    {
+      "stock_code": "002603",
+      "stock_abbr": "以岭药业",
+      "net_profit_yoy_growth": 81.51487891696773
+    },
+    {
+      "stock_code": "002728",
+      "stock_abbr": "特一药业",
+      "net_profit_yoy_growth": 985.1796452032535
+    },
+    {
+      "stock_code": "300181",
+      "stock_abbr": "佐力药业",
+      "net_profit_yoy_growth": 21.22909186681436
+    },
+    {
+      "stock_code": "301331",
+      "stock_abbr": "恩威医药",
+      "net_profit_yoy_growth": 66.12807117938533
+    },
+    {
+      "stock_code": "600329",
+      "stock_abbr": "达仁堂",
+      "net_profit_yoy_growth": 170.59938256580205
+    },
+    {
+      "stock_code": "600479",
+      "stock_abbr": "千金药业",
+      "net_profit_yoy_growth": 21.028667276468486
+    },
+    {
+      "stock_code": "600518",
+      "stock_abbr": "康美药业",
+      "net_profit_yoy_growth": 86.06034114359072
+    },
+    {
+      "stock_code": "600594",
+      "stock_abbr": "益佰制药",
+      "net_profit_yoy_growth": 47.986192957110234
+    },
+    {
+      "stock_code": "600671",
+      "stock_abbr": "天目药业",
+      "net_profit_yoy_growth": 299.6262083844167
+    },
+    {
+      "stock_code": "603858",
+      "stock_abbr": "步长制药",
+      "net_profit_yoy_growth": 263.1097634092608
+    }
+  ],
+  "context_companies": [
+    "启迪药业",
+    "沃华医药",
+    "嘉应制药",
+    "众生药业",
+    "以岭药业",
+    "特一药业",
+    "佐力药业",
+    "恩威医药",
+    "达仁堂",
+    "千金药业",
+    "康美药业",
+    "益佰制药",
+    "天目药业",
+    "步长制药"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "000590",
+      "stock_abbr": "启迪药业",
+      "net_profit_yoy_growth": 46.64858494533798
+    },
+    {
+      "stock_code": "002107",
+      "stock_abbr": "沃华医药",
+      "net_profit_yoy_growth": 192.81517145896942
+    },
+    {
+      "stock_code": "002198",
+      "stock_abbr": "嘉应制药",
+      "net_profit_yoy_growth": 658.498909607456
+    },
+    {
+      "stock_code": "002317",
+      "stock_abbr": "众生药业",
+      "net_profit_yoy_growth": 80.63137180894428
+    },
+    {
+      "stock_code": "002603",
+      "stock_abbr": "以岭药业",
+      "net_profit_yoy_growth": 81.51487891696773
+    },
+    {
+      "stock_code": "002728",
+      "stock_abbr": "特一药业",
+      "net_profit_yoy_growth": 985.1796452032535
+    },
+    {
+      "stock_code": "300181",
+      "stock_abbr": "佐力药业",
+      "net_profit_yoy_growth": 21.22909186681436
+    },
+    {
+      "stock_code": "301331",
+      "stock_abbr": "恩威医药",
+      "net_profit_yoy_growth": 66.12807117938533
+    },
+    {
+      "stock_code": "600329",
+      "stock_abbr": "达仁堂",
+      "net_profit_yoy_growth": 170.59938256580205
+    },
+    {
+      "stock_code": "600479",
+      "stock_abbr": "千金药业",
+      "net_profit_yoy_growth": 21.028667276468486
+    },
+    {
+      "stock_code": "600518",
+      "stock_abbr": "康美药业",
+      "net_profit_yoy_growth": 86.06034114359072
+    },
+    {
+      "stock_code": "600594",
+      "stock_abbr": "益佰制药",
+      "net_profit_yoy_growth": 47.986192957110234
+    },
+    {
+      "stock_code": "600671",
+      "stock_abbr": "天目药业",
+      "net_profit_yoy_growth": 299.6262083844167
+    },
+    {
+      "stock_code": "603858",
+      "stock_abbr": "步长制药",
+      "net_profit_yoy_growth": 263.1097634092608
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"000590\",\"stock_abbr\":\"启迪药业\",\"net_profit_yoy_growth\":46.6485849453},{\"stock_code\":\"002107\",\"stock_abbr\":\"沃华医药\",\"net_profit_yoy_growth\":192.815171459},{\"stock_code\":\"002198\",\"stock_abbr\":\"嘉应制药\",\"net_profit_yoy_growth\":658.4989096075},{\"stock_code\":\"002317\",\"stock_abbr\":\"众生药业\",\"net_profit_yoy_growth\":80.6313718089},{\"stock_code\":\"002603\",\"stock_abbr\":\"以岭药业\",\"net_profit_yoy_growth\":81.514878917},{\"stock_code\":\"002728\",\"stock_abbr\":\"特一药业\",\"net_profit_yoy_growth\":985.1796452033},{\"stock_code\":\"300181\",\"stock_abbr\":\"佐力药业\",\"net_profit_yoy_growth\":21.2290918668},{\"stock_code\":\"301331\",\"stock_abbr\":\"恩威医药\",\"net_profit_yoy_growth\":66.1280711794},{\"stock_code\":\"600329\",\"stock_abbr\":\"达仁堂\",\"net_profit_yoy_growth\":170.5993825658},{\"stock_code\":\"600479\",\"stock_abbr\":\"千金药业\",\"net_profit_yoy_growth\":21.0286672765},{\"stock_code\":\"600518\",\"stock_abbr\":\"康美药业\",\"net_profit_yoy_growth\":86.0603411436},{\"stock_code\":\"600594\",\"stock_abbr\":\"益佰制药\",\"net_profit_yoy_growth\":47.9861929571},{\"stock_code\":\"600671\",\"stock_abbr\":\"天目药业\",\"net_profit_yoy_growth\":299.6262083844},{\"stock_code\":\"603858\",\"stock_abbr\":\"步长制药\",\"net_profit_yoy_growth\":263.1097634093}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2025年第三季度净利润同比增长率超过20%的中药公司",
+    "x_field": null,
+    "y_fields": [
+      "net_profit_yoy_growth"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": "net_profit_yoy_growth",
+    "sort_ascending": false,
+    "top_n": 14,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1070",
+    "image_index": 2,
+    "chart_type": "bar",
+    "title": "2025年第三季度净利润同比增长率超过20%的中药公司",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 14,
+      "preview_rows": [
+        {
+          "stock_code": "000590",
+          "stock_abbr": "启迪药业",
+          "net_profit_yoy_growth": 46.64858494533798
+        },
+        {
+          "stock_code": "002107",
+          "stock_abbr": "沃华医药",
+          "net_profit_yoy_growth": 192.81517145896942
+        },
+        {
+          "stock_code": "002198",
+          "stock_abbr": "嘉应制药",
+          "net_profit_yoy_growth": 658.498909607456
+        },
+        {
+          "stock_code": "002317",
+          "stock_abbr": "众生药业",
+          "net_profit_yoy_growth": 80.63137180894428
+        },
+        {
+          "stock_code": "002603",
+          "stock_abbr": "以岭药业",
+          "net_profit_yoy_growth": 81.51487891696773
+        },
+        {
+          "stock_code": "002728",
+          "stock_abbr": "特一药业",
+          "net_profit_yoy_growth": 985.1796452032535
+        },
+        {
+          "stock_code": "300181",
+          "stock_abbr": "佐力药业",
+          "net_profit_yoy_growth": 21.22909186681436
+        },
+        {
+          "stock_code": "301331",
+          "stock_abbr": "恩威医药",
+          "net_profit_yoy_growth": 66.12807117938533
+        },
+        {
+          "stock_code": "600329",
+          "stock_abbr": "达仁堂",
+          "net_profit_yoy_growth": 170.59938256580205
+        },
+        {
+          "stock_code": "600479",
+          "stock_abbr": "千金药业",
+          "net_profit_yoy_growth": 21.028667276468486
+        },
+        {
+          "stock_code": "600518",
+          "stock_abbr": "康美药业",
+          "net_profit_yoy_growth": 86.06034114359072
+        },
+        {
+          "stock_code": "600594",
+          "stock_abbr": "益佰制药",
+          "net_profit_yoy_growth": 47.986192957110234
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "net_profit_yoy_growth",
+      "sort_ascending": false,
+      "top_n": 14,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "net_profit_yoy_growth",
+        "data_type": "quantitative",
+        "label": "net_profit_yoy_growth",
+        "unit": "%"
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B1070_2.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1070_2.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT stock_code, stock_abbr, net_profit_yoy_growth FROM financials_view WHERE report_period = '2025Q3' AND net_profit_yoy_growth > 20",
+      "value_fields": [
+        "net_profit_yoy_growth"
+      ],
+      "value_labels": [
+        "net_profit_yoy_growth"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "net_profit_yoy_growth"
+        ],
+        "category_field": "stock_abbr",
+        "sort_by": "net_profit_yoy_growth",
+        "sort_ascending": false,
+        "top_n": 14
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1070_2.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1070_2.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "查询净利润同比增长的公司",
+      "A": {
+        "content": "请问您想查询哪家公司的净利润同比增长情况？",
+        "image": []
+      }
+    },
+    {
+      "Q": "2025年第三季度，66家中药上市公司中，净利润同比增长率超过20%的公司有哪些？列出股票代码、简称及具体增长率",
+      "A": {
+        "content": "根据查询结果，2025年第三季度，在66家中药上市公司中，净利润同比增长率超过20%的公司共有14家。具体名单、股票代码及增长率如下：\n\n1.  启迪药业（000590）：46.65%\n2.  沃华医药（002107）：192.82%\n3.  嘉应制药（002198）：658.50%\n4.  众生药业（002317）：80.63%\n5.  以岭药业（002603）：81.51%\n6.  特一药业（002728）：985.18%\n7.  佐力药业（300181）：21.23%\n8.  恩威医药（301331）：66.13%\n9.  达仁堂（600329）：170.60%\n10. 千金药业（600479）：21.03%\n11. 康美药业（600518）：86.06%\n12. 益佰制药（600594）：47.99%\n13. 天目药业（600671）：299.63%\n14. 步长制药（603858）：263.11%",
+        "image": [
+          "./result/B1070_2.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"查询净利润同比增长的公司\", \"A\": {\"content\": \"请问您想查询哪家公司的净利润同比增长情况？\", \"image\": []}}, {\"Q\": \"2025年第三季度，66家中药上市公司中，净利润同比增长率超过20%的公司有哪些？列出股票代码、简称及具体增长率\", \"A\": {\"content\": \"根据查询结果，2025年第三季度，在66家中药上市公司中，净利润同比增长率超过20%的公司共有14家。具体名单、股票代码及增长率如下：\\n\\n1.  启迪药业（000590）：46.65%\\n2.  沃华医药（002107）：192.82%\\n3.  嘉应制药（002198）：658.50%\\n4.  众生药业（002317）：80.63%\\n5.  以岭药业（002603）：81.51%\\n6.  特一药业（002728）：985.18%\\n7.  佐力药业（300181）：21.23%\\n8.  恩威医药（301331）：66.13%\\n9.  达仁堂（600329）：170.60%\\n10. 千金药业（600479）：21.03%\\n11. 康美药业（600518）：86.06%\\n12. 益佰制药（600594）：47.99%\\n13. 天目药业（600671）：299.63%\\n14. 步长制药（603858）：263.11%\", \"image\": [\"./result/B1070_2.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，需要筛选2025Q3报告期，净利润同比增长率超过20%的公司，并返回股票代码、简称和增长率。直接使用net_profit_yoy_growth字段进行阈值过滤。"
+  ],
+  "final_status": "ok"
+}

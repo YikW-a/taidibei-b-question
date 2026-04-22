@@ -1,0 +1,84 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1016",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "2025Q3存货前三公司的存货与营业总收入比值",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 3,
+    "preview_rows": [
+      {
+        "公司简称": "同仁堂",
+        "存货_万元": 1112490.3777649999,
+        "营业总收入_万元": 1330791.480027,
+        "比值": 1.1962274071085166
+      },
+      {
+        "公司简称": "白云山",
+        "存货_万元": 1108068.571539,
+        "营业总收入_万元": 6160599.379554,
+        "比值": 5.559763662457752
+      },
+      {
+        "公司简称": "华润三九",
+        "存货_万元": 638694.735653,
+        "营业总收入_万元": 2198640.396207,
+        "比值": 3.4423963021381656
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": null,
+    "sort_ascending": true,
+    "top_n": 3,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "比值",
+      "data_type": "quantitative",
+      "label": "比值",
+      "unit": null
+    },
+    "category": {
+      "field": "公司简称",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1016_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1016_1.jpg"
+  },
+  "meta": {
+    "source_sql": "WITH ranked AS (\n  SELECT\n    stock_abbr,\n    asset_inventory AS 存货_万元,\n    total_operating_revenue AS 营业总收入_万元,\n    total_operating_revenue / NULLIF(asset_inventory, 0) AS 比值,\n    ROW_NUMBER() OVER (ORDER BY asset_inventory DESC) AS rn\n  FROM financials_view\n  WHERE report_period = '2025Q3'\n    AND asset_inventory IS NOT NULL\n    AND total_operating_revenue IS NOT NULL\n)\nSELECT\n  stock_abbr AS 公司简称,\n  存货_万元,\n  营业总收入_万元,\n  比值\nFROM ranked\nWHERE rn <= 3\nORDER BY rn;",
+    "value_fields": [
+      "比值"
+    ],
+    "value_labels": [
+      "比值"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "比值"
+      ],
+      "category_field": "公司简称",
+      "sort_by": null,
+      "sort_ascending": true,
+      "top_n": 3
+    }
+  }
+}

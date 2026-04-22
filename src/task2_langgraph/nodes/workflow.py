@@ -174,7 +174,10 @@ def clarify_or_continue_node(state: Task2GraphState, ctx: Task2NodeContext) -> T
     if not parsed.get("periods") and any(token in cumulative for token in ["季度", "年度", "前年", "去年", "今年", "报告期", "第三季度", "前三季度"]):
         if not any(token in cumulative for token in ["近3年", "近三年", "2022-", "2023-", "2024-", "2025-"]):
             missing.append("period")
-    if not parsed.get("metrics") and any(token in cumulative for token in ["收入", "利润", "毛利率", "净利率", "现金流", "负债率", "收益率"]):
+    if not parsed.get("metrics") and any(
+        token in cumulative
+        for token in ["收入", "利润", "毛利率", "净利率", "现金流", "负债率", "收益率", "财务数据", "业绩", "表现"]
+    ):
         missing.append("metric")
     if has_chart_request and not parsed.get("metrics"):
         missing.append("metric")
@@ -384,10 +387,14 @@ def generate_answer_node(state: Task2GraphState, ctx: Task2NodeContext) -> Task2
                 "notes": state.get("notes", []) + [f"generate_answer_failed={repr(exc)}"],
             }
     if state.get("sql"):
+        empty_answer, empty_status = ctx.runtime.build_empty_result_response(
+            question,
+            state.get("query_plan", {}),
+        )
         return {
             **state,
-            "current_answer": "未查询到符合条件的数据，或当前条件下结果为空。",
-            "final_status": "warning",
+            "current_answer": empty_answer,
+            "final_status": empty_status,
         }
     return {**state, "current_answer": "当前轮次未生成有效回答。", "final_status": "warning"}
 
@@ -407,9 +414,15 @@ def append_turn_result_node(state: Task2GraphState, ctx: Task2NodeContext) -> Ta
 
 
 def export_result_node(state: Task2GraphState, ctx: Task2NodeContext) -> Task2GraphState:
+    finalized_turn_answers = ctx.runtime.finalize_turn_answers(
+        state.get("turn_answers", []),
+        context_rows=state.get("context_rows", []),
+        current_question=state.get("current_question", ""),
+    )
     return {
         **state,
-        "answer_json": json.dumps(state.get("turn_answers", []), ensure_ascii=False),
+        "turn_answers": finalized_turn_answers,
+        "answer_json": json.dumps(finalized_turn_answers, ensure_ascii=False),
         "graph_format_text": "；".join(state.get("graph_formats", [])) if state.get("graph_formats") else "无",
         "final_status": state.get("final_status", "ok"),
     }

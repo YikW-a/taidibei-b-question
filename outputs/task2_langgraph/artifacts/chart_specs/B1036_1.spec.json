@@ -1,0 +1,126 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1036",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "2025Q3中药公司资产负债率Top10",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 10,
+    "preview_rows": [
+      {
+        "avg_asset_liability_ratio": 29.61,
+        "stock_code": "600129",
+        "stock_abbr": "太极集团",
+        "asset_liability_ratio": 74.16
+      },
+      {
+        "avg_asset_liability_ratio": 29.61,
+        "stock_code": "603139",
+        "stock_abbr": "康惠制药",
+        "asset_liability_ratio": 60.48
+      },
+      {
+        "avg_asset_liability_ratio": 29.61,
+        "stock_code": "600332",
+        "stock_abbr": "白云山",
+        "asset_liability_ratio": 51.92
+      },
+      {
+        "avg_asset_liability_ratio": 29.61,
+        "stock_code": "603858",
+        "stock_abbr": "步长制药",
+        "asset_liability_ratio": 48.53
+      },
+      {
+        "avg_asset_liability_ratio": 29.61,
+        "stock_code": "002424",
+        "stock_abbr": "贵州百灵",
+        "asset_liability_ratio": 47.78
+      },
+      {
+        "avg_asset_liability_ratio": 29.61,
+        "stock_code": "603439",
+        "stock_abbr": "贵州三力",
+        "asset_liability_ratio": 45.64
+      },
+      {
+        "avg_asset_liability_ratio": 29.61,
+        "stock_code": "600285",
+        "stock_abbr": "羚锐制药",
+        "asset_liability_ratio": 42.96
+      },
+      {
+        "avg_asset_liability_ratio": 29.61,
+        "stock_code": "300534",
+        "stock_abbr": "陇神戎发",
+        "asset_liability_ratio": 42.84
+      },
+      {
+        "avg_asset_liability_ratio": 29.61,
+        "stock_code": "603998",
+        "stock_abbr": "方盛制药",
+        "asset_liability_ratio": 42.2
+      },
+      {
+        "avg_asset_liability_ratio": 29.61,
+        "stock_code": "600976",
+        "stock_abbr": "健民集团",
+        "asset_liability_ratio": 40.05
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "asset_liability_ratio",
+    "sort_ascending": false,
+    "top_n": 10,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "asset_liability_ratio",
+      "data_type": "quantitative",
+      "label": "asset_liability_ratio",
+      "unit": "%"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1036_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1036_1.jpg"
+  },
+  "meta": {
+    "source_sql": "WITH industry_avg AS (\n    SELECT ROUND(AVG(asset_liability_ratio), 2) AS avg_asset_liability_ratio\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n      AND stock_abbr IN ('白云山', '云南白药', '片仔癀', '同仁堂', '华润三九', '东阿阿胶', '太极集团', '天士力', '以岭药业', '步长制药', '康恩贝', '九芝堂', '中新药业', '广誉远', '健民集团', '马应龙', '仁和药业', '江中药业', '千金药业', '桂林三金', '沃华医药', '众生药业', '太安堂', '嘉应制药', '紫鑫药业', '益盛药业', '振东制药', '香雪制药', '康缘药业', '红日药业', '华森制药', '盘龙药业', '特一药业', '新天药业', '贵州百灵', '奇正藏药', '西藏药业', '康弘药业', '方盛制药', '济川药业', '葵花药业', '羚锐制药', '亚宝药业', '贵州三力', '维康药业', '万邦德', '葫芦娃', '贵州茅台', '寿仙谷', '佐力药业', '陇神戎发', '上海凯宝', '福瑞股份', '康惠制药', '华润双鹤', '华海药业', '浙江震元', '国药股份', '国药一致', '中国医药', '国药现代', '哈药股份', '人民同泰', '南京医药', '上海医药')\n), top10 AS (\n    SELECT stock_code, stock_abbr, ROUND(asset_liability_ratio, 2) AS asset_liability_ratio\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n      AND stock_abbr IN ('白云山', '云南白药', '片仔癀', '同仁堂', '华润三九', '东阿阿胶', '太极集团', '天士力', '以岭药业', '步长制药', '康恩贝', '九芝堂', '中新药业', '广誉远', '健民集团', '马应龙', '仁和药业', '江中药业', '千金药业', '桂林三金', '沃华医药', '众生药业', '太安堂', '嘉应制药', '紫鑫药业', '益盛药业', '振东制药', '香雪制药', '康缘药业', '红日药业', '华森制药', '盘龙药业', '特一药业', '新天药业', '贵州百灵', '奇正藏药', '西藏药业', '康弘药业', '方盛制药', '济川药业', '葵花药业', '羚锐制药', '亚宝药业', '贵州三力', '维康药业', '万邦德', '葫芦娃', '贵州茅台', '寿仙谷', '佐力药业', '陇神戎发', '上海凯宝', '福瑞股份', '康惠制药', '华润双鹤', '华海药业', '浙江震元', '国药股份', '国药一致', '中国医药', '国药现代', '哈药股份', '人民同泰', '南京医药', '上海医药')\n    ORDER BY asset_liability_ratio DESC\n    LIMIT 10\n)\nSELECT * FROM industry_avg, top10;",
+    "value_fields": [
+      "asset_liability_ratio"
+    ],
+    "value_labels": [
+      "asset_liability_ratio"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "asset_liability_ratio"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": "asset_liability_ratio",
+      "sort_ascending": false,
+      "top_n": 10
+    }
+  }
+}

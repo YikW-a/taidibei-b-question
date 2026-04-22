@@ -1,0 +1,463 @@
+{
+  "question_id": "B1013",
+  "question_type": "数据统计分析查询",
+  "raw_question": "2025年第三季度，“销售毛利率”和“销售净利率”均高于行业均值的中药公司有哪些？请同步输出行业均值和公司具体数值。",
+  "raw_question_json": "[{\"Q\":\"2025年第三季度，“销售毛利率”和“销售净利率”均高于行业均值的中药公司有哪些？请同步输出行业均值和公司具体数值。\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "销售毛利率",
+      "销售净利率"
+    ],
+    "chart_type": null,
+    "intent_type": "filter",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "filter",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "销售毛利率",
+      "销售净利率"
+    ],
+    "chart_type": "table",
+    "top_n": null,
+    "threshold": null,
+    "question": "2025年第三季度，“销售毛利率”和“销售净利率”均高于行业均值的中药公司有哪些？请同步输出行业均值和公司具体数值。",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "WITH industry_avg AS (\n    SELECT \n        AVG(gross_profit_margin) AS avg_gross_profit_margin,\n        AVG(net_profit_margin) AS avg_net_profit_margin\n    FROM financials_view \n    WHERE report_period = '2025Q3' \n      AND stock_abbr IN ('云南白药', '片仔癀', '同仁堂', '白云山', '华润三九', '东阿阿胶', '天士力', '以岭药业', '步长制药', '康恩贝', '九芝堂', '太极集团', '中新药业', '广誉远', '健民集团', '马应龙', '仁和药业', '江中药业', '千金药业', '桂林三金', '沃华医药', '贵州百灵', '振东制药', '益盛药业', '康缘药业', '奇正藏药', '西藏药业', '羚锐制药', '太安堂', '嘉应制药', '紫鑫药业', '佛慈制药', '陇神戎发', '盘龙药业', '寿仙谷', '一品红', '新天药业', '特一药业', '大理药业', '龙津药业', '方盛制药', '贵州三力', '万邦德', '吉贝尔', '葫芦娃', '维康药业', '共同药业', '苑东生物', '泽璟制药', '百奥泰', '前沿生物', '艾力斯', '神州细胞', '君实生物', '康希诺', '康泰生物', '智飞生物', '沃森生物', '华兰生物', '天坛生物', '博雅生物', '卫光生物', '双林生物')\n)\nSELECT \n    f.stock_code,\n    f.stock_abbr,\n    f.gross_profit_margin,\n    f.net_profit_margin,\n    i.avg_gross_profit_margin,\n    i.avg_net_profit_margin\nFROM financials_view f\nCROSS JOIN industry_avg i\nWHERE f.report_period = '2025Q3' \n  AND f.stock_abbr IN ('云南白药', '片仔癀', '同仁堂', '白云山', '华润三九', '东阿阿胶', '天士力', '以岭药业', '步长制药', '康恩贝', '九芝堂', '太极集团', '中新药业', '广誉远', '健民集团', '马应龙', '仁和药业', '江中药业', '千金药业', '桂林三金', '沃华医药', '贵州百灵', '振东制药', '益盛药业', '康缘药业', '奇正藏药', '西藏药业', '羚锐制药', '太安堂', '嘉应制药', '紫鑫药业', '佛慈制药', '陇神戎发', '盘龙药业', '寿仙谷', '一品红', '新天药业', '特一药业', '大理药业', '龙津药业', '方盛制药', '贵州三力', '万邦德', '吉贝尔', '葫芦娃', '维康药业', '共同药业', '苑东生物', '泽璟制药', '百奥泰', '前沿生物', '艾力斯', '神州细胞', '君实生物', '康希诺', '康泰生物', '智飞生物', '沃森生物', '华兰生物', '天坛生物', '博雅生物', '卫光生物', '双林生物')\n  AND f.gross_profit_margin > i.avg_gross_profit_margin\n  AND f.net_profit_margin > i.avg_net_profit_margin\nORDER BY f.stock_code;",
+  "sql_history": [
+    "WITH industry_avg AS (\n    SELECT \n        AVG(gross_profit_margin) AS avg_gross_profit_margin,\n        AVG(net_profit_margin) AS avg_net_profit_margin\n    FROM financials_view \n    WHERE report_period = '2025Q3' \n      AND stock_abbr IN ('云南白药', '片仔癀', '同仁堂', '白云山', '华润三九', '东阿阿胶', '天士力', '以岭药业', '步长制药', '康恩贝', '九芝堂', '太极集团', '中新药业', '广誉远', '健民集团', '马应龙', '仁和药业', '江中药业', '千金药业', '桂林三金', '沃华医药', '贵州百灵', '振东制药', '益盛药业', '康缘药业', '奇正藏药', '西藏药业', '羚锐制药', '太安堂', '嘉应制药', '紫鑫药业', '佛慈制药', '陇神戎发', '盘龙药业', '寿仙谷', '一品红', '新天药业', '特一药业', '大理药业', '龙津药业', '方盛制药', '贵州三力', '万邦德', '吉贝尔', '葫芦娃', '维康药业', '共同药业', '苑东生物', '泽璟制药', '百奥泰', '前沿生物', '艾力斯', '神州细胞', '君实生物', '康希诺', '康泰生物', '智飞生物', '沃森生物', '华兰生物', '天坛生物', '博雅生物', '卫光生物', '双林生物')\n)\nSELECT \n    f.stock_code,\n    f.stock_abbr,\n    f.gross_profit_margin,\n    f.net_profit_margin,\n    i.avg_gross_profit_margin,\n    i.avg_net_profit_margin\nFROM financials_view f\nCROSS JOIN industry_avg i\nWHERE f.report_period = '2025Q3' \n  AND f.stock_abbr IN ('云南白药', '片仔癀', '同仁堂', '白云山', '华润三九', '东阿阿胶', '天士力', '以岭药业', '步长制药', '康恩贝', '九芝堂', '太极集团', '中新药业', '广誉远', '健民集团', '马应龙', '仁和药业', '江中药业', '千金药业', '桂林三金', '沃华医药', '贵州百灵', '振东制药', '益盛药业', '康缘药业', '奇正藏药', '西藏药业', '羚锐制药', '太安堂', '嘉应制药', '紫鑫药业', '佛慈制药', '陇神戎发', '盘龙药业', '寿仙谷', '一品红', '新天药业', '特一药业', '大理药业', '龙津药业', '方盛制药', '贵州三力', '万邦德', '吉贝尔', '葫芦娃', '维康药业', '共同药业', '苑东生物', '泽璟制药', '百奥泰', '前沿生物', '艾力斯', '神州细胞', '君实生物', '康希诺', '康泰生物', '智飞生物', '沃森生物', '华兰生物', '天坛生物', '博雅生物', '卫光生物', '双林生物')\n  AND f.gross_profit_margin > i.avg_gross_profit_margin\n  AND f.net_profit_margin > i.avg_net_profit_margin\nORDER BY f.stock_code;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 12,
+  "result_rows": [
+    {
+      "stock_code": "000423",
+      "stock_abbr": "东阿阿胶",
+      "gross_profit_margin": 73.68527545449713,
+      "net_profit_margin": 26.725158211768317,
+      "avg_gross_profit_margin": 57.02367441453758,
+      "avg_net_profit_margin": 9.578959309736996
+    },
+    {
+      "stock_code": "002107",
+      "stock_abbr": "沃华医药",
+      "gross_profit_margin": 75.12426953885254,
+      "net_profit_margin": 10.245537004523184,
+      "avg_gross_profit_margin": 57.02367441453758,
+      "avg_net_profit_margin": 9.578959309736996
+    },
+    {
+      "stock_code": "002275",
+      "stock_abbr": "桂林三金",
+      "gross_profit_margin": 75.22712417383367,
+      "net_profit_margin": 26.34244318549325,
+      "avg_gross_profit_margin": 57.02367441453758,
+      "avg_net_profit_margin": 9.578959309736996
+    },
+    {
+      "stock_code": "002287",
+      "stock_abbr": "奇正藏药",
+      "gross_profit_margin": 82.25405055659824,
+      "net_profit_margin": 27.809235464549502,
+      "avg_gross_profit_margin": 57.02367441453758,
+      "avg_net_profit_margin": 9.578959309736996
+    },
+    {
+      "stock_code": "002603",
+      "stock_abbr": "以岭药业",
+      "gross_profit_margin": 60.531245635278154,
+      "net_profit_margin": 17.049630988322946,
+      "avg_gross_profit_margin": 57.02367441453758,
+      "avg_net_profit_margin": 9.578959309736996
+    },
+    {
+      "stock_code": "600285",
+      "stock_abbr": "羚锐制药",
+      "gross_profit_margin": 81.0184028079756,
+      "net_profit_margin": 21.402670481095505,
+      "avg_gross_profit_margin": 57.02367441453758,
+      "avg_net_profit_margin": 9.578959309736996
+    },
+    {
+      "stock_code": "600535",
+      "stock_abbr": "天士力",
+      "gross_profit_margin": 66.99075076644773,
+      "net_profit_margin": 15.598546037563448,
+      "avg_gross_profit_margin": 57.02367441453758,
+      "avg_net_profit_margin": 9.578959309736996
+    },
+    {
+      "stock_code": "600750",
+      "stock_abbr": "江中药业",
+      "gross_profit_margin": 66.0528652218674,
+      "net_profit_margin": 23.30071303077775,
+      "avg_gross_profit_margin": 57.02367441453758,
+      "avg_net_profit_margin": 9.578959309736996
+    },
+    {
+      "stock_code": "600976",
+      "stock_abbr": "健民集团",
+      "gross_profit_margin": 59.19978518279443,
+      "net_profit_margin": 11.196892336201516,
+      "avg_gross_profit_margin": 57.02367441453758,
+      "avg_net_profit_margin": 9.578959309736996
+    },
+    {
+      "stock_code": "603858",
+      "stock_abbr": "步长制药",
+      "gross_profit_margin": 62.305454633999815,
+      "net_profit_margin": 10.253473228736464,
+      "avg_gross_profit_margin": 57.02367441453758,
+      "avg_net_profit_margin": 9.578959309736996
+    },
+    {
+      "stock_code": "603896",
+      "stock_abbr": "寿仙谷",
+      "gross_profit_margin": 79.06449746418419,
+      "net_profit_margin": 17.748188765111163,
+      "avg_gross_profit_margin": 57.02367441453758,
+      "avg_net_profit_margin": 9.578959309736996
+    },
+    {
+      "stock_code": "603998",
+      "stock_abbr": "方盛制药",
+      "gross_profit_margin": 71.27539060730282,
+      "net_profit_margin": 21.405889438861532,
+      "avg_gross_profit_margin": 57.02367441453758,
+      "avg_net_profit_margin": 9.578959309736996
+    }
+  ],
+  "context_companies": [
+    "东阿阿胶",
+    "沃华医药",
+    "桂林三金",
+    "奇正藏药",
+    "以岭药业",
+    "羚锐制药",
+    "天士力",
+    "江中药业",
+    "健民集团",
+    "步长制药",
+    "寿仙谷",
+    "方盛制药"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "000423",
+      "stock_abbr": "东阿阿胶",
+      "gross_profit_margin": 73.68527545449713,
+      "net_profit_margin": 26.725158211768317,
+      "avg_gross_profit_margin": 57.02367441453758,
+      "avg_net_profit_margin": 9.578959309736996
+    },
+    {
+      "stock_code": "002107",
+      "stock_abbr": "沃华医药",
+      "gross_profit_margin": 75.12426953885254,
+      "net_profit_margin": 10.245537004523184,
+      "avg_gross_profit_margin": 57.02367441453758,
+      "avg_net_profit_margin": 9.578959309736996
+    },
+    {
+      "stock_code": "002275",
+      "stock_abbr": "桂林三金",
+      "gross_profit_margin": 75.22712417383367,
+      "net_profit_margin": 26.34244318549325,
+      "avg_gross_profit_margin": 57.02367441453758,
+      "avg_net_profit_margin": 9.578959309736996
+    },
+    {
+      "stock_code": "002287",
+      "stock_abbr": "奇正藏药",
+      "gross_profit_margin": 82.25405055659824,
+      "net_profit_margin": 27.809235464549502,
+      "avg_gross_profit_margin": 57.02367441453758,
+      "avg_net_profit_margin": 9.578959309736996
+    },
+    {
+      "stock_code": "002603",
+      "stock_abbr": "以岭药业",
+      "gross_profit_margin": 60.531245635278154,
+      "net_profit_margin": 17.049630988322946,
+      "avg_gross_profit_margin": 57.02367441453758,
+      "avg_net_profit_margin": 9.578959309736996
+    },
+    {
+      "stock_code": "600285",
+      "stock_abbr": "羚锐制药",
+      "gross_profit_margin": 81.0184028079756,
+      "net_profit_margin": 21.402670481095505,
+      "avg_gross_profit_margin": 57.02367441453758,
+      "avg_net_profit_margin": 9.578959309736996
+    },
+    {
+      "stock_code": "600535",
+      "stock_abbr": "天士力",
+      "gross_profit_margin": 66.99075076644773,
+      "net_profit_margin": 15.598546037563448,
+      "avg_gross_profit_margin": 57.02367441453758,
+      "avg_net_profit_margin": 9.578959309736996
+    },
+    {
+      "stock_code": "600750",
+      "stock_abbr": "江中药业",
+      "gross_profit_margin": 66.0528652218674,
+      "net_profit_margin": 23.30071303077775,
+      "avg_gross_profit_margin": 57.02367441453758,
+      "avg_net_profit_margin": 9.578959309736996
+    },
+    {
+      "stock_code": "600976",
+      "stock_abbr": "健民集团",
+      "gross_profit_margin": 59.19978518279443,
+      "net_profit_margin": 11.196892336201516,
+      "avg_gross_profit_margin": 57.02367441453758,
+      "avg_net_profit_margin": 9.578959309736996
+    },
+    {
+      "stock_code": "603858",
+      "stock_abbr": "步长制药",
+      "gross_profit_margin": 62.305454633999815,
+      "net_profit_margin": 10.253473228736464,
+      "avg_gross_profit_margin": 57.02367441453758,
+      "avg_net_profit_margin": 9.578959309736996
+    },
+    {
+      "stock_code": "603896",
+      "stock_abbr": "寿仙谷",
+      "gross_profit_margin": 79.06449746418419,
+      "net_profit_margin": 17.748188765111163,
+      "avg_gross_profit_margin": 57.02367441453758,
+      "avg_net_profit_margin": 9.578959309736996
+    },
+    {
+      "stock_code": "603998",
+      "stock_abbr": "方盛制药",
+      "gross_profit_margin": 71.27539060730282,
+      "net_profit_margin": 21.405889438861532,
+      "avg_gross_profit_margin": 57.02367441453758,
+      "avg_net_profit_margin": 9.578959309736996
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"000423\",\"stock_abbr\":\"东阿阿胶\",\"gross_profit_margin\":73.6852754545,\"net_profit_margin\":26.7251582118,\"avg_gross_profit_margin\":57.0236744145,\"avg_net_profit_margin\":9.5789593097},{\"stock_code\":\"002107\",\"stock_abbr\":\"沃华医药\",\"gross_profit_margin\":75.1242695389,\"net_profit_margin\":10.2455370045,\"avg_gross_profit_margin\":57.0236744145,\"avg_net_profit_margin\":9.5789593097},{\"stock_code\":\"002275\",\"stock_abbr\":\"桂林三金\",\"gross_profit_margin\":75.2271241738,\"net_profit_margin\":26.3424431855,\"avg_gross_profit_margin\":57.0236744145,\"avg_net_profit_margin\":9.5789593097},{\"stock_code\":\"002287\",\"stock_abbr\":\"奇正藏药\",\"gross_profit_margin\":82.2540505566,\"net_profit_margin\":27.8092354645,\"avg_gross_profit_margin\":57.0236744145,\"avg_net_profit_margin\":9.5789593097},{\"stock_code\":\"002603\",\"stock_abbr\":\"以岭药业\",\"gross_profit_margin\":60.5312456353,\"net_profit_margin\":17.0496309883,\"avg_gross_profit_margin\":57.0236744145,\"avg_net_profit_margin\":9.5789593097},{\"stock_code\":\"600285\",\"stock_abbr\":\"羚锐制药\",\"gross_profit_margin\":81.018402808,\"net_profit_margin\":21.4026704811,\"avg_gross_profit_margin\":57.0236744145,\"avg_net_profit_margin\":9.5789593097},{\"stock_code\":\"600535\",\"stock_abbr\":\"天士力\",\"gross_profit_margin\":66.9907507664,\"net_profit_margin\":15.5985460376,\"avg_gross_profit_margin\":57.0236744145,\"avg_net_profit_margin\":9.5789593097},{\"stock_code\":\"600750\",\"stock_abbr\":\"江中药业\",\"gross_profit_margin\":66.0528652219,\"net_profit_margin\":23.3007130308,\"avg_gross_profit_margin\":57.0236744145,\"avg_net_profit_margin\":9.5789593097},{\"stock_code\":\"600976\",\"stock_abbr\":\"健民集团\",\"gross_profit_margin\":59.1997851828,\"net_profit_margin\":11.1968923362,\"avg_gross_profit_margin\":57.0236744145,\"avg_net_profit_margin\":9.5789593097},{\"stock_code\":\"603858\",\"stock_abbr\":\"步长制药\",\"gross_profit_margin\":62.305454634,\"net_profit_margin\":10.2534732287,\"avg_gross_profit_margin\":57.0236744145,\"avg_net_profit_margin\":9.5789593097},{\"stock_code\":\"603896\",\"stock_abbr\":\"寿仙谷\",\"gross_profit_margin\":79.0644974642,\"net_profit_margin\":17.7481887651,\"avg_gross_profit_margin\":57.0236744145,\"avg_net_profit_margin\":9.5789593097},{\"stock_code\":\"603998\",\"stock_abbr\":\"方盛制药\",\"gross_profit_margin\":71.2753906073,\"net_profit_margin\":21.4058894389,\"avg_gross_profit_margin\":57.0236744145,\"avg_net_profit_margin\":9.5789593097}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2025Q3 销售毛利率与净利率高于行业均值的公司",
+    "x_field": null,
+    "y_fields": [
+      "gross_profit_margin",
+      "net_profit_margin"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": "gross_profit_margin",
+    "sort_ascending": false,
+    "top_n": 12,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1013",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "2025Q3 销售毛利率与净利率高于行业均值的公司",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 12,
+      "preview_rows": [
+        {
+          "stock_code": "000423",
+          "stock_abbr": "东阿阿胶",
+          "gross_profit_margin": 73.68527545449713,
+          "net_profit_margin": 26.725158211768317,
+          "avg_gross_profit_margin": 57.02367441453758,
+          "avg_net_profit_margin": 9.578959309736996
+        },
+        {
+          "stock_code": "002107",
+          "stock_abbr": "沃华医药",
+          "gross_profit_margin": 75.12426953885254,
+          "net_profit_margin": 10.245537004523184,
+          "avg_gross_profit_margin": 57.02367441453758,
+          "avg_net_profit_margin": 9.578959309736996
+        },
+        {
+          "stock_code": "002275",
+          "stock_abbr": "桂林三金",
+          "gross_profit_margin": 75.22712417383367,
+          "net_profit_margin": 26.34244318549325,
+          "avg_gross_profit_margin": 57.02367441453758,
+          "avg_net_profit_margin": 9.578959309736996
+        },
+        {
+          "stock_code": "002287",
+          "stock_abbr": "奇正藏药",
+          "gross_profit_margin": 82.25405055659824,
+          "net_profit_margin": 27.809235464549502,
+          "avg_gross_profit_margin": 57.02367441453758,
+          "avg_net_profit_margin": 9.578959309736996
+        },
+        {
+          "stock_code": "002603",
+          "stock_abbr": "以岭药业",
+          "gross_profit_margin": 60.531245635278154,
+          "net_profit_margin": 17.049630988322946,
+          "avg_gross_profit_margin": 57.02367441453758,
+          "avg_net_profit_margin": 9.578959309736996
+        },
+        {
+          "stock_code": "600285",
+          "stock_abbr": "羚锐制药",
+          "gross_profit_margin": 81.0184028079756,
+          "net_profit_margin": 21.402670481095505,
+          "avg_gross_profit_margin": 57.02367441453758,
+          "avg_net_profit_margin": 9.578959309736996
+        },
+        {
+          "stock_code": "600535",
+          "stock_abbr": "天士力",
+          "gross_profit_margin": 66.99075076644773,
+          "net_profit_margin": 15.598546037563448,
+          "avg_gross_profit_margin": 57.02367441453758,
+          "avg_net_profit_margin": 9.578959309736996
+        },
+        {
+          "stock_code": "600750",
+          "stock_abbr": "江中药业",
+          "gross_profit_margin": 66.0528652218674,
+          "net_profit_margin": 23.30071303077775,
+          "avg_gross_profit_margin": 57.02367441453758,
+          "avg_net_profit_margin": 9.578959309736996
+        },
+        {
+          "stock_code": "600976",
+          "stock_abbr": "健民集团",
+          "gross_profit_margin": 59.19978518279443,
+          "net_profit_margin": 11.196892336201516,
+          "avg_gross_profit_margin": 57.02367441453758,
+          "avg_net_profit_margin": 9.578959309736996
+        },
+        {
+          "stock_code": "603858",
+          "stock_abbr": "步长制药",
+          "gross_profit_margin": 62.305454633999815,
+          "net_profit_margin": 10.253473228736464,
+          "avg_gross_profit_margin": 57.02367441453758,
+          "avg_net_profit_margin": 9.578959309736996
+        },
+        {
+          "stock_code": "603896",
+          "stock_abbr": "寿仙谷",
+          "gross_profit_margin": 79.06449746418419,
+          "net_profit_margin": 17.748188765111163,
+          "avg_gross_profit_margin": 57.02367441453758,
+          "avg_net_profit_margin": 9.578959309736996
+        },
+        {
+          "stock_code": "603998",
+          "stock_abbr": "方盛制药",
+          "gross_profit_margin": 71.27539060730282,
+          "net_profit_margin": 21.405889438861532,
+          "avg_gross_profit_margin": 57.02367441453758,
+          "avg_net_profit_margin": 9.578959309736996
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "gross_profit_margin",
+      "sort_ascending": false,
+      "top_n": 12,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "gross_profit_margin",
+        "data_type": "quantitative",
+        "label": "销售毛利率",
+        "unit": "%"
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B1013_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1013_1.jpg"
+    },
+    "meta": {
+      "source_sql": "WITH industry_avg AS (\n    SELECT \n        AVG(gross_profit_margin) AS avg_gross_profit_margin,\n        AVG(net_profit_margin) AS avg_net_profit_margin\n    FROM financials_view \n    WHERE report_period = '2025Q3' \n      AND stock_abbr IN ('云南白药', '片仔癀', '同仁堂', '白云山', '华润三九', '东阿阿胶', '天士力', '以岭药业', '步长制药', '康恩贝', '九芝堂', '太极集团', '中新药业', '广誉远', '健民集团', '马应龙', '仁和药业', '江中药业', '千金药业', '桂林三金', '沃华医药', '贵州百灵', '振东制药', '益盛药业', '康缘药业', '奇正藏药', '西藏药业', '羚锐制药', '太安堂', '嘉应制药', '紫鑫药业', '佛慈制药', '陇神戎发', '盘龙药业', '寿仙谷', '一品红', '新天药业', '特一药业', '大理药业', '龙津药业', '方盛制药', '贵州三力', '万邦德', '吉贝尔', '葫芦娃', '维康药业', '共同药业', '苑东生物', '泽璟制药', '百奥泰', '前沿生物', '艾力斯', '神州细胞', '君实生物', '康希诺', '康泰生物', '智飞生物', '沃森生物', '华兰生物', '天坛生物', '博雅生物', '卫光生物', '双林生物')\n)\nSELECT \n    f.stock_code,\n    f.stock_abbr,\n    f.gross_profit_margin,\n    f.net_profit_margin,\n    i.avg_gross_profit_margin,\n    i.avg_net_profit_margin\nFROM financials_view f\nCROSS JOIN industry_avg i\nWHERE f.report_period = '2025Q3' \n  AND f.stock_abbr IN ('云南白药', '片仔癀', '同仁堂', '白云山', '华润三九', '东阿阿胶', '天士力', '以岭药业', '步长制药', '康恩贝', '九芝堂', '太极集团', '中新药业', '广誉远', '健民集团', '马应龙', '仁和药业', '江中药业', '千金药业', '桂林三金', '沃华医药', '贵州百灵', '振东制药', '益盛药业', '康缘药业', '奇正藏药', '西藏药业', '羚锐制药', '太安堂', '嘉应制药', '紫鑫药业', '佛慈制药', '陇神戎发', '盘龙药业', '寿仙谷', '一品红', '新天药业', '特一药业', '大理药业', '龙津药业', '方盛制药', '贵州三力', '万邦德', '吉贝尔', '葫芦娃', '维康药业', '共同药业', '苑东生物', '泽璟制药', '百奥泰', '前沿生物', '艾力斯', '神州细胞', '君实生物', '康希诺', '康泰生物', '智飞生物', '沃森生物', '华兰生物', '天坛生物', '博雅生物', '卫光生物', '双林生物')\n  AND f.gross_profit_margin > i.avg_gross_profit_margin\n  AND f.net_profit_margin > i.avg_net_profit_margin\nORDER BY f.stock_code;",
+      "value_fields": [
+        "gross_profit_margin",
+        "net_profit_margin"
+      ],
+      "value_labels": [
+        "销售毛利率",
+        "销售净利率"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "gross_profit_margin",
+          "net_profit_margin"
+        ],
+        "category_field": "stock_abbr",
+        "sort_by": "gross_profit_margin",
+        "sort_ascending": false,
+        "top_n": 12
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1013_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1013_1.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "2025年第三季度，“销售毛利率”和“销售净利率”均高于行业均值的中药公司有哪些？请同步输出行业均值和公司具体数值。",
+      "A": {
+        "content": "2025年第三季度，中药行业销售毛利率均值为57.02%，销售净利率均值为9.58%。  \n共有12家公司的销售毛利率和销售净利率均高于行业均值，具体如下：  \n\n- 东阿阿胶：毛利率73.69%，净利率26.73%  \n- 沃华医药：毛利率75.12%，净利率10.25%  \n- 桂林三金：毛利率75.23%，净利率26.34%  \n- 奇正藏药：毛利率82.25%，净利率27.81%  \n- 以岭药业：毛利率60.53%，净利率17.05%  \n- 羚锐制药：毛利率81.02%，净利率21.40%  \n- 天士力：毛利率66.99%，净利率15.60%  \n- 江中药业：毛利率66.05%，净利率23.30%  \n- 健民集团：毛利率59.20%，净利率11.20%  \n- 步长制药：毛利率62.31%，净利率10.25%  \n- 寿仙谷：毛利率79.06%，净利率17.75%  \n- 方盛制药：毛利率71.28%，净利率21.41%",
+        "image": [
+          "./result/B1013_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"2025年第三季度，“销售毛利率”和“销售净利率”均高于行业均值的中药公司有哪些？请同步输出行业均值和公司具体数值。\", \"A\": {\"content\": \"2025年第三季度，中药行业销售毛利率均值为57.02%，销售净利率均值为9.58%。  \\n共有12家公司的销售毛利率和销售净利率均高于行业均值，具体如下：  \\n\\n- 东阿阿胶：毛利率73.69%，净利率26.73%  \\n- 沃华医药：毛利率75.12%，净利率10.25%  \\n- 桂林三金：毛利率75.23%，净利率26.34%  \\n- 奇正藏药：毛利率82.25%，净利率27.81%  \\n- 以岭药业：毛利率60.53%，净利率17.05%  \\n- 羚锐制药：毛利率81.02%，净利率21.40%  \\n- 天士力：毛利率66.99%，净利率15.60%  \\n- 江中药业：毛利率66.05%，净利率23.30%  \\n- 健民集团：毛利率59.20%，净利率11.20%  \\n- 步长制药：毛利率62.31%，净利率10.25%  \\n- 寿仙谷：毛利率79.06%，净利率17.75%  \\n- 方盛制药：毛利率71.28%，净利率21.41%\", \"image\": [\"./result/B1013_1.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，需要筛选2025Q3期间，销售毛利率(gross_profit_margin)和销售净利率(net_profit_margin)均高于行业均值的中药公司。行业均值通过子查询计算所有中药公司（使用stock_abbr IN列表）的平均值。然后通过CROSS JOIN将行业均值与每家公司比较，筛选出同时高于均值的公司，并输出公司代码、简称、具体数值以及行业均值。"
+  ],
+  "final_status": "ok"
+}

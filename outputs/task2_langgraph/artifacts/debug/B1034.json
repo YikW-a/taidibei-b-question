@@ -1,0 +1,111 @@
+{
+  "question_id": "B1034",
+  "question_type": "数据基本查询",
+  "raw_question": "计算云南白药（000538）2025年第三季度营业总收入的环比增长率（环比增长率=(本季度值-上季度值)/上季度值*100），并展示2025年第二季度和第三季度的营业总收入（万元）及环比增长率（保留两位小数）。",
+  "raw_question_json": "[{\"Q\":\"计算云南白药（000538）2025年第三季度营业总收入的环比增长率（环比增长率=(本季度值-上季度值)/上季度值*100），并展示2025年第二季度和第三季度的营业总收入（万元）及环比增长率（保留两位小数）。\"}]",
+  "parsed_slots": {
+    "companies": [
+      "云南白药"
+    ],
+    "stock_codes": [
+      "000538"
+    ],
+    "periods": [
+      "2025Q3",
+      "2025Q2"
+    ],
+    "metrics": [
+      "营业总收入"
+    ],
+    "chart_type": null,
+    "intent_type": "single_company_metric",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "single_company_metric",
+    "companies": [
+      "云南白药"
+    ],
+    "periods": [
+      "2025Q2",
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入"
+    ],
+    "chart_type": "table",
+    "top_n": null,
+    "threshold": null,
+    "question": "计算云南白药（000538）2025年第三季度营业总收入的环比增长率（环比增长率=(本季度值-上季度值)/上季度值*100），并展示2025年第二季度和第三季度的营业总收入（万元）及环比增长率（保留两位小数）。",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "WITH base AS ( SELECT stock_code, stock_abbr, report_period, total_operating_revenue FROM financials_view WHERE stock_abbr = '云南白药' AND report_period IN ('2025Q2', '2025H1', '2025Q3')), agg AS ( SELECT stock_code, stock_abbr, MAX(CASE WHEN report_period = '2025Q2' THEN total_operating_revenue END) AS total_operating_revenue_q2, MAX(CASE WHEN report_period = '2025H1' THEN total_operating_revenue END) AS total_operating_revenue_h1, MAX(CASE WHEN report_period = '2025Q3' THEN total_operating_revenue END) AS total_operating_revenue_q3_cumulative FROM base GROUP BY stock_code, stock_abbr) SELECT stock_code, stock_abbr, '2025Q2' AS report_period_prev, total_operating_revenue_q2 AS total_operating_revenue_prev, '2025Q3' AS report_period_curr, (total_operating_revenue_q3_cumulative - total_operating_revenue_h1) AS total_operating_revenue_curr, ROUND((((total_operating_revenue_q3_cumulative - total_operating_revenue_h1) - total_operating_revenue_q2) / ABS(total_operating_revenue_q2)) * 100, 2) AS qoq_growth FROM agg WHERE total_operating_revenue_q2 IS NOT NULL AND total_operating_revenue_q2 != 0 AND total_operating_revenue_h1 IS NOT NULL AND total_operating_revenue_q3_cumulative IS NOT NULL",
+  "sql_history": [
+    "WITH base AS ( SELECT stock_code, stock_abbr, report_period, total_operating_revenue FROM financials_view WHERE stock_abbr = '云南白药' AND report_period IN ('2025Q2', '2025H1', '2025Q3')), agg AS ( SELECT stock_code, stock_abbr, MAX(CASE WHEN report_period = '2025Q2' THEN total_operating_revenue END) AS total_operating_revenue_q2, MAX(CASE WHEN report_period = '2025H1' THEN total_operating_revenue END) AS total_operating_revenue_h1, MAX(CASE WHEN report_period = '2025Q3' THEN total_operating_revenue END) AS total_operating_revenue_q3_cumulative FROM base GROUP BY stock_code, stock_abbr) SELECT stock_code, stock_abbr, '2025Q2' AS report_period_prev, total_operating_revenue_q2 AS total_operating_revenue_prev, '2025Q3' AS report_period_curr, (total_operating_revenue_q3_cumulative - total_operating_revenue_h1) AS total_operating_revenue_curr, ROUND((((total_operating_revenue_q3_cumulative - total_operating_revenue_h1) - total_operating_revenue_q2) / ABS(total_operating_revenue_q2)) * 100, 2) AS qoq_growth FROM agg WHERE total_operating_revenue_q2 IS NOT NULL AND total_operating_revenue_q2 != 0 AND total_operating_revenue_h1 IS NOT NULL AND total_operating_revenue_q3_cumulative IS NOT NULL"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 1,
+  "result_rows": [
+    {
+      "stock_code": "000538",
+      "stock_abbr": "云南白药",
+      "report_period_prev": "2025Q2",
+      "total_operating_revenue_prev": 1041586.5174730001,
+      "report_period_curr": "2025Q3",
+      "total_operating_revenue_curr": 939711.1312989998,
+      "qoq_growth": -9.78
+    }
+  ],
+  "context_companies": [
+    "云南白药"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "000538",
+      "stock_abbr": "云南白药",
+      "report_period_prev": "2025Q2",
+      "total_operating_revenue_prev": 1041586.5174730001,
+      "report_period_curr": "2025Q3",
+      "total_operating_revenue_curr": 939711.1312989998,
+      "qoq_growth": -9.78
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"000538\",\"stock_abbr\":\"云南白药\",\"report_period_prev\":\"2025Q2\",\"total_operating_revenue_prev\":1041586.5174730001,\"report_period_curr\":\"2025Q3\",\"total_operating_revenue_curr\":939711.1312989998,\"qoq_growth\":-9.78}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "云南白药2025Q3营业总收入环比增长",
+    "x_field": null,
+    "y_fields": [
+      "stock_code"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": "stock_code",
+    "sort_ascending": true,
+    "top_n": 1,
+    "should_draw": true
+  },
+  "chart_spec": {},
+  "all_chart_specs": [],
+  "all_chart_paths": [],
+  "graph_formats": [],
+  "turn_answers": [
+    {
+      "Q": "计算云南白药（000538）2025年第三季度营业总收入的环比增长率（环比增长率=(本季度值-上季度值)/上季度值*100），并展示2025年第二季度和第三季度的营业总收入（万元）及环比增长率（保留两位小数）。",
+      "A": {
+        "content": "云南白药（000538）2025年第二季度营业总收入为1,041,586.52万元，第三季度营业总收入为939,711.13万元。第三季度营业总收入环比下降9.78%。",
+        "image": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"计算云南白药（000538）2025年第三季度营业总收入的环比增长率（环比增长率=(本季度值-上季度值)/上季度值*100），并展示2025年第二季度和第三季度的营业总收入（万元）及环比增长率（保留两位小数）。\", \"A\": {\"content\": \"云南白药（000538）2025年第二季度营业总收入为1,041,586.52万元，第三季度营业总收入为939,711.13万元。第三季度营业总收入环比下降9.78%。\", \"image\": []}}]",
+  "notes": [
+    "Used deterministic SQL template for a known query pattern."
+  ],
+  "final_status": "ok"
+}

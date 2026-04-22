@@ -1,0 +1,300 @@
+{
+  "question_id": "B1002",
+  "question_type": "数据统计分析查询",
+  "raw_question": "金花股份近几年的利润总额变化趋势是什么样的",
+  "raw_question_json": "[{\"Q\":\"金花股份近几年的利润总额变化趋势是什么样的\"}]",
+  "parsed_slots": {
+    "companies": [
+      "金花股份"
+    ],
+    "stock_codes": [],
+    "periods": [],
+    "metrics": [
+      "利润总额"
+    ],
+    "chart_type": null,
+    "intent_type": "trend_or_chart",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "trend_or_chart",
+    "companies": [
+      "金花股份"
+    ],
+    "periods": [],
+    "metrics": [
+      "利润总额"
+    ],
+    "chart_type": "line",
+    "top_n": null,
+    "threshold": null,
+    "question": "金花股份近几年的利润总额变化趋势是什么样的",
+    "should_draw": true,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT report_period, total_profit FROM financials_view WHERE stock_abbr = '金花股份' AND total_profit IS NOT NULL ORDER BY report_period",
+  "sql_history": [
+    "SELECT report_period, total_profit FROM financials_view WHERE stock_abbr = '金花股份' AND total_profit IS NOT NULL ORDER BY report_period"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 12,
+  "result_rows": [
+    {
+      "report_period": "2022FY",
+      "total_profit": 4905.154102
+    },
+    {
+      "report_period": "2023FY",
+      "total_profit": -4105.4617259999995
+    },
+    {
+      "report_period": "2023H1",
+      "total_profit": 506.584259
+    },
+    {
+      "report_period": "2023Q1",
+      "total_profit": 490.645995
+    },
+    {
+      "report_period": "2023Q3",
+      "total_profit": 193.603353
+    },
+    {
+      "report_period": "2024FY",
+      "total_profit": 4203.928014
+    },
+    {
+      "report_period": "2024H1",
+      "total_profit": 924.980958
+    },
+    {
+      "report_period": "2024Q1",
+      "total_profit": 2790.534078
+    },
+    {
+      "report_period": "2024Q3",
+      "total_profit": 3245.72417
+    },
+    {
+      "report_period": "2025H1",
+      "total_profit": 532.451361
+    },
+    {
+      "report_period": "2025Q1",
+      "total_profit": 63.094877000000004
+    },
+    {
+      "report_period": "2025Q3",
+      "total_profit": 3533.5900020000004
+    }
+  ],
+  "context_companies": [],
+  "context_rows": [
+    {
+      "report_period": "2022FY",
+      "total_profit": 4905.154102
+    },
+    {
+      "report_period": "2023FY",
+      "total_profit": -4105.4617259999995
+    },
+    {
+      "report_period": "2023H1",
+      "total_profit": 506.584259
+    },
+    {
+      "report_period": "2023Q1",
+      "total_profit": 490.645995
+    },
+    {
+      "report_period": "2023Q3",
+      "total_profit": 193.603353
+    },
+    {
+      "report_period": "2024FY",
+      "total_profit": 4203.928014
+    },
+    {
+      "report_period": "2024H1",
+      "total_profit": 924.980958
+    },
+    {
+      "report_period": "2024Q1",
+      "total_profit": 2790.534078
+    },
+    {
+      "report_period": "2024Q3",
+      "total_profit": 3245.72417
+    },
+    {
+      "report_period": "2025H1",
+      "total_profit": 532.451361
+    },
+    {
+      "report_period": "2025Q1",
+      "total_profit": 63.094877000000004
+    },
+    {
+      "report_period": "2025Q3",
+      "total_profit": 3533.5900020000004
+    }
+  ],
+  "result_preview": "[{\"report_period\":\"2022FY\",\"total_profit\":4905.154102},{\"report_period\":\"2023FY\",\"total_profit\":-4105.461726},{\"report_period\":\"2023H1\",\"total_profit\":506.584259},{\"report_period\":\"2023Q1\",\"total_profit\":490.645995},{\"report_period\":\"2023Q3\",\"total_profit\":193.603353},{\"report_period\":\"2024FY\",\"total_profit\":4203.928014},{\"report_period\":\"2024H1\",\"total_profit\":924.980958},{\"report_period\":\"2024Q1\",\"total_profit\":2790.534078},{\"report_period\":\"2024Q3\",\"total_profit\":3245.72417},{\"report_period\":\"2025H1\",\"total_profit\":532.451361},{\"report_period\":\"2025Q1\",\"total_profit\":63.094877},{\"report_period\":\"2025Q3\",\"total_profit\":3533.590002}]",
+  "chart_plan": {
+    "chart_type": "line",
+    "title": "金花股份利润总额变化趋势",
+    "x_field": "report_period",
+    "y_fields": [
+      "total_profit"
+    ],
+    "category_field": null,
+    "sort_by": "report_period",
+    "sort_ascending": true,
+    "top_n": null,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B1002",
+    "image_index": 1,
+    "chart_type": "line",
+    "title": "金花股份利润总额变化趋势",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 12,
+      "preview_rows": [
+        {
+          "report_period": "2022FY",
+          "total_profit": 4905.154102
+        },
+        {
+          "report_period": "2023FY",
+          "total_profit": -4105.4617259999995
+        },
+        {
+          "report_period": "2023H1",
+          "total_profit": 506.584259
+        },
+        {
+          "report_period": "2023Q1",
+          "total_profit": 490.645995
+        },
+        {
+          "report_period": "2023Q3",
+          "total_profit": 193.603353
+        },
+        {
+          "report_period": "2024FY",
+          "total_profit": 4203.928014
+        },
+        {
+          "report_period": "2024H1",
+          "total_profit": 924.980958
+        },
+        {
+          "report_period": "2024Q1",
+          "total_profit": 2790.534078
+        },
+        {
+          "report_period": "2024Q3",
+          "total_profit": 3245.72417
+        },
+        {
+          "report_period": "2025H1",
+          "total_profit": 532.451361
+        },
+        {
+          "report_period": "2025Q1",
+          "total_profit": 63.094877000000004
+        },
+        {
+          "report_period": "2025Q3",
+          "total_profit": 3533.5900020000004
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "report_period",
+      "sort_ascending": true,
+      "top_n": null,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "total_profit",
+        "data_type": "quantitative",
+        "label": "total_profit",
+        "unit": null
+      },
+      "x": {
+        "field": "report_period",
+        "data_type": "temporal",
+        "label": "报告期",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": false
+    },
+    "output": {
+      "filename": "B1002_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B1002_1.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT report_period, total_profit FROM financials_view WHERE stock_abbr = '金花股份' AND total_profit IS NOT NULL ORDER BY report_period",
+      "value_fields": [
+        "total_profit"
+      ],
+      "value_labels": [
+        "total_profit"
+      ],
+      "original_chart_plan": {
+        "chart_type": "line",
+        "x_field": "report_period",
+        "y_fields": [
+          "total_profit"
+        ],
+        "category_field": null,
+        "sort_by": "report_period",
+        "sort_ascending": true,
+        "top_n": null
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph/artifacts/chart_specs/B1002_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B1002_1.jpg"
+  ],
+  "graph_formats": [
+    "折线图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "金花股份近几年的利润总额变化趋势是什么样的",
+      "A": {
+        "content": "金花股份的利润总额在近几年呈现波动变化趋势。  \n- 2022年全年为4905.15万元，2023年全年转为亏损4105.46万元。  \n- 2024年全年恢复盈利，达到4203.93万元。  \n- 从季度数据看，2023年上半年及季度间波动较大，2024年第一季度较高（2790.53万元），2025年第三季度回升至3533.59万元。  \n\n整体表现为先盈利、后亏损、再恢复盈利的波动状态。",
+        "image": [
+          "./result/B1002_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"金花股份近几年的利润总额变化趋势是什么样的\", \"A\": {\"content\": \"金花股份的利润总额在近几年呈现波动变化趋势。  \\n- 2022年全年为4905.15万元，2023年全年转为亏损4105.46万元。  \\n- 2024年全年恢复盈利，达到4203.93万元。  \\n- 从季度数据看，2023年上半年及季度间波动较大，2024年第一季度较高（2790.53万元），2025年第三季度回升至3533.59万元。  \\n\\n整体表现为先盈利、后亏损、再恢复盈利的波动状态。\", \"image\": [\"./result/B1002_1.jpg\"]}}]",
+  "notes": [
+    "用户询问金花股份近几年的利润总额变化趋势。根据查询计划，公司为'金花股份'，指标为'利润总额'，意图为趋势图。因此，查询应返回报告期和利润总额（对应字段total_profit），并按报告期排序以展示趋势。"
+  ],
+  "final_status": "ok"
+}

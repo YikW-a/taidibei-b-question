@@ -1,0 +1,84 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1009",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "2025年第三季度中药公司营收与净利润双前五",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 3,
+    "preview_rows": [
+      {
+        "stock_code": "600332",
+        "stock_abbr": "白云山",
+        "营业总收入": 6160599.379554,
+        "净利润": 331005.207786
+      },
+      {
+        "stock_code": "000538",
+        "stock_abbr": "云南白药",
+        "营业总收入": 3065421.420901,
+        "净利润": 477711.965747
+      },
+      {
+        "stock_code": "000999",
+        "stock_abbr": "华润三九",
+        "营业总收入": 2198640.396207,
+        "净利润": 235282.69556599998
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": null,
+    "sort_ascending": true,
+    "top_n": 3,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "stock_code",
+      "data_type": "quantitative",
+      "label": "股票代码",
+      "unit": "万元"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1009_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1009_1.jpg"
+  },
+  "meta": {
+    "source_sql": "WITH ranked_by_revenue AS (\n    SELECT stock_code, stock_abbr, total_operating_revenue AS 营业总收入, net_profit AS 净利润,\n           ROW_NUMBER() OVER (ORDER BY total_operating_revenue DESC) AS revenue_rank\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n), ranked_by_profit AS (\n    SELECT stock_code, stock_abbr, total_operating_revenue AS 营业总收入, net_profit AS 净利润,\n           ROW_NUMBER() OVER (ORDER BY net_profit DESC) AS profit_rank\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n)\nSELECT r.stock_code, r.stock_abbr, r.营业总收入, r.净利润\nFROM ranked_by_revenue r\nINNER JOIN ranked_by_profit p ON r.stock_code = p.stock_code\nWHERE r.revenue_rank <= 5 AND p.profit_rank <= 5\nORDER BY r.revenue_rank, p.profit_rank;",
+    "value_fields": [
+      "stock_code"
+    ],
+    "value_labels": [
+      "股票代码"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "stock_code"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": null,
+      "sort_ascending": true,
+      "top_n": 3
+    }
+  }
+}

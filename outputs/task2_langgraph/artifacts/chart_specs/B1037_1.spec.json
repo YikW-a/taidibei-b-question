@@ -1,0 +1,82 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B1037",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "2025年第三季度销售净利率区间公司数量",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 4,
+    "preview_rows": [
+      {
+        "profit_margin_group": "0-5%",
+        "company_count": 15
+      },
+      {
+        "profit_margin_group": "10%以上",
+        "company_count": 28
+      },
+      {
+        "profit_margin_group": "5%-10%",
+        "company_count": 15
+      },
+      {
+        "profit_margin_group": "其他",
+        "company_count": 9
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "company_count",
+    "sort_ascending": true,
+    "top_n": 4,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "company_count",
+      "data_type": "quantitative",
+      "label": "company_count",
+      "unit": null
+    },
+    "category": {
+      "field": "profit_margin_group",
+      "data_type": "nominal",
+      "label": "profit_margin_group",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B1037_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B1037_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT CASE WHEN net_profit_margin >= 0 AND net_profit_margin < 5 THEN '0-5%' WHEN net_profit_margin >= 5 AND net_profit_margin < 10 THEN '5%-10%' WHEN net_profit_margin >= 10 THEN '10%以上' ELSE '其他' END AS profit_margin_group, COUNT(*) AS company_count FROM financials_view WHERE report_period = '2025Q3' AND net_profit_margin IS NOT NULL GROUP BY profit_margin_group ORDER BY profit_margin_group",
+    "value_fields": [
+      "company_count"
+    ],
+    "value_labels": [
+      "company_count"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "company_count"
+      ],
+      "category_field": "profit_margin_group",
+      "sort_by": "company_count",
+      "sort_ascending": true,
+      "top_n": 4
+    }
+  }
+}
