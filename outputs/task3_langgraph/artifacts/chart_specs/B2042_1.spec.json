@@ -1,0 +1,150 @@
+{
+  "schema_version": "task3.chart-spec.v1",
+  "question_id": "B2042",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "净利润对比",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 14,
+    "preview_rows": [
+      {
+        "stock_code": "002603",
+        "stock_abbr": "以岭药业",
+        "净利润同比增长率": "80.33",
+        "研发费用占比": 9.271466634932073,
+        "平均研发费用占比": 3.836496015722465
+      },
+      {
+        "stock_code": "002773",
+        "stock_abbr": "康弘药业",
+        "净利润同比增长率": "6.08",
+        "研发费用占比": 9.221024892507804,
+        "平均研发费用占比": 3.836496015722465
+      },
+      {
+        "stock_code": "600535",
+        "stock_abbr": "天士力",
+        "净利润同比增长率": "16.88",
+        "研发费用占比": 8.76977600291724,
+        "平均研发费用占比": 3.836496015722465
+      },
+      {
+        "stock_code": "603998",
+        "stock_abbr": "方盛制药",
+        "净利润同比增长率": "17.6",
+        "研发费用占比": 8.623554901790714,
+        "平均研发费用占比": 3.836496015722465
+      },
+      {
+        "stock_code": "002275",
+        "stock_abbr": "桂林三金",
+        "净利润同比增长率": "0.352018868604449",
+        "研发费用占比": 6.2264693904383615,
+        "平均研发费用占比": 3.836496015722465
+      },
+      {
+        "stock_code": "600080",
+        "stock_abbr": "金花股份",
+        "净利润同比增长率": "12.06",
+        "研发费用占比": 5.816750398155424,
+        "平均研发费用占比": 3.836496015722465
+      },
+      {
+        "stock_code": "600479",
+        "stock_abbr": "千金药业",
+        "净利润同比增长率": "11.47",
+        "研发费用占比": 5.330610101877996,
+        "平均研发费用占比": 3.836496015722465
+      },
+      {
+        "stock_code": "000590",
+        "stock_abbr": "启迪药业",
+        "净利润同比增长率": "47.91",
+        "研发费用占比": 5.187840675072184,
+        "平均研发费用占比": 3.836496015722465
+      },
+      {
+        "stock_code": "300519",
+        "stock_abbr": "新光药业",
+        "净利润同比增长率": "19.9929772517716",
+        "研发费用占比": 4.883664905871746,
+        "平均研发费用占比": 3.836496015722465
+      },
+      {
+        "stock_code": "002728",
+        "stock_abbr": "特一药业",
+        "净利润同比增长率": "985.18",
+        "研发费用占比": 4.367592188802714,
+        "平均研发费用占比": 3.836496015722465
+      },
+      {
+        "stock_code": "002107",
+        "stock_abbr": "沃华医药",
+        "净利润同比增长率": "179.34",
+        "研发费用占比": 4.358450086375299,
+        "平均研发费用占比": 3.836496015722465
+      },
+      {
+        "stock_code": "600594",
+        "stock_abbr": "益佰制药",
+        "净利润同比增长率": "47.9861929571102",
+        "研发费用占比": 4.314913437612396,
+        "平均研发费用占比": 3.836496015722465
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "研发费用占比",
+    "sort_ascending": false,
+    "top_n": 12,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "研发费用占比",
+      "data_type": "quantitative",
+      "label": "研发费用占比",
+      "unit": "%"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B2042_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B2042_1.jpg"
+  },
+  "meta": {
+    "source_sql": "WITH profitable_companies AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        kpi_net_profit_yoy_growth,\n        rnd_expense_ratio\n    FROM financials_view \n    WHERE report_period = '2025Q3' \n        AND kpi_net_profit_yoy_growth > 0\n),\navg_rnd_ratio AS (\n    SELECT \n        AVG(rnd_expense_ratio) AS avg_rnd_ratio\n    FROM profitable_companies\n),\nhigh_rnd_companies AS (\n    SELECT \n        pc.stock_code,\n        pc.stock_abbr,\n        pc.kpi_net_profit_yoy_growth,\n        pc.rnd_expense_ratio,\n        ar.avg_rnd_ratio\n    FROM profitable_companies pc\n    CROSS JOIN avg_rnd_ratio ar\n    WHERE pc.rnd_expense_ratio > ar.avg_rnd_ratio\n)\nSELECT \n    stock_code,\n    stock_abbr,\n    kpi_net_profit_yoy_growth AS 净利润同比增长率,\n    rnd_expense_ratio AS 研发费用占比,\n    avg_rnd_ratio AS 平均研发费用占比\nFROM high_rnd_companies\nORDER BY rnd_expense_ratio DESC;",
+    "value_fields": [
+      "研发费用占比"
+    ],
+    "value_labels": [
+      "研发费用占比"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "研发费用占比"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": "研发费用占比",
+      "sort_ascending": false,
+      "top_n": 12
+    }
+  }
+}

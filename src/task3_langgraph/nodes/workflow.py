@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import re
 from collections.abc import Callable
 from pathlib import Path
 
@@ -54,7 +55,18 @@ def parse_question_node(state: Task3GraphState, ctx: Task3NodeContext) -> Task3G
     turn_index = state.get("current_turn_index", 0)
     current_question = question.sub_questions[turn_index]
     cumulative_question = " | ".join(question.sub_questions[: turn_index + 1])
-    referential_follow_up_tokens = ["判断依据", "依据是什么", "你确定", "名单", "为什么这么说", "你怎么判断"]
+    referential_follow_up_tokens = [
+        "判断依据",
+        "依据是什么",
+        "你确定",
+        "名单",
+        "为什么这么说",
+        "你怎么判断",
+        "数据来源",
+        "是否可靠",
+        "可靠性",
+        "从哪里查询",
+    ]
     is_open_trend_or_forecast_question = any(
         token in current_question for token in ["未来", "趋势", "预测", "中药材价格", "价格波动"]
     )
@@ -66,12 +78,28 @@ def parse_question_node(state: Task3GraphState, ctx: Task3NodeContext) -> Task3G
     )
     parse_text = current_question if should_parse_current_only else cumulative_question
     intent = ctx.intent_parser.parse_text(parse_text)
+    intent.periods = _refine_follow_up_periods(current_question, intent.periods, state.get("result_rows", []) or [])
     if (
         not intent.companies
         and state.get("context_companies")
         and any(
             token in current_question
-            for token in ["这些公司", "上述公司", "这些企业", "上述企业", "它们", "其中", "名单", "你确定", "判断依据", "依据是什么"]
+            for token in [
+                "这些公司",
+                "上述公司",
+                "这些企业",
+                "上述企业",
+                "它们",
+                "其中",
+                "名单",
+                "你确定",
+                "判断依据",
+                "依据是什么",
+                "数据来源",
+                "是否可靠",
+                "可靠性",
+                "从哪里查询",
+            ]
         )
     ):
         intent.companies = list(state.get("context_companies", []))
@@ -182,7 +210,7 @@ def clarify_or_continue_node(state: Task3GraphState, ctx: Task3NodeContext) -> T
     )
     is_follow_up_group_question = any(
         token in text
-        for token in ["他们", "这些", "上述", "其中", "共同点", "原因", "判断依据", "名单", "你确定", "依据是什么"]
+        for token in ["他们", "这些", "上述", "其中", "共同点", "原因", "判断依据", "名单", "你确定", "依据是什么", "数据来源", "是否可靠", "可靠性", "从哪里查询"]
     )
     is_open_trend_or_forecast_question = any(
         token in text for token in ["未来", "趋势", "预测", "中药材价格", "价格波动", "判断的依据"]
@@ -308,6 +336,33 @@ def execute_sql_node(state: Task3GraphState, ctx: Task3NodeContext) -> Task3Grap
             "final_status": "running",
         }
     except Exception as exc:
+        repaired_sql = ctx.runtime.repair_sql_after_error(state.get("sql", ""), str(exc))
+        if repaired_sql:
+            try:
+                df = ctx.runtime.run_sql(repaired_sql)
+                history = list(state.get("sql_history", []) or [])
+                if repaired_sql not in history:
+                    history.append(repaired_sql)
+                context_companies = (
+                    df["stock_abbr"].dropna().astype(str).drop_duplicates().tolist()
+                    if "stock_abbr" in df.columns
+                    else state.get("context_companies", [])
+                )
+                return {
+                    **state,
+                    "sql": repaired_sql,
+                    "sql_history": history,
+                    "result_rows": df.to_dict(orient="records"),
+                    "result_row_count": len(df),
+                    "result_preview": df.head(20).to_json(force_ascii=False, orient="records"),
+                    "context_companies": context_companies,
+                    "context_rows": df.head(30).to_dict(orient="records"),
+                    "sql_error": "",
+                    "final_status": "running",
+                    "notes": state.get("notes", []) + ["sql_repaired_after_execution_error"],
+                }
+            except Exception:
+                pass
         return {**state, "sql_error": str(exc), "final_status": "sql_error"}
 
 
@@ -379,11 +434,29 @@ def retrieve_reports_node(state: Task3GraphState, ctx: Task3NodeContext) -> Task
             f"retrieval_hits={len(evidences)}",
         ],
     }
+    needs_evidence_seeded_filter = (
+        query_plan.get("needs_sql")
+        and not query_plan.get("companies")
+        and ctx.runtime.requires_evidence_seeded_company_filter(question_text)
+    )
+    if needs_evidence_seeded_filter and not derived_companies and state.get("result_rows"):
+        next_state.update(
+            {
+                "result_rows": [],
+                "result_row_count": 0,
+                "result_preview": "",
+                "context_rows": [],
+                "notes": next_state.get("notes", []) + ["sql_rows_cleared_without_evidence_company_match"],
+            }
+        )
     if (
         query_plan.get("needs_sql")
-        and not state.get("result_rows")
         and not query_plan.get("companies")
         and derived_companies
+        and (
+            not state.get("result_rows")
+            or needs_evidence_seeded_filter
+        )
     ):
         query_plan["companies"] = derived_companies
         sql, reason = ctx.runtime.generate_sql(
@@ -662,6 +735,37 @@ def _result_dataframe(state: Task3GraphState) -> pd.DataFrame:
     if not rows:
         return pd.DataFrame()
     return pd.DataFrame(rows)
+
+
+def _refine_follow_up_periods(current_question: str, periods: list[str], prior_rows: list[dict[str, object]]) -> list[str]:
+    if "同期" not in current_question:
+        return list(periods or [])
+    prior_period = ""
+    for row in prior_rows or []:
+        if not isinstance(row, dict):
+            continue
+        for key in ["report_period", "报告期", "current_period", "base_period"]:
+            value = str(row.get(key, "") or "").strip()
+            if len(value) >= 6 and value[:4].isdigit():
+                prior_period = value
+                break
+        if prior_period:
+            break
+    if not prior_period:
+        return list(periods or [])
+    suffix = prior_period[4:]
+    refined: list[str] = []
+    for period in periods or []:
+        period_str = str(period)
+        if period_str.endswith("FY") and re.search(r"\d{4}年同期", current_question):
+            refined.append(f"{period_str[:4]}{suffix}")
+        else:
+            refined.append(period_str)
+    if not refined:
+        year_match = re.search(r"(\d{4})年同期", current_question)
+        if year_match:
+            refined.append(f"{year_match.group(1)}{suffix}")
+    return list(dict.fromkeys(refined))
 
 
 REQUIRED_CHART_TOKENS = ["可视化", "绘图", "画图", "图表", "柱状图", "折线图", "饼图", "雷达图", "散点图", "直方图", "箱线图"]

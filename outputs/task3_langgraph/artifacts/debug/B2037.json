@@ -1,0 +1,152 @@
+{
+  "question_id": "B2037",
+  "question_type": "数据校验",
+  "raw_question": "查询云南白药（000538）2025年第三季度的营业总收入 | 核心业绩指标表与利润表中的该数值是否一致",
+  "raw_question_json": "[{\"Q\":\"查询云南白药（000538）2025年第三季度的营业总收入\"},{\"Q\":\"核心业绩指标表与利润表中的该数值是否一致\"}]",
+  "parsed_slots": {
+    "companies": [
+      "云南白药"
+    ],
+    "stock_codes": [
+      "000538"
+    ],
+    "metrics": [
+      "营业总收入",
+      "净利润"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "focus_topics": [],
+    "intent_type": "sql_only",
+    "needs_sql": true,
+    "needs_retrieval": false,
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "sql_only",
+    "companies": [
+      "云南白药"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入",
+      "净利润"
+    ],
+    "needs_sql": true,
+    "top_n": null,
+    "threshold": null,
+    "question": "查询云南白药2025Q3的营业总收入和净利润，用于核对核心业绩指标表与利润表中的数值一致性"
+  },
+  "retrieval_plan": {
+    "question": "核心业绩指标表与利润表中的该数值是否一致",
+    "companies": [
+      "云南白药"
+    ],
+    "focus_topics": [],
+    "needs_retrieval": false,
+    "top_k": 0,
+    "source_scope": "hybrid",
+    "retrieval_mode": "hybrid"
+  },
+  "sql": "SELECT \n    stock_code,\n    stock_abbr,\n    report_period,\n    kpi_total_operating_revenue AS 核心业绩指标表_营业总收入,\n    income_total_operating_revenue AS 利润表_营业总收入,\n    kpi_net_profit AS 核心业绩指标表_净利润,\n    income_net_profit AS 利润表_净利润,\n    CASE \n        WHEN kpi_total_operating_revenue = income_total_operating_revenue THEN '一致'\n        ELSE '不一致'\n    END AS 营业总收入一致性,\n    CASE \n        WHEN kpi_net_profit = income_net_profit THEN '一致'\n        ELSE '不一致'\n    END AS 净利润一致性\nFROM financials_view\nWHERE stock_abbr = '云南白药' \n    AND report_period = '2025Q3';",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, report_period, total_operating_revenue AS 营业总收入 FROM financials_view WHERE stock_code = '000538' AND report_period = '2025Q3';",
+    "SELECT \n    stock_code,\n    stock_abbr,\n    report_period,\n    kpi_total_operating_revenue AS 核心业绩指标表_营业总收入,\n    income_total_operating_revenue AS 利润表_营业总收入,\n    kpi_net_profit AS 核心业绩指标表_净利润,\n    income_net_profit AS 利润表_净利润,\n    CASE \n        WHEN kpi_total_operating_revenue = income_total_operating_revenue THEN '一致'\n        ELSE '不一致'\n    END AS 营业总收入一致性,\n    CASE \n        WHEN kpi_net_profit = income_net_profit THEN '一致'\n        ELSE '不一致'\n    END AS 净利润一致性\nFROM financials_view\nWHERE stock_abbr = '云南白药' \n    AND report_period = '2025Q3';"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 1,
+  "result_rows": [
+    {
+      "stock_code": "000538",
+      "stock_abbr": "云南白药",
+      "report_period": "2025Q3",
+      "核心业绩指标表_营业总收入": "3065421.420901",
+      "利润表_营业总收入": "3065421.420901",
+      "核心业绩指标表_净利润": "477711.965747",
+      "利润表_净利润": "477711.965747",
+      "营业总收入一致性": "一致",
+      "净利润一致性": "一致"
+    }
+  ],
+  "retrieved_evidence": [],
+  "reranked_evidence": [],
+  "rerank_preview": "{\"strategy\": \"skipped_fast_path\", \"kept_count\": 0}",
+  "fused_context": {
+    "question": "核心业绩指标表与利润表中的该数值是否一致",
+    "sql_row_count": 1,
+    "evidence_count": 0,
+    "sql_preview": [
+      {
+        "stock_code": "000538",
+        "stock_abbr": "云南白药",
+        "report_period": "2025Q3",
+        "核心业绩指标表_营业总收入": "3065421.420901",
+        "利润表_营业总收入": "3065421.420901",
+        "核心业绩指标表_净利润": "477711.965747",
+        "利润表_净利润": "477711.965747",
+        "营业总收入一致性": "一致",
+        "净利润一致性": "一致"
+      }
+    ],
+    "evidence_preview": [],
+    "evidence_titles": [],
+    "source_breakdown": {}
+  },
+  "self_check": {
+    "pass": true,
+    "notes": [
+      "self_check_skipped_fast_path"
+    ]
+  },
+  "chart_plan": {},
+  "chart_spec": {},
+  "current_chart_paths": [],
+  "current_chart_specs": [],
+  "current_answer": "根据提供的 SQL 查询结果，云南白药在2025年第三季度（2025Q3）的核心业绩指标表与利润表中的关键数值完全一致。\n\n**直接结论：**\n对于云南白药2025Q3的数据，核心业绩指标表中的“营业总收入”与利润表中的“营业总收入”一致；核心业绩指标表中的“净利润”与利润表中的“净利润”也一致。\n\n**财务数据支撑：**\n- **营业总收入**：核心业绩指标表与利润表中的数值均为 3,065,421.420901 万元。\n- **净利润**：核心业绩指标表与利润表中的数值均为 477,711.965747 万元。\n查询结果中的“营业总收入一致性”和“净利润一致性”字段均明确标注为“一致”。\n\n**研报证据支撑：**\n未检索到直接研报证据。\n\n**综合判断：**\n基于当前可获取的标准化财务数据视图，云南白药2025年第三季度的核心业绩指标表与利润表在“营业总收入”和“净利润”这两个关键指标上数值完全吻合，不存在差异。",
+  "current_references": [],
+  "answer_rewritten": false,
+  "turn_answers": [
+    {
+      "Q": "查询云南白药（000538）2025年第三季度的营业总收入",
+      "A": {
+        "content": "根据SQL查询结果，满足条件的公司如下：\n1. **云南白药 (000538)**：营业总收入为306.54亿元。",
+        "image": [],
+        "references": []
+      }
+    },
+    {
+      "Q": "核心业绩指标表与利润表中的该数值是否一致",
+      "A": {
+        "content": "根据提供的 SQL 查询结果，云南白药在2025年第三季度（2025Q3）的核心业绩指标表与利润表中的关键数值完全一致。\n\n**直接结论：**\n对于云南白药2025Q3的数据，核心业绩指标表中的“营业总收入”与利润表中的“营业总收入”一致；核心业绩指标表中的“净利润”与利润表中的“净利润”也一致。\n\n**财务数据支撑：**\n- **营业总收入**：核心业绩指标表与利润表中的数值均为 3,065,421.420901 万元。\n- **净利润**：核心业绩指标表与利润表中的数值均为 477,711.965747 万元。\n查询结果中的“营业总收入一致性”和“净利润一致性”字段均明确标注为“一致”。\n\n**研报证据支撑：**\n未检索到直接研报证据。\n\n**综合判断：**\n基于当前可获取的标准化财务数据视图，云南白药2025年第三季度的核心业绩指标表与利润表在“营业总收入”和“净利润”这两个关键指标上数值完全吻合，不存在差异。",
+        "image": [],
+        "references": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"查询云南白药（000538）2025年第三季度的营业总收入\", \"A\": {\"content\": \"根据SQL查询结果，满足条件的公司如下：\\n1. **云南白药 (000538)**：营业总收入为306.54亿元。\", \"image\": [], \"references\": []}}, {\"Q\": \"核心业绩指标表与利润表中的该数值是否一致\", \"A\": {\"content\": \"根据提供的 SQL 查询结果，云南白药在2025年第三季度（2025Q3）的核心业绩指标表与利润表中的关键数值完全一致。\\n\\n**直接结论：**\\n对于云南白药2025Q3的数据，核心业绩指标表中的“营业总收入”与利润表中的“营业总收入”一致；核心业绩指标表中的“净利润”与利润表中的“净利润”也一致。\\n\\n**财务数据支撑：**\\n- **营业总收入**：核心业绩指标表与利润表中的数值均为 3,065,421.420901 万元。\\n- **净利润**：核心业绩指标表与利润表中的数值均为 477,711.965747 万元。\\n查询结果中的“营业总收入一致性”和“净利润一致性”字段均明确标注为“一致”。\\n\\n**研报证据支撑：**\\n未检索到直接研报证据。\\n\\n**综合判断：**\\n基于当前可获取的标准化财务数据视图，云南白药2025年第三季度的核心业绩指标表与利润表在“营业总收入”和“净利润”这两个关键指标上数值完全吻合，不存在差异。\", \"image\": [], \"references\": []}}]",
+  "references_json": "[]",
+  "notes": [
+    "route=sql_only",
+    "问题要求查询云南白药（000538）2025年第三季度的营业总收入。根据查询计划，公司明确为云南白药（股票代码000538），期间为2025Q3，指标为营业总收入。在financials_view中，营业总收入对应的字段是total_operating_revenue。因此，直接使用WHERE条件过滤stock_code和report_period，并选择total_operating_revenue即可。",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=0",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=0",
+    "self_check={\"pass\": true, \"notes\": [\"self_check_skipped_fast_path\"]}",
+    "route=sql_only",
+    "根据查询计划，需要检查云南白药2025Q3的核心业绩指标表与利润表中的营业总收入和净利润是否一致。financials_view中提供了kpi_total_operating_revenue（核心业绩指标表营业总收入）、income_total_operating_revenue（利润表营业总收入）、kpi_net_profit（核心业绩指标表净利润）、income_net_profit（利润表净利润）四个字段。查询直接比较这两个来源的数值，并添加一致性判断列。由于查询计划明确指定了公司（云南白药）和期间（2025Q3），所以可以在WHERE条件中直接使用stock_abbr = '云南白药'。",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=0",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=0",
+    "self_check={\"pass\": true, \"notes\": [\"self_check_skipped_fast_path\"]}"
+  ],
+  "final_status": "ok"
+}

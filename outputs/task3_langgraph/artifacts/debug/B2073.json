@@ -1,0 +1,615 @@
+{
+  "question_id": "B2073",
+  "question_type": "归因分析",
+  "raw_question": "健民集团2025年第三季度营业总成本同比增长20%，但营业总收入仅增长5%，请结合利润表项目和研报（如原材料涨价、人力成本上升），分析成本增长快于营收的原因。 | 你凭什么觉得是这个原因导致了这个问题",
+  "raw_question_json": "[{\"Q\":\"健民集团2025年第三季度营业总成本同比增长20%，但营业总收入仅增长5%，请结合利润表项目和研报（如原材料涨价、人力成本上升），分析成本增长快于营收的原因。\"},{\"Q\":\"你凭什么觉得是这个原因导致了这个问题\"}]",
+  "parsed_slots": {
+    "companies": [
+      "健民集团"
+    ],
+    "stock_codes": [],
+    "metrics": [
+      "营业总收入",
+      "净利润"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "focus_topics": [
+      "原因"
+    ],
+    "intent_type": "causal_analysis",
+    "needs_sql": true,
+    "needs_retrieval": true,
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "causal_analysis",
+    "companies": [
+      "健民集团"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入",
+      "净利润"
+    ],
+    "needs_sql": true,
+    "top_n": null,
+    "threshold": null,
+    "question": "分析健民集团2025Q3营业总收入下降11.43%但净利润率基本稳定的具体原因，重点考察成本费用结构变化（如销售费用增长21.7%、营业成本下降36.61%对毛利率提升至59.2%的影响）"
+  },
+  "retrieval_plan": {
+    "question": "你凭什么觉得是这个原因导致了这个问题",
+    "companies": [
+      "健民集团"
+    ],
+    "focus_topics": [
+      "业绩变动原因",
+      "成本控制",
+      "费用结构",
+      "毛利率提升",
+      "销售费用增长",
+      "增长驱动",
+      "业务结构",
+      "市场拓展",
+      "产品线",
+      "品牌",
+      "渠道"
+    ],
+    "needs_retrieval": true,
+    "top_k": 8,
+    "source_scope": "hybrid",
+    "retrieval_mode": "hybrid"
+  },
+  "sql": "WITH cost_structure AS (\n    SELECT \n        stock_abbr,\n        report_period,\n        total_operating_revenue,\n        operating_cost,\n        selling_expenses,\n        administrative_expenses,\n        financial_expenses,\n        taxes_and_surcharges,\n        gross_profit_margin,\n        net_profit_margin,\n        net_profit,\n        -- 计算各项费用占营收比例\n        CASE WHEN total_operating_revenue > 0 \n             THEN 100.0 * operating_cost / total_operating_revenue \n             ELSE NULL END AS operating_cost_ratio,\n        CASE WHEN total_operating_revenue > 0 \n             THEN 100.0 * selling_expenses / total_operating_revenue \n             ELSE NULL END AS selling_expenses_ratio,\n        CASE WHEN total_operating_revenue > 0 \n             THEN 100.0 * administrative_expenses / total_operating_revenue \n             ELSE NULL END AS admin_expenses_ratio,\n        CASE WHEN total_operating_revenue > 0 \n             THEN 100.0 * financial_expenses / total_operating_revenue \n             ELSE NULL END AS financial_expenses_ratio,\n        CASE WHEN total_operating_revenue > 0 \n             THEN 100.0 * taxes_and_surcharges / total_operating_revenue \n             ELSE NULL END AS taxes_ratio\n    FROM financials_view\n    WHERE stock_abbr = '健民集团'\n      AND report_period IN ('2025Q3', '2024Q3')\n)\nSELECT \n    current.stock_abbr,\n    current.report_period AS current_period,\n    previous.report_period AS previous_period,\n    current.total_operating_revenue AS current_revenue,\n    previous.total_operating_revenue AS previous_revenue,\n    ROUND(100.0 * (current.total_operating_revenue - previous.total_operating_revenue) / previous.total_operating_revenue, 2) AS revenue_growth_rate_percent,\n    current.operating_cost AS current_operating_cost,\n    previous.operating_cost AS previous_operating_cost,\n    ROUND(100.0 * (current.operating_cost - previous.operating_cost) / previous.operating_cost, 2) AS operating_cost_growth_rate_percent,\n    current.selling_expenses AS current_selling_expenses,\n    previous.selling_expenses AS previous_selling_expenses,\n    ROUND(100.0 * (current.selling_expenses - previous.selling_expenses) / previous.selling_expenses, 2) AS selling_expenses_growth_rate_percent,\n    current.gross_profit_margin AS current_gross_margin_percent,\n    previous.gross_profit_margin AS previous_gross_margin_percent,\n    current.net_profit_margin AS current_net_margin_percent,\n    previous.net_profit_margin AS previous_net_margin_percent,\n    current.net_profit AS current_net_profit,\n    previous.net_profit AS previous_net_profit,\n    -- 成本费用结构变化\n    current.operating_cost_ratio AS current_operating_cost_ratio,\n    previous.operating_cost_ratio AS previous_operating_cost_ratio,\n    current.operating_cost_ratio - previous.operating_cost_ratio AS operating_cost_ratio_change,\n    current.selling_expenses_ratio AS current_selling_expenses_ratio,\n    previous.selling_expenses_ratio AS previous_selling_expenses_ratio,\n    current.selling_expenses_ratio - previous.selling_expenses_ratio AS selling_expenses_ratio_change,\n    current.admin_expenses_ratio AS current_admin_expenses_ratio,\n    previous.admin_expenses_ratio AS previous_admin_expenses_ratio,\n    current.admin_expenses_ratio - previous.admin_expenses_ratio AS admin_expenses_ratio_change,\n    current.financial_expenses_ratio AS current_financial_expenses_ratio,\n    previous.financial_expenses_ratio AS previous_financial_expenses_ratio,\n    current.financial_expenses_ratio - previous.financial_expenses_ratio AS financial_expenses_ratio_change,\n    current.taxes_ratio AS current_taxes_ratio,\n    previous.taxes_ratio AS previous_taxes_ratio,\n    current.taxes_ratio - previous.taxes_ratio AS taxes_ratio_change\nFROM cost_structure current\nJOIN cost_structure previous ON current.stock_abbr = previous.stock_abbr\nWHERE current.report_period = '2025Q3'\n  AND previous.report_period = '2024Q3'",
+  "sql_history": [
+    "WITH cost_components AS (\n    SELECT \n        stock_abbr,\n        report_period,\n        total_operating_revenue,\n        operating_cost,\n        selling_expenses,\n        administrative_expenses,\n        financial_expenses,\n        taxes_and_surcharges,\n        operating_expense_rnd_expenses,\n        operating_expense_cost_of_sales,\n        operating_expense_selling_expenses,\n        operating_expense_administrative_expenses,\n        operating_expense_financial_expenses,\n        operating_expense_taxes_and_surcharges,\n        total_operating_expenses,\n        gross_profit_margin,\n        net_profit_margin\n    FROM financials_view\n    WHERE stock_abbr = '健民集团' \n        AND report_period IN ('2025Q3', '2024Q3')\n),\ncost_growth AS (\n    SELECT \n        curr.stock_abbr,\n        curr.report_period AS current_period,\n        prev.report_period AS previous_period,\n        curr.total_operating_revenue AS current_revenue,\n        prev.total_operating_revenue AS previous_revenue,\n        (curr.total_operating_revenue - prev.total_operating_revenue) * 1.0 / prev.total_operating_revenue AS revenue_growth_rate,\n        curr.total_operating_expenses AS current_total_cost,\n        prev.total_operating_expenses AS previous_total_cost,\n        (curr.total_operating_expenses - prev.total_operating_expenses) * 1.0 / prev.total_operating_expenses AS total_cost_growth_rate,\n        curr.operating_cost AS current_operating_cost,\n        prev.operating_cost AS previous_operating_cost,\n        (curr.operating_cost - prev.operating_cost) * 1.0 / prev.operating_cost AS operating_cost_growth_rate,\n        curr.selling_expenses AS current_selling_expenses,\n        prev.selling_expenses AS previous_selling_expenses,\n        (curr.selling_expenses - prev.selling_expenses) * 1.0 / prev.selling_expenses AS selling_expenses_growth_rate,\n        curr.administrative_expenses AS current_admin_expenses,\n        prev.administrative_expenses AS previous_admin_expenses,\n        (curr.administrative_expenses - prev.administrative_expenses) * 1.0 / prev.administrative_expenses AS admin_expenses_growth_rate,\n        curr.financial_expenses AS current_financial_expenses,\n        prev.financial_expenses AS previous_financial_expenses,\n        (curr.financial_expenses - prev.financial_expenses) * 1.0 / prev.financial_expenses AS financial_expenses_growth_rate,\n        curr.taxes_and_surcharges AS current_taxes,\n        prev.taxes_and_surcharges AS previous_taxes,\n        (curr.taxes_and_surcharges - prev.taxes_and_surcharges) * 1.0 / prev.taxes_and_surcharges AS taxes_growth_rate,\n        curr.gross_profit_margin AS current_gross_margin,\n        prev.gross_profit_margin AS previous_gross_margin,\n        curr.net_profit_margin AS current_net_margin,\n        prev.net_profit_margin AS previous_net_margin\n    FROM cost_components curr\n    JOIN cost_components prev ON curr.stock_abbr = prev.stock_abbr\n    WHERE curr.report_period = '2025Q3'\n        AND prev.report_period = '2024Q3'\n)\nSELECT \n    stock_abbr,\n    current_period,\n    previous_period,\n    current_revenue,\n    previous_revenue,\n    ROUND(revenue_growth_rate * 100, 2) AS revenue_growth_rate_percent,\n    current_total_cost,\n    previous_total_cost,\n    ROUND(total_cost_growth_rate * 100, 2) AS total_cost_growth_rate_percent,\n    ROUND(operating_cost_growth_rate * 100, 2) AS operating_cost_growth_rate_percent,\n    ROUND(selling_expenses_growth_rate * 100, 2) AS selling_expenses_growth_rate_percent,\n    ROUND(admin_expenses_growth_rate * 100, 2) AS admin_expenses_growth_rate_percent,\n    ROUND(financial_expenses_growth_rate * 100, 2) AS financial_expenses_growth_rate_percent,\n    ROUND(taxes_growth_rate * 100, 2) AS taxes_growth_rate_percent,\n    ROUND(current_gross_margin, 2) AS current_gross_margin_percent,\n    ROUND(previous_gross_margin, 2) AS previous_gross_margin_percent,\n    ROUND(current_net_margin, 2) AS current_net_margin_percent,\n    ROUND(previous_net_margin, 2) AS previous_net_margin_percent\nFROM cost_growth\nORDER BY total_cost_growth_rate DESC\nLIMIT 10;",
+    "WITH cost_structure AS (\n    SELECT \n        stock_abbr,\n        report_period,\n        total_operating_revenue,\n        operating_cost,\n        selling_expenses,\n        administrative_expenses,\n        financial_expenses,\n        taxes_and_surcharges,\n        gross_profit_margin,\n        net_profit_margin,\n        net_profit,\n        -- 计算各项费用占营收比例\n        CASE WHEN total_operating_revenue > 0 \n             THEN 100.0 * operating_cost / total_operating_revenue \n             ELSE NULL END AS operating_cost_ratio,\n        CASE WHEN total_operating_revenue > 0 \n             THEN 100.0 * selling_expenses / total_operating_revenue \n             ELSE NULL END AS selling_expenses_ratio,\n        CASE WHEN total_operating_revenue > 0 \n             THEN 100.0 * administrative_expenses / total_operating_revenue \n             ELSE NULL END AS admin_expenses_ratio,\n        CASE WHEN total_operating_revenue > 0 \n             THEN 100.0 * financial_expenses / total_operating_revenue \n             ELSE NULL END AS financial_expenses_ratio,\n        CASE WHEN total_operating_revenue > 0 \n             THEN 100.0 * taxes_and_surcharges / total_operating_revenue \n             ELSE NULL END AS taxes_ratio\n    FROM financials_view\n    WHERE stock_abbr = '健民集团'\n      AND report_period IN ('2025Q3', '2024Q3')\n)\nSELECT \n    current.stock_abbr,\n    current.report_period AS current_period,\n    previous.report_period AS previous_period,\n    current.total_operating_revenue AS current_revenue,\n    previous.total_operating_revenue AS previous_revenue,\n    ROUND(100.0 * (current.total_operating_revenue - previous.total_operating_revenue) / previous.total_operating_revenue, 2) AS revenue_growth_rate_percent,\n    current.operating_cost AS current_operating_cost,\n    previous.operating_cost AS previous_operating_cost,\n    ROUND(100.0 * (current.operating_cost - previous.operating_cost) / previous.operating_cost, 2) AS operating_cost_growth_rate_percent,\n    current.selling_expenses AS current_selling_expenses,\n    previous.selling_expenses AS previous_selling_expenses,\n    ROUND(100.0 * (current.selling_expenses - previous.selling_expenses) / previous.selling_expenses, 2) AS selling_expenses_growth_rate_percent,\n    current.gross_profit_margin AS current_gross_margin_percent,\n    previous.gross_profit_margin AS previous_gross_margin_percent,\n    current.net_profit_margin AS current_net_margin_percent,\n    previous.net_profit_margin AS previous_net_margin_percent,\n    current.net_profit AS current_net_profit,\n    previous.net_profit AS previous_net_profit,\n    -- 成本费用结构变化\n    current.operating_cost_ratio AS current_operating_cost_ratio,\n    previous.operating_cost_ratio AS previous_operating_cost_ratio,\n    current.operating_cost_ratio - previous.operating_cost_ratio AS operating_cost_ratio_change,\n    current.selling_expenses_ratio AS current_selling_expenses_ratio,\n    previous.selling_expenses_ratio AS previous_selling_expenses_ratio,\n    current.selling_expenses_ratio - previous.selling_expenses_ratio AS selling_expenses_ratio_change,\n    current.admin_expenses_ratio AS current_admin_expenses_ratio,\n    previous.admin_expenses_ratio AS previous_admin_expenses_ratio,\n    current.admin_expenses_ratio - previous.admin_expenses_ratio AS admin_expenses_ratio_change,\n    current.financial_expenses_ratio AS current_financial_expenses_ratio,\n    previous.financial_expenses_ratio AS previous_financial_expenses_ratio,\n    current.financial_expenses_ratio - previous.financial_expenses_ratio AS financial_expenses_ratio_change,\n    current.taxes_ratio AS current_taxes_ratio,\n    previous.taxes_ratio AS previous_taxes_ratio,\n    current.taxes_ratio - previous.taxes_ratio AS taxes_ratio_change\nFROM cost_structure current\nJOIN cost_structure previous ON current.stock_abbr = previous.stock_abbr\nWHERE current.report_period = '2025Q3'\n  AND previous.report_period = '2024Q3'"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 1,
+  "result_rows": [
+    {
+      "stock_abbr": "健民集团",
+      "current_period": "2025Q3",
+      "previous_period": "2024Q3",
+      "current_revenue": 255193.417379,
+      "previous_revenue": 288131.709047,
+      "revenue_growth_rate_percent": -11.43,
+      "current_operating_cost": 104119.46248999999,
+      "previous_operating_cost": 164241.67461,
+      "operating_cost_growth_rate_percent": -36.61,
+      "current_selling_expenses": 111816.381276,
+      "previous_selling_expenses": 91878.928572,
+      "selling_expenses_growth_rate_percent": 21.7,
+      "current_gross_margin_percent": "59.1997851827944",
+      "previous_gross_margin_percent": "42.9977092235937",
+      "current_net_margin_percent": "11.1968923362015",
+      "previous_net_margin_percent": "11.1621050245996",
+      "current_net_profit": 28573.732193,
+      "previous_net_profit": 32161.563973,
+      "current_operating_cost_ratio": 40.800214817205564,
+      "previous_operating_cost_ratio": 57.002290776406326,
+      "operating_cost_ratio_change": -16.202075959200762,
+      "current_selling_expenses_ratio": 43.816326621754556,
+      "previous_selling_expenses_ratio": 31.887822716871725,
+      "selling_expenses_ratio_change": 11.928503904882831,
+      "current_admin_expenses_ratio": 4.891339179984343,
+      "previous_admin_expenses_ratio": 4.316170904664783,
+      "admin_expenses_ratio_change": 0.5751682753195606,
+      "current_financial_expenses_ratio": 0.3394684118021018,
+      "previous_financial_expenses_ratio": 0.28500977997740795,
+      "financial_expenses_ratio_change": 0.05445863182469385,
+      "current_taxes_ratio": 0.6645228977366052,
+      "previous_taxes_ratio": 0.5707748208065972,
+      "taxes_ratio_change": 0.09374807693000797
+    }
+  ],
+  "retrieved_evidence": [
+    {
+      "source_type": "stock",
+      "title": "儿药龙头焕新机，品牌+创新打开成长空间",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/个股研报/儿药龙头焕新机，品牌+创新打开成长空间.pdf",
+      "publish_date": "2025-04-29 00:00:00.000",
+      "company_or_industry": "健民集团",
+      "organization": "华源证券",
+      "snippet": "儿药龙头焕新机，品牌+创新打开成长空间；健民集团；华源证券",
+      "score": 5.0,
+      "metadata_ref": "stock::儿药龙头焕新机，品牌+创新打开成长空间::2025-04-29 00:00:00.000::华源证券::健民集团",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "立足儿科优势品牌，营销改革焕新颜",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/个股研报/立足儿科优势品牌，营销改革焕新颜.pdf",
+      "publish_date": "2025-04-20 00:00:00.000",
+      "company_or_industry": "健民集团",
+      "organization": "东吴证券",
+      "snippet": "立足儿科优势品牌，营销改革焕新颜；健民集团；东吴证券",
+      "score": 5.0,
+      "metadata_ref": "stock::立足儿科优势品牌，营销改革焕新颜::2025-04-20 00:00:00.000::东吴证券::健民集团",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "体培牛黄持续高增长，渠道改革迎来拐点",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/个股研报/体培牛黄持续高增长，渠道改革迎来拐点.pdf",
+      "publish_date": "2025-03-25 00:00:00.000",
+      "company_or_industry": "健民集团",
+      "organization": "西南证券",
+      "snippet": "体培牛黄持续高增长，渠道改革迎来拐点；健民集团；西南证券",
+      "score": 5.0,
+      "metadata_ref": "stock::体培牛黄持续高增长，渠道改革迎来拐点::2025-03-25 00:00:00.000::西南证券::健民集团",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "OTC及处方线库存均降至合理水平，健民大鹏业绩持续快速增长",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/个股研报/OTC及处方线库存均降至合理水平，健民大鹏业绩持续快速增长.pdf",
+      "publish_date": "2025-03-27 00:00:00.000",
+      "company_or_industry": "健民集团",
+      "organization": "信达证券",
+      "snippet": "OTC及处方线库存均降至合理水平，健民大鹏业绩持续快速增长；健民集团；信达证券",
+      "score": 3.559164,
+      "metadata_ref": "stock::OTC及处方线库存均降至合理水平，健民大鹏业绩持续快速增长::2025-03-27 00:00:00.000::信达证券::健民集团",
+      "score_components": {
+        "metadata": 3.0,
+        "vector": 0.559164
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "医药工业持续高增，结构优化提升盈利能力",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/个股研报/医药工业持续高增，结构优化提升盈利能力.pdf",
+      "publish_date": "2025-10-31 00:00:00.000",
+      "company_or_industry": "健民集团",
+      "organization": "西南证券",
+      "snippet": "医药工业持续高增，结构优化提升盈利能力；健民集团；西南证券",
+      "score": 3.0,
+      "metadata_ref": "stock::医药工业持续高增，结构优化提升盈利能力::2025-10-31 00:00:00.000::西南证券::健民集团",
+      "score_components": {
+        "metadata": 3.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "25H1工业收入快速增长，儿药新药放量可期",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/个股研报/25H1工业收入快速增长，儿药新药放量可期.pdf",
+      "publish_date": "2025-08-22 00:00:00.000",
+      "company_or_industry": "健民集团",
+      "organization": "华源证券",
+      "snippet": "25H1工业收入快速增长，儿药新药放量可期；健民集团；华源证券",
+      "score": 3.0,
+      "metadata_ref": "stock::25H1工业收入快速增长，儿药新药放量可期::2025-08-22 00:00:00.000::华源证券::健民集团",
+      "score_components": {
+        "metadata": 3.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药行业周报：政策持续支持中药创新，关注健民集团",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药行业周报：政策持续支持中药创新，关注健民集团.pdf",
+      "publish_date": "2025-04-06 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "华源证券",
+      "snippet": "医药行业周报：政策持续支持中药创新，关注健民集团；中药；华源证券",
+      "score": 3.0,
+      "metadata_ref": "industry::医药行业周报：政策持续支持中药创新，关注健民集团::2025-04-06 00:00:00.000::华源证券::中药",
+      "score_components": {
+        "metadata": 3.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "中药Ⅱ行业跟踪报告：2025H1：受政策和渠道影响中药板块业绩承压",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/中药Ⅱ行业跟踪报告：2025H1：受政策和渠道影响中药板块业绩承压.pdf",
+      "publish_date": "2025-09-05 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "万联证券",
+      "snippet": "中药Ⅱ行业跟踪报告：2025H1：受政策和渠道影响中药板块业绩承压；中药；万联证券",
+      "score": 2.5181329999999997,
+      "metadata_ref": "industry::中药Ⅱ行业跟踪报告：2025H1：受政策和渠道影响中药板块业绩承压::2025-09-05 00:00:00.000::万联证券::中药",
+      "score_components": {
+        "metadata": 2.0,
+        "vector": 0.518133
+      }
+    }
+  ],
+  "reranked_evidence": [
+    {
+      "source_type": "stock",
+      "title": "OTC及处方线库存均降至合理水平，健民大鹏业绩持续快速增长",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/个股研报/OTC及处方线库存均降至合理水平，健民大鹏业绩持续快速增长.pdf",
+      "publish_date": "2025-03-27 00:00:00.000",
+      "company_or_industry": "健民集团",
+      "organization": "信达证券",
+      "snippet": "OTC及处方线库存均降至合理水平，健民大鹏业绩持续快速增长；健民集团；信达证券",
+      "score": 3.559164,
+      "metadata_ref": "stock::OTC及处方线库存均降至合理水平，健民大鹏业绩持续快速增长::2025-03-27 00:00:00.000::信达证券::健民集团",
+      "score_components": {
+        "metadata": 3.0,
+        "vector": 0.559164
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "中药Ⅱ行业跟踪报告：2025H1：受政策和渠道影响中药板块业绩承压",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/中药Ⅱ行业跟踪报告：2025H1：受政策和渠道影响中药板块业绩承压.pdf",
+      "publish_date": "2025-09-05 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "万联证券",
+      "snippet": "中药Ⅱ行业跟踪报告：2025H1：受政策和渠道影响中药板块业绩承压；中药；万联证券",
+      "score": 2.5181329999999997,
+      "metadata_ref": "industry::中药Ⅱ行业跟踪报告：2025H1：受政策和渠道影响中药板块业绩承压::2025-09-05 00:00:00.000::万联证券::中药",
+      "score_components": {
+        "metadata": 2.0,
+        "vector": 0.518133
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "医药工业持续高增，结构优化提升盈利能力",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/个股研报/医药工业持续高增，结构优化提升盈利能力.pdf",
+      "publish_date": "2025-10-31 00:00:00.000",
+      "company_or_industry": "健民集团",
+      "organization": "西南证券",
+      "snippet": "医药工业持续高增，结构优化提升盈利能力；健民集团；西南证券",
+      "score": 3.0,
+      "metadata_ref": "stock::医药工业持续高增，结构优化提升盈利能力::2025-10-31 00:00:00.000::西南证券::健民集团",
+      "score_components": {
+        "metadata": 3.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "立足儿科优势品牌，营销改革焕新颜",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/个股研报/立足儿科优势品牌，营销改革焕新颜.pdf",
+      "publish_date": "2025-04-20 00:00:00.000",
+      "company_or_industry": "健民集团",
+      "organization": "东吴证券",
+      "snippet": "立足儿科优势品牌，营销改革焕新颜；健民集团；东吴证券",
+      "score": 5.0,
+      "metadata_ref": "stock::立足儿科优势品牌，营销改革焕新颜::2025-04-20 00:00:00.000::东吴证券::健民集团",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "儿药龙头焕新机，品牌+创新打开成长空间",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/个股研报/儿药龙头焕新机，品牌+创新打开成长空间.pdf",
+      "publish_date": "2025-04-29 00:00:00.000",
+      "company_or_industry": "健民集团",
+      "organization": "华源证券",
+      "snippet": "儿药龙头焕新机，品牌+创新打开成长空间；健民集团；华源证券",
+      "score": 5.0,
+      "metadata_ref": "stock::儿药龙头焕新机，品牌+创新打开成长空间::2025-04-29 00:00:00.000::华源证券::健民集团",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药行业周报：政策持续支持中药创新，关注健民集团",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药行业周报：政策持续支持中药创新，关注健民集团.pdf",
+      "publish_date": "2025-04-06 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "华源证券",
+      "snippet": "医药行业周报：政策持续支持中药创新，关注健民集团；中药；华源证券",
+      "score": 3.0,
+      "metadata_ref": "industry::医药行业周报：政策持续支持中药创新，关注健民集团::2025-04-06 00:00:00.000::华源证券::中药",
+      "score_components": {
+        "metadata": 3.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "体培牛黄持续高增长，渠道改革迎来拐点",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/个股研报/体培牛黄持续高增长，渠道改革迎来拐点.pdf",
+      "publish_date": "2025-03-25 00:00:00.000",
+      "company_or_industry": "健民集团",
+      "organization": "西南证券",
+      "snippet": "体培牛黄持续高增长，渠道改革迎来拐点；健民集团；西南证券",
+      "score": 5.0,
+      "metadata_ref": "stock::体培牛黄持续高增长，渠道改革迎来拐点::2025-03-25 00:00:00.000::西南证券::健民集团",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "25H1工业收入快速增长，儿药新药放量可期",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/个股研报/25H1工业收入快速增长，儿药新药放量可期.pdf",
+      "publish_date": "2025-08-22 00:00:00.000",
+      "company_or_industry": "健民集团",
+      "organization": "华源证券",
+      "snippet": "25H1工业收入快速增长，儿药新药放量可期；健民集团；华源证券",
+      "score": 3.0,
+      "metadata_ref": "stock::25H1工业收入快速增长，儿药新药放量可期::2025-08-22 00:00:00.000::华源证券::健民集团",
+      "score_components": {
+        "metadata": 3.0,
+        "vector": 0.0
+      }
+    }
+  ],
+  "rerank_preview": "{\"strategy\": \"reranker_model\", \"kept_count\": 8, \"reason\": \"BAAI/bge-reranker-v2-m3\"}",
+  "fused_context": {
+    "question": "你凭什么觉得是这个原因导致了这个问题",
+    "sql_row_count": 1,
+    "evidence_count": 8,
+    "sql_preview": [
+      {
+        "stock_abbr": "健民集团",
+        "current_period": "2025Q3",
+        "previous_period": "2024Q3",
+        "current_revenue": 255193.417379,
+        "previous_revenue": 288131.709047,
+        "revenue_growth_rate_percent": -11.43,
+        "current_operating_cost": 104119.46248999999,
+        "previous_operating_cost": 164241.67461,
+        "operating_cost_growth_rate_percent": -36.61,
+        "current_selling_expenses": 111816.381276,
+        "previous_selling_expenses": 91878.928572,
+        "selling_expenses_growth_rate_percent": 21.7,
+        "current_gross_margin_percent": "59.1997851827944",
+        "previous_gross_margin_percent": "42.9977092235937",
+        "current_net_margin_percent": "11.1968923362015",
+        "previous_net_margin_percent": "11.1621050245996",
+        "current_net_profit": 28573.732193,
+        "previous_net_profit": 32161.563973,
+        "current_operating_cost_ratio": 40.800214817205564,
+        "previous_operating_cost_ratio": 57.002290776406326,
+        "operating_cost_ratio_change": -16.202075959200762,
+        "current_selling_expenses_ratio": 43.816326621754556,
+        "previous_selling_expenses_ratio": 31.887822716871725,
+        "selling_expenses_ratio_change": 11.928503904882831,
+        "current_admin_expenses_ratio": 4.891339179984343,
+        "previous_admin_expenses_ratio": 4.316170904664783,
+        "admin_expenses_ratio_change": 0.5751682753195606,
+        "current_financial_expenses_ratio": 0.3394684118021018,
+        "previous_financial_expenses_ratio": 0.28500977997740795,
+        "financial_expenses_ratio_change": 0.05445863182469385,
+        "current_taxes_ratio": 0.6645228977366052,
+        "previous_taxes_ratio": 0.5707748208065972,
+        "taxes_ratio_change": 0.09374807693000797
+      }
+    ],
+    "evidence_preview": [
+      {
+        "source_type": "stock",
+        "title": "OTC及处方线库存均降至合理水平，健民大鹏业绩持续快速增长",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/个股研报/OTC及处方线库存均降至合理水平，健民大鹏业绩持续快速增长.pdf",
+        "publish_date": "2025-03-27 00:00:00.000",
+        "company_or_industry": "健民集团",
+        "organization": "信达证券",
+        "snippet": "OTC及处方线库存均降至合理水平，健民大鹏业绩持续快速增长；健民集团；信达证券",
+        "score": 3.559164,
+        "metadata_ref": "stock::OTC及处方线库存均降至合理水平，健民大鹏业绩持续快速增长::2025-03-27 00:00:00.000::信达证券::健民集团",
+        "score_components": {
+          "metadata": 3.0,
+          "vector": 0.559164
+        }
+      },
+      {
+        "source_type": "industry",
+        "title": "中药Ⅱ行业跟踪报告：2025H1：受政策和渠道影响中药板块业绩承压",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/中药Ⅱ行业跟踪报告：2025H1：受政策和渠道影响中药板块业绩承压.pdf",
+        "publish_date": "2025-09-05 00:00:00.000",
+        "company_or_industry": "中药",
+        "organization": "万联证券",
+        "snippet": "中药Ⅱ行业跟踪报告：2025H1：受政策和渠道影响中药板块业绩承压；中药；万联证券",
+        "score": 2.5181329999999997,
+        "metadata_ref": "industry::中药Ⅱ行业跟踪报告：2025H1：受政策和渠道影响中药板块业绩承压::2025-09-05 00:00:00.000::万联证券::中药",
+        "score_components": {
+          "metadata": 2.0,
+          "vector": 0.518133
+        }
+      },
+      {
+        "source_type": "stock",
+        "title": "医药工业持续高增，结构优化提升盈利能力",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/个股研报/医药工业持续高增，结构优化提升盈利能力.pdf",
+        "publish_date": "2025-10-31 00:00:00.000",
+        "company_or_industry": "健民集团",
+        "organization": "西南证券",
+        "snippet": "医药工业持续高增，结构优化提升盈利能力；健民集团；西南证券",
+        "score": 3.0,
+        "metadata_ref": "stock::医药工业持续高增，结构优化提升盈利能力::2025-10-31 00:00:00.000::西南证券::健民集团",
+        "score_components": {
+          "metadata": 3.0,
+          "vector": 0.0
+        }
+      },
+      {
+        "source_type": "stock",
+        "title": "立足儿科优势品牌，营销改革焕新颜",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/个股研报/立足儿科优势品牌，营销改革焕新颜.pdf",
+        "publish_date": "2025-04-20 00:00:00.000",
+        "company_or_industry": "健民集团",
+        "organization": "东吴证券",
+        "snippet": "立足儿科优势品牌，营销改革焕新颜；健民集团；东吴证券",
+        "score": 5.0,
+        "metadata_ref": "stock::立足儿科优势品牌，营销改革焕新颜::2025-04-20 00:00:00.000::东吴证券::健民集团",
+        "score_components": {
+          "metadata": 5.0,
+          "vector": 0.0
+        }
+      },
+      {
+        "source_type": "stock",
+        "title": "儿药龙头焕新机，品牌+创新打开成长空间",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/个股研报/儿药龙头焕新机，品牌+创新打开成长空间.pdf",
+        "publish_date": "2025-04-29 00:00:00.000",
+        "company_or_industry": "健民集团",
+        "organization": "华源证券",
+        "snippet": "儿药龙头焕新机，品牌+创新打开成长空间；健民集团；华源证券",
+        "score": 5.0,
+        "metadata_ref": "stock::儿药龙头焕新机，品牌+创新打开成长空间::2025-04-29 00:00:00.000::华源证券::健民集团",
+        "score_components": {
+          "metadata": 5.0,
+          "vector": 0.0
+        }
+      }
+    ],
+    "evidence_titles": [
+      "OTC及处方线库存均降至合理水平，健民大鹏业绩持续快速增长",
+      "中药Ⅱ行业跟踪报告：2025H1：受政策和渠道影响中药板块业绩承压",
+      "医药工业持续高增，结构优化提升盈利能力",
+      "立足儿科优势品牌，营销改革焕新颜",
+      "儿药龙头焕新机，品牌+创新打开成长空间"
+    ],
+    "source_breakdown": {
+      "stock": 6,
+      "industry": 2
+    }
+  },
+  "self_check": {
+    "pass": false,
+    "notes": [
+      "1. 数字一致性：回答中的数字与SQL rows基本一致，但需注意：回答中提及的'毛利率因此从2024Q3的43.00%大幅提升至2025Q3的59.20%'，SQL rows中对应的值为'59.1997851827944'和'42.9977092235937'，回答进行了四舍五入处理，可以接受。",
+      "2. 证据引用：回答中引用了Evidences中真实存在的内容，即西南证券2025-10-31的研报《医药工业持续高增，结构优化提升盈利能力》，并正确指出该研报未提供直接因果解释。",
+      "3. 关键点遗漏：问题要求分析'你凭什么觉得是这个原因导致了这个问题'，即需要论证核心原因（营业成本下降带动毛利率提升）的合理性。回答虽然给出了财务数据支撑，但缺乏对'为什么营业成本会大幅下降'这一关键点的深入分析或推测（例如产品结构优化、原材料成本下降等），尽管在'综合判断'部分略有提及，但不够具体和有力。",
+      "4. 指标混淆：未发现指标名称混淆。回答正确区分了营业总收入、营业成本、毛利率、销售费用、净利润率等。",
+      "5. 聚合统计错误：不适用，因为SQL rows只包含健民集团单家公司的数据，不存在聚合统计结果对应错误的问题。"
+    ]
+  },
+  "chart_plan": {},
+  "chart_spec": {},
+  "current_chart_paths": [],
+  "current_chart_specs": [],
+  "current_answer": "**直接结论**  \n健民集团2025Q3营业总收入下降11.43%但净利润率基本稳定的核心原因在于：**营业成本大幅下降带动毛利率显著提升，部分对冲了销售费用增长对利润的侵蚀**，从而在营收下滑的背景下维持了净利润率的稳定。\n\n**财务数据支撑**  \n1. **营收与成本变化**：  \n   - 2025Q3营业总收入为25.52亿元（注：由数据库中的255193.42万元换算，1亿元=10000万元），同比下降11.43%。  \n   - 营业成本为10.41亿元，同比下降36.61%，降幅远大于营收降幅。  \n   - 毛利率因此从2024Q3的43.00%大幅提升至2025Q3的59.20%，提升了16.20个百分点。  \n\n2. **费用结构变化**：  \n   - 销售费用为11.18亿元，同比增长21.70%，销售费用占营收比例从31.89%上升至43.82%，增加了11.93个百分点。  \n   - 管理费用、财务费用及税金占营收比例小幅上升，但变动幅度相对较小。  \n\n3. **净利润率结果**：  \n   - 2025Q3净利润率为11.20%，与2024Q3的11.16%基本持平。  \n   - 净利润绝对值从3.22亿元下降至2.86亿元，降幅与营收降幅基本匹配，但净利润率未明显下滑，主要得益于毛利率提升对利润的支撑。\n\n**研报证据支撑**  \n检索到的相关研报（如西南证券2025-10-31《医药工业持续高增，结构优化提升盈利能力》）虽提及“结构优化提升盈利能力”，但未针对2025Q3具体的成本费用结构变化（如营业成本下降36.61%、销售费用增长21.7%）提供直接因果解释。因此，**缺乏直接解释2025Q3财务数据变动的研报证据**。\n\n**综合判断**  \n基于财务数据：  \n- **营业成本大幅下降**是毛利率提升、进而稳定净利润率的关键驱动力。这可能源于产品结构优化、原材料成本下降或生产效率提升。  \n- **销售费用显著增长**对利润形成了侵蚀，但其负面影响被毛利率的大幅提升所抵消。  \n- 最终，在营收下滑的背景下，**成本端的节约效果强于费用端的增长压力**，使得净利润率保持稳定。  \n\n由于现有研报未对2025Q3具体成本费用变化进行因果分析，以上结论主要基于财务数据的结构性变化推断得出。",
+  "current_references": [
+    {
+      "paper_path": "./附件5：研报数据/个股研报/OTC及处方线库存均降至合理水平，健民大鹏业绩持续快速增长.pdf",
+      "text": "风险因素：中药材价格上涨超预期、产品销售不及预期、OTC 市场竞\n争加剧风险、体培牛黄增长不及预期、新生儿人数下降超预期。"
+    },
+    {
+      "paper_path": "./附件5：研报数据/行业研报/中药Ⅱ行业跟踪报告：2025H1：受政策和渠道影响中药板块业绩承压.pdf",
+      "text": "投资建议：2025 年上半年，中药板块在药店和院内渠道销售疲软影响\n下业绩承压，上市公司业绩分化，整体看，OTC 领域龙头企业业绩韧性较强。\n\n在医保改革背景下，中药行业正经历发展模式转型的阵痛期，未来多元化渠道、高品牌力和高临床价值是关键。\n\n长期看，政策引导行业走向高质量和规范化发展。\n\n建议关注拥有强大品牌护城河的OTC 龙头企业，品牌力可以对冲政策压力、成本控制能力强，产业链一体化的企业、以及在创新中药上取得突破的企业。\n\n预计下半年在渠道库存逐步出清、中成药成本下行趋势延续、叠加低基数效应下收入和利润有望温和向好。",
+      "paper_image": "图表7：中药板块营业收入和同比增速：亿元"
+    },
+    {
+      "paper_path": "./附件5：研报数据/个股研报/医药工业持续高增，结构优化提升盈利能力.pdf",
+      "text": "买入：未来6 个月内，个股相对同期相关证券市场代表性指数涨幅在20%以上\n持有：未来6 个月内，个股相对同期相关证券市场代表性指数涨幅介于10%与20%之间中性：未来6 个月内，个股相对同期相关证券市场代表性指数涨幅介于-10%与10%之间回避：未来6 个月内，个股相对同期相关证券市场代表性指数涨幅介于-20%与-10%之间卖出：未来6 个月内，个股相对同期相关证券市场代表性指数涨幅在-20%以下行业评级强于大市：未来6 个月内，行业整体回报高于同期相关证券市场代表性指数5%以上跟随大市：未来6 个月内，行业整体回报介于同期相关证券市场代表性指数-5%与5%之间弱于大市：未来6 个月内，行业整体回报低于同期相关证券市场代表性指数-5%以下\n\n重要声明西南证券股份有限公司（以下简称“本公司”）具有中国证券监督管理委员会核准的证券投资咨询业务资格。\n\n本公司与作者在自身所知情范围内，与本报告中所评价或推荐的证券不存在法律法规要求披露或采取限制、静默措施的利益冲突。\n\n《证券期货投资者适当性管理办法》于2017 年7 月1 日起正式实施，本报告仅供本公司签约客户使用，若您并非本公司签约客户，为控制投资风险，请取消接收、订阅或使用本报告中的任何信息。\n\n本公司也不会因接收人收到、阅读或关注自媒体推送本报告中的内容而视其为客户。\n\n本公司或关联机构可能会持有报告中提到的公司所发行的证券并进行"
+    },
+    {
+      "paper_path": "./附件5：研报数据/个股研报/立足儿科优势品牌，营销改革焕新颜.pdf",
+      "text": "1. 百年品牌的壮骨冲剂中药，OTC 品牌新活力\n健民集团是中药企业中为数不多的拥有多个驰名商标的企业，拥有两大中国驰名商标“健民”和“龙牡”。\n\n公司前身叶开泰药号，创始于明崇祯十年（1637 年），秉承叶开泰近400 年历史的中医药文化，品牌影响力在国内位列前茅，是“中华老字号”企业，也是中国四大中药名店之一，享有“初清三杰”、“中国四大药号”的美誉。\n\n从1953 年即开始企业化经营，叶开泰改造为武汉健民药厂。\n\n公司多年入选“中国最有价值品牌500 强”，综合实力位列全国医药企业百强。\n\n健民集团以发展中医药为核心，以儿科产品为特色，已成为全国重点中药企业和小儿用药生产基地。\n\n健民集团立足于中药产业，以中药制造为核心，深耕儿童用药和儿童大健康领域，积极探索中医诊疗、中医药健康旅游等领域，形成以中医药为核心的大健康产业集团。\n\n➢医药工业主要是药品的研发、制造及销售，按照药品流通的渠道分为OTC（非处方药）产品线和Rx（处方药）产品线。\n\n截至2024 年，公司及全资子公司叶开泰国药合计持有药品批文264 个，产品资源丰富，重点产品有龙牡壮骨颗粒、健脾生血颗粒、健民咽喉片、小金胶囊、便通胶囊等。\n\n知名中药百年品牌+核心产品独家配方+体培牛黄独家技术，造就公司强力护城河。\n\n➢医药商业板块主要为药品的批发和零售，批发业务主要通过下属的福高公司和维生公司开展，业务区域主要集中",
+      "paper_image": "表7：健民集团业绩拆分及盈利预测（亿元）................................................................................. 23"
+    },
+    {
+      "paper_path": "./附件5：研报数据/个股研报/儿药龙头焕新机，品牌+创新打开成长空间.pdf",
+      "text": "1.中华老字号企业，“龙牡”“健民”双品牌驱动\n成长健民集团始创于明崇祯十年（1637 年），前身为历史悠久的“叶开泰”，1953 年改制为“武汉健民制药厂”，并于2004 年登陆上交所。\n\n集团传承“叶开泰”近400 年历史文化，致力于精品中药的研发与生产，旗下拥有\"健民\"\"龙牡\"\"叶开泰\"三大品牌，其中“健民”“龙牡”为中国驰名商标，“健民”为中华老字号品牌。\n\n目前集团及全资子公司叶开泰国药共持有264 个药品批文，89 个医保产品，40 余个儿科药品，构建了“龙牡”牌儿药产品线以及“健民”牌家庭常备药产品线，产品资源丰富，品类结构完善。\n\n华立医药集团控股，股权结构稳定。截至2025 年Q1，控股股东华立医药集团（华立集团全资子公司）直接持有公司24.13%股份，华立集团直接持有3.32%公司股份。公司实控人为华立集团董事会主席汪力成先生。",
+      "paper_image": "图表41：2025-2027 年健民集团收入预测（百万元）................................................. 23"
+    }
+  ],
+  "answer_rewritten": true,
+  "turn_answers": [
+    {
+      "Q": "健民集团2025年第三季度营业总成本同比增长20%，但营业总收入仅增长5%，请结合利润表项目和研报（如原材料涨价、人力成本上升），分析成本增长快于营收的原因。",
+      "A": {
+        "content": "### 直接结论\n根据财务数据，问题中“营业总成本同比增长20%，营业总收入仅增长5%”的描述与实际情况不符。健民集团2025年第三季度的营业总收入同比**下降**了11.43%，营业总成本同比**下降**了13.81%。因此，不存在成本增速快于营收增速的情况。不过，从利润表项目看，销售费用同比大幅增长21.7%，是成本项中唯一显著增长的部分，这可能是影响当期利润结构的关键因素。未检索到直接解释2025年第三季度成本结构的研报证据。\n\n### 财务数据支撑\n根据SQL查询结果，健民集团2025年第三季度（当期）与2024年第三季度（上期）的关键财务数据对比如下（金额单位为万元）：\n1.  **营业总收入**：当期255,193.42万元，上期288,131.71万元，**同比下降11.43%**。\n2.  **营业总成本**：当期238,812.23万元，上期277,067.48万元，**同比下降13.81%**。\n3.  **主要成本费用项目增长率**：\n    *   营业成本：同比下降36.61%。\n    *   **销售费用**：**同比增长21.7%**。\n    *   管理费用：同比增长0.37%。\n    *   财务费用：同比增长5.49%。\n    *   税金及附加：同比增长3.12%。\n4.  **利润率变化**：毛利率从43.0%大幅提升至59.2%，净利率基本稳定（从11.16%微升至11.2%）。\n\n**数据换算说明**：为便于理解，将主要金额换算为亿元。当期营业总收入约为25.52亿元，营业总成本约为23.88亿元。\n\n### 研报证据支撑\n未检索到直接分析健民集团2025年第三季度成本费用结构的研报证据。已提供的研报摘要（如《医药工业持续高增，结构优化提升盈利能力》、《25H1工业收入快速增长，儿药新药放量可期》等）主要关注公司长期战略、产品线及上半年业绩，未提及第三季度具体的成本驱动因素（如原材料、人力成本）。\n\n### 综合判断\n1.  **趋势澄清**：问题前提与数据事实不符。2025年第三季度，健民集团的营业总收入和营业总成本均呈同比下降态势，且成本降幅（-13.81%）大于营收降幅（-11.43%），这反而导致了毛利率的显著提升。\n2.  **成本结构分析**：尽管总成本下降，但**销售费用逆势大幅增长21.7%**，成为最突出的成本变动项目。这暗示公司可能在该季度加大了市场推广、渠道建设或品牌宣传等方面的投入。\n3.  **原因推断**：结合财务数据和有限的研报线索（提及“营销改革”、“渠道改革”），销售费用的大幅增长很可能与公司主动进行的营销体系改革、加大市场投入以推动产品（尤其是儿科药品）销售有关。然而，由于缺乏针对该季度的直接研报证据，无法确认原材料涨价、人力成本上升等因素是否在当期产生了显著影响。\n4.  **最终结论**：健民集团2025年第三季度并未出现“成本增长快于营收”的情况。相反，营收与总成本双降，但销售费用的大幅增加是利润表中的显著特征，这可能是公司为促进销售而进行的战略性投入，具体原因有待更详细的季度报告或研报披露。",
+        "image": [],
+        "references": [
+          {
+            "paper_path": "./附件5：研报数据/个股研报/立足儿科优势品牌，营销改革焕新颜.pdf",
+            "text": "1. 百年品牌的壮骨冲剂中药，OTC 品牌新活力\n健民集团是中药企业中为数不多的拥有多个驰名商标的企业，拥有两大中国驰名商标“健民”和“龙牡”。\n\n公司前身叶开泰药号，创始于明崇祯十年（1637 年），秉承叶开泰近400 年历史的中医药文化，品牌影响力在国内位列前茅，是“中华老字号”企业，也是中国四大中药名店之一，享有“初清三杰”、“中国四大药号”的美誉。\n\n从1953 年即开始企业化经营，叶开泰改造为武汉健民药厂。\n\n公司多年入选“中国最有价值品牌500 强”，综合实力位列全国医药企业百强。\n\n健民集团以发展中医药为核心，以儿科产品为特色，已成为全国重点中药企业和小儿用药生产基地。\n\n健民集团立足于中药产业，以中药制造为核心，深耕儿童用药和儿童大健康领域，积极探索中医诊疗、中医药健康旅游等领域，形成以中医药为核心的大健康产业集团。\n\n➢医药工业主要是药品的研发、制造及销售，按照药品流通的渠道分为OTC（非处方药）产品线和Rx（处方药）产品线。\n\n截至2024 年，公司及全资子公司叶开泰国药合计持有药品批文264 个，产品资源丰富，重点产品有龙牡壮骨颗粒、健脾生血颗粒、健民咽喉片、小金胶囊、便通胶囊等。\n\n知名中药百年品牌+核心产品独家配方+体培牛黄独家技术，造就公司强力护城河。\n\n➢医药商业板块主要为药品的批发和零售，批发业务主要通过下属的福高公司和维生公司开展，业务区域主要集中",
+            "paper_image": "表7：健民集团业绩拆分及盈利预测（亿元）................................................................................. 23"
+          },
+          {
+            "paper_path": "./附件5：研报数据/个股研报/儿药龙头焕新机，品牌+创新打开成长空间.pdf",
+            "text": "1.中华老字号企业，“龙牡”“健民”双品牌驱动\n成长健民集团始创于明崇祯十年（1637 年），前身为历史悠久的“叶开泰”，1953 年改制为“武汉健民制药厂”，并于2004 年登陆上交所。\n\n集团传承“叶开泰”近400 年历史文化，致力于精品中药的研发与生产，旗下拥有\"健民\"\"龙牡\"\"叶开泰\"三大品牌，其中“健民”“龙牡”为中国驰名商标，“健民”为中华老字号品牌。\n\n目前集团及全资子公司叶开泰国药共持有264 个药品批文，89 个医保产品，40 余个儿科药品，构建了“龙牡”牌儿药产品线以及“健民”牌家庭常备药产品线，产品资源丰富，品类结构完善。\n\n华立医药集团控股，股权结构稳定。截至2025 年Q1，控股股东华立医药集团（华立集团全资子公司）直接持有公司24.13%股份，华立集团直接持有3.32%公司股份。公司实控人为华立集团董事会主席汪力成先生。",
+            "paper_image": "图表41：2025-2027 年健民集团收入预测（百万元）................................................. 23"
+          },
+          {
+            "paper_path": "./附件5：研报数据/个股研报/体培牛黄持续高增长，渠道改革迎来拐点.pdf",
+            "text": " 盈利预测与投资建议：考虑到公司龙母壮骨颗粒渠道变革重换生机，便通胶囊\n那和健脾生血院外提高市占率。预计2025-2027 年归母净利润分别为5.3亿元、"
+          },
+          {
+            "paper_path": "./附件5：研报数据/个股研报/医药工业持续高增，结构优化提升盈利能力.pdf",
+            "text": "买入：未来6 个月内，个股相对同期相关证券市场代表性指数涨幅在20%以上\n持有：未来6 个月内，个股相对同期相关证券市场代表性指数涨幅介于10%与20%之间中性：未来6 个月内，个股相对同期相关证券市场代表性指数涨幅介于-10%与10%之间回避：未来6 个月内，个股相对同期相关证券市场代表性指数涨幅介于-20%与-10%之间卖出：未来6 个月内，个股相对同期相关证券市场代表性指数涨幅在-20%以下行业评级强于大市：未来6 个月内，行业整体回报高于同期相关证券市场代表性指数5%以上跟随大市：未来6 个月内，行业整体回报介于同期相关证券市场代表性指数-5%与5%之间弱于大市：未来6 个月内，行业整体回报低于同期相关证券市场代表性指数-5%以下\n\n重要声明西南证券股份有限公司（以下简称“本公司”）具有中国证券监督管理委员会核准的证券投资咨询业务资格。\n\n本公司与作者在自身所知情范围内，与本报告中所评价或推荐的证券不存在法律法规要求披露或采取限制、静默措施的利益冲突。\n\n《证券期货投资者适当性管理办法》于2017 年7 月1 日起正式实施，本报告仅供本公司签约客户使用，若您并非本公司签约客户，为控制投资风险，请取消接收、订阅或使用本报告中的任何信息。\n\n本公司也不会因接收人收到、阅读或关注自媒体推送本报告中的内容而视其为客户。\n\n本公司或关联机构可能会持有报告中提到的公司所发行的证券并进行"
+          },
+          {
+            "paper_path": "./附件5：研报数据/个股研报/25H1工业收入快速增长，儿药新药放量可期.pdf",
+            "text": "事件：公司发布2025 年半年报，25H1 实现营业收入18.05 亿元，同比下降10.20%；\n\n归母净利润2.21亿元，同比下滑7.83%；\n\n扣非归母净利润1.95亿元，同比增长0.61%。\n\n医药工业增长亮眼，医药商业结构持续优化。\n\n25H1，公司实现营业收入18.05 亿元，同比下降10.20%。\n\n分业务结构来看，医药工业板块表现亮眼，收入同比增长23.07%；\n\n医药商业收入同比下降37.82%，主因公司持续优化下属商业子公司业务结构，逐步收缩部分低毛利业务。\n\n归母净利润2.21 亿元，同比下滑7.83%，净利润下降主因联营企业投资收益及非经常性损益减少所致。\n\n具体来看，25H1 公司对联营企业和合营企业的投资收益为6727 万元，同比下降40%，预计主因联营企业健民大鹏业绩承压，进而使公司获得的投资收益减少。\n\n品牌战略驱动OTC 产品线快速发展。\n\n公司坚持“龙牡”儿药品牌和“健民”慢病及家庭常备药品牌的双品牌战略，核心产品多点发力：1）龙牡儿药：基于“龙牡儿药·专业可靠”的品牌理念打造“龙牡儿药”专业IP，不断提升儿药线产品市占率和龙牡品牌影响力；\n\n2）便通胶囊：通过加快产品的市场覆盖、标杆上量和广告提效，驱动OTC 渠道快速增长；\n\n3）健脾生血颗粒：开展区域性KA 标杆连锁打造，加快商销精准铺货，逐步成为公司OTC 第三大单品。\n\n我们预计随着"
+          }
+        ]
+      }
+    },
+    {
+      "Q": "你凭什么觉得是这个原因导致了这个问题",
+      "A": {
+        "content": "**直接结论**  \n健民集团2025Q3营业总收入下降11.43%但净利润率基本稳定的核心原因在于：**营业成本大幅下降带动毛利率显著提升，部分对冲了销售费用增长对利润的侵蚀**，从而在营收下滑的背景下维持了净利润率的稳定。\n\n**财务数据支撑**  \n1. **营收与成本变化**：  \n   - 2025Q3营业总收入为25.52亿元（注：由数据库中的255193.42万元换算，1亿元=10000万元），同比下降11.43%。  \n   - 营业成本为10.41亿元，同比下降36.61%，降幅远大于营收降幅。  \n   - 毛利率因此从2024Q3的43.00%大幅提升至2025Q3的59.20%，提升了16.20个百分点。  \n\n2. **费用结构变化**：  \n   - 销售费用为11.18亿元，同比增长21.70%，销售费用占营收比例从31.89%上升至43.82%，增加了11.93个百分点。  \n   - 管理费用、财务费用及税金占营收比例小幅上升，但变动幅度相对较小。  \n\n3. **净利润率结果**：  \n   - 2025Q3净利润率为11.20%，与2024Q3的11.16%基本持平。  \n   - 净利润绝对值从3.22亿元下降至2.86亿元，降幅与营收降幅基本匹配，但净利润率未明显下滑，主要得益于毛利率提升对利润的支撑。\n\n**研报证据支撑**  \n检索到的相关研报（如西南证券2025-10-31《医药工业持续高增，结构优化提升盈利能力》）虽提及“结构优化提升盈利能力”，但未针对2025Q3具体的成本费用结构变化（如营业成本下降36.61%、销售费用增长21.7%）提供直接因果解释。因此，**缺乏直接解释2025Q3财务数据变动的研报证据**。\n\n**综合判断**  \n基于财务数据：  \n- **营业成本大幅下降**是毛利率提升、进而稳定净利润率的关键驱动力。这可能源于产品结构优化、原材料成本下降或生产效率提升。  \n- **销售费用显著增长**对利润形成了侵蚀，但其负面影响被毛利率的大幅提升所抵消。  \n- 最终，在营收下滑的背景下，**成本端的节约效果强于费用端的增长压力**，使得净利润率保持稳定。  \n\n由于现有研报未对2025Q3具体成本费用变化进行因果分析，以上结论主要基于财务数据的结构性变化推断得出。",
+        "image": [],
+        "references": [
+          {
+            "paper_path": "./附件5：研报数据/个股研报/OTC及处方线库存均降至合理水平，健民大鹏业绩持续快速增长.pdf",
+            "text": "风险因素：中药材价格上涨超预期、产品销售不及预期、OTC 市场竞\n争加剧风险、体培牛黄增长不及预期、新生儿人数下降超预期。"
+          },
+          {
+            "paper_path": "./附件5：研报数据/行业研报/中药Ⅱ行业跟踪报告：2025H1：受政策和渠道影响中药板块业绩承压.pdf",
+            "text": "投资建议：2025 年上半年，中药板块在药店和院内渠道销售疲软影响\n下业绩承压，上市公司业绩分化，整体看，OTC 领域龙头企业业绩韧性较强。\n\n在医保改革背景下，中药行业正经历发展模式转型的阵痛期，未来多元化渠道、高品牌力和高临床价值是关键。\n\n长期看，政策引导行业走向高质量和规范化发展。\n\n建议关注拥有强大品牌护城河的OTC 龙头企业，品牌力可以对冲政策压力、成本控制能力强，产业链一体化的企业、以及在创新中药上取得突破的企业。\n\n预计下半年在渠道库存逐步出清、中成药成本下行趋势延续、叠加低基数效应下收入和利润有望温和向好。",
+            "paper_image": "图表7：中药板块营业收入和同比增速：亿元"
+          },
+          {
+            "paper_path": "./附件5：研报数据/个股研报/医药工业持续高增，结构优化提升盈利能力.pdf",
+            "text": "买入：未来6 个月内，个股相对同期相关证券市场代表性指数涨幅在20%以上\n持有：未来6 个月内，个股相对同期相关证券市场代表性指数涨幅介于10%与20%之间中性：未来6 个月内，个股相对同期相关证券市场代表性指数涨幅介于-10%与10%之间回避：未来6 个月内，个股相对同期相关证券市场代表性指数涨幅介于-20%与-10%之间卖出：未来6 个月内，个股相对同期相关证券市场代表性指数涨幅在-20%以下行业评级强于大市：未来6 个月内，行业整体回报高于同期相关证券市场代表性指数5%以上跟随大市：未来6 个月内，行业整体回报介于同期相关证券市场代表性指数-5%与5%之间弱于大市：未来6 个月内，行业整体回报低于同期相关证券市场代表性指数-5%以下\n\n重要声明西南证券股份有限公司（以下简称“本公司”）具有中国证券监督管理委员会核准的证券投资咨询业务资格。\n\n本公司与作者在自身所知情范围内，与本报告中所评价或推荐的证券不存在法律法规要求披露或采取限制、静默措施的利益冲突。\n\n《证券期货投资者适当性管理办法》于2017 年7 月1 日起正式实施，本报告仅供本公司签约客户使用，若您并非本公司签约客户，为控制投资风险，请取消接收、订阅或使用本报告中的任何信息。\n\n本公司也不会因接收人收到、阅读或关注自媒体推送本报告中的内容而视其为客户。\n\n本公司或关联机构可能会持有报告中提到的公司所发行的证券并进行"
+          },
+          {
+            "paper_path": "./附件5：研报数据/个股研报/立足儿科优势品牌，营销改革焕新颜.pdf",
+            "text": "1. 百年品牌的壮骨冲剂中药，OTC 品牌新活力\n健民集团是中药企业中为数不多的拥有多个驰名商标的企业，拥有两大中国驰名商标“健民”和“龙牡”。\n\n公司前身叶开泰药号，创始于明崇祯十年（1637 年），秉承叶开泰近400 年历史的中医药文化，品牌影响力在国内位列前茅，是“中华老字号”企业，也是中国四大中药名店之一，享有“初清三杰”、“中国四大药号”的美誉。\n\n从1953 年即开始企业化经营，叶开泰改造为武汉健民药厂。\n\n公司多年入选“中国最有价值品牌500 强”，综合实力位列全国医药企业百强。\n\n健民集团以发展中医药为核心，以儿科产品为特色，已成为全国重点中药企业和小儿用药生产基地。\n\n健民集团立足于中药产业，以中药制造为核心，深耕儿童用药和儿童大健康领域，积极探索中医诊疗、中医药健康旅游等领域，形成以中医药为核心的大健康产业集团。\n\n➢医药工业主要是药品的研发、制造及销售，按照药品流通的渠道分为OTC（非处方药）产品线和Rx（处方药）产品线。\n\n截至2024 年，公司及全资子公司叶开泰国药合计持有药品批文264 个，产品资源丰富，重点产品有龙牡壮骨颗粒、健脾生血颗粒、健民咽喉片、小金胶囊、便通胶囊等。\n\n知名中药百年品牌+核心产品独家配方+体培牛黄独家技术，造就公司强力护城河。\n\n➢医药商业板块主要为药品的批发和零售，批发业务主要通过下属的福高公司和维生公司开展，业务区域主要集中",
+            "paper_image": "表7：健民集团业绩拆分及盈利预测（亿元）................................................................................. 23"
+          },
+          {
+            "paper_path": "./附件5：研报数据/个股研报/儿药龙头焕新机，品牌+创新打开成长空间.pdf",
+            "text": "1.中华老字号企业，“龙牡”“健民”双品牌驱动\n成长健民集团始创于明崇祯十年（1637 年），前身为历史悠久的“叶开泰”，1953 年改制为“武汉健民制药厂”，并于2004 年登陆上交所。\n\n集团传承“叶开泰”近400 年历史文化，致力于精品中药的研发与生产，旗下拥有\"健民\"\"龙牡\"\"叶开泰\"三大品牌，其中“健民”“龙牡”为中国驰名商标，“健民”为中华老字号品牌。\n\n目前集团及全资子公司叶开泰国药共持有264 个药品批文，89 个医保产品，40 余个儿科药品，构建了“龙牡”牌儿药产品线以及“健民”牌家庭常备药产品线，产品资源丰富，品类结构完善。\n\n华立医药集团控股，股权结构稳定。截至2025 年Q1，控股股东华立医药集团（华立集团全资子公司）直接持有公司24.13%股份，华立集团直接持有3.32%公司股份。公司实控人为华立集团董事会主席汪力成先生。",
+            "paper_image": "图表41：2025-2027 年健民集团收入预测（百万元）................................................. 23"
+          }
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"健民集团2025年第三季度营业总成本同比增长20%，但营业总收入仅增长5%，请结合利润表项目和研报（如原材料涨价、人力成本上升），分析成本增长快于营收的原因。\", \"A\": {\"content\": \"### 直接结论\\n根据财务数据，问题中“营业总成本同比增长20%，营业总收入仅增长5%”的描述与实际情况不符。健民集团2025年第三季度的营业总收入同比**下降**了11.43%，营业总成本同比**下降**了13.81%。因此，不存在成本增速快于营收增速的情况。不过，从利润表项目看，销售费用同比大幅增长21.7%，是成本项中唯一显著增长的部分，这可能是影响当期利润结构的关键因素。未检索到直接解释2025年第三季度成本结构的研报证据。\\n\\n### 财务数据支撑\\n根据SQL查询结果，健民集团2025年第三季度（当期）与2024年第三季度（上期）的关键财务数据对比如下（金额单位为万元）：\\n1.  **营业总收入**：当期255,193.42万元，上期288,131.71万元，**同比下降11.43%**。\\n2.  **营业总成本**：当期238,812.23万元，上期277,067.48万元，**同比下降13.81%**。\\n3.  **主要成本费用项目增长率**：\\n    *   营业成本：同比下降36.61%。\\n    *   **销售费用**：**同比增长21.7%**。\\n    *   管理费用：同比增长0.37%。\\n    *   财务费用：同比增长5.49%。\\n    *   税金及附加：同比增长3.12%。\\n4.  **利润率变化**：毛利率从43.0%大幅提升至59.2%，净利率基本稳定（从11.16%微升至11.2%）。\\n\\n**数据换算说明**：为便于理解，将主要金额换算为亿元。当期营业总收入约为25.52亿元，营业总成本约为23.88亿元。\\n\\n### 研报证据支撑\\n未检索到直接分析健民集团2025年第三季度成本费用结构的研报证据。已提供的研报摘要（如《医药工业持续高增，结构优化提升盈利能力》、《25H1工业收入快速增长，儿药新药放量可期》等）主要关注公司长期战略、产品线及上半年业绩，未提及第三季度具体的成本驱动因素（如原材料、人力成本）。\\n\\n### 综合判断\\n1.  **趋势澄清**：问题前提与数据事实不符。2025年第三季度，健民集团的营业总收入和营业总成本均呈同比下降态势，且成本降幅（-13.81%）大于营收降幅（-11.43%），这反而导致了毛利率的显著提升。\\n2.  **成本结构分析**：尽管总成本下降，但**销售费用逆势大幅增长21.7%**，成为最突出的成本变动项目。这暗示公司可能在该季度加大了市场推广、渠道建设或品牌宣传等方面的投入。\\n3.  **原因推断**：结合财务数据和有限的研报线索（提及“营销改革”、“渠道改革”），销售费用的大幅增长很可能与公司主动进行的营销体系改革、加大市场投入以推动产品（尤其是儿科药品）销售有关。然而，由于缺乏针对该季度的直接研报证据，无法确认原材料涨价、人力成本上升等因素是否在当期产生了显著影响。\\n4.  **最终结论**：健民集团2025年第三季度并未出现“成本增长快于营收”的情况。相反，营收与总成本双降，但销售费用的大幅增加是利润表中的显著特征，这可能是公司为促进销售而进行的战略性投入，具体原因有待更详细的季度报告或研报披露。\", \"image\": [], \"references\": [{\"paper_path\": \"./附件5：研报数据/个股研报/立足儿科优势品牌，营销改革焕新颜.pdf\", \"text\": \"1. 百年品牌的壮骨冲剂中药，OTC 品牌新活力\\n健民集团是中药企业中为数不多的拥有多个驰名商标的企业，拥有两大中国驰名商标“健民”和“龙牡”。\\n\\n公司前身叶开泰药号，创始于明崇祯十年（1637 年），秉承叶开泰近400 年历史的中医药文化，品牌影响力在国内位列前茅，是“中华老字号”企业，也是中国四大中药名店之一，享有“初清三杰”、“中国四大药号”的美誉。\\n\\n从1953 年即开始企业化经营，叶开泰改造为武汉健民药厂。\\n\\n公司多年入选“中国最有价值品牌500 强”，综合实力位列全国医药企业百强。\\n\\n健民集团以发展中医药为核心，以儿科产品为特色，已成为全国重点中药企业和小儿用药生产基地。\\n\\n健民集团立足于中药产业，以中药制造为核心，深耕儿童用药和儿童大健康领域，积极探索中医诊疗、中医药健康旅游等领域，形成以中医药为核心的大健康产业集团。\\n\\n➢医药工业主要是药品的研发、制造及销售，按照药品流通的渠道分为OTC（非处方药）产品线和Rx（处方药）产品线。\\n\\n截至2024 年，公司及全资子公司叶开泰国药合计持有药品批文264 个，产品资源丰富，重点产品有龙牡壮骨颗粒、健脾生血颗粒、健民咽喉片、小金胶囊、便通胶囊等。\\n\\n知名中药百年品牌+核心产品独家配方+体培牛黄独家技术，造就公司强力护城河。\\n\\n➢医药商业板块主要为药品的批发和零售，批发业务主要通过下属的福高公司和维生公司开展，业务区域主要集中\", \"paper_image\": \"表7：健民集团业绩拆分及盈利预测（亿元）................................................................................. 23\"}, {\"paper_path\": \"./附件5：研报数据/个股研报/儿药龙头焕新机，品牌+创新打开成长空间.pdf\", \"text\": \"1.中华老字号企业，“龙牡”“健民”双品牌驱动\\n成长健民集团始创于明崇祯十年（1637 年），前身为历史悠久的“叶开泰”，1953 年改制为“武汉健民制药厂”，并于2004 年登陆上交所。\\n\\n集团传承“叶开泰”近400 年历史文化，致力于精品中药的研发与生产，旗下拥有\\\"健民\\\"\\\"龙牡\\\"\\\"叶开泰\\\"三大品牌，其中“健民”“龙牡”为中国驰名商标，“健民”为中华老字号品牌。\\n\\n目前集团及全资子公司叶开泰国药共持有264 个药品批文，89 个医保产品，40 余个儿科药品，构建了“龙牡”牌儿药产品线以及“健民”牌家庭常备药产品线，产品资源丰富，品类结构完善。\\n\\n华立医药集团控股，股权结构稳定。截至2025 年Q1，控股股东华立医药集团（华立集团全资子公司）直接持有公司24.13%股份，华立集团直接持有3.32%公司股份。公司实控人为华立集团董事会主席汪力成先生。\", \"paper_image\": \"图表41：2025-2027 年健民集团收入预测（百万元）................................................. 23\"}, {\"paper_path\": \"./附件5：研报数据/个股研报/体培牛黄持续高增长，渠道改革迎来拐点.pdf\", \"text\": \" 盈利预测与投资建议：考虑到公司龙母壮骨颗粒渠道变革重换生机，便通胶囊\\n那和健脾生血院外提高市占率。预计2025-2027 年归母净利润分别为5.3亿元、\"}, {\"paper_path\": \"./附件5：研报数据/个股研报/医药工业持续高增，结构优化提升盈利能力.pdf\", \"text\": \"买入：未来6 个月内，个股相对同期相关证券市场代表性指数涨幅在20%以上\\n持有：未来6 个月内，个股相对同期相关证券市场代表性指数涨幅介于10%与20%之间中性：未来6 个月内，个股相对同期相关证券市场代表性指数涨幅介于-10%与10%之间回避：未来6 个月内，个股相对同期相关证券市场代表性指数涨幅介于-20%与-10%之间卖出：未来6 个月内，个股相对同期相关证券市场代表性指数涨幅在-20%以下行业评级强于大市：未来6 个月内，行业整体回报高于同期相关证券市场代表性指数5%以上跟随大市：未来6 个月内，行业整体回报介于同期相关证券市场代表性指数-5%与5%之间弱于大市：未来6 个月内，行业整体回报低于同期相关证券市场代表性指数-5%以下\\n\\n重要声明西南证券股份有限公司（以下简称“本公司”）具有中国证券监督管理委员会核准的证券投资咨询业务资格。\\n\\n本公司与作者在自身所知情范围内，与本报告中所评价或推荐的证券不存在法律法规要求披露或采取限制、静默措施的利益冲突。\\n\\n《证券期货投资者适当性管理办法》于2017 年7 月1 日起正式实施，本报告仅供本公司签约客户使用，若您并非本公司签约客户，为控制投资风险，请取消接收、订阅或使用本报告中的任何信息。\\n\\n本公司也不会因接收人收到、阅读或关注自媒体推送本报告中的内容而视其为客户。\\n\\n本公司或关联机构可能会持有报告中提到的公司所发行的证券并进行\"}, {\"paper_path\": \"./附件5：研报数据/个股研报/25H1工业收入快速增长，儿药新药放量可期.pdf\", \"text\": \"事件：公司发布2025 年半年报，25H1 实现营业收入18.05 亿元，同比下降10.20%；\\n\\n归母净利润2.21亿元，同比下滑7.83%；\\n\\n扣非归母净利润1.95亿元，同比增长0.61%。\\n\\n医药工业增长亮眼，医药商业结构持续优化。\\n\\n25H1，公司实现营业收入18.05 亿元，同比下降10.20%。\\n\\n分业务结构来看，医药工业板块表现亮眼，收入同比增长23.07%；\\n\\n医药商业收入同比下降37.82%，主因公司持续优化下属商业子公司业务结构，逐步收缩部分低毛利业务。\\n\\n归母净利润2.21 亿元，同比下滑7.83%，净利润下降主因联营企业投资收益及非经常性损益减少所致。\\n\\n具体来看，25H1 公司对联营企业和合营企业的投资收益为6727 万元，同比下降40%，预计主因联营企业健民大鹏业绩承压，进而使公司获得的投资收益减少。\\n\\n品牌战略驱动OTC 产品线快速发展。\\n\\n公司坚持“龙牡”儿药品牌和“健民”慢病及家庭常备药品牌的双品牌战略，核心产品多点发力：1）龙牡儿药：基于“龙牡儿药·专业可靠”的品牌理念打造“龙牡儿药”专业IP，不断提升儿药线产品市占率和龙牡品牌影响力；\\n\\n2）便通胶囊：通过加快产品的市场覆盖、标杆上量和广告提效，驱动OTC 渠道快速增长；\\n\\n3）健脾生血颗粒：开展区域性KA 标杆连锁打造，加快商销精准铺货，逐步成为公司OTC 第三大单品。\\n\\n我们预计随着\"}]}}, {\"Q\": \"你凭什么觉得是这个原因导致了这个问题\", \"A\": {\"content\": \"**直接结论**  \\n健民集团2025Q3营业总收入下降11.43%但净利润率基本稳定的核心原因在于：**营业成本大幅下降带动毛利率显著提升，部分对冲了销售费用增长对利润的侵蚀**，从而在营收下滑的背景下维持了净利润率的稳定。\\n\\n**财务数据支撑**  \\n1. **营收与成本变化**：  \\n   - 2025Q3营业总收入为25.52亿元（注：由数据库中的255193.42万元换算，1亿元=10000万元），同比下降11.43%。  \\n   - 营业成本为10.41亿元，同比下降36.61%，降幅远大于营收降幅。  \\n   - 毛利率因此从2024Q3的43.00%大幅提升至2025Q3的59.20%，提升了16.20个百分点。  \\n\\n2. **费用结构变化**：  \\n   - 销售费用为11.18亿元，同比增长21.70%，销售费用占营收比例从31.89%上升至43.82%，增加了11.93个百分点。  \\n   - 管理费用、财务费用及税金占营收比例小幅上升，但变动幅度相对较小。  \\n\\n3. **净利润率结果**：  \\n   - 2025Q3净利润率为11.20%，与2024Q3的11.16%基本持平。  \\n   - 净利润绝对值从3.22亿元下降至2.86亿元，降幅与营收降幅基本匹配，但净利润率未明显下滑，主要得益于毛利率提升对利润的支撑。\\n\\n**研报证据支撑**  \\n检索到的相关研报（如西南证券2025-10-31《医药工业持续高增，结构优化提升盈利能力》）虽提及“结构优化提升盈利能力”，但未针对2025Q3具体的成本费用结构变化（如营业成本下降36.61%、销售费用增长21.7%）提供直接因果解释。因此，**缺乏直接解释2025Q3财务数据变动的研报证据**。\\n\\n**综合判断**  \\n基于财务数据：  \\n- **营业成本大幅下降**是毛利率提升、进而稳定净利润率的关键驱动力。这可能源于产品结构优化、原材料成本下降或生产效率提升。  \\n- **销售费用显著增长**对利润形成了侵蚀，但其负面影响被毛利率的大幅提升所抵消。  \\n- 最终，在营收下滑的背景下，**成本端的节约效果强于费用端的增长压力**，使得净利润率保持稳定。  \\n\\n由于现有研报未对2025Q3具体成本费用变化进行因果分析，以上结论主要基于财务数据的结构性变化推断得出。\", \"image\": [], \"references\": [{\"paper_path\": \"./附件5：研报数据/个股研报/OTC及处方线库存均降至合理水平，健民大鹏业绩持续快速增长.pdf\", \"text\": \"风险因素：中药材价格上涨超预期、产品销售不及预期、OTC 市场竞\\n争加剧风险、体培牛黄增长不及预期、新生儿人数下降超预期。\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/中药Ⅱ行业跟踪报告：2025H1：受政策和渠道影响中药板块业绩承压.pdf\", \"text\": \"投资建议：2025 年上半年，中药板块在药店和院内渠道销售疲软影响\\n下业绩承压，上市公司业绩分化，整体看，OTC 领域龙头企业业绩韧性较强。\\n\\n在医保改革背景下，中药行业正经历发展模式转型的阵痛期，未来多元化渠道、高品牌力和高临床价值是关键。\\n\\n长期看，政策引导行业走向高质量和规范化发展。\\n\\n建议关注拥有强大品牌护城河的OTC 龙头企业，品牌力可以对冲政策压力、成本控制能力强，产业链一体化的企业、以及在创新中药上取得突破的企业。\\n\\n预计下半年在渠道库存逐步出清、中成药成本下行趋势延续、叠加低基数效应下收入和利润有望温和向好。\", \"paper_image\": \"图表7：中药板块营业收入和同比增速：亿元\"}, {\"paper_path\": \"./附件5：研报数据/个股研报/医药工业持续高增，结构优化提升盈利能力.pdf\", \"text\": \"买入：未来6 个月内，个股相对同期相关证券市场代表性指数涨幅在20%以上\\n持有：未来6 个月内，个股相对同期相关证券市场代表性指数涨幅介于10%与20%之间中性：未来6 个月内，个股相对同期相关证券市场代表性指数涨幅介于-10%与10%之间回避：未来6 个月内，个股相对同期相关证券市场代表性指数涨幅介于-20%与-10%之间卖出：未来6 个月内，个股相对同期相关证券市场代表性指数涨幅在-20%以下行业评级强于大市：未来6 个月内，行业整体回报高于同期相关证券市场代表性指数5%以上跟随大市：未来6 个月内，行业整体回报介于同期相关证券市场代表性指数-5%与5%之间弱于大市：未来6 个月内，行业整体回报低于同期相关证券市场代表性指数-5%以下\\n\\n重要声明西南证券股份有限公司（以下简称“本公司”）具有中国证券监督管理委员会核准的证券投资咨询业务资格。\\n\\n本公司与作者在自身所知情范围内，与本报告中所评价或推荐的证券不存在法律法规要求披露或采取限制、静默措施的利益冲突。\\n\\n《证券期货投资者适当性管理办法》于2017 年7 月1 日起正式实施，本报告仅供本公司签约客户使用，若您并非本公司签约客户，为控制投资风险，请取消接收、订阅或使用本报告中的任何信息。\\n\\n本公司也不会因接收人收到、阅读或关注自媒体推送本报告中的内容而视其为客户。\\n\\n本公司或关联机构可能会持有报告中提到的公司所发行的证券并进行\"}, {\"paper_path\": \"./附件5：研报数据/个股研报/立足儿科优势品牌，营销改革焕新颜.pdf\", \"text\": \"1. 百年品牌的壮骨冲剂中药，OTC 品牌新活力\\n健民集团是中药企业中为数不多的拥有多个驰名商标的企业，拥有两大中国驰名商标“健民”和“龙牡”。\\n\\n公司前身叶开泰药号，创始于明崇祯十年（1637 年），秉承叶开泰近400 年历史的中医药文化，品牌影响力在国内位列前茅，是“中华老字号”企业，也是中国四大中药名店之一，享有“初清三杰”、“中国四大药号”的美誉。\\n\\n从1953 年即开始企业化经营，叶开泰改造为武汉健民药厂。\\n\\n公司多年入选“中国最有价值品牌500 强”，综合实力位列全国医药企业百强。\\n\\n健民集团以发展中医药为核心，以儿科产品为特色，已成为全国重点中药企业和小儿用药生产基地。\\n\\n健民集团立足于中药产业，以中药制造为核心，深耕儿童用药和儿童大健康领域，积极探索中医诊疗、中医药健康旅游等领域，形成以中医药为核心的大健康产业集团。\\n\\n➢医药工业主要是药品的研发、制造及销售，按照药品流通的渠道分为OTC（非处方药）产品线和Rx（处方药）产品线。\\n\\n截至2024 年，公司及全资子公司叶开泰国药合计持有药品批文264 个，产品资源丰富，重点产品有龙牡壮骨颗粒、健脾生血颗粒、健民咽喉片、小金胶囊、便通胶囊等。\\n\\n知名中药百年品牌+核心产品独家配方+体培牛黄独家技术，造就公司强力护城河。\\n\\n➢医药商业板块主要为药品的批发和零售，批发业务主要通过下属的福高公司和维生公司开展，业务区域主要集中\", \"paper_image\": \"表7：健民集团业绩拆分及盈利预测（亿元）................................................................................. 23\"}, {\"paper_path\": \"./附件5：研报数据/个股研报/儿药龙头焕新机，品牌+创新打开成长空间.pdf\", \"text\": \"1.中华老字号企业，“龙牡”“健民”双品牌驱动\\n成长健民集团始创于明崇祯十年（1637 年），前身为历史悠久的“叶开泰”，1953 年改制为“武汉健民制药厂”，并于2004 年登陆上交所。\\n\\n集团传承“叶开泰”近400 年历史文化，致力于精品中药的研发与生产，旗下拥有\\\"健民\\\"\\\"龙牡\\\"\\\"叶开泰\\\"三大品牌，其中“健民”“龙牡”为中国驰名商标，“健民”为中华老字号品牌。\\n\\n目前集团及全资子公司叶开泰国药共持有264 个药品批文，89 个医保产品，40 余个儿科药品，构建了“龙牡”牌儿药产品线以及“健民”牌家庭常备药产品线，产品资源丰富，品类结构完善。\\n\\n华立医药集团控股，股权结构稳定。截至2025 年Q1，控股股东华立医药集团（华立集团全资子公司）直接持有公司24.13%股份，华立集团直接持有3.32%公司股份。公司实控人为华立集团董事会主席汪力成先生。\", \"paper_image\": \"图表41：2025-2027 年健民集团收入预测（百万元）................................................. 23\"}]}}]",
+  "references_json": "[{\"paper_path\": \"./附件5：研报数据/个股研报/立足儿科优势品牌，营销改革焕新颜.pdf\", \"text\": \"1. 百年品牌的壮骨冲剂中药，OTC 品牌新活力\\n健民集团是中药企业中为数不多的拥有多个驰名商标的企业，拥有两大中国驰名商标“健民”和“龙牡”。\\n\\n公司前身叶开泰药号，创始于明崇祯十年（1637 年），秉承叶开泰近400 年历史的中医药文化，品牌影响力在国内位列前茅，是“中华老字号”企业，也是中国四大中药名店之一，享有“初清三杰”、“中国四大药号”的美誉。\\n\\n从1953 年即开始企业化经营，叶开泰改造为武汉健民药厂。\\n\\n公司多年入选“中国最有价值品牌500 强”，综合实力位列全国医药企业百强。\\n\\n健民集团以发展中医药为核心，以儿科产品为特色，已成为全国重点中药企业和小儿用药生产基地。\\n\\n健民集团立足于中药产业，以中药制造为核心，深耕儿童用药和儿童大健康领域，积极探索中医诊疗、中医药健康旅游等领域，形成以中医药为核心的大健康产业集团。\\n\\n➢医药工业主要是药品的研发、制造及销售，按照药品流通的渠道分为OTC（非处方药）产品线和Rx（处方药）产品线。\\n\\n截至2024 年，公司及全资子公司叶开泰国药合计持有药品批文264 个，产品资源丰富，重点产品有龙牡壮骨颗粒、健脾生血颗粒、健民咽喉片、小金胶囊、便通胶囊等。\\n\\n知名中药百年品牌+核心产品独家配方+体培牛黄独家技术，造就公司强力护城河。\\n\\n➢医药商业板块主要为药品的批发和零售，批发业务主要通过下属的福高公司和维生公司开展，业务区域主要集中\", \"paper_image\": \"表7：健民集团业绩拆分及盈利预测（亿元）................................................................................. 23\"}, {\"paper_path\": \"./附件5：研报数据/个股研报/儿药龙头焕新机，品牌+创新打开成长空间.pdf\", \"text\": \"1.中华老字号企业，“龙牡”“健民”双品牌驱动\\n成长健民集团始创于明崇祯十年（1637 年），前身为历史悠久的“叶开泰”，1953 年改制为“武汉健民制药厂”，并于2004 年登陆上交所。\\n\\n集团传承“叶开泰”近400 年历史文化，致力于精品中药的研发与生产，旗下拥有\\\"健民\\\"\\\"龙牡\\\"\\\"叶开泰\\\"三大品牌，其中“健民”“龙牡”为中国驰名商标，“健民”为中华老字号品牌。\\n\\n目前集团及全资子公司叶开泰国药共持有264 个药品批文，89 个医保产品，40 余个儿科药品，构建了“龙牡”牌儿药产品线以及“健民”牌家庭常备药产品线，产品资源丰富，品类结构完善。\\n\\n华立医药集团控股，股权结构稳定。截至2025 年Q1，控股股东华立医药集团（华立集团全资子公司）直接持有公司24.13%股份，华立集团直接持有3.32%公司股份。公司实控人为华立集团董事会主席汪力成先生。\", \"paper_image\": \"图表41：2025-2027 年健民集团收入预测（百万元）................................................. 23\"}, {\"paper_path\": \"./附件5：研报数据/个股研报/体培牛黄持续高增长，渠道改革迎来拐点.pdf\", \"text\": \" 盈利预测与投资建议：考虑到公司龙母壮骨颗粒渠道变革重换生机，便通胶囊\\n那和健脾生血院外提高市占率。预计2025-2027 年归母净利润分别为5.3亿元、\"}, {\"paper_path\": \"./附件5：研报数据/个股研报/医药工业持续高增，结构优化提升盈利能力.pdf\", \"text\": \"买入：未来6 个月内，个股相对同期相关证券市场代表性指数涨幅在20%以上\\n持有：未来6 个月内，个股相对同期相关证券市场代表性指数涨幅介于10%与20%之间中性：未来6 个月内，个股相对同期相关证券市场代表性指数涨幅介于-10%与10%之间回避：未来6 个月内，个股相对同期相关证券市场代表性指数涨幅介于-20%与-10%之间卖出：未来6 个月内，个股相对同期相关证券市场代表性指数涨幅在-20%以下行业评级强于大市：未来6 个月内，行业整体回报高于同期相关证券市场代表性指数5%以上跟随大市：未来6 个月内，行业整体回报介于同期相关证券市场代表性指数-5%与5%之间弱于大市：未来6 个月内，行业整体回报低于同期相关证券市场代表性指数-5%以下\\n\\n重要声明西南证券股份有限公司（以下简称“本公司”）具有中国证券监督管理委员会核准的证券投资咨询业务资格。\\n\\n本公司与作者在自身所知情范围内，与本报告中所评价或推荐的证券不存在法律法规要求披露或采取限制、静默措施的利益冲突。\\n\\n《证券期货投资者适当性管理办法》于2017 年7 月1 日起正式实施，本报告仅供本公司签约客户使用，若您并非本公司签约客户，为控制投资风险，请取消接收、订阅或使用本报告中的任何信息。\\n\\n本公司也不会因接收人收到、阅读或关注自媒体推送本报告中的内容而视其为客户。\\n\\n本公司或关联机构可能会持有报告中提到的公司所发行的证券并进行\"}, {\"paper_path\": \"./附件5：研报数据/个股研报/25H1工业收入快速增长，儿药新药放量可期.pdf\", \"text\": \"事件：公司发布2025 年半年报，25H1 实现营业收入18.05 亿元，同比下降10.20%；\\n\\n归母净利润2.21亿元，同比下滑7.83%；\\n\\n扣非归母净利润1.95亿元，同比增长0.61%。\\n\\n医药工业增长亮眼，医药商业结构持续优化。\\n\\n25H1，公司实现营业收入18.05 亿元，同比下降10.20%。\\n\\n分业务结构来看，医药工业板块表现亮眼，收入同比增长23.07%；\\n\\n医药商业收入同比下降37.82%，主因公司持续优化下属商业子公司业务结构，逐步收缩部分低毛利业务。\\n\\n归母净利润2.21 亿元，同比下滑7.83%，净利润下降主因联营企业投资收益及非经常性损益减少所致。\\n\\n具体来看，25H1 公司对联营企业和合营企业的投资收益为6727 万元，同比下降40%，预计主因联营企业健民大鹏业绩承压，进而使公司获得的投资收益减少。\\n\\n品牌战略驱动OTC 产品线快速发展。\\n\\n公司坚持“龙牡”儿药品牌和“健民”慢病及家庭常备药品牌的双品牌战略，核心产品多点发力：1）龙牡儿药：基于“龙牡儿药·专业可靠”的品牌理念打造“龙牡儿药”专业IP，不断提升儿药线产品市占率和龙牡品牌影响力；\\n\\n2）便通胶囊：通过加快产品的市场覆盖、标杆上量和广告提效，驱动OTC 渠道快速增长；\\n\\n3）健脾生血颗粒：开展区域性KA 标杆连锁打造，加快商销精准铺货，逐步成为公司OTC 第三大单品。\\n\\n我们预计随着\"}, {\"paper_path\": \"./附件5：研报数据/个股研报/OTC及处方线库存均降至合理水平，健民大鹏业绩持续快速增长.pdf\", \"text\": \"风险因素：中药材价格上涨超预期、产品销售不及预期、OTC 市场竞\\n争加剧风险、体培牛黄增长不及预期、新生儿人数下降超预期。\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/中药Ⅱ行业跟踪报告：2025H1：受政策和渠道影响中药板块业绩承压.pdf\", \"text\": \"投资建议：2025 年上半年，中药板块在药店和院内渠道销售疲软影响\\n下业绩承压，上市公司业绩分化，整体看，OTC 领域龙头企业业绩韧性较强。\\n\\n在医保改革背景下，中药行业正经历发展模式转型的阵痛期，未来多元化渠道、高品牌力和高临床价值是关键。\\n\\n长期看，政策引导行业走向高质量和规范化发展。\\n\\n建议关注拥有强大品牌护城河的OTC 龙头企业，品牌力可以对冲政策压力、成本控制能力强，产业链一体化的企业、以及在创新中药上取得突破的企业。\\n\\n预计下半年在渠道库存逐步出清、中成药成本下行趋势延续、叠加低基数效应下收入和利润有望温和向好。\", \"paper_image\": \"图表7：中药板块营业收入和同比增速：亿元\"}]",
+  "notes": [
+    "route=causal_analysis",
+    "该查询旨在分析健民集团2025年第三季度成本增长快于营收的原因。通过比较2025Q3和2024Q3的财务数据，计算营业总收入和各成本项目（营业成本、销售费用、管理费用、财务费用、税金及附加）的同比增长率。查询结果将显示：1）营收增长率（预期约5%）；2）总成本增长率（预期约20%）；3）各成本分项的增长率，以识别成本增长的主要驱动因素（如原材料涨价可能体现在营业成本增长，人力成本上升可能体现在管理费用或销售费用增长）；4）毛利率和净利率的变化，反映成本压力对盈利能力的影响。查询仅针对健民集团，使用标准报告期格式，并限制返回10条结果。",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=6",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=6",
+    "self_check={\"pass\": true, \"notes\": [\"self_check_skipped_fast_path\"]}",
+    "route=causal_analysis",
+    "根据查询计划，需要分析健民集团2025Q3营业总收入下降但净利润率稳定的具体原因，重点考察成本费用结构变化。之前的查询结果已显示：营收下降11.43%，营业成本下降36.61%，销售费用增长21.7%，毛利率从43.0%提升至59.2%，净利率从11.16%微升至11.2%。\n\n本SQL设计旨在深入分析成本费用结构变化：\n1. 计算各项成本费用占营收的比例，这比单纯看绝对值变化更能反映结构变化\n2. 对比2025Q3和2024Q3的各项费用占比变化\n3. 重点关注：\n   - 营业成本占比的大幅下降（解释毛利率提升）\n   - 销售费用占比的上升（尽管营收下降，销售费用仍增长）\n   - 其他费用占比的变化\n\n通过分析各项费用占营收比例的变化，可以更清楚地解释为什么在营收下降的情况下，净利润率能够保持稳定：营业成本的大幅下降（占比降低）抵消了销售费用增长的影响，从而维持了净利率。",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=8",
+    "rerank_strategy=reranker_model",
+    "rerank_kept=8",
+    "answer_rewritten_after_self_check",
+    "self_check={\"pass\": false, \"notes\": [\"1. 数字一致性：回答中的数字与SQL rows基本一致，但需注意：回答中提及的'毛利率因此从2024Q3的43.00%大幅提升至2025Q3的59.20%'，SQL rows中对应的值为'59.1997851827944'和'42.9977092235937'，回答进行了四舍五入处理，可以接受。\", \"2. 证据引用：回答中引用了Evidences中真实存在的内容，即西南证券2025-10-31的研报《医药工业持续高增，结构优化提升盈利能力》，并正确指出该研报未提供直接因果解释。\", \"3. 关键点遗漏：问题要求分析'你凭什么觉得是这个原因导致了这个问题'，即需要论证核心原因（营业成本下降带动毛利率提升）的合理性。回答虽然给出了财务数据支撑，但缺乏对'为什么营业成本会大幅下降'这一关键点的深入分析或推测（例如产品结构优化、原材料成本下降等），尽管在'综合判断'部分略有提及，但不够具体和有力。\", \"4. 指标混淆：未发现指标名称混淆。回答正确区分了营业总收入、营业成本、毛利率、销售费用、净利润率等。\", \"5. 聚合统计错误：不适用，因为SQL rows只包含健民集团单家公司的数据，不存在聚合统计结果对应错误的问题。\"]}"
+  ],
+  "final_status": "ok"
+}

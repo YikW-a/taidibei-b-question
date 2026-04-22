@@ -26,7 +26,9 @@
 ├── run_test_question_sets.py
 ├── configs/
 ├── docs/
-│   └── 任务一建模与求解（论文版）.md
+│   ├── 任务一建模与求解（论文版）.md
+│   ├── 任务二建模与求解（论文版）.md
+│   └── 任务三建模与求解（论文版）.md
 ├── outputs/
 ├── scripts/
 ├── src/
@@ -82,6 +84,7 @@ cp configs/task3_llm.env.example configs/task3_llm.env
 
 - [任务一建模与求解（论文版）.md](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/docs/任务一建模与求解（论文版）.md)
 - [任务二建模与求解（论文版）.md](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/docs/任务二建模与求解（论文版）.md)
+- [任务三建模与求解（论文版）.md](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/docs/任务三建模与求解（论文版）.md)
 
 其中任务二论文已补充：
 
@@ -91,13 +94,27 @@ cp configs/task3_llm.env.example configs/task3_llm.env
 - 季度口径派生公式
 - 从 `61 ok / 9 warning` 到 `69 ok / 1 warning` 的优化收口
 
+任务三论文当前补充：
+
+- `RAG + SQL + LangGraph` 的统一状态图
+- 研报知识库构建与混合检索
+- 提示词工程分层设计
+- SQLite 修复、边界收口与回答自检
+- 最终 `80 ok / 0 error` 的结果收口
+
 ### `outputs/`
 
 运行产物统一放在这里。当前目录下已经存在：
 
 - `outputs/task1`
+- `outputs/task2_langgraph`
+- `outputs/task3_langgraph`
 
-任务二、任务三及测试集结果也会默认写到 `outputs/` 下的对应子目录。
+其中：
+
+- `outputs/task1`：任务一正式版结果
+- `outputs/task2_langgraph`：任务二正式版结果
+- `outputs/task3_langgraph`：任务三正式版结果与知识库产物
 
 ### `正式数据/`
 
@@ -136,12 +153,13 @@ cp configs/task3_llm.env.example configs/task3_llm.env
 
 - 主代码目录：
   - [src/task3_langgraph](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/src/task3_langgraph)
-- 已同步任务二的部分通用优化：
-  - 指标映射补全
-  - `metric` 缺失识别增强
-  - `Q2 / Q4` 派生单季度逻辑
-  - SQL 提示词中的 SQLite / 季度口径约束
-  - 澄清回退模板
+- 正式输出目录：
+  - [outputs/task3_langgraph](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task3_langgraph)
+- 当前正式结果：
+  - `80` 题
+  - `80 ok / 0 error`
+- 当前方法关键词：
+  - `RAG + SQL + LangGraph + 分层提示词 + 混合检索 + chart_spec`
 - 详细说明：
   - [README_task3_langgraph.md](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/README_task3_langgraph.md)
 
@@ -216,3 +234,4 @@ python3 run_test_question_sets.py
 3. [README_task3_langgraph.md](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/README_task3_langgraph.md)
 4. [任务一建模与求解（论文版）.md](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/docs/任务一建模与求解（论文版）.md)
 5. [任务二建模与求解（论文版）.md](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/docs/任务二建模与求解（论文版）.md)
+6. [任务三建模与求解（论文版）.md](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/docs/任务三建模与求解（论文版）.md)

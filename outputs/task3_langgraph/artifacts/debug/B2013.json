@@ -1,0 +1,270 @@
+{
+  "question_id": "B2013",
+  "question_type": "意图模糊",
+  "raw_question": "25年各中药企业研发情况。",
+  "raw_question_json": "[{\"Q\":\"25年各中药企业研发情况。\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "metrics": [],
+    "periods": [],
+    "focus_topics": [],
+    "intent_type": "sql_only",
+    "needs_sql": true,
+    "needs_retrieval": false,
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "sql_only",
+    "companies": [],
+    "periods": [
+      "2025"
+    ],
+    "metrics": [
+      "研发费用",
+      "研发费用率",
+      "研发人员数量",
+      "研发投入强度"
+    ],
+    "needs_sql": true,
+    "top_n": null,
+    "threshold": null,
+    "question": "25年各中药企业研发情况"
+  },
+  "retrieval_plan": {
+    "question": "25年各中药企业研发情况。",
+    "companies": [],
+    "focus_topics": [],
+    "needs_retrieval": false,
+    "top_k": 0,
+    "source_scope": "hybrid",
+    "retrieval_mode": "hybrid"
+  },
+  "sql": "SELECT \n    stock_code,\n    stock_abbr,\n    report_period,\n    operating_expense_rnd_expenses AS 研发费用,\n    rnd_expense_ratio AS 研发费用率\nFROM financials_view\nWHERE report_period IN ('2025FY', '2025H1', '2025Q1', '2025Q2', '2025Q3', '2025Q4')\n    AND stock_abbr LIKE '%中药%'\nORDER BY stock_abbr, report_period;",
+  "sql_history": [
+    "SELECT \n    stock_code,\n    stock_abbr,\n    report_period,\n    operating_expense_rnd_expenses AS 研发费用,\n    rnd_expense_ratio AS 研发费用率\nFROM financials_view\nWHERE report_period IN ('2025FY', '2025H1', '2025Q1', '2025Q2', '2025Q3', '2025Q4')\n    AND stock_abbr LIKE '%中药%'\nORDER BY stock_abbr, report_period;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 4,
+  "result_rows": [
+    {
+      "stock_code": "600750",
+      "stock_abbr": "江中药业",
+      "report_period": "2025H1",
+      "研发费用": "4854.915217",
+      "研发费用率": 2.267467226870843
+    },
+    {
+      "stock_code": "600750",
+      "stock_abbr": "江中药业",
+      "report_period": "2025Q1",
+      "研发费用": "2694.633364",
+      "研发费用率": 2.275682093150507
+    },
+    {
+      "stock_code": "600750",
+      "stock_abbr": "江中药业",
+      "report_period": "2025Q2",
+      "研发费用": "2160.281853",
+      "研发费用率": 2.2573031472444867
+    },
+    {
+      "stock_code": "600750",
+      "stock_abbr": "江中药业",
+      "report_period": "2025Q3",
+      "研发费用": "9713.972032",
+      "研发费用率": 3.311763267283347
+    }
+  ],
+  "retrieved_evidence": [],
+  "reranked_evidence": [],
+  "rerank_preview": "{\"strategy\": \"skipped_fast_path\", \"kept_count\": 0}",
+  "fused_context": {
+    "question": "25年各中药企业研发情况。",
+    "sql_row_count": 4,
+    "evidence_count": 0,
+    "sql_preview": [
+      {
+        "stock_code": "600750",
+        "stock_abbr": "江中药业",
+        "report_period": "2025H1",
+        "研发费用": "4854.915217",
+        "研发费用率": 2.267467226870843
+      },
+      {
+        "stock_code": "600750",
+        "stock_abbr": "江中药业",
+        "report_period": "2025Q1",
+        "研发费用": "2694.633364",
+        "研发费用率": 2.275682093150507
+      },
+      {
+        "stock_code": "600750",
+        "stock_abbr": "江中药业",
+        "report_period": "2025Q2",
+        "研发费用": "2160.281853",
+        "研发费用率": 2.2573031472444867
+      },
+      {
+        "stock_code": "600750",
+        "stock_abbr": "江中药业",
+        "report_period": "2025Q3",
+        "研发费用": "9713.972032",
+        "研发费用率": 3.311763267283347
+      }
+    ],
+    "evidence_preview": [],
+    "evidence_titles": [],
+    "source_breakdown": {}
+  },
+  "self_check": {
+    "pass": true,
+    "notes": [
+      "self_check_skipped_fast_path"
+    ]
+  },
+  "chart_plan": {
+    "chart_type": "line",
+    "title": "25年各中药企业研发情况。 - 研发费用",
+    "x_field": "report_period",
+    "y_fields": [
+      "研发费用"
+    ],
+    "category_field": null,
+    "sort_by": "report_period",
+    "sort_ascending": true,
+    "top_n": null,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task3.chart-spec.v1",
+    "question_id": "B2013",
+    "image_index": 1,
+    "chart_type": "line",
+    "title": "25年各中药企业研发情况。 - 研发费用",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 4,
+      "preview_rows": [
+        {
+          "stock_code": "600750",
+          "stock_abbr": "江中药业",
+          "report_period": "2025H1",
+          "研发费用": "4854.915217",
+          "研发费用率": 2.267467226870843
+        },
+        {
+          "stock_code": "600750",
+          "stock_abbr": "江中药业",
+          "report_period": "2025Q1",
+          "研发费用": "2694.633364",
+          "研发费用率": 2.275682093150507
+        },
+        {
+          "stock_code": "600750",
+          "stock_abbr": "江中药业",
+          "report_period": "2025Q2",
+          "研发费用": "2160.281853",
+          "研发费用率": 2.2573031472444867
+        },
+        {
+          "stock_code": "600750",
+          "stock_abbr": "江中药业",
+          "report_period": "2025Q3",
+          "研发费用": "9713.972032",
+          "研发费用率": 3.311763267283347
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "report_period",
+      "sort_ascending": true,
+      "top_n": null,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "研发费用",
+        "data_type": "quantitative",
+        "label": "研发费用",
+        "unit": null
+      },
+      "x": {
+        "field": "report_period",
+        "data_type": "temporal",
+        "label": "报告期",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": false
+    },
+    "output": {
+      "filename": "B2013_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B2013_1.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT \n    stock_code,\n    stock_abbr,\n    report_period,\n    operating_expense_rnd_expenses AS 研发费用,\n    rnd_expense_ratio AS 研发费用率\nFROM financials_view\nWHERE report_period IN ('2025FY', '2025H1', '2025Q1', '2025Q2', '2025Q3', '2025Q4')\n    AND stock_abbr LIKE '%中药%'\nORDER BY stock_abbr, report_period;",
+      "value_fields": [
+        "研发费用"
+      ],
+      "value_labels": [
+        "研发费用"
+      ],
+      "original_chart_plan": {
+        "chart_type": "line",
+        "x_field": "report_period",
+        "y_fields": [
+          "研发费用"
+        ],
+        "category_field": null,
+        "sort_by": "report_period",
+        "sort_ascending": true,
+        "top_n": null
+      }
+    }
+  },
+  "current_chart_paths": [
+    "./result/B2013_1.jpg"
+  ],
+  "current_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task3_langgraph/artifacts/chart_specs/B2013_1.spec.json"
+  ],
+  "current_answer": "根据SQL查询结果，当前仅获取到**江中药业**一家公司在2025年的研发相关数据。未检索到其他中药企业的数据，也未检索到直接研报证据。\n\n**直接结论：**\n目前仅能分析江中药业在2025年的研发投入情况。该公司在2025年上半年及前三季度持续进行研发投入，且第三季度的研发费用和研发费用率均有显著提升。\n\n**财务数据支撑：**\n1.  **研发费用**（单位：万元）：\n    *   2025年第一季度：2,694.63万元\n    *   2025年第二季度：2,160.28万元\n    *   2025年上半年合计：4,854.92万元\n    *   2025年第三季度：9,713.97万元\n2.  **研发费用率**：\n    *   2025年第一季度：2.28%\n    *   2025年第二季度：2.26%\n    *   2025年上半年：2.27%\n    *   2025年第三季度：3.31%\n\n从数据看，江中药业2025年前三季度的研发投入呈逐季累积态势，尤其第三季度的单季研发费用（9,713.97万元）超过了上半年总和，研发费用率也提升至3.31%，显示其在该季度可能加大了研发投入力度。\n\n**研报证据支撑：**\n未检索到直接研报证据。\n\n**综合判断：**\n基于现有数据，**江中药业**是唯一可分析的中药企业。其在2025年，特别是第三季度，表现出明显的研发投入增长。由于缺乏其他中药企业的对比数据以及相关的研报分析，无法对“各中药企业”的整体研发情况做出全面判断。",
+  "current_references": [],
+  "answer_rewritten": false,
+  "turn_answers": [
+    {
+      "Q": "25年各中药企业研发情况。",
+      "A": {
+        "content": "根据SQL查询结果，当前仅获取到**江中药业**一家公司在2025年的研发相关数据。未检索到其他中药企业的数据，也未检索到直接研报证据。\n\n**直接结论：**\n目前仅能分析江中药业在2025年的研发投入情况。该公司在2025年上半年及前三季度持续进行研发投入，且第三季度的研发费用和研发费用率均有显著提升。\n\n**财务数据支撑：**\n1.  **研发费用**（单位：万元）：\n    *   2025年第一季度：2,694.63万元\n    *   2025年第二季度：2,160.28万元\n    *   2025年上半年合计：4,854.92万元\n    *   2025年第三季度：9,713.97万元\n2.  **研发费用率**：\n    *   2025年第一季度：2.28%\n    *   2025年第二季度：2.26%\n    *   2025年上半年：2.27%\n    *   2025年第三季度：3.31%\n\n从数据看，江中药业2025年前三季度的研发投入呈逐季累积态势，尤其第三季度的单季研发费用（9,713.97万元）超过了上半年总和，研发费用率也提升至3.31%，显示其在该季度可能加大了研发投入力度。\n\n**研报证据支撑：**\n未检索到直接研报证据。\n\n**综合判断：**\n基于现有数据，**江中药业**是唯一可分析的中药企业。其在2025年，特别是第三季度，表现出明显的研发投入增长。由于缺乏其他中药企业的对比数据以及相关的研报分析，无法对“各中药企业”的整体研发情况做出全面判断。",
+        "image": [
+          "./result/B2013_1.jpg"
+        ],
+        "references": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"25年各中药企业研发情况。\", \"A\": {\"content\": \"根据SQL查询结果，当前仅获取到**江中药业**一家公司在2025年的研发相关数据。未检索到其他中药企业的数据，也未检索到直接研报证据。\\n\\n**直接结论：**\\n目前仅能分析江中药业在2025年的研发投入情况。该公司在2025年上半年及前三季度持续进行研发投入，且第三季度的研发费用和研发费用率均有显著提升。\\n\\n**财务数据支撑：**\\n1.  **研发费用**（单位：万元）：\\n    *   2025年第一季度：2,694.63万元\\n    *   2025年第二季度：2,160.28万元\\n    *   2025年上半年合计：4,854.92万元\\n    *   2025年第三季度：9,713.97万元\\n2.  **研发费用率**：\\n    *   2025年第一季度：2.28%\\n    *   2025年第二季度：2.26%\\n    *   2025年上半年：2.27%\\n    *   2025年第三季度：3.31%\\n\\n从数据看，江中药业2025年前三季度的研发投入呈逐季累积态势，尤其第三季度的单季研发费用（9,713.97万元）超过了上半年总和，研发费用率也提升至3.31%，显示其在该季度可能加大了研发投入力度。\\n\\n**研报证据支撑：**\\n未检索到直接研报证据。\\n\\n**综合判断：**\\n基于现有数据，**江中药业**是唯一可分析的中药企业。其在2025年，特别是第三季度，表现出明显的研发投入增长。由于缺乏其他中药企业的对比数据以及相关的研报分析，无法对“各中药企业”的整体研发情况做出全面判断。\", \"image\": [\"./result/B2013_1.jpg\"], \"references\": []}}]",
+  "references_json": "[]",
+  "notes": [
+    "route=sql_only",
+    "1. 查询计划要求2025年各中药企业研发情况，涉及研发费用和研发费用率。\n2. 视图中有operating_expense_rnd_expenses（研发费用）和rnd_expense_ratio（研发费用率）字段。\n3. 查询计划未指定具体公司列表，因此不能使用stock_abbr IN (...)枚举。\n4. 使用stock_abbr LIKE '%中药%'筛选中药企业。\n5. 报告期间包含2025年所有可能格式：FY、H1、Q1-Q4。\n6. 按公司简称和报告期间排序，便于查看各企业不同期间的数据。\n7. 注意：视图中没有研发人员数量和研发投入强度字段，因此只返回可用的研发费用和研发费用率。",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=0",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=0",
+    "self_check={\"pass\": true, \"notes\": [\"self_check_skipped_fast_path\"]}"
+  ],
+  "final_status": "ok"
+}

@@ -1,0 +1,333 @@
+{
+  "question_id": "B2032",
+  "question_type": "融合查询",
+  "raw_question": "2025年中药电商渠道销售额增长，请查询2025年第三季度销售费用中电商推广费占比前五的公司。",
+  "raw_question_json": "[{\"Q\":\"2025年中药电商渠道销售额增长，请查询2025年第三季度销售费用中电商推广费占比前五的公司。\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "metrics": [
+      "营业总收入",
+      "销售费用"
+    ],
+    "periods": [
+      "2025Q3",
+      "2025FY"
+    ],
+    "focus_topics": [
+      "渠道"
+    ],
+    "intent_type": "hybrid_sql_rag",
+    "needs_sql": true,
+    "needs_retrieval": true,
+    "top_n": 5,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "hybrid_sql_rag",
+    "companies": [],
+    "periods": [
+      "2025Q3",
+      "2025FY"
+    ],
+    "metrics": [
+      "营业总收入",
+      "销售费用"
+    ],
+    "needs_sql": true,
+    "top_n": 5,
+    "threshold": null,
+    "question": "2025年第三季度销售费用中电商推广费占比前五的公司"
+  },
+  "retrieval_plan": {
+    "question": "2025年中药电商渠道销售额增长，请查询2025年第三季度销售费用中电商推广费占比前五的公司。",
+    "companies": [
+      "金花股份",
+      "沃华医药",
+      "益盛药业",
+      "粤万年青",
+      "维康药业"
+    ],
+    "focus_topics": [
+      "中药电商",
+      "渠道",
+      "电商推广费",
+      "主营业务",
+      "主营业务类型",
+      "业务类型",
+      "成本控制",
+      "成本结构",
+      "销售费用",
+      "研发费用",
+      "中药",
+      "创新药"
+    ],
+    "needs_retrieval": true,
+    "top_k": 5,
+    "source_scope": "stock",
+    "retrieval_mode": "hybrid"
+  },
+  "sql": "WITH financials_2025q3 AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        selling_expenses,\n        total_operating_revenue\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n        AND selling_expenses IS NOT NULL\n        AND total_operating_revenue IS NOT NULL\n        AND total_operating_revenue > 0\n)\nSELECT \n    stock_code,\n    stock_abbr,\n    report_period,\n    selling_expenses,\n    total_operating_revenue,\n    ROUND((selling_expenses * 1.0 / total_operating_revenue) * 100, 2) AS selling_expense_ratio_percent\nFROM financials_2025q3\nORDER BY selling_expense_ratio_percent DESC\nLIMIT 5;",
+  "sql_history": [
+    "WITH financials_2025q3 AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        selling_expenses,\n        total_operating_revenue\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n        AND selling_expenses IS NOT NULL\n        AND total_operating_revenue IS NOT NULL\n        AND total_operating_revenue > 0\n)\nSELECT \n    stock_code,\n    stock_abbr,\n    report_period,\n    selling_expenses,\n    total_operating_revenue,\n    ROUND((selling_expenses * 1.0 / total_operating_revenue) * 100, 2) AS selling_expense_ratio_percent\nFROM financials_2025q3\nORDER BY selling_expense_ratio_percent DESC\nLIMIT 5;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 5,
+  "result_rows": [
+    {
+      "stock_code": "600080",
+      "stock_abbr": "金花股份",
+      "report_period": "2025Q3",
+      "selling_expenses": 22422.031459,
+      "total_operating_revenue": 38390.836363,
+      "selling_expense_ratio_percent": 58.4
+    },
+    {
+      "stock_code": "002107",
+      "stock_abbr": "沃华医药",
+      "report_period": "2025Q3",
+      "selling_expenses": 32234.440175,
+      "total_operating_revenue": 62461.33542999999,
+      "selling_expense_ratio_percent": 51.61
+    },
+    {
+      "stock_code": "002566",
+      "stock_abbr": "益盛药业",
+      "report_period": "2025Q3",
+      "selling_expenses": 23746.815446,
+      "total_operating_revenue": 47619.523312,
+      "selling_expense_ratio_percent": 49.87
+    },
+    {
+      "stock_code": "301111",
+      "stock_abbr": "粤万年青",
+      "report_period": "2025Q3",
+      "selling_expenses": 11369.241349,
+      "total_operating_revenue": 22841.486264,
+      "selling_expense_ratio_percent": 49.77
+    },
+    {
+      "stock_code": "300878",
+      "stock_abbr": "维康药业",
+      "report_period": "2025Q3",
+      "selling_expenses": 7462.980106999999,
+      "total_operating_revenue": 15131.775430000002,
+      "selling_expense_ratio_percent": 49.32
+    }
+  ],
+  "retrieved_evidence": [],
+  "reranked_evidence": [],
+  "rerank_preview": "{\"strategy\": \"skipped_fast_path\", \"kept_count\": 0}",
+  "fused_context": {
+    "question": "2025年中药电商渠道销售额增长，请查询2025年第三季度销售费用中电商推广费占比前五的公司。",
+    "sql_row_count": 5,
+    "evidence_count": 0,
+    "sql_preview": [
+      {
+        "stock_code": "600080",
+        "stock_abbr": "金花股份",
+        "report_period": "2025Q3",
+        "selling_expenses": 22422.031459,
+        "total_operating_revenue": 38390.836363,
+        "selling_expense_ratio_percent": 58.4
+      },
+      {
+        "stock_code": "002107",
+        "stock_abbr": "沃华医药",
+        "report_period": "2025Q3",
+        "selling_expenses": 32234.440175,
+        "total_operating_revenue": 62461.33542999999,
+        "selling_expense_ratio_percent": 51.61
+      },
+      {
+        "stock_code": "002566",
+        "stock_abbr": "益盛药业",
+        "report_period": "2025Q3",
+        "selling_expenses": 23746.815446,
+        "total_operating_revenue": 47619.523312,
+        "selling_expense_ratio_percent": 49.87
+      },
+      {
+        "stock_code": "301111",
+        "stock_abbr": "粤万年青",
+        "report_period": "2025Q3",
+        "selling_expenses": 11369.241349,
+        "total_operating_revenue": 22841.486264,
+        "selling_expense_ratio_percent": 49.77
+      },
+      {
+        "stock_code": "300878",
+        "stock_abbr": "维康药业",
+        "report_period": "2025Q3",
+        "selling_expenses": 7462.980106999999,
+        "total_operating_revenue": 15131.775430000002,
+        "selling_expense_ratio_percent": 49.32
+      }
+    ],
+    "evidence_preview": [],
+    "evidence_titles": [],
+    "source_breakdown": {}
+  },
+  "self_check": {
+    "pass": true,
+    "notes": [
+      "self_check_skipped_fast_path"
+    ]
+  },
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2025年中药电商渠道销售额增长，请查询2025... - 营业总收入",
+    "x_field": null,
+    "y_fields": [
+      "total_operating_revenue"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": null,
+    "sort_ascending": false,
+    "top_n": 5,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task3.chart-spec.v1",
+    "question_id": "B2032",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "2025年中药电商渠道销售额增长，请查询2025... - 营业总收入",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 5,
+      "preview_rows": [
+        {
+          "stock_code": "600080",
+          "stock_abbr": "金花股份",
+          "report_period": "2025Q3",
+          "selling_expenses": 22422.031459,
+          "total_operating_revenue": 38390.836363,
+          "selling_expense_ratio_percent": 58.4
+        },
+        {
+          "stock_code": "002107",
+          "stock_abbr": "沃华医药",
+          "report_period": "2025Q3",
+          "selling_expenses": 32234.440175,
+          "total_operating_revenue": 62461.33542999999,
+          "selling_expense_ratio_percent": 51.61
+        },
+        {
+          "stock_code": "002566",
+          "stock_abbr": "益盛药业",
+          "report_period": "2025Q3",
+          "selling_expenses": 23746.815446,
+          "total_operating_revenue": 47619.523312,
+          "selling_expense_ratio_percent": 49.87
+        },
+        {
+          "stock_code": "301111",
+          "stock_abbr": "粤万年青",
+          "report_period": "2025Q3",
+          "selling_expenses": 11369.241349,
+          "total_operating_revenue": 22841.486264,
+          "selling_expense_ratio_percent": 49.77
+        },
+        {
+          "stock_code": "300878",
+          "stock_abbr": "维康药业",
+          "report_period": "2025Q3",
+          "selling_expenses": 7462.980106999999,
+          "total_operating_revenue": 15131.775430000002,
+          "selling_expense_ratio_percent": 49.32
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": null,
+      "sort_ascending": false,
+      "top_n": 5,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "total_operating_revenue",
+        "data_type": "quantitative",
+        "label": "营业总收入",
+        "unit": null
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B2032_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B2032_1.jpg"
+    },
+    "meta": {
+      "source_sql": "WITH financials_2025q3 AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        selling_expenses,\n        total_operating_revenue\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n        AND selling_expenses IS NOT NULL\n        AND total_operating_revenue IS NOT NULL\n        AND total_operating_revenue > 0\n)\nSELECT \n    stock_code,\n    stock_abbr,\n    report_period,\n    selling_expenses,\n    total_operating_revenue,\n    ROUND((selling_expenses * 1.0 / total_operating_revenue) * 100, 2) AS selling_expense_ratio_percent\nFROM financials_2025q3\nORDER BY selling_expense_ratio_percent DESC\nLIMIT 5;",
+      "value_fields": [
+        "total_operating_revenue"
+      ],
+      "value_labels": [
+        "营业总收入"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "total_operating_revenue"
+        ],
+        "category_field": "stock_abbr",
+        "sort_by": null,
+        "sort_ascending": false,
+        "top_n": 5
+      }
+    }
+  },
+  "current_chart_paths": [
+    "./result/B2032_1.jpg"
+  ],
+  "current_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task3_langgraph/artifacts/chart_specs/B2032_1.spec.json"
+  ],
+  "current_answer": "根据提供的SQL查询结果，2025年第三季度销售费用占营业总收入比例最高的五家公司如下：\n\n1.  **金花股份 (600080)**：销售费用为22,422.03万元，营业总收入为38,390.84万元，销售费用占比为**58.40%**。\n2.  **沃华医药 (002107)**：销售费用为32,234.44万元，营业总收入为62,461.34万元，销售费用占比为**51.61%**。\n3.  **益盛药业 (002566)**：销售费用为23,746.82万元，营业总收入为47,619.52万元，销售费用占比为**49.87%**。\n4.  **粤万年青 (301111)**：销售费用为11,369.24万元，营业总收入为22,841.49万元，销售费用占比为**49.77%**。\n5.  **维康药业 (300878)**：销售费用为7,462.98万元，营业总收入为15,131.78万元，销售费用占比为**49.32%**。\n\n**综合判断**：\n以上数据展示了2025年第三季度销售费用率最高的五家中药行业上市公司。然而，**未检索到直接研报证据**来证实这些公司的销售费用中具体有多少比例用于“电商推广费”。当前查询结果反映的是**总销售费用**占营业总收入的比例，并非问题所要求的“电商推广费占比”。因此，无法直接根据现有信息确定电商推广费占比前五的公司。",
+  "current_references": [],
+  "answer_rewritten": false,
+  "turn_answers": [
+    {
+      "Q": "2025年中药电商渠道销售额增长，请查询2025年第三季度销售费用中电商推广费占比前五的公司。",
+      "A": {
+        "content": "根据提供的SQL查询结果，2025年第三季度销售费用占营业总收入比例最高的五家公司如下：\n\n1.  **金花股份 (600080)**：销售费用为22,422.03万元，营业总收入为38,390.84万元，销售费用占比为**58.40%**。\n2.  **沃华医药 (002107)**：销售费用为32,234.44万元，营业总收入为62,461.34万元，销售费用占比为**51.61%**。\n3.  **益盛药业 (002566)**：销售费用为23,746.82万元，营业总收入为47,619.52万元，销售费用占比为**49.87%**。\n4.  **粤万年青 (301111)**：销售费用为11,369.24万元，营业总收入为22,841.49万元，销售费用占比为**49.77%**。\n5.  **维康药业 (300878)**：销售费用为7,462.98万元，营业总收入为15,131.78万元，销售费用占比为**49.32%**。\n\n**综合判断**：\n以上数据展示了2025年第三季度销售费用率最高的五家中药行业上市公司。然而，**未检索到直接研报证据**来证实这些公司的销售费用中具体有多少比例用于“电商推广费”。当前查询结果反映的是**总销售费用**占营业总收入的比例，并非问题所要求的“电商推广费占比”。因此，无法直接根据现有信息确定电商推广费占比前五的公司。",
+        "image": [
+          "./result/B2032_1.jpg"
+        ],
+        "references": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"2025年中药电商渠道销售额增长，请查询2025年第三季度销售费用中电商推广费占比前五的公司。\", \"A\": {\"content\": \"根据提供的SQL查询结果，2025年第三季度销售费用占营业总收入比例最高的五家公司如下：\\n\\n1.  **金花股份 (600080)**：销售费用为22,422.03万元，营业总收入为38,390.84万元，销售费用占比为**58.40%**。\\n2.  **沃华医药 (002107)**：销售费用为32,234.44万元，营业总收入为62,461.34万元，销售费用占比为**51.61%**。\\n3.  **益盛药业 (002566)**：销售费用为23,746.82万元，营业总收入为47,619.52万元，销售费用占比为**49.87%**。\\n4.  **粤万年青 (301111)**：销售费用为11,369.24万元，营业总收入为22,841.49万元，销售费用占比为**49.77%**。\\n5.  **维康药业 (300878)**：销售费用为7,462.98万元，营业总收入为15,131.78万元，销售费用占比为**49.32%**。\\n\\n**综合判断**：\\n以上数据展示了2025年第三季度销售费用率最高的五家中药行业上市公司。然而，**未检索到直接研报证据**来证实这些公司的销售费用中具体有多少比例用于“电商推广费”。当前查询结果反映的是**总销售费用**占营业总收入的比例，并非问题所要求的“电商推广费占比”。因此，无法直接根据现有信息确定电商推广费占比前五的公司。\", \"image\": [\"./result/B2032_1.jpg\"], \"references\": []}}]",
+  "references_json": "[]",
+  "notes": [
+    "route=hybrid_sql_rag",
+    "问题要求查询2025年第三季度销售费用中电商推广费占比前五的公司。根据查询计划，需要关注2025Q3期间的营业总收入和销售费用。虽然视图中没有直接的“电商推广费”字段，但销售费用（selling_expenses）是电商推广费的主要组成部分。因此，计算销售费用占营业总收入的比例作为代理指标。首先筛选2025Q3的数据，确保销售费用和营业总收入非空且营业总收入大于0以避免除零错误。然后计算销售费用占比，按降序排列取前五名。查询计划未指定具体公司，因此不添加公司过滤条件。",
+    "retrieval_companies_seeded_from_sql=金花股份,沃华医药,益盛药业,粤万年青,维康药业",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=0",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=0",
+    "self_check={\"pass\": true, \"notes\": [\"self_check_skipped_fast_path\"]}"
+  ],
+  "final_status": "ok"
+}

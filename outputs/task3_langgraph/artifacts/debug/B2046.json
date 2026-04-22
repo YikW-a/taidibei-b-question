@@ -1,0 +1,385 @@
+{
+  "question_id": "B2046",
+  "question_type": "多意图",
+  "raw_question": "围绕“研发投入与业绩”：①找出2025年第三季度研发费用占比前十的公司；②查询它们2024-2025年第三季度的净利润同比增长率；③对比研发费用占比前十与后十公司的增长率差异；④生成研发费用占比与净利润增长率的对比柱状图。",
+  "raw_question_json": "[{\"Q\":\"围绕“研发投入与业绩”：①找出2025年第三季度研发费用占比前十的公司；②查询它们2024-2025年第三季度的净利润同比增长率；③对比研发费用占比前十与后十公司的增长率差异；④生成研发费用占比与净利润增长率的对比柱状图。\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "metrics": [
+      "净利润",
+      "研发费用",
+      "研发费用占比"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "focus_topics": [],
+    "intent_type": "sql_chart",
+    "needs_sql": true,
+    "needs_retrieval": false,
+    "top_n": 10,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "sql_chart",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "净利润",
+      "研发费用",
+      "研发费用占比"
+    ],
+    "needs_sql": true,
+    "top_n": 10,
+    "threshold": null,
+    "question": "围绕“研发投入与业绩”：①找出2025年第三季度研发费用占比前十的公司；②查询它们2024-2025年第三季度的净利润同比增长率；③对比研发费用占比前十与后十公司的增长率差异；④生成研发费用占比与净利润增长率的对比柱状图。"
+  },
+  "retrieval_plan": {
+    "question": "围绕“研发投入与业绩”：①找出2025年第三季度研发费用占比前十的公司；②查询它们2024-2025年第三季度的净利润同比增长率；③对比研发费用占比前十与后十公司的增长率差异；④生成研发费用占比与净利润增长率的对比柱状图。",
+    "companies": [],
+    "focus_topics": [
+      "主营业务",
+      "主营业务类型",
+      "业务类型",
+      "成本控制",
+      "成本结构",
+      "销售费用",
+      "研发费用",
+      "中药",
+      "创新药"
+    ],
+    "needs_retrieval": false,
+    "top_k": 0,
+    "source_scope": "hybrid",
+    "retrieval_mode": "hybrid"
+  },
+  "sql": "WITH q3_2025_rnd AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        rnd_expense_ratio,\n        ROW_NUMBER() OVER (ORDER BY rnd_expense_ratio DESC) AS rnd_rank_desc,\n        ROW_NUMBER() OVER (ORDER BY rnd_expense_ratio ASC) AS rnd_rank_asc\n    FROM financials_view \n    WHERE report_period = '2025Q3' \n        AND rnd_expense_ratio IS NOT NULL\n),\ntop10_rnd AS (\n    SELECT stock_code, stock_abbr, rnd_expense_ratio\n    FROM q3_2025_rnd\n    WHERE rnd_rank_desc <= 10\n),\nbottom10_rnd AS (\n    SELECT stock_code, stock_abbr, rnd_expense_ratio\n    FROM q3_2025_rnd\n    WHERE rnd_rank_asc <= 10\n),\nprofit_growth AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        net_profit_yoy_growth\n    FROM financials_view\n    WHERE report_period IN ('2024Q3', '2025Q3')\n        AND net_profit_yoy_growth IS NOT NULL\n),\ntop10_growth AS (\n    SELECT \n        t.stock_code,\n        t.stock_abbr,\n        t.rnd_expense_ratio,\n        p2024.net_profit_yoy_growth AS growth_2024q3,\n        p2025.net_profit_yoy_growth AS growth_2025q3\n    FROM top10_rnd t\n    LEFT JOIN profit_growth p2024 ON t.stock_code = p2024.stock_code \n        AND p2024.report_period = '2024Q3'\n    LEFT JOIN profit_growth p2025 ON t.stock_code = p2025.stock_code \n        AND p2025.report_period = '2025Q3'\n),\nbottom10_growth AS (\n    SELECT \n        b.stock_code,\n        b.stock_abbr,\n        b.rnd_expense_ratio,\n        p2024.net_profit_yoy_growth AS growth_2024q3,\n        p2025.net_profit_yoy_growth AS growth_2025q3\n    FROM bottom10_rnd b\n    LEFT JOIN profit_growth p2024 ON b.stock_code = p2024.stock_code \n        AND p2024.report_period = '2024Q3'\n    LEFT JOIN profit_growth p2025 ON b.stock_code = p2025.stock_code \n        AND p2025.report_period = '2025Q3'\n),\ncomparison_summary AS (\n    SELECT \n        '研发费用占比前十' AS group_type,\n        COUNT(*) AS company_count,\n        AVG(rnd_expense_ratio) AS avg_rnd_ratio,\n        AVG(growth_2024q3) AS avg_growth_2024q3,\n        AVG(growth_2025q3) AS avg_growth_2025q3\n    FROM top10_growth\n    UNION ALL\n    SELECT \n        '研发费用占比后十' AS group_type,\n        COUNT(*) AS company_count,\n        AVG(rnd_expense_ratio) AS avg_rnd_ratio,\n        AVG(growth_2024q3) AS avg_growth_2024q3,\n        AVG(growth_2025q3) AS avg_growth_2025q3\n    FROM bottom10_growth\n)\nSELECT * FROM (\n    SELECT \n        stock_abbr AS 公司简称,\n        rnd_expense_ratio AS 研发费用占比,\n        growth_2024q3 AS \"2024Q3净利润同比增长率\",\n        growth_2025q3 AS \"2025Q3净利润同比增长率\"\n    FROM top10_growth\n    UNION ALL\n    SELECT \n        '---对比组---' AS 公司简称,\n        NULL AS 研发费用占比,\n        NULL AS \"2024Q3净利润同比增长率\",\n        NULL AS \"2025Q3净利润同比增长率\"\n    UNION ALL\n    SELECT \n        group_type AS 公司简称,\n        avg_rnd_ratio AS 研发费用占比,\n        avg_growth_2024q3 AS \"2024Q3净利润同比增长率\",\n        avg_growth_2025q3 AS \"2025Q3净利润同比增长率\"\n    FROM comparison_summary\n)\nORDER BY \n    CASE \n        WHEN 公司简称 LIKE '---%' THEN 2\n        WHEN 公司简称 LIKE '研发费用%' THEN 3\n        ELSE 1\n    END,\n    研发费用占比 DESC;",
+  "sql_history": [
+    "WITH q3_2025_rnd AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        rnd_expense_ratio,\n        ROW_NUMBER() OVER (ORDER BY rnd_expense_ratio DESC) AS rnd_rank_desc,\n        ROW_NUMBER() OVER (ORDER BY rnd_expense_ratio ASC) AS rnd_rank_asc\n    FROM financials_view \n    WHERE report_period = '2025Q3' \n        AND rnd_expense_ratio IS NOT NULL\n),\ntop10_rnd AS (\n    SELECT stock_code, stock_abbr, rnd_expense_ratio\n    FROM q3_2025_rnd\n    WHERE rnd_rank_desc <= 10\n),\nbottom10_rnd AS (\n    SELECT stock_code, stock_abbr, rnd_expense_ratio\n    FROM q3_2025_rnd\n    WHERE rnd_rank_asc <= 10\n),\nprofit_growth AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        net_profit_yoy_growth\n    FROM financials_view\n    WHERE report_period IN ('2024Q3', '2025Q3')\n        AND net_profit_yoy_growth IS NOT NULL\n),\ntop10_growth AS (\n    SELECT \n        t.stock_code,\n        t.stock_abbr,\n        t.rnd_expense_ratio,\n        p2024.net_profit_yoy_growth AS growth_2024q3,\n        p2025.net_profit_yoy_growth AS growth_2025q3\n    FROM top10_rnd t\n    LEFT JOIN profit_growth p2024 ON t.stock_code = p2024.stock_code \n        AND p2024.report_period = '2024Q3'\n    LEFT JOIN profit_growth p2025 ON t.stock_code = p2025.stock_code \n        AND p2025.report_period = '2025Q3'\n),\nbottom10_growth AS (\n    SELECT \n        b.stock_code,\n        b.stock_abbr,\n        b.rnd_expense_ratio,\n        p2024.net_profit_yoy_growth AS growth_2024q3,\n        p2025.net_profit_yoy_growth AS growth_2025q3\n    FROM bottom10_rnd b\n    LEFT JOIN profit_growth p2024 ON b.stock_code = p2024.stock_code \n        AND p2024.report_period = '2024Q3'\n    LEFT JOIN profit_growth p2025 ON b.stock_code = p2025.stock_code \n        AND p2025.report_period = '2025Q3'\n),\ncomparison_summary AS (\n    SELECT \n        '研发费用占比前十' AS group_type,\n        COUNT(*) AS company_count,\n        AVG(rnd_expense_ratio) AS avg_rnd_ratio,\n        AVG(growth_2024q3) AS avg_growth_2024q3,\n        AVG(growth_2025q3) AS avg_growth_2025q3\n    FROM top10_growth\n    UNION ALL\n    SELECT \n        '研发费用占比后十' AS group_type,\n        COUNT(*) AS company_count,\n        AVG(rnd_expense_ratio) AS avg_rnd_ratio,\n        AVG(growth_2024q3) AS avg_growth_2024q3,\n        AVG(growth_2025q3) AS avg_growth_2025q3\n    FROM bottom10_growth\n)\nSELECT \n    stock_abbr AS 公司简称,\n    rnd_expense_ratio AS 研发费用占比,\n    growth_2024q3 AS 2024Q3净利润同比增长率,\n    growth_2025q3 AS 2025Q3净利润同比增长率\nFROM top10_growth\nORDER BY rnd_expense_ratio DESC\nUNION ALL\nSELECT \n    '---对比组---' AS 公司简称,\n    NULL AS 研发费用占比,\n    NULL AS 2024Q3净利润同比增长率,\n    NULL AS 2024Q3净利润同比增长率\nUNION ALL\nSELECT \n    group_type AS 公司简称,\n    avg_rnd_ratio AS 研发费用占比,\n    avg_growth_2024q3 AS 2024Q3净利润同比增长率,\n    avg_growth_2025q3 AS 2025Q3净利润同比增长率\nFROM comparison_summary\nORDER BY \n    CASE \n        WHEN 公司简称 LIKE '---%' THEN 2\n        WHEN 公司简称 LIKE '研发费用%' THEN 3\n        ELSE 1\n    END,\n    研发费用占比 DESC;",
+    "WITH q3_2025_rnd AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        rnd_expense_ratio,\n        ROW_NUMBER() OVER (ORDER BY rnd_expense_ratio DESC) AS rnd_rank_desc,\n        ROW_NUMBER() OVER (ORDER BY rnd_expense_ratio ASC) AS rnd_rank_asc\n    FROM financials_view \n    WHERE report_period = '2025Q3' \n        AND rnd_expense_ratio IS NOT NULL\n),\ntop10_rnd AS (\n    SELECT stock_code, stock_abbr, rnd_expense_ratio\n    FROM q3_2025_rnd\n    WHERE rnd_rank_desc <= 10\n),\nbottom10_rnd AS (\n    SELECT stock_code, stock_abbr, rnd_expense_ratio\n    FROM q3_2025_rnd\n    WHERE rnd_rank_asc <= 10\n),\nprofit_growth AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        net_profit_yoy_growth\n    FROM financials_view\n    WHERE report_period IN ('2024Q3', '2025Q3')\n        AND net_profit_yoy_growth IS NOT NULL\n),\ntop10_growth AS (\n    SELECT \n        t.stock_code,\n        t.stock_abbr,\n        t.rnd_expense_ratio,\n        p2024.net_profit_yoy_growth AS growth_2024q3,\n        p2025.net_profit_yoy_growth AS growth_2025q3\n    FROM top10_rnd t\n    LEFT JOIN profit_growth p2024 ON t.stock_code = p2024.stock_code \n        AND p2024.report_period = '2024Q3'\n    LEFT JOIN profit_growth p2025 ON t.stock_code = p2025.stock_code \n        AND p2025.report_period = '2025Q3'\n),\nbottom10_growth AS (\n    SELECT \n        b.stock_code,\n        b.stock_abbr,\n        b.rnd_expense_ratio,\n        p2024.net_profit_yoy_growth AS growth_2024q3,\n        p2025.net_profit_yoy_growth AS growth_2025q3\n    FROM bottom10_rnd b\n    LEFT JOIN profit_growth p2024 ON b.stock_code = p2024.stock_code \n        AND p2024.report_period = '2024Q3'\n    LEFT JOIN profit_growth p2025 ON b.stock_code = p2025.stock_code \n        AND p2025.report_period = '2025Q3'\n),\ncomparison_summary AS (\n    SELECT \n        '研发费用占比前十' AS group_type,\n        COUNT(*) AS company_count,\n        AVG(rnd_expense_ratio) AS avg_rnd_ratio,\n        AVG(growth_2024q3) AS avg_growth_2024q3,\n        AVG(growth_2025q3) AS avg_growth_2025q3\n    FROM top10_growth\n    UNION ALL\n    SELECT \n        '研发费用占比后十' AS group_type,\n        COUNT(*) AS company_count,\n        AVG(rnd_expense_ratio) AS avg_rnd_ratio,\n        AVG(growth_2024q3) AS avg_growth_2024q3,\n        AVG(growth_2025q3) AS avg_growth_2025q3\n    FROM bottom10_growth\n)\nSELECT \n    stock_abbr AS 公司简称,\n    rnd_expense_ratio AS 研发费用占比,\n    growth_2024q3 AS \"2024Q3净利润同比增长率\",\n    growth_2025q3 AS \"2025Q3净利润同比增长率\"\nFROM top10_growth\nORDER BY rnd_expense_ratio DESC\nUNION ALL\nSELECT \n    '---对比组---' AS 公司简称,\n    NULL AS 研发费用占比,\n    NULL AS \"2024Q3净利润同比增长率\",\n    NULL AS \"2025Q3净利润同比增长率\"\nUNION ALL\nSELECT \n    group_type AS 公司简称,\n    avg_rnd_ratio AS 研发费用占比,\n    avg_growth_2024q3 AS \"2024Q3净利润同比增长率\",\n    avg_growth_2025q3 AS \"2025Q3净利润同比增长率\"\nFROM comparison_summary\nORDER BY \n    CASE \n        WHEN 公司简称 LIKE '---%' THEN 2\n        WHEN 公司简称 LIKE '研发费用%' THEN 3\n        ELSE 1\n    END,\n    研发费用占比 DESC;",
+    "WITH q3_2025_rnd AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        rnd_expense_ratio,\n        ROW_NUMBER() OVER (ORDER BY rnd_expense_ratio DESC) AS rnd_rank_desc,\n        ROW_NUMBER() OVER (ORDER BY rnd_expense_ratio ASC) AS rnd_rank_asc\n    FROM financials_view \n    WHERE report_period = '2025Q3' \n        AND rnd_expense_ratio IS NOT NULL\n),\ntop10_rnd AS (\n    SELECT stock_code, stock_abbr, rnd_expense_ratio\n    FROM q3_2025_rnd\n    WHERE rnd_rank_desc <= 10\n),\nbottom10_rnd AS (\n    SELECT stock_code, stock_abbr, rnd_expense_ratio\n    FROM q3_2025_rnd\n    WHERE rnd_rank_asc <= 10\n),\nprofit_growth AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        net_profit_yoy_growth\n    FROM financials_view\n    WHERE report_period IN ('2024Q3', '2025Q3')\n        AND net_profit_yoy_growth IS NOT NULL\n),\ntop10_growth AS (\n    SELECT \n        t.stock_code,\n        t.stock_abbr,\n        t.rnd_expense_ratio,\n        p2024.net_profit_yoy_growth AS growth_2024q3,\n        p2025.net_profit_yoy_growth AS growth_2025q3\n    FROM top10_rnd t\n    LEFT JOIN profit_growth p2024 ON t.stock_code = p2024.stock_code \n        AND p2024.report_period = '2024Q3'\n    LEFT JOIN profit_growth p2025 ON t.stock_code = p2025.stock_code \n        AND p2025.report_period = '2025Q3'\n),\nbottom10_growth AS (\n    SELECT \n        b.stock_code,\n        b.stock_abbr,\n        b.rnd_expense_ratio,\n        p2024.net_profit_yoy_growth AS growth_2024q3,\n        p2025.net_profit_yoy_growth AS growth_2025q3\n    FROM bottom10_rnd b\n    LEFT JOIN profit_growth p2024 ON b.stock_code = p2024.stock_code \n        AND p2024.report_period = '2024Q3'\n    LEFT JOIN profit_growth p2025 ON b.stock_code = p2025.stock_code \n        AND p2025.report_period = '2025Q3'\n),\ncomparison_summary AS (\n    SELECT \n        '研发费用占比前十' AS group_type,\n        COUNT(*) AS company_count,\n        AVG(rnd_expense_ratio) AS avg_rnd_ratio,\n        AVG(growth_2024q3) AS avg_growth_2024q3,\n        AVG(growth_2025q3) AS avg_growth_2025q3\n    FROM top10_growth\n    UNION ALL\n    SELECT \n        '研发费用占比后十' AS group_type,\n        COUNT(*) AS company_count,\n        AVG(rnd_expense_ratio) AS avg_rnd_ratio,\n        AVG(growth_2024q3) AS avg_growth_2024q3,\n        AVG(growth_2025q3) AS avg_growth_2025q3\n    FROM bottom10_growth\n)\nSELECT * FROM (\n    SELECT \n        stock_abbr AS 公司简称,\n        rnd_expense_ratio AS 研发费用占比,\n        growth_2024q3 AS \"2024Q3净利润同比增长率\",\n        growth_2025q3 AS \"2025Q3净利润同比增长率\"\n    FROM top10_growth\n    UNION ALL\n    SELECT \n        '---对比组---' AS 公司简称,\n        NULL AS 研发费用占比,\n        NULL AS \"2024Q3净利润同比增长率\",\n        NULL AS \"2025Q3净利润同比增长率\"\n    UNION ALL\n    SELECT \n        group_type AS 公司简称,\n        avg_rnd_ratio AS 研发费用占比,\n        avg_growth_2024q3 AS \"2024Q3净利润同比增长率\",\n        avg_growth_2025q3 AS \"2025Q3净利润同比增长率\"\n    FROM comparison_summary\n)\nORDER BY \n    CASE \n        WHEN 公司简称 LIKE '---%' THEN 2\n        WHEN 公司简称 LIKE '研发费用%' THEN 3\n        ELSE 1\n    END,\n    研发费用占比 DESC;"
+  ],
+  "sql_attempts": 3,
+  "sql_error": "",
+  "result_row_count": 13,
+  "result_rows": [
+    {
+      "公司简称": "康泰医学",
+      "研发费用占比": 20.079128651209306,
+      "2024Q3净利润同比增长率": -94.92463510578042,
+      "2025Q3净利润同比增长率": -5.080168886537761
+    },
+    {
+      "公司简称": "康缘药业",
+      "研发费用占比": 15.010007526606758,
+      "2024Q3净利润同比增长率": 1.1756640506482308,
+      "2025Q3净利润同比增长率": -30.179506073687172
+    },
+    {
+      "公司简称": "寿仙谷",
+      "研发费用占比": 9.78561237797322,
+      "2024Q3净利润同比增长率": -14.846624113238372,
+      "2025Q3净利润同比增长率": -33.46540298870326
+    },
+    {
+      "公司简称": "华森制药",
+      "研发费用占比": 9.464621860708016,
+      "2024Q3净利润同比增长率": 66.55907170061606,
+      "2025Q3净利润同比增长率": -8.928647084244751
+    },
+    {
+      "公司简称": "以岭药业",
+      "研发费用占比": 9.271466634932073,
+      "2024Q3净利润同比增长率": -68.69403312544912,
+      "2025Q3净利润同比增长率": 81.51487891696773
+    },
+    {
+      "公司简称": "康弘药业",
+      "研发费用占比": 9.221024892507804,
+      "2024Q3净利润同比增长率": 18.216299346480312,
+      "2025Q3净利润同比增长率": 5.828081419228094
+    },
+    {
+      "公司简称": "天士力",
+      "研发费用占比": 8.76977600291724,
+      "2024Q3净利润同比增长率": -17.194290414364584,
+      "2025Q3净利润同比增长率": 19.85175286569481
+    },
+    {
+      "公司简称": "方盛制药",
+      "研发费用占比": 8.623554901790714,
+      "2024Q3净利润同比增长率": 61.71100568939292,
+      "2025Q3净利润同比增长率": 16.691184386097582
+    },
+    {
+      "公司简称": "济川药业",
+      "研发费用占比": 6.913783573701683,
+      "2024Q3净利润同比增长率": -2.0557777941480757,
+      "2025Q3净利润同比增长率": -46.306702405519296
+    },
+    {
+      "公司简称": "桂林三金",
+      "研发费用占比": 6.2264693904383615,
+      "2024Q3净利润同比增长率": -3.280189521848974,
+      "2025Q3净利润同比增长率": 0.35201886860444875
+    },
+    {
+      "公司简称": "---对比组---",
+      "研发费用占比": NaN,
+      "2024Q3净利润同比增长率": NaN,
+      "2025Q3净利润同比增长率": NaN
+    },
+    {
+      "公司简称": "研发费用占比前十",
+      "研发费用占比": 10.336544581278517,
+      "2024Q3净利润同比增长率": -5.333350928769203,
+      "2025Q3净利润同比增长率": 0.027748901790042503
+    },
+    {
+      "公司简称": "研发费用占比后十",
+      "研发费用占比": 0.6005640164592896,
+      "2024Q3净利润同比增长率": 20.13399926002584,
+      "2025Q3净利润同比增长率": 22.308401455478993
+    }
+  ],
+  "retrieved_evidence": [],
+  "reranked_evidence": [],
+  "rerank_preview": "{\"strategy\": \"skipped_fast_path\", \"kept_count\": 0}",
+  "fused_context": {
+    "question": "围绕“研发投入与业绩”：①找出2025年第三季度研发费用占比前十的公司；②查询它们2024-2025年第三季度的净利润同比增长率；③对比研发费用占比前十与后十公司的增长率差异；④生成研发费用占比与净利润增长率的对比柱状图。",
+    "sql_row_count": 13,
+    "evidence_count": 0,
+    "sql_preview": [
+      {
+        "公司简称": "康泰医学",
+        "研发费用占比": 20.079128651209306,
+        "2024Q3净利润同比增长率": -94.92463510578042,
+        "2025Q3净利润同比增长率": -5.080168886537761
+      },
+      {
+        "公司简称": "康缘药业",
+        "研发费用占比": 15.010007526606758,
+        "2024Q3净利润同比增长率": 1.1756640506482308,
+        "2025Q3净利润同比增长率": -30.179506073687172
+      },
+      {
+        "公司简称": "寿仙谷",
+        "研发费用占比": 9.78561237797322,
+        "2024Q3净利润同比增长率": -14.846624113238372,
+        "2025Q3净利润同比增长率": -33.46540298870326
+      },
+      {
+        "公司简称": "华森制药",
+        "研发费用占比": 9.464621860708016,
+        "2024Q3净利润同比增长率": 66.55907170061606,
+        "2025Q3净利润同比增长率": -8.928647084244751
+      },
+      {
+        "公司简称": "以岭药业",
+        "研发费用占比": 9.271466634932073,
+        "2024Q3净利润同比增长率": -68.69403312544912,
+        "2025Q3净利润同比增长率": 81.51487891696773
+      }
+    ],
+    "evidence_preview": [],
+    "evidence_titles": [],
+    "source_breakdown": {}
+  },
+  "self_check": {
+    "pass": true,
+    "notes": [
+      "self_check_skipped_fast_path"
+    ]
+  },
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "围绕“研发投入与业绩”：①找出2025年第三季度... - 净利润",
+    "x_field": null,
+    "y_fields": [
+      "研发费用占比"
+    ],
+    "category_field": "公司简称",
+    "sort_by": null,
+    "sort_ascending": false,
+    "top_n": 12,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task3.chart-spec.v1",
+    "question_id": "B2046",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "围绕“研发投入与业绩”：①找出2025年第三季度... - 净利润",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 13,
+      "preview_rows": [
+        {
+          "公司简称": "康泰医学",
+          "研发费用占比": 20.079128651209306,
+          "2024Q3净利润同比增长率": -94.92463510578042,
+          "2025Q3净利润同比增长率": -5.080168886537761
+        },
+        {
+          "公司简称": "康缘药业",
+          "研发费用占比": 15.010007526606758,
+          "2024Q3净利润同比增长率": 1.1756640506482308,
+          "2025Q3净利润同比增长率": -30.179506073687172
+        },
+        {
+          "公司简称": "寿仙谷",
+          "研发费用占比": 9.78561237797322,
+          "2024Q3净利润同比增长率": -14.846624113238372,
+          "2025Q3净利润同比增长率": -33.46540298870326
+        },
+        {
+          "公司简称": "华森制药",
+          "研发费用占比": 9.464621860708016,
+          "2024Q3净利润同比增长率": 66.55907170061606,
+          "2025Q3净利润同比增长率": -8.928647084244751
+        },
+        {
+          "公司简称": "以岭药业",
+          "研发费用占比": 9.271466634932073,
+          "2024Q3净利润同比增长率": -68.69403312544912,
+          "2025Q3净利润同比增长率": 81.51487891696773
+        },
+        {
+          "公司简称": "康弘药业",
+          "研发费用占比": 9.221024892507804,
+          "2024Q3净利润同比增长率": 18.216299346480312,
+          "2025Q3净利润同比增长率": 5.828081419228094
+        },
+        {
+          "公司简称": "天士力",
+          "研发费用占比": 8.76977600291724,
+          "2024Q3净利润同比增长率": -17.194290414364584,
+          "2025Q3净利润同比增长率": 19.85175286569481
+        },
+        {
+          "公司简称": "方盛制药",
+          "研发费用占比": 8.623554901790714,
+          "2024Q3净利润同比增长率": 61.71100568939292,
+          "2025Q3净利润同比增长率": 16.691184386097582
+        },
+        {
+          "公司简称": "济川药业",
+          "研发费用占比": 6.913783573701683,
+          "2024Q3净利润同比增长率": -2.0557777941480757,
+          "2025Q3净利润同比增长率": -46.306702405519296
+        },
+        {
+          "公司简称": "桂林三金",
+          "研发费用占比": 6.2264693904383615,
+          "2024Q3净利润同比增长率": -3.280189521848974,
+          "2025Q3净利润同比增长率": 0.35201886860444875
+        },
+        {
+          "公司简称": "---对比组---",
+          "研发费用占比": NaN,
+          "2024Q3净利润同比增长率": NaN,
+          "2025Q3净利润同比增长率": NaN
+        },
+        {
+          "公司简称": "研发费用占比前十",
+          "研发费用占比": 10.336544581278517,
+          "2024Q3净利润同比增长率": -5.333350928769203,
+          "2025Q3净利润同比增长率": 0.027748901790042503
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": null,
+      "sort_ascending": false,
+      "top_n": 12,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "研发费用占比",
+        "data_type": "quantitative",
+        "label": "研发费用占比",
+        "unit": "%"
+      },
+      "category": {
+        "field": "公司简称",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B2046_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B2046_1.jpg"
+    },
+    "meta": {
+      "source_sql": "WITH q3_2025_rnd AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        rnd_expense_ratio,\n        ROW_NUMBER() OVER (ORDER BY rnd_expense_ratio DESC) AS rnd_rank_desc,\n        ROW_NUMBER() OVER (ORDER BY rnd_expense_ratio ASC) AS rnd_rank_asc\n    FROM financials_view \n    WHERE report_period = '2025Q3' \n        AND rnd_expense_ratio IS NOT NULL\n),\ntop10_rnd AS (\n    SELECT stock_code, stock_abbr, rnd_expense_ratio\n    FROM q3_2025_rnd\n    WHERE rnd_rank_desc <= 10\n),\nbottom10_rnd AS (\n    SELECT stock_code, stock_abbr, rnd_expense_ratio\n    FROM q3_2025_rnd\n    WHERE rnd_rank_asc <= 10\n),\nprofit_growth AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        net_profit_yoy_growth\n    FROM financials_view\n    WHERE report_period IN ('2024Q3', '2025Q3')\n        AND net_profit_yoy_growth IS NOT NULL\n),\ntop10_growth AS (\n    SELECT \n        t.stock_code,\n        t.stock_abbr,\n        t.rnd_expense_ratio,\n        p2024.net_profit_yoy_growth AS growth_2024q3,\n        p2025.net_profit_yoy_growth AS growth_2025q3\n    FROM top10_rnd t\n    LEFT JOIN profit_growth p2024 ON t.stock_code = p2024.stock_code \n        AND p2024.report_period = '2024Q3'\n    LEFT JOIN profit_growth p2025 ON t.stock_code = p2025.stock_code \n        AND p2025.report_period = '2025Q3'\n),\nbottom10_growth AS (\n    SELECT \n        b.stock_code,\n        b.stock_abbr,\n        b.rnd_expense_ratio,\n        p2024.net_profit_yoy_growth AS growth_2024q3,\n        p2025.net_profit_yoy_growth AS growth_2025q3\n    FROM bottom10_rnd b\n    LEFT JOIN profit_growth p2024 ON b.stock_code = p2024.stock_code \n        AND p2024.report_period = '2024Q3'\n    LEFT JOIN profit_growth p2025 ON b.stock_code = p2025.stock_code \n        AND p2025.report_period = '2025Q3'\n),\ncomparison_summary AS (\n    SELECT \n        '研发费用占比前十' AS group_type,\n        COUNT(*) AS company_count,\n        AVG(rnd_expense_ratio) AS avg_rnd_ratio,\n        AVG(growth_2024q3) AS avg_growth_2024q3,\n        AVG(growth_2025q3) AS avg_growth_2025q3\n    FROM top10_growth\n    UNION ALL\n    SELECT \n        '研发费用占比后十' AS group_type,\n        COUNT(*) AS company_count,\n        AVG(rnd_expense_ratio) AS avg_rnd_ratio,\n        AVG(growth_2024q3) AS avg_growth_2024q3,\n        AVG(growth_2025q3) AS avg_growth_2025q3\n    FROM bottom10_growth\n)\nSELECT * FROM (\n    SELECT \n        stock_abbr AS 公司简称,\n        rnd_expense_ratio AS 研发费用占比,\n        growth_2024q3 AS \"2024Q3净利润同比增长率\",\n        growth_2025q3 AS \"2025Q3净利润同比增长率\"\n    FROM top10_growth\n    UNION ALL\n    SELECT \n        '---对比组---' AS 公司简称,\n        NULL AS 研发费用占比,\n        NULL AS \"2024Q3净利润同比增长率\",\n        NULL AS \"2025Q3净利润同比增长率\"\n    UNION ALL\n    SELECT \n        group_type AS 公司简称,\n        avg_rnd_ratio AS 研发费用占比,\n        avg_growth_2024q3 AS \"2024Q3净利润同比增长率\",\n        avg_growth_2025q3 AS \"2025Q3净利润同比增长率\"\n    FROM comparison_summary\n)\nORDER BY \n    CASE \n        WHEN 公司简称 LIKE '---%' THEN 2\n        WHEN 公司简称 LIKE '研发费用%' THEN 3\n        ELSE 1\n    END,\n    研发费用占比 DESC;",
+      "value_fields": [
+        "研发费用占比"
+      ],
+      "value_labels": [
+        "研发费用占比"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "研发费用占比"
+        ],
+        "category_field": "公司简称",
+        "sort_by": null,
+        "sort_ascending": false,
+        "top_n": 12
+      }
+    }
+  },
+  "current_chart_paths": [
+    "./result/B2046_1.jpg"
+  ],
+  "current_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task3_langgraph/artifacts/chart_specs/B2046_1.spec.json"
+  ],
+  "current_answer": "**直接结论**  \n基于2025年第三季度财务数据：  \n1. **研发费用占比前十的公司**已列出，其研发费用占比在6.23%至20.08%之间。  \n2. 这十家公司2024‑2025年第三季度的净利润同比增长率差异显著，部分公司增长、部分下滑，整体平均增长率较低。  \n3. **研发费用占比后十的公司**（平均占比仅0.60%）在2024‑2025年第三季度的平均净利润同比增长率均高于研发费用占比前十的公司，显示短期内高研发投入并未带来更高的净利润增长。\n\n**财务数据支撑**  \n1. **研发费用占比前十的公司及其净利润同比增长率**（按研发费用占比降序排列）：  \n   - 康泰医学（20.08%）：2024Q3增长‑94.92%，2025Q3增长‑5.08%  \n   - 康缘药业（15.01%）：2024Q3增长1.18%，2025Q3增长‑30.18%  \n   - 寿仙谷（9.79%）：2024Q3增长‑14.85%，2025Q3增长‑33.47%  \n   - 华森制药（9.46%）：2024Q3增长66.56%，2025Q3增长‑8.93%  \n   - 以岭药业（9.27%）：2024Q3增长‑68.69%，2025Q3增长81.51%  \n   - 康弘药业（9.22%）：2024Q3增长18.22%，2025Q3增长5.83%  \n   - 天士力（8.77%）：2024Q3增长‑17.19%，2025Q3增长19.85%  \n   - 方盛制药（8.62%）：2024Q3增长61.71%，2025Q3增长16.69%  \n   - 济川药业（6.91%）：2024Q3增长‑2.06%，2025Q3增长‑46.31%  \n   - 桂林三金（6.23%）：2024Q3增长‑3.28%，2025Q3增长0.35%  \n\n2. **两组对比摘要**：  \n   - **研发费用占比前十**：平均研发费用占比10.34%，2024Q3平均净利润同比增长率‑5.33%，2025Q3平均净利润同比增长率0.03%。  \n   - **研发费用占比后十**：平均研发费用占比0.60%，2024Q3平均净利润同比增长率20.13%，2025Q3平均净利润同比增长率22.31%。  \n\n**研报证据支撑**  \n未检索到直接研报证据。\n\n**综合判断**  \n1. 从单个公司看，研发费用占比前十的公司净利润增长表现分化明显，如以岭药业在2025Q3实现81.51%的高增长，而济川药业、寿仙谷等同期大幅下滑。  \n2. 从组别对比看，研发费用占比后十的公司（平均占比极低）在2024‑2025年第三季度的平均净利润同比增长率均显著高于研发费用占比前十的公司，说明在当前观察期内，高研发投入并未普遍转化为更高的净利润增长，可能反映研发投入的效益存在滞后性，或高研发公司多处于投入期、业绩波动较大。  \n3. 由于缺乏研报证据，无法从行业或公司具体战略层面解释上述差异。  \n\n**图表说明**  \n根据数据可生成对比柱状图，建议以两组（前十 vs 后十）为横轴，纵轴分别显示平均研发费用占比、2024Q3平均净利润同比增长率、2025Q3平均净利润同比增长率，以直观呈现研发投入强度与短期净利润增长的负向关系。",
+  "current_references": [],
+  "answer_rewritten": false,
+  "turn_answers": [
+    {
+      "Q": "围绕“研发投入与业绩”：①找出2025年第三季度研发费用占比前十的公司；②查询它们2024-2025年第三季度的净利润同比增长率；③对比研发费用占比前十与后十公司的增长率差异；④生成研发费用占比与净利润增长率的对比柱状图。",
+      "A": {
+        "content": "**直接结论**  \n基于2025年第三季度财务数据：  \n1. **研发费用占比前十的公司**已列出，其研发费用占比在6.23%至20.08%之间。  \n2. 这十家公司2024‑2025年第三季度的净利润同比增长率差异显著，部分公司增长、部分下滑，整体平均增长率较低。  \n3. **研发费用占比后十的公司**（平均占比仅0.60%）在2024‑2025年第三季度的平均净利润同比增长率均高于研发费用占比前十的公司，显示短期内高研发投入并未带来更高的净利润增长。\n\n**财务数据支撑**  \n1. **研发费用占比前十的公司及其净利润同比增长率**（按研发费用占比降序排列）：  \n   - 康泰医学（20.08%）：2024Q3增长‑94.92%，2025Q3增长‑5.08%  \n   - 康缘药业（15.01%）：2024Q3增长1.18%，2025Q3增长‑30.18%  \n   - 寿仙谷（9.79%）：2024Q3增长‑14.85%，2025Q3增长‑33.47%  \n   - 华森制药（9.46%）：2024Q3增长66.56%，2025Q3增长‑8.93%  \n   - 以岭药业（9.27%）：2024Q3增长‑68.69%，2025Q3增长81.51%  \n   - 康弘药业（9.22%）：2024Q3增长18.22%，2025Q3增长5.83%  \n   - 天士力（8.77%）：2024Q3增长‑17.19%，2025Q3增长19.85%  \n   - 方盛制药（8.62%）：2024Q3增长61.71%，2025Q3增长16.69%  \n   - 济川药业（6.91%）：2024Q3增长‑2.06%，2025Q3增长‑46.31%  \n   - 桂林三金（6.23%）：2024Q3增长‑3.28%，2025Q3增长0.35%  \n\n2. **两组对比摘要**：  \n   - **研发费用占比前十**：平均研发费用占比10.34%，2024Q3平均净利润同比增长率‑5.33%，2025Q3平均净利润同比增长率0.03%。  \n   - **研发费用占比后十**：平均研发费用占比0.60%，2024Q3平均净利润同比增长率20.13%，2025Q3平均净利润同比增长率22.31%。  \n\n**研报证据支撑**  \n未检索到直接研报证据。\n\n**综合判断**  \n1. 从单个公司看，研发费用占比前十的公司净利润增长表现分化明显，如以岭药业在2025Q3实现81.51%的高增长，而济川药业、寿仙谷等同期大幅下滑。  \n2. 从组别对比看，研发费用占比后十的公司（平均占比极低）在2024‑2025年第三季度的平均净利润同比增长率均显著高于研发费用占比前十的公司，说明在当前观察期内，高研发投入并未普遍转化为更高的净利润增长，可能反映研发投入的效益存在滞后性，或高研发公司多处于投入期、业绩波动较大。  \n3. 由于缺乏研报证据，无法从行业或公司具体战略层面解释上述差异。  \n\n**图表说明**  \n根据数据可生成对比柱状图，建议以两组（前十 vs 后十）为横轴，纵轴分别显示平均研发费用占比、2024Q3平均净利润同比增长率、2025Q3平均净利润同比增长率，以直观呈现研发投入强度与短期净利润增长的负向关系。",
+        "image": [
+          "./result/B2046_1.jpg"
+        ],
+        "references": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"围绕“研发投入与业绩”：①找出2025年第三季度研发费用占比前十的公司；②查询它们2024-2025年第三季度的净利润同比增长率；③对比研发费用占比前十与后十公司的增长率差异；④生成研发费用占比与净利润增长率的对比柱状图。\", \"A\": {\"content\": \"**直接结论**  \\n基于2025年第三季度财务数据：  \\n1. **研发费用占比前十的公司**已列出，其研发费用占比在6.23%至20.08%之间。  \\n2. 这十家公司2024‑2025年第三季度的净利润同比增长率差异显著，部分公司增长、部分下滑，整体平均增长率较低。  \\n3. **研发费用占比后十的公司**（平均占比仅0.60%）在2024‑2025年第三季度的平均净利润同比增长率均高于研发费用占比前十的公司，显示短期内高研发投入并未带来更高的净利润增长。\\n\\n**财务数据支撑**  \\n1. **研发费用占比前十的公司及其净利润同比增长率**（按研发费用占比降序排列）：  \\n   - 康泰医学（20.08%）：2024Q3增长‑94.92%，2025Q3增长‑5.08%  \\n   - 康缘药业（15.01%）：2024Q3增长1.18%，2025Q3增长‑30.18%  \\n   - 寿仙谷（9.79%）：2024Q3增长‑14.85%，2025Q3增长‑33.47%  \\n   - 华森制药（9.46%）：2024Q3增长66.56%，2025Q3增长‑8.93%  \\n   - 以岭药业（9.27%）：2024Q3增长‑68.69%，2025Q3增长81.51%  \\n   - 康弘药业（9.22%）：2024Q3增长18.22%，2025Q3增长5.83%  \\n   - 天士力（8.77%）：2024Q3增长‑17.19%，2025Q3增长19.85%  \\n   - 方盛制药（8.62%）：2024Q3增长61.71%，2025Q3增长16.69%  \\n   - 济川药业（6.91%）：2024Q3增长‑2.06%，2025Q3增长‑46.31%  \\n   - 桂林三金（6.23%）：2024Q3增长‑3.28%，2025Q3增长0.35%  \\n\\n2. **两组对比摘要**：  \\n   - **研发费用占比前十**：平均研发费用占比10.34%，2024Q3平均净利润同比增长率‑5.33%，2025Q3平均净利润同比增长率0.03%。  \\n   - **研发费用占比后十**：平均研发费用占比0.60%，2024Q3平均净利润同比增长率20.13%，2025Q3平均净利润同比增长率22.31%。  \\n\\n**研报证据支撑**  \\n未检索到直接研报证据。\\n\\n**综合判断**  \\n1. 从单个公司看，研发费用占比前十的公司净利润增长表现分化明显，如以岭药业在2025Q3实现81.51%的高增长，而济川药业、寿仙谷等同期大幅下滑。  \\n2. 从组别对比看，研发费用占比后十的公司（平均占比极低）在2024‑2025年第三季度的平均净利润同比增长率均显著高于研发费用占比前十的公司，说明在当前观察期内，高研发投入并未普遍转化为更高的净利润增长，可能反映研发投入的效益存在滞后性，或高研发公司多处于投入期、业绩波动较大。  \\n3. 由于缺乏研报证据，无法从行业或公司具体战略层面解释上述差异。  \\n\\n**图表说明**  \\n根据数据可生成对比柱状图，建议以两组（前十 vs 后十）为横轴，纵轴分别显示平均研发费用占比、2024Q3平均净利润同比增长率、2025Q3平均净利润同比增长率，以直观呈现研发投入强度与短期净利润增长的负向关系。\", \"image\": [\"./result/B2046_1.jpg\"], \"references\": []}}]",
+  "references_json": "[]",
+  "notes": [
+    "route=sql_chart",
+    "1. 首先找出2025Q3研发费用占比前十的公司（使用rnd_expense_ratio降序排名）\n2. 同时找出后十家公司（升序排名）用于对比\n3. 分别查询这些公司2024Q3和2025Q3的净利润同比增长率（net_profit_yoy_growth）\n4. 计算两组公司的平均研发费用占比和平均增长率差异\n5. 最终结果包含：前十公司的详细数据、分隔行、两组对比数据\n6. 排序确保前十公司按研发费用占比降序显示，对比组在最后\n7. 所有查询都基于financials_view，使用标准report_period格式\n8. 没有手动枚举公司列表，完全基于排名动态确定",
+    "修复了SQL错误：将包含数字的列别名用双引号括起来，避免SQLite解析错误。原错误是'unrecognized token: \"2024Q3净利润同比增长率\"'，因为SQLite将'2024Q3净利润同比增长率'这样的列别名（包含数字开头）解析为数字令牌，导致语法错误。用双引号包裹这些别名可以正确识别为字符串标识符。",
+    "修复了SQL语法错误：将ORDER BY子句从UNION ALL之前移到了整个查询的最后。具体做法是将所有UNION ALL的结果包装在一个子查询中，然后在最外层应用ORDER BY。这样既保持了原有的逻辑（显示前十公司的详细数据、分隔行和对比组平均值），又符合SQLite的语法要求。",
+    "retrieval_skipped_fast_path",
+    "retrieval_hits=0",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=0",
+    "self_check={\"pass\": true, \"notes\": [\"self_check_skipped_fast_path\"]}"
+  ],
+  "final_status": "ok"
+}

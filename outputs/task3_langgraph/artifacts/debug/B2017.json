@@ -1,0 +1,875 @@
+{
+  "question_id": "B2017",
+  "question_type": "融合查询",
+  "raw_question": "从个股研报中筛选出被评为“强烈推荐”的中药公司，统计它们2025年第三季度的平均净利润同比增长率，并与行业均值对比。",
+  "raw_question_json": "[{\"Q\":\"从个股研报中筛选出被评为“强烈推荐”的中药公司，统计它们2025年第三季度的平均净利润同比增长率，并与行业均值对比。\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "metrics": [
+      "净利润"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "focus_topics": [
+      "行业"
+    ],
+    "intent_type": "industry_open_analysis",
+    "needs_sql": true,
+    "needs_retrieval": true,
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "industry_open_analysis",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "净利润"
+    ],
+    "needs_sql": true,
+    "top_n": null,
+    "threshold": null,
+    "question": "从个股研报中筛选出被评为“强烈推荐”的中药公司，统计它们2025年第三季度的平均净利润同比增长率，并与行业均值对比。"
+  },
+  "retrieval_plan": {
+    "question": "从个股研报中筛选出被评为“强烈推荐”的中药公司，统计它们2025年第三季度的平均净利润同比增长率，并与行业均值对比。",
+    "companies": [],
+    "focus_topics": [
+      "行业",
+      "强烈推荐",
+      "中药"
+    ],
+    "needs_retrieval": true,
+    "top_k": 20,
+    "source_scope": "industry",
+    "retrieval_mode": "hybrid"
+  },
+  "sql": "WITH recommended_companies AS (\n    -- 由于financials_view中没有研报评级字段，这里假设已通过其他方式筛选出\"强烈推荐\"的中药公司\n    -- 根据query_plan，companies列表为空，因此不能手动枚举公司\n    -- 这里返回空结果集，实际应用中应由外部提供公司列表\n    SELECT NULL AS stock_code, NULL AS stock_abbr WHERE 1=0\n),\nindustry_avg AS (\n    SELECT \n        AVG(kpi_net_profit_yoy_growth) AS industry_avg_growth\n    FROM financials_view \n    WHERE report_period = '2025Q3'\n        -- 假设中药行业可通过某种标识筛选，但视图中无行业字段\n        -- 这里返回全行业均值作为近似\n),\nrecommended_avg AS (\n    SELECT \n        AVG(fv.kpi_net_profit_yoy_growth) AS recommended_avg_growth\n    FROM financials_view fv\n    INNER JOIN recommended_companies rc ON fv.stock_code = rc.stock_code\n    WHERE fv.report_period = '2025Q3'\n)\nSELECT \n    '强烈推荐中药公司' AS group_name,\n    recommended_avg_growth AS avg_net_profit_yoy_growth,\n    industry_avg_growth AS industry_avg_net_profit_yoy_growth,\n    recommended_avg_growth - industry_avg_growth AS vs_industry\nFROM recommended_avg, industry_avg\nUNION ALL\nSELECT \n    '全行业' AS group_name,\n    industry_avg_growth,\n    industry_avg_growth,\n    0.0\nFROM industry_avg;",
+  "sql_history": [
+    "WITH recommended_companies AS (\n    -- 由于financials_view中没有研报评级字段，这里假设已通过其他方式筛选出\"强烈推荐\"的中药公司\n    -- 根据query_plan，companies列表为空，因此不能手动枚举公司\n    -- 这里返回空结果集，实际应用中应由外部提供公司列表\n    SELECT NULL AS stock_code, NULL AS stock_abbr WHERE 1=0\n),\nindustry_avg AS (\n    SELECT \n        AVG(kpi_net_profit_yoy_growth) AS industry_avg_growth\n    FROM financials_view \n    WHERE report_period = '2025Q3'\n        -- 假设中药行业可通过某种标识筛选，但视图中无行业字段\n        -- 这里返回全行业均值作为近似\n),\nrecommended_avg AS (\n    SELECT \n        AVG(fv.kpi_net_profit_yoy_growth) AS recommended_avg_growth\n    FROM financials_view fv\n    INNER JOIN recommended_companies rc ON fv.stock_code = rc.stock_code\n    WHERE fv.report_period = '2025Q3'\n)\nSELECT \n    '强烈推荐中药公司' AS group_name,\n    recommended_avg_growth AS avg_net_profit_yoy_growth,\n    industry_avg_growth AS industry_avg_net_profit_yoy_growth,\n    recommended_avg_growth - industry_avg_growth AS vs_industry\nFROM recommended_avg, industry_avg\nUNION ALL\nSELECT \n    '全行业' AS group_name,\n    industry_avg_growth,\n    industry_avg_growth,\n    0.0\nFROM industry_avg;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 2,
+  "result_rows": [
+    {
+      "group_name": "强烈推荐中药公司",
+      "avg_net_profit_yoy_growth": NaN,
+      "industry_avg_net_profit_yoy_growth": 6.220483573132552,
+      "vs_industry": NaN
+    },
+    {
+      "group_name": "全行业",
+      "avg_net_profit_yoy_growth": 6.220483573132552,
+      "industry_avg_net_profit_yoy_growth": 6.220483573132552,
+      "vs_industry": 0.0
+    }
+  ],
+  "retrieved_evidence": [
+    {
+      "source_type": "industry",
+      "title": "医药健康行业研究：药店、中药2026年度策略：蛰伏蓄势，以候风至",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药健康行业研究：药店、中药2026年度策略：蛰伏蓄势，以候风至.pdf",
+      "publish_date": "2025-12-26 00:00:00",
+      "company_or_industry": "中药",
+      "organization": "国金证券",
+      "snippet": "医药健康行业研究：药店、中药2026年度策略：蛰伏蓄势，以候风至；中药；国金证券",
+      "score": 6.580551,
+      "metadata_ref": "industry::医药健康行业研究：药店、中药2026年度策略：蛰伏蓄势，以候风至::2025-12-26T00:00:00::国金证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.775945
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报（25年第51周）：吉因加招股书梳理，关注国内外基因检测行业的发展",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报（25年第51周）：吉因加招股书梳理，关注国内外基因检测行业的发展.pdf",
+      "publish_date": "2025-12-31 00:00:00",
+      "company_or_industry": "中药",
+      "organization": "国信证券",
+      "snippet": "医药生物行业周报（25年第51周）：吉因加招股书梳理，关注国内外基因检测行业的发展；中药；国信证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业周报（25年第51周）：吉因加招股书梳理，关注国内外基因检测行业的发展::2025-12-31T00:00:00::国信证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会.pdf",
+      "publish_date": "2025-12-29 00:00:00",
+      "company_or_industry": "中药",
+      "organization": "中邮证券",
+      "snippet": "医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会；中药；中邮证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会::2025-12-29T00:00:00::中邮证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高.pdf",
+      "publish_date": "2025-12-28 00:00:00",
+      "company_or_industry": "中药",
+      "organization": "东吴证券",
+      "snippet": "医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高；中药；东吴证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高::2025-12-28T00:00:00::东吴证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药健康行业研究：政策推动创新器械应用，脑机接口加速商业落地",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药健康行业研究：政策推动创新器械应用，脑机接口加速商业落地.pdf",
+      "publish_date": "2025-12-28 00:00:00",
+      "company_or_industry": "中药",
+      "organization": "国金证券",
+      "snippet": "医药健康行业研究：政策推动创新器械应用，脑机接口加速商业落地；中药；国金证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药健康行业研究：政策推动创新器械应用，脑机接口加速商业落地::2025-12-28T00:00:00::国金证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "2026年医药行业投资策略：聚焦创新、出海与确定性",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/2026年医药行业投资策略：聚焦创新、出海与确定性.pdf",
+      "publish_date": "2025-12-24 00:00:00",
+      "company_or_industry": "中药",
+      "organization": "诚通证券",
+      "snippet": "2026年医药行业投资策略：聚焦创新、出海与确定性；中药；诚通证券",
+      "score": 5.0,
+      "metadata_ref": "industry::2026年医药行业投资策略：聚焦创新、出海与确定性::2025-12-24T00:00:00::诚通证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报（25年第49周）：政策端支持服务消费力度提升，关注医疗服务相关机会",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报（25年第49周）：政策端支持服务消费力度提升，关注医疗服务相关机会.pdf",
+      "publish_date": "2025-12-23 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "国信证券",
+      "snippet": "医药生物行业周报（25年第49周）：政策端支持服务消费力度提升，关注医疗服务相关机会；中药；国信证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业周报（25年第49周）：政策端支持服务消费力度提升，关注医疗服务相关机会::2025-12-23 00:00:00.000::国信证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业双周报：29省耗材联盟集采启动",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业双周报：29省耗材联盟集采启动.pdf",
+      "publish_date": "2025-12-19 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东莞证券",
+      "snippet": "医药生物行业双周报：29省耗材联盟集采启动；中药；东莞证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业双周报：29省耗材联盟集采启动::2025-12-19 00:00:00.000::东莞证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "2025年中国中药行业市场研究报告",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/2025年中国中药行业市场研究报告.pdf",
+      "publish_date": "2025-12-16 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "硕远咨询",
+      "snippet": "2025年中国中药行业市场研究报告；中药；硕远咨询",
+      "score": 5.0,
+      "metadata_ref": "industry::2025年中国中药行业市场研究报告::2025-12-16 00:00:00.000::硕远咨询::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：STAT6 PROTAC 1b期数据媲美Dupi，重视自免口服市场掘金潜力",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：STAT6 PROTAC 1b期数据媲美Dupi，重视自免口服市场掘金潜力.pdf",
+      "publish_date": "2025-12-15 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "中邮证券",
+      "snippet": "医药生物行业周报：STAT6 PROTAC 1b期数据媲美Dupi，重视自免口服市场掘金潜力；中药；中邮证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业周报：STAT6 PROTAC 1b期数据媲美Dupi，重视自免口服市场掘金潜力::2025-12-15 00:00:00.000::中邮证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业跟踪周报：全球最大单品GLP1，口服临床数据亮眼",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：全球最大单品GLP1，口服临床数据亮眼.pdf",
+      "publish_date": "2025-12-14 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东吴证券",
+      "snippet": "医药生物行业跟踪周报：全球最大单品GLP1，口服临床数据亮眼；中药；东吴证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业跟踪周报：全球最大单品GLP1，口服临床数据亮眼::2025-12-14 00:00:00.000::东吴证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：新版“医保+商保”目录发布，协同保障体系提升创新药可及性",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：新版“医保+商保”目录发布，协同保障体系提升创新药可及性.pdf",
+      "publish_date": "2025-12-09 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "上海证券",
+      "snippet": "医药生物行业周报：新版“医保+商保”目录发布，协同保障体系提升创新药可及性；中药；上海证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业周报：新版“医保+商保”目录发布，协同保障体系提升创新药可及性::2025-12-09 00:00:00.000::上海证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报（12月第1周）：医保商保“双目录”发布",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报（12月第1周）：医保商保“双目录”发布.pdf",
+      "publish_date": "2025-12-09 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "世纪证券",
+      "snippet": "医药生物行业周报（12月第1周）：医保商保“双目录”发布；中药；世纪证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业周报（12月第1周）：医保商保“双目录”发布::2025-12-09 00:00:00.000::世纪证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业快评报告：医保赋能多方合力，共促创新药高质量发展",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业快评报告：医保赋能多方合力，共促创新药高质量发展.pdf",
+      "publish_date": "2025-12-08 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "万联证券",
+      "snippet": "医药生物行业快评报告：医保赋能多方合力，共促创新药高质量发展；中药；万联证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业快评报告：医保赋能多方合力，共促创新药高质量发展::2025-12-08 00:00:00.000::万联证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药健康行业研究：从2025医保谈判看行业风向：成功率提升，创新导向持续强化",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药健康行业研究：从2025医保谈判看行业风向：成功率提升，创新导向持续强化.pdf",
+      "publish_date": "2025-12-08 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "国金证券",
+      "snippet": "医药健康行业研究：从2025医保谈判看行业风向：成功率提升，创新导向持续强化；中药；国金证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药健康行业研究：从2025医保谈判看行业风向：成功率提升，创新导向持续强化::2025-12-08 00:00:00.000::国金证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业跟踪周报：看好创新药出海，重点推荐恒瑞医药、百济神州等",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：看好创新药出海，重点推荐恒瑞医药、百济神州等.pdf",
+      "publish_date": "2025-12-07 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东吴证券",
+      "snippet": "医药生物行业跟踪周报：看好创新药出海，重点推荐恒瑞医药、百济神州等；中药；东吴证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业跟踪周报：看好创新药出海，重点推荐恒瑞医药、百济神州等::2025-12-07 00:00:00.000::东吴证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：必贝特在小核酸领域的差异化布局",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：必贝特在小核酸领域的差异化布局.pdf",
+      "publish_date": "2025-12-07 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "开源证券",
+      "snippet": "医药生物行业周报：必贝特在小核酸领域的差异化布局；中药；开源证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业周报：必贝特在小核酸领域的差异化布局::2025-12-07 00:00:00.000::开源证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业双周报：超大耗材联盟集采结果公布",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业双周报：超大耗材联盟集采结果公布.pdf",
+      "publish_date": "2025-12-05 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东莞证券",
+      "snippet": "医药生物行业双周报：超大耗材联盟集采结果公布；中药；东莞证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业双周报：超大耗材联盟集采结果公布::2025-12-05 00:00:00.000::东莞证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：流感爆发零售药店板块有望受益，看好26年行业集中度加速提升",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：流感爆发零售药店板块有望受益，看好26年行业集中度加速提升.pdf",
+      "publish_date": "2025-12-01 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "中邮证券",
+      "snippet": "医药生物行业周报：流感爆发零售药店板块有望受益，看好26年行业集中度加速提升；中药；中邮证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业周报：流感爆发零售药店板块有望受益，看好26年行业集中度加速提升::2025-12-01 00:00:00.000::中邮证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：短期把握流感驱动，长期布局创新与国际化主线",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：短期把握流感驱动，长期布局创新与国际化主线.pdf",
+      "publish_date": "2025-12-01 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "信达证券",
+      "snippet": "医药生物行业周报：短期把握流感驱动，长期布局创新与国际化主线；中药；信达证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业周报：短期把握流感驱动，长期布局创新与国际化主线::2025-12-01 00:00:00.000::信达证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    }
+  ],
+  "reranked_evidence": [
+    {
+      "source_type": "industry",
+      "title": "2025年中国中药行业市场研究报告",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/2025年中国中药行业市场研究报告.pdf",
+      "publish_date": "2025-12-16 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "硕远咨询",
+      "snippet": "2025年中国中药行业市场研究报告；中药；硕远咨询",
+      "score": 5.0,
+      "metadata_ref": "industry::2025年中国中药行业市场研究报告::2025-12-16 00:00:00.000::硕远咨询::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药健康行业研究：药店、中药2026年度策略：蛰伏蓄势，以候风至",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药健康行业研究：药店、中药2026年度策略：蛰伏蓄势，以候风至.pdf",
+      "publish_date": "2025-12-26 00:00:00",
+      "company_or_industry": "中药",
+      "organization": "国金证券",
+      "snippet": "医药健康行业研究：药店、中药2026年度策略：蛰伏蓄势，以候风至；中药；国金证券",
+      "score": 6.580551,
+      "metadata_ref": "industry::医药健康行业研究：药店、中药2026年度策略：蛰伏蓄势，以候风至::2025-12-26T00:00:00::国金证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.775945
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业跟踪周报：看好创新药出海，重点推荐恒瑞医药、百济神州等",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：看好创新药出海，重点推荐恒瑞医药、百济神州等.pdf",
+      "publish_date": "2025-12-07 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东吴证券",
+      "snippet": "医药生物行业跟踪周报：看好创新药出海，重点推荐恒瑞医药、百济神州等；中药；东吴证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业跟踪周报：看好创新药出海，重点推荐恒瑞医药、百济神州等::2025-12-07 00:00:00.000::东吴证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高.pdf",
+      "publish_date": "2025-12-28 00:00:00",
+      "company_or_industry": "中药",
+      "organization": "东吴证券",
+      "snippet": "医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高；中药；东吴证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高::2025-12-28T00:00:00::东吴证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药健康行业研究：从2025医保谈判看行业风向：成功率提升，创新导向持续强化",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药健康行业研究：从2025医保谈判看行业风向：成功率提升，创新导向持续强化.pdf",
+      "publish_date": "2025-12-08 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "国金证券",
+      "snippet": "医药健康行业研究：从2025医保谈判看行业风向：成功率提升，创新导向持续强化；中药；国金证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药健康行业研究：从2025医保谈判看行业风向：成功率提升，创新导向持续强化::2025-12-08 00:00:00.000::国金证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报（25年第51周）：吉因加招股书梳理，关注国内外基因检测行业的发展",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报（25年第51周）：吉因加招股书梳理，关注国内外基因检测行业的发展.pdf",
+      "publish_date": "2025-12-31 00:00:00",
+      "company_or_industry": "中药",
+      "organization": "国信证券",
+      "snippet": "医药生物行业周报（25年第51周）：吉因加招股书梳理，关注国内外基因检测行业的发展；中药；国信证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业周报（25年第51周）：吉因加招股书梳理，关注国内外基因检测行业的发展::2025-12-31T00:00:00::国信证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：STAT6 PROTAC 1b期数据媲美Dupi，重视自免口服市场掘金潜力",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：STAT6 PROTAC 1b期数据媲美Dupi，重视自免口服市场掘金潜力.pdf",
+      "publish_date": "2025-12-15 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "中邮证券",
+      "snippet": "医药生物行业周报：STAT6 PROTAC 1b期数据媲美Dupi，重视自免口服市场掘金潜力；中药；中邮证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业周报：STAT6 PROTAC 1b期数据媲美Dupi，重视自免口服市场掘金潜力::2025-12-15 00:00:00.000::中邮证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业双周报：29省耗材联盟集采启动",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业双周报：29省耗材联盟集采启动.pdf",
+      "publish_date": "2025-12-19 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东莞证券",
+      "snippet": "医药生物行业双周报：29省耗材联盟集采启动；中药；东莞证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业双周报：29省耗材联盟集采启动::2025-12-19 00:00:00.000::东莞证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "2026年医药行业投资策略：聚焦创新、出海与确定性",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/2026年医药行业投资策略：聚焦创新、出海与确定性.pdf",
+      "publish_date": "2025-12-24 00:00:00",
+      "company_or_industry": "中药",
+      "organization": "诚通证券",
+      "snippet": "2026年医药行业投资策略：聚焦创新、出海与确定性；中药；诚通证券",
+      "score": 5.0,
+      "metadata_ref": "industry::2026年医药行业投资策略：聚焦创新、出海与确定性::2025-12-24T00:00:00::诚通证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报（25年第49周）：政策端支持服务消费力度提升，关注医疗服务相关机会",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报（25年第49周）：政策端支持服务消费力度提升，关注医疗服务相关机会.pdf",
+      "publish_date": "2025-12-23 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "国信证券",
+      "snippet": "医药生物行业周报（25年第49周）：政策端支持服务消费力度提升，关注医疗服务相关机会；中药；国信证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业周报（25年第49周）：政策端支持服务消费力度提升，关注医疗服务相关机会::2025-12-23 00:00:00.000::国信证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：短期把握流感驱动，长期布局创新与国际化主线",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：短期把握流感驱动，长期布局创新与国际化主线.pdf",
+      "publish_date": "2025-12-01 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "信达证券",
+      "snippet": "医药生物行业周报：短期把握流感驱动，长期布局创新与国际化主线；中药；信达证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业周报：短期把握流感驱动，长期布局创新与国际化主线::2025-12-01 00:00:00.000::信达证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：流感爆发零售药店板块有望受益，看好26年行业集中度加速提升",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：流感爆发零售药店板块有望受益，看好26年行业集中度加速提升.pdf",
+      "publish_date": "2025-12-01 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "中邮证券",
+      "snippet": "医药生物行业周报：流感爆发零售药店板块有望受益，看好26年行业集中度加速提升；中药；中邮证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业周报：流感爆发零售药店板块有望受益，看好26年行业集中度加速提升::2025-12-01 00:00:00.000::中邮证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业跟踪周报：全球最大单品GLP1，口服临床数据亮眼",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：全球最大单品GLP1，口服临床数据亮眼.pdf",
+      "publish_date": "2025-12-14 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东吴证券",
+      "snippet": "医药生物行业跟踪周报：全球最大单品GLP1，口服临床数据亮眼；中药；东吴证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业跟踪周报：全球最大单品GLP1，口服临床数据亮眼::2025-12-14 00:00:00.000::东吴证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：必贝特在小核酸领域的差异化布局",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：必贝特在小核酸领域的差异化布局.pdf",
+      "publish_date": "2025-12-07 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "开源证券",
+      "snippet": "医药生物行业周报：必贝特在小核酸领域的差异化布局；中药；开源证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业周报：必贝特在小核酸领域的差异化布局::2025-12-07 00:00:00.000::开源证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会.pdf",
+      "publish_date": "2025-12-29 00:00:00",
+      "company_or_industry": "中药",
+      "organization": "中邮证券",
+      "snippet": "医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会；中药；中邮证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会::2025-12-29T00:00:00::中邮证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业双周报：超大耗材联盟集采结果公布",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业双周报：超大耗材联盟集采结果公布.pdf",
+      "publish_date": "2025-12-05 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东莞证券",
+      "snippet": "医药生物行业双周报：超大耗材联盟集采结果公布；中药；东莞证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业双周报：超大耗材联盟集采结果公布::2025-12-05 00:00:00.000::东莞证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：新版“医保+商保”目录发布，协同保障体系提升创新药可及性",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：新版“医保+商保”目录发布，协同保障体系提升创新药可及性.pdf",
+      "publish_date": "2025-12-09 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "上海证券",
+      "snippet": "医药生物行业周报：新版“医保+商保”目录发布，协同保障体系提升创新药可及性；中药；上海证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业周报：新版“医保+商保”目录发布，协同保障体系提升创新药可及性::2025-12-09 00:00:00.000::上海证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药健康行业研究：政策推动创新器械应用，脑机接口加速商业落地",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药健康行业研究：政策推动创新器械应用，脑机接口加速商业落地.pdf",
+      "publish_date": "2025-12-28 00:00:00",
+      "company_or_industry": "中药",
+      "organization": "国金证券",
+      "snippet": "医药健康行业研究：政策推动创新器械应用，脑机接口加速商业落地；中药；国金证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药健康行业研究：政策推动创新器械应用，脑机接口加速商业落地::2025-12-28T00:00:00::国金证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业快评报告：医保赋能多方合力，共促创新药高质量发展",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业快评报告：医保赋能多方合力，共促创新药高质量发展.pdf",
+      "publish_date": "2025-12-08 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "万联证券",
+      "snippet": "医药生物行业快评报告：医保赋能多方合力，共促创新药高质量发展；中药；万联证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业快评报告：医保赋能多方合力，共促创新药高质量发展::2025-12-08 00:00:00.000::万联证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报（12月第1周）：医保商保“双目录”发布",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报（12月第1周）：医保商保“双目录”发布.pdf",
+      "publish_date": "2025-12-09 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "世纪证券",
+      "snippet": "医药生物行业周报（12月第1周）：医保商保“双目录”发布；中药；世纪证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业周报（12月第1周）：医保商保“双目录”发布::2025-12-09 00:00:00.000::世纪证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    }
+  ],
+  "rerank_preview": "{\"strategy\": \"reranker_model\", \"kept_count\": 20, \"reason\": \"BAAI/bge-reranker-v2-m3\"}",
+  "fused_context": {
+    "question": "从个股研报中筛选出被评为“强烈推荐”的中药公司，统计它们2025年第三季度的平均净利润同比增长率，并与行业均值对比。",
+    "sql_row_count": 2,
+    "evidence_count": 20,
+    "sql_preview": [
+      {
+        "group_name": "强烈推荐中药公司",
+        "avg_net_profit_yoy_growth": NaN,
+        "industry_avg_net_profit_yoy_growth": 6.220483573132552,
+        "vs_industry": NaN
+      },
+      {
+        "group_name": "全行业",
+        "avg_net_profit_yoy_growth": 6.220483573132552,
+        "industry_avg_net_profit_yoy_growth": 6.220483573132552,
+        "vs_industry": 0.0
+      }
+    ],
+    "evidence_preview": [
+      {
+        "source_type": "industry",
+        "title": "2025年中国中药行业市场研究报告",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/2025年中国中药行业市场研究报告.pdf",
+        "publish_date": "2025-12-16 00:00:00.000",
+        "company_or_industry": "中药",
+        "organization": "硕远咨询",
+        "snippet": "2025年中国中药行业市场研究报告；中药；硕远咨询",
+        "score": 5.0,
+        "metadata_ref": "industry::2025年中国中药行业市场研究报告::2025-12-16 00:00:00.000::硕远咨询::中药",
+        "score_components": {
+          "metadata": 5.0,
+          "vector": 0.0
+        }
+      },
+      {
+        "source_type": "industry",
+        "title": "医药健康行业研究：药店、中药2026年度策略：蛰伏蓄势，以候风至",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药健康行业研究：药店、中药2026年度策略：蛰伏蓄势，以候风至.pdf",
+        "publish_date": "2025-12-26 00:00:00",
+        "company_or_industry": "中药",
+        "organization": "国金证券",
+        "snippet": "医药健康行业研究：药店、中药2026年度策略：蛰伏蓄势，以候风至；中药；国金证券",
+        "score": 6.580551,
+        "metadata_ref": "industry::医药健康行业研究：药店、中药2026年度策略：蛰伏蓄势，以候风至::2025-12-26T00:00:00::国金证券::中药",
+        "score_components": {
+          "metadata": 5.0,
+          "vector": 0.775945
+        }
+      },
+      {
+        "source_type": "industry",
+        "title": "医药生物行业跟踪周报：看好创新药出海，重点推荐恒瑞医药、百济神州等",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：看好创新药出海，重点推荐恒瑞医药、百济神州等.pdf",
+        "publish_date": "2025-12-07 00:00:00.000",
+        "company_or_industry": "中药",
+        "organization": "东吴证券",
+        "snippet": "医药生物行业跟踪周报：看好创新药出海，重点推荐恒瑞医药、百济神州等；中药；东吴证券",
+        "score": 5.0,
+        "metadata_ref": "industry::医药生物行业跟踪周报：看好创新药出海，重点推荐恒瑞医药、百济神州等::2025-12-07 00:00:00.000::东吴证券::中药",
+        "score_components": {
+          "metadata": 5.0,
+          "vector": 0.0
+        }
+      },
+      {
+        "source_type": "industry",
+        "title": "医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高.pdf",
+        "publish_date": "2025-12-28 00:00:00",
+        "company_or_industry": "中药",
+        "organization": "东吴证券",
+        "snippet": "医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高；中药；东吴证券",
+        "score": 5.0,
+        "metadata_ref": "industry::医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高::2025-12-28T00:00:00::东吴证券::中药",
+        "score_components": {
+          "metadata": 5.0,
+          "vector": 0.0
+        }
+      },
+      {
+        "source_type": "industry",
+        "title": "医药健康行业研究：从2025医保谈判看行业风向：成功率提升，创新导向持续强化",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药健康行业研究：从2025医保谈判看行业风向：成功率提升，创新导向持续强化.pdf",
+        "publish_date": "2025-12-08 00:00:00.000",
+        "company_or_industry": "中药",
+        "organization": "国金证券",
+        "snippet": "医药健康行业研究：从2025医保谈判看行业风向：成功率提升，创新导向持续强化；中药；国金证券",
+        "score": 5.0,
+        "metadata_ref": "industry::医药健康行业研究：从2025医保谈判看行业风向：成功率提升，创新导向持续强化::2025-12-08 00:00:00.000::国金证券::中药",
+        "score_components": {
+          "metadata": 5.0,
+          "vector": 0.0
+        }
+      }
+    ],
+    "evidence_titles": [
+      "2025年中国中药行业市场研究报告",
+      "医药健康行业研究：药店、中药2026年度策略：蛰伏蓄势，以候风至",
+      "医药生物行业跟踪周报：看好创新药出海，重点推荐恒瑞医药、百济神州等",
+      "医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高",
+      "医药健康行业研究：从2025医保谈判看行业风向：成功率提升，创新导向持续强化"
+    ],
+    "source_breakdown": {
+      "industry": 20
+    }
+  },
+  "self_check": {
+    "pass": true,
+    "notes": [
+      "1. 回答中的数字与SQL rows一致：行业平均净利润同比增长率6.22%正确对应。",
+      "2. 回答正确指出无法筛选出“强烈推荐”中药公司，因为SQL结果中该群体的avg_net_profit_yoy_growth为NaN。",
+      "3. 回答没有遗漏关键点：明确说明了无法计算目标群体平均值的原因，并提供了可用的行业均值作为参考。",
+      "4. 指标名称使用正确：始终使用“净利润同比增长率”，没有与其他指标混淆。",
+      "5. 聚合统计结果对应正确：正确将6.22%解释为行业平均值，没有错误对应到具体公司。",
+      "6. 回答正确引用了Evidences：指出研报证据中没有直接提供所需的定量数据，这与提供的Evidences内容相符。"
+    ]
+  },
+  "chart_plan": {},
+  "chart_spec": {},
+  "current_chart_paths": [],
+  "current_chart_specs": [],
+  "current_answer": "根据提供的SQL查询结果和研报证据，回答如下：\n\n**直接结论：**\n由于无法从当前数据中筛选出具体的“强烈推荐”中药公司，因此无法计算该群体的平均净利润同比增长率。根据SQL查询结果，2025年第三季度全行业的平均净利润同比增长率约为6.22%。\n\n**财务数据支撑：**\nSQL查询结果显示：\n*   **全行业平均净利润同比增长率**：在2025年第三季度为**6.2205%**。\n*   **“强烈推荐”中药公司平均净利润同比增长率**：查询结果为`null`，表明在当前数据条件下，未能获取到符合条件的公司列表及其财务数据，因此无法计算该群体的平均值。\n\n**研报证据支撑：**\n未检索到直接提供2025年第三季度中药行业净利润同比增长率具体数值或“强烈推荐”公司相关财务数据的研报证据。检索到的行业研报主要关注市场趋势、年度策略和医保谈判等宏观主题，未提供与问题直接匹配的定量数据。\n\n**综合判断：**\n1.  **数据层面**：由于数据库结构限制（缺乏研报评级字段和精确的行业筛选标识），无法完成从“强烈推荐”评级出发筛选中药公司并计算其财务指标的任务。因此，无法将“强烈推荐”中药公司的平均净利润增长率与行业均值进行对比。\n2.  **行业参考**：当前仅能提供2025年第三季度全行业的平均净利润同比增长率（约6.22%）作为背景参考。该数值可能包含了中药行业在内的所有医药生物行业公司。\n3.  **证据层面**：现有研报证据无法为“强烈推荐”中药公司的具体财务表现或行业对比提供直接支持。\n\n**总结：** 无法完成“统计‘强烈推荐’中药公司2025年第三季度平均净利润同比增长率并与行业均值对比”的请求。原因在于数据源中缺乏必要的关联字段以筛选出目标公司群体。仅能提供同期全行业的平均净利润增长率作为参考。",
+  "current_references": [
+    {
+      "paper_path": "./附件5：研报数据/行业研报/2025年中国中药行业市场研究报告.pdf",
+      "text": "数据来源：中国中药协会，前瞻产业研究院\n中药产业作为中国传统医药文化的重要组成部分，具有悠久的历史和丰富的资源基础。\n\n全国范围内，中药材的种植和采集主要分布在资源丰富的省份，如安徽、四川、云南、河南、河北等地。\n\n这些地区得天独厚的自然条件，如适宜的气候、土壤环境和丰富的生物多样性，为中药材的质量和产量提供了坚实保障。\n\n安徽以黄山药材闻名，四川则因其丰富的川贝、天麻等名贵药材而著称，云南拥有众多珍稀中药材资源，是中国重要的中药材生产基地之一。\n\n与此同时，东部沿海地区如江苏、浙江、广东和福建，则成为中药制药和销售的核心区域。\n\n这些地区拥有发达的交通运输网络、先进的加工技术和完善的市场体系，形成了从中药材加工、提取、制剂到销售的完整产业链。\n\n展望未来，随着国家对中医药产业的高度重视以及相关政策的持续支持，区域集聚效应将进一步增强。\n\n各地区将在产业链分工、技术创新、品牌建设等方面实现更深层次的合作，推动中药产业迈向高质量发展阶段。\n\n这不仅有助于提升中国中药产业的整体竞争力和国际影响力，也为促进传统文化传承和人民健康保障发挥积极作用。\n\n随着社会的发展和健康观念的不断提升，消费者对中药的认知逐步加深，普遍认可中药作为天然疗法的独特优势，尤其强调其中药的天然成分、安全性高以及整体调理身体的特点。越来越多的人开始接受中药不仅仅是传统的治疗手段，更是一种预防疾病、促进健康的生活方式"
+    },
+    {
+      "paper_path": "./附件5：研报数据/行业研报/医药健康行业研究：药店、中药2026年度策略：蛰伏蓄势，以候风至.pdf",
+      "text": "药店、中药2026年度策略：蛰伏蓄势，以候风至\n复盘2025 年，药店、中药板块整体行情都相对偏弱。\n\n药店：在政策促行业向更规范发展、整体消费景气度不足、终端需求偏弱等多重因素影响下，2018-2023 年快速提升的行业门店数量带来的竞争压力被持续放大，行业同店增长明显放缓，行业迎来出清阶段，自2024 年Q4 开始，连续多个季度关店多于开店。\n\n中药：2025 年板块行情整体偏弱，主要系受业绩表现承压影响，尤其是药品零售环境相对疲软，院外OTC 产品销售有所波动，且流感发病率整体同比更低，终端需求不足，部分抗病毒/呼吸/消化类中成药相关公司业绩受去库存或消化基数影响较大。\n\n另外，全国中成药集采及首批扩围接续中选结果实际执行效果仍待观望。\n\n展望2026 年，药店、中药板块都有望迎来触底回升的机会。\n\n药店：挑战与机遇并存，在政策持续推动行业规范发展的背景下，合规龙头优先受益。\n\n且我们同样能看到率先进行门店调整的龙头公司，2025 年Q3 收入端边际回暖。\n\n内生表现向好，且部分龙头公司现金流状况优秀，有望在出清期趁势提升市占率；\n\n另外，部分公司开始尝试积极拓展非药，优化产品结构，作为纯增量业务来看，非药后续若迎来超预期的表现，有望成为潜在的重要利润贡献点。\n\n中药：经历2024-2025 年的持续去库存、消化业绩基数，以及高峰发货的效期临近，加之2025 年Q4 ",
+      "paper_image": "图表20：年初至今涨跌幅，中药板块总体相对偏弱"
+    },
+    {
+      "paper_path": "./附件5：研报数据/行业研报/医药生物行业跟踪周报：看好创新药出海，重点推荐恒瑞医药、百济神州等.pdf",
+      "text": "医疗器械>药店等。具体标的选择思路：从中药角度，建议关注佐力药\n从CXO、上游科研服务角度，建议关注药明康德、皓元医药、百奥赛图、奥浦迈、纳微科技、金斯瑞生物等。\n\n从医疗器械角度，建议关注联影医疗、鱼跃医疗等。\n\n从AI 制药角度，建议关注晶泰控股等。\n\n从GLP1 角度，建议关注联邦制药、博瑞医药、众生药业、信达生物等。\n\n从PD1/VEGF 双抗角度，建议关注三生制药、康方生物、荣昌生物等从创新药角度，建议关注信达生物、百济神州、石药集团、恒瑞医药、泽璟制药、百利天恒、科伦博泰、迪哲医药、海思科、科伦博泰等。",
+      "paper_image": "图2：减重领域，体系化管线解决现有疗法核心痛点"
+    },
+    {
+      "paper_path": "./附件5：研报数据/行业研报/医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高.pdf",
+      "text": "诺和诺德宣布司美格鲁肽注射液（商品名：诺和盈 ®）的心血管适应症\n上市申请获得国家药品监督管理局批准，适用于降低已确诊为心血管疾病且BMI≥27kg/m2 成人患者的主要心血管不良事件的风险。该药品可作为当前肥胖症标准化治疗中的重要手段之一。◼ 具体思路:看好的子行业排序分别为:创新药>科研服务>CXO>中药>医",
+      "paper_image": "图3：中美在研创新药赛道覆盖度及研发进度排名（截至2024 年）"
+    },
+    {
+      "paper_path": "./附件5：研报数据/行业研报/医药健康行业研究：从2025医保谈判看行业风向：成功率提升，创新导向持续强化.pdf",
+      "text": "三九、以岭药业、方盛制药、康缘药业、广东思济药业等药企。\n中药经典名方申请较多，但政策鼓励创新方向明确。根据国家医保局25 年8 月公告，通过初步审查的中成药共23 种、合计25 个产品。今日公示名单，最终入选7 个产品，包括4 个1 类新药以及3 个3 类新药。本次整体入选比例不高，主要系经典名方申请较多，且多数未入选。通过初审名单中，共6 个1 类新药，最终入选4 个。12 个3 类中药，最终入选3 个。6 个进口中药，无入选。1 个天然药物1.1 类，未入选。\n\n投资建议西药：建议关注纳入新版医保目录创新药较多/品种重磅的恒瑞医药、百济神州、康方生物、科伦博泰、信达生物等，以及大单品首次纳入医保的康诺亚（IL4 单抗）、特宝生物（长效生长激素）等。中成药：建议关注入选新版医保目录的中药产品放量潜力，如华润三九的益气清肺颗粒、以岭药业的芪防鼻通片、方盛制药的养血祛风止痛颗粒、康缘药业的玉女煎颗粒/温阳解毒颗粒等。序号公司药品2025年医保目录价格2025年医保目录适应症用法用量注册分类\n\n于饮片52g))益气养阴，健脾和中，清热祛湿。适用于疫病后短期症状，气阴两虚，脾虚失运，余邪未尽证，症见倦怠乏力、动后气短、干咳少痰、咽喉不利、胃脘痞闷、纳呆便溏，舌淡或红、少津，脉细数。温水冲服。1次1袋，1日2次。疗程14天。中药3.2类\n\n片1.52g)/片)益气通窍。用于改善肺脾两虚型",
+      "paper_image": "图表7：凭借商保，较高定价的药物能够实现患者渗透率的快速提升"
+    }
+  ],
+  "answer_rewritten": false,
+  "turn_answers": [
+    {
+      "Q": "从个股研报中筛选出被评为“强烈推荐”的中药公司，统计它们2025年第三季度的平均净利润同比增长率，并与行业均值对比。",
+      "A": {
+        "content": "根据提供的SQL查询结果和研报证据，回答如下：\n\n**直接结论：**\n由于无法从当前数据中筛选出具体的“强烈推荐”中药公司，因此无法计算该群体的平均净利润同比增长率。根据SQL查询结果，2025年第三季度全行业的平均净利润同比增长率约为6.22%。\n\n**财务数据支撑：**\nSQL查询结果显示：\n*   **全行业平均净利润同比增长率**：在2025年第三季度为**6.2205%**。\n*   **“强烈推荐”中药公司平均净利润同比增长率**：查询结果为`null`，表明在当前数据条件下，未能获取到符合条件的公司列表及其财务数据，因此无法计算该群体的平均值。\n\n**研报证据支撑：**\n未检索到直接提供2025年第三季度中药行业净利润同比增长率具体数值或“强烈推荐”公司相关财务数据的研报证据。检索到的行业研报主要关注市场趋势、年度策略和医保谈判等宏观主题，未提供与问题直接匹配的定量数据。\n\n**综合判断：**\n1.  **数据层面**：由于数据库结构限制（缺乏研报评级字段和精确的行业筛选标识），无法完成从“强烈推荐”评级出发筛选中药公司并计算其财务指标的任务。因此，无法将“强烈推荐”中药公司的平均净利润增长率与行业均值进行对比。\n2.  **行业参考**：当前仅能提供2025年第三季度全行业的平均净利润同比增长率（约6.22%）作为背景参考。该数值可能包含了中药行业在内的所有医药生物行业公司。\n3.  **证据层面**：现有研报证据无法为“强烈推荐”中药公司的具体财务表现或行业对比提供直接支持。\n\n**总结：** 无法完成“统计‘强烈推荐’中药公司2025年第三季度平均净利润同比增长率并与行业均值对比”的请求。原因在于数据源中缺乏必要的关联字段以筛选出目标公司群体。仅能提供同期全行业的平均净利润增长率作为参考。",
+        "image": [],
+        "references": [
+          {
+            "paper_path": "./附件5：研报数据/行业研报/2025年中国中药行业市场研究报告.pdf",
+            "text": "数据来源：中国中药协会，前瞻产业研究院\n中药产业作为中国传统医药文化的重要组成部分，具有悠久的历史和丰富的资源基础。\n\n全国范围内，中药材的种植和采集主要分布在资源丰富的省份，如安徽、四川、云南、河南、河北等地。\n\n这些地区得天独厚的自然条件，如适宜的气候、土壤环境和丰富的生物多样性，为中药材的质量和产量提供了坚实保障。\n\n安徽以黄山药材闻名，四川则因其丰富的川贝、天麻等名贵药材而著称，云南拥有众多珍稀中药材资源，是中国重要的中药材生产基地之一。\n\n与此同时，东部沿海地区如江苏、浙江、广东和福建，则成为中药制药和销售的核心区域。\n\n这些地区拥有发达的交通运输网络、先进的加工技术和完善的市场体系，形成了从中药材加工、提取、制剂到销售的完整产业链。\n\n展望未来，随着国家对中医药产业的高度重视以及相关政策的持续支持，区域集聚效应将进一步增强。\n\n各地区将在产业链分工、技术创新、品牌建设等方面实现更深层次的合作，推动中药产业迈向高质量发展阶段。\n\n这不仅有助于提升中国中药产业的整体竞争力和国际影响力，也为促进传统文化传承和人民健康保障发挥积极作用。\n\n随着社会的发展和健康观念的不断提升，消费者对中药的认知逐步加深，普遍认可中药作为天然疗法的独特优势，尤其强调其中药的天然成分、安全性高以及整体调理身体的特点。越来越多的人开始接受中药不仅仅是传统的治疗手段，更是一种预防疾病、促进健康的生活方式"
+          },
+          {
+            "paper_path": "./附件5：研报数据/行业研报/医药健康行业研究：药店、中药2026年度策略：蛰伏蓄势，以候风至.pdf",
+            "text": "药店、中药2026年度策略：蛰伏蓄势，以候风至\n复盘2025 年，药店、中药板块整体行情都相对偏弱。\n\n药店：在政策促行业向更规范发展、整体消费景气度不足、终端需求偏弱等多重因素影响下，2018-2023 年快速提升的行业门店数量带来的竞争压力被持续放大，行业同店增长明显放缓，行业迎来出清阶段，自2024 年Q4 开始，连续多个季度关店多于开店。\n\n中药：2025 年板块行情整体偏弱，主要系受业绩表现承压影响，尤其是药品零售环境相对疲软，院外OTC 产品销售有所波动，且流感发病率整体同比更低，终端需求不足，部分抗病毒/呼吸/消化类中成药相关公司业绩受去库存或消化基数影响较大。\n\n另外，全国中成药集采及首批扩围接续中选结果实际执行效果仍待观望。\n\n展望2026 年，药店、中药板块都有望迎来触底回升的机会。\n\n药店：挑战与机遇并存，在政策持续推动行业规范发展的背景下，合规龙头优先受益。\n\n且我们同样能看到率先进行门店调整的龙头公司，2025 年Q3 收入端边际回暖。\n\n内生表现向好，且部分龙头公司现金流状况优秀，有望在出清期趁势提升市占率；\n\n另外，部分公司开始尝试积极拓展非药，优化产品结构，作为纯增量业务来看，非药后续若迎来超预期的表现，有望成为潜在的重要利润贡献点。\n\n中药：经历2024-2025 年的持续去库存、消化业绩基数，以及高峰发货的效期临近，加之2025 年Q4 ",
+            "paper_image": "图表20：年初至今涨跌幅，中药板块总体相对偏弱"
+          },
+          {
+            "paper_path": "./附件5：研报数据/行业研报/医药生物行业跟踪周报：看好创新药出海，重点推荐恒瑞医药、百济神州等.pdf",
+            "text": "医疗器械>药店等。具体标的选择思路：从中药角度，建议关注佐力药\n从CXO、上游科研服务角度，建议关注药明康德、皓元医药、百奥赛图、奥浦迈、纳微科技、金斯瑞生物等。\n\n从医疗器械角度，建议关注联影医疗、鱼跃医疗等。\n\n从AI 制药角度，建议关注晶泰控股等。\n\n从GLP1 角度，建议关注联邦制药、博瑞医药、众生药业、信达生物等。\n\n从PD1/VEGF 双抗角度，建议关注三生制药、康方生物、荣昌生物等从创新药角度，建议关注信达生物、百济神州、石药集团、恒瑞医药、泽璟制药、百利天恒、科伦博泰、迪哲医药、海思科、科伦博泰等。",
+            "paper_image": "图2：减重领域，体系化管线解决现有疗法核心痛点"
+          },
+          {
+            "paper_path": "./附件5：研报数据/行业研报/医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高.pdf",
+            "text": "诺和诺德宣布司美格鲁肽注射液（商品名：诺和盈 ®）的心血管适应症\n上市申请获得国家药品监督管理局批准，适用于降低已确诊为心血管疾病且BMI≥27kg/m2 成人患者的主要心血管不良事件的风险。该药品可作为当前肥胖症标准化治疗中的重要手段之一。◼ 具体思路:看好的子行业排序分别为:创新药>科研服务>CXO>中药>医",
+            "paper_image": "图3：中美在研创新药赛道覆盖度及研发进度排名（截至2024 年）"
+          },
+          {
+            "paper_path": "./附件5：研报数据/行业研报/医药健康行业研究：从2025医保谈判看行业风向：成功率提升，创新导向持续强化.pdf",
+            "text": "三九、以岭药业、方盛制药、康缘药业、广东思济药业等药企。\n中药经典名方申请较多，但政策鼓励创新方向明确。根据国家医保局25 年8 月公告，通过初步审查的中成药共23 种、合计25 个产品。今日公示名单，最终入选7 个产品，包括4 个1 类新药以及3 个3 类新药。本次整体入选比例不高，主要系经典名方申请较多，且多数未入选。通过初审名单中，共6 个1 类新药，最终入选4 个。12 个3 类中药，最终入选3 个。6 个进口中药，无入选。1 个天然药物1.1 类，未入选。\n\n投资建议西药：建议关注纳入新版医保目录创新药较多/品种重磅的恒瑞医药、百济神州、康方生物、科伦博泰、信达生物等，以及大单品首次纳入医保的康诺亚（IL4 单抗）、特宝生物（长效生长激素）等。中成药：建议关注入选新版医保目录的中药产品放量潜力，如华润三九的益气清肺颗粒、以岭药业的芪防鼻通片、方盛制药的养血祛风止痛颗粒、康缘药业的玉女煎颗粒/温阳解毒颗粒等。序号公司药品2025年医保目录价格2025年医保目录适应症用法用量注册分类\n\n于饮片52g))益气养阴，健脾和中，清热祛湿。适用于疫病后短期症状，气阴两虚，脾虚失运，余邪未尽证，症见倦怠乏力、动后气短、干咳少痰、咽喉不利、胃脘痞闷、纳呆便溏，舌淡或红、少津，脉细数。温水冲服。1次1袋，1日2次。疗程14天。中药3.2类\n\n片1.52g)/片)益气通窍。用于改善肺脾两虚型",
+            "paper_image": "图表7：凭借商保，较高定价的药物能够实现患者渗透率的快速提升"
+          }
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"从个股研报中筛选出被评为“强烈推荐”的中药公司，统计它们2025年第三季度的平均净利润同比增长率，并与行业均值对比。\", \"A\": {\"content\": \"根据提供的SQL查询结果和研报证据，回答如下：\\n\\n**直接结论：**\\n由于无法从当前数据中筛选出具体的“强烈推荐”中药公司，因此无法计算该群体的平均净利润同比增长率。根据SQL查询结果，2025年第三季度全行业的平均净利润同比增长率约为6.22%。\\n\\n**财务数据支撑：**\\nSQL查询结果显示：\\n*   **全行业平均净利润同比增长率**：在2025年第三季度为**6.2205%**。\\n*   **“强烈推荐”中药公司平均净利润同比增长率**：查询结果为`null`，表明在当前数据条件下，未能获取到符合条件的公司列表及其财务数据，因此无法计算该群体的平均值。\\n\\n**研报证据支撑：**\\n未检索到直接提供2025年第三季度中药行业净利润同比增长率具体数值或“强烈推荐”公司相关财务数据的研报证据。检索到的行业研报主要关注市场趋势、年度策略和医保谈判等宏观主题，未提供与问题直接匹配的定量数据。\\n\\n**综合判断：**\\n1.  **数据层面**：由于数据库结构限制（缺乏研报评级字段和精确的行业筛选标识），无法完成从“强烈推荐”评级出发筛选中药公司并计算其财务指标的任务。因此，无法将“强烈推荐”中药公司的平均净利润增长率与行业均值进行对比。\\n2.  **行业参考**：当前仅能提供2025年第三季度全行业的平均净利润同比增长率（约6.22%）作为背景参考。该数值可能包含了中药行业在内的所有医药生物行业公司。\\n3.  **证据层面**：现有研报证据无法为“强烈推荐”中药公司的具体财务表现或行业对比提供直接支持。\\n\\n**总结：** 无法完成“统计‘强烈推荐’中药公司2025年第三季度平均净利润同比增长率并与行业均值对比”的请求。原因在于数据源中缺乏必要的关联字段以筛选出目标公司群体。仅能提供同期全行业的平均净利润增长率作为参考。\", \"image\": [], \"references\": [{\"paper_path\": \"./附件5：研报数据/行业研报/2025年中国中药行业市场研究报告.pdf\", \"text\": \"数据来源：中国中药协会，前瞻产业研究院\\n中药产业作为中国传统医药文化的重要组成部分，具有悠久的历史和丰富的资源基础。\\n\\n全国范围内，中药材的种植和采集主要分布在资源丰富的省份，如安徽、四川、云南、河南、河北等地。\\n\\n这些地区得天独厚的自然条件，如适宜的气候、土壤环境和丰富的生物多样性，为中药材的质量和产量提供了坚实保障。\\n\\n安徽以黄山药材闻名，四川则因其丰富的川贝、天麻等名贵药材而著称，云南拥有众多珍稀中药材资源，是中国重要的中药材生产基地之一。\\n\\n与此同时，东部沿海地区如江苏、浙江、广东和福建，则成为中药制药和销售的核心区域。\\n\\n这些地区拥有发达的交通运输网络、先进的加工技术和完善的市场体系，形成了从中药材加工、提取、制剂到销售的完整产业链。\\n\\n展望未来，随着国家对中医药产业的高度重视以及相关政策的持续支持，区域集聚效应将进一步增强。\\n\\n各地区将在产业链分工、技术创新、品牌建设等方面实现更深层次的合作，推动中药产业迈向高质量发展阶段。\\n\\n这不仅有助于提升中国中药产业的整体竞争力和国际影响力，也为促进传统文化传承和人民健康保障发挥积极作用。\\n\\n随着社会的发展和健康观念的不断提升，消费者对中药的认知逐步加深，普遍认可中药作为天然疗法的独特优势，尤其强调其中药的天然成分、安全性高以及整体调理身体的特点。越来越多的人开始接受中药不仅仅是传统的治疗手段，更是一种预防疾病、促进健康的生活方式\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/医药健康行业研究：药店、中药2026年度策略：蛰伏蓄势，以候风至.pdf\", \"text\": \"药店、中药2026年度策略：蛰伏蓄势，以候风至\\n复盘2025 年，药店、中药板块整体行情都相对偏弱。\\n\\n药店：在政策促行业向更规范发展、整体消费景气度不足、终端需求偏弱等多重因素影响下，2018-2023 年快速提升的行业门店数量带来的竞争压力被持续放大，行业同店增长明显放缓，行业迎来出清阶段，自2024 年Q4 开始，连续多个季度关店多于开店。\\n\\n中药：2025 年板块行情整体偏弱，主要系受业绩表现承压影响，尤其是药品零售环境相对疲软，院外OTC 产品销售有所波动，且流感发病率整体同比更低，终端需求不足，部分抗病毒/呼吸/消化类中成药相关公司业绩受去库存或消化基数影响较大。\\n\\n另外，全国中成药集采及首批扩围接续中选结果实际执行效果仍待观望。\\n\\n展望2026 年，药店、中药板块都有望迎来触底回升的机会。\\n\\n药店：挑战与机遇并存，在政策持续推动行业规范发展的背景下，合规龙头优先受益。\\n\\n且我们同样能看到率先进行门店调整的龙头公司，2025 年Q3 收入端边际回暖。\\n\\n内生表现向好，且部分龙头公司现金流状况优秀，有望在出清期趁势提升市占率；\\n\\n另外，部分公司开始尝试积极拓展非药，优化产品结构，作为纯增量业务来看，非药后续若迎来超预期的表现，有望成为潜在的重要利润贡献点。\\n\\n中药：经历2024-2025 年的持续去库存、消化业绩基数，以及高峰发货的效期临近，加之2025 年Q4 \", \"paper_image\": \"图表20：年初至今涨跌幅，中药板块总体相对偏弱\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/医药生物行业跟踪周报：看好创新药出海，重点推荐恒瑞医药、百济神州等.pdf\", \"text\": \"医疗器械>药店等。具体标的选择思路：从中药角度，建议关注佐力药\\n从CXO、上游科研服务角度，建议关注药明康德、皓元医药、百奥赛图、奥浦迈、纳微科技、金斯瑞生物等。\\n\\n从医疗器械角度，建议关注联影医疗、鱼跃医疗等。\\n\\n从AI 制药角度，建议关注晶泰控股等。\\n\\n从GLP1 角度，建议关注联邦制药、博瑞医药、众生药业、信达生物等。\\n\\n从PD1/VEGF 双抗角度，建议关注三生制药、康方生物、荣昌生物等从创新药角度，建议关注信达生物、百济神州、石药集团、恒瑞医药、泽璟制药、百利天恒、科伦博泰、迪哲医药、海思科、科伦博泰等。\", \"paper_image\": \"图2：减重领域，体系化管线解决现有疗法核心痛点\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高.pdf\", \"text\": \"诺和诺德宣布司美格鲁肽注射液（商品名：诺和盈 ®）的心血管适应症\\n上市申请获得国家药品监督管理局批准，适用于降低已确诊为心血管疾病且BMI≥27kg/m2 成人患者的主要心血管不良事件的风险。该药品可作为当前肥胖症标准化治疗中的重要手段之一。◼ 具体思路:看好的子行业排序分别为:创新药>科研服务>CXO>中药>医\", \"paper_image\": \"图3：中美在研创新药赛道覆盖度及研发进度排名（截至2024 年）\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/医药健康行业研究：从2025医保谈判看行业风向：成功率提升，创新导向持续强化.pdf\", \"text\": \"三九、以岭药业、方盛制药、康缘药业、广东思济药业等药企。\\n中药经典名方申请较多，但政策鼓励创新方向明确。根据国家医保局25 年8 月公告，通过初步审查的中成药共23 种、合计25 个产品。今日公示名单，最终入选7 个产品，包括4 个1 类新药以及3 个3 类新药。本次整体入选比例不高，主要系经典名方申请较多，且多数未入选。通过初审名单中，共6 个1 类新药，最终入选4 个。12 个3 类中药，最终入选3 个。6 个进口中药，无入选。1 个天然药物1.1 类，未入选。\\n\\n投资建议西药：建议关注纳入新版医保目录创新药较多/品种重磅的恒瑞医药、百济神州、康方生物、科伦博泰、信达生物等，以及大单品首次纳入医保的康诺亚（IL4 单抗）、特宝生物（长效生长激素）等。中成药：建议关注入选新版医保目录的中药产品放量潜力，如华润三九的益气清肺颗粒、以岭药业的芪防鼻通片、方盛制药的养血祛风止痛颗粒、康缘药业的玉女煎颗粒/温阳解毒颗粒等。序号公司药品2025年医保目录价格2025年医保目录适应症用法用量注册分类\\n\\n于饮片52g))益气养阴，健脾和中，清热祛湿。适用于疫病后短期症状，气阴两虚，脾虚失运，余邪未尽证，症见倦怠乏力、动后气短、干咳少痰、咽喉不利、胃脘痞闷、纳呆便溏，舌淡或红、少津，脉细数。温水冲服。1次1袋，1日2次。疗程14天。中药3.2类\\n\\n片1.52g)/片)益气通窍。用于改善肺脾两虚型\", \"paper_image\": \"图表7：凭借商保，较高定价的药物能够实现患者渗透率的快速提升\"}]}}]",
+  "references_json": "[{\"paper_path\": \"./附件5：研报数据/行业研报/2025年中国中药行业市场研究报告.pdf\", \"text\": \"数据来源：中国中药协会，前瞻产业研究院\\n中药产业作为中国传统医药文化的重要组成部分，具有悠久的历史和丰富的资源基础。\\n\\n全国范围内，中药材的种植和采集主要分布在资源丰富的省份，如安徽、四川、云南、河南、河北等地。\\n\\n这些地区得天独厚的自然条件，如适宜的气候、土壤环境和丰富的生物多样性，为中药材的质量和产量提供了坚实保障。\\n\\n安徽以黄山药材闻名，四川则因其丰富的川贝、天麻等名贵药材而著称，云南拥有众多珍稀中药材资源，是中国重要的中药材生产基地之一。\\n\\n与此同时，东部沿海地区如江苏、浙江、广东和福建，则成为中药制药和销售的核心区域。\\n\\n这些地区拥有发达的交通运输网络、先进的加工技术和完善的市场体系，形成了从中药材加工、提取、制剂到销售的完整产业链。\\n\\n展望未来，随着国家对中医药产业的高度重视以及相关政策的持续支持，区域集聚效应将进一步增强。\\n\\n各地区将在产业链分工、技术创新、品牌建设等方面实现更深层次的合作，推动中药产业迈向高质量发展阶段。\\n\\n这不仅有助于提升中国中药产业的整体竞争力和国际影响力，也为促进传统文化传承和人民健康保障发挥积极作用。\\n\\n随着社会的发展和健康观念的不断提升，消费者对中药的认知逐步加深，普遍认可中药作为天然疗法的独特优势，尤其强调其中药的天然成分、安全性高以及整体调理身体的特点。越来越多的人开始接受中药不仅仅是传统的治疗手段，更是一种预防疾病、促进健康的生活方式\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/医药健康行业研究：药店、中药2026年度策略：蛰伏蓄势，以候风至.pdf\", \"text\": \"药店、中药2026年度策略：蛰伏蓄势，以候风至\\n复盘2025 年，药店、中药板块整体行情都相对偏弱。\\n\\n药店：在政策促行业向更规范发展、整体消费景气度不足、终端需求偏弱等多重因素影响下，2018-2023 年快速提升的行业门店数量带来的竞争压力被持续放大，行业同店增长明显放缓，行业迎来出清阶段，自2024 年Q4 开始，连续多个季度关店多于开店。\\n\\n中药：2025 年板块行情整体偏弱，主要系受业绩表现承压影响，尤其是药品零售环境相对疲软，院外OTC 产品销售有所波动，且流感发病率整体同比更低，终端需求不足，部分抗病毒/呼吸/消化类中成药相关公司业绩受去库存或消化基数影响较大。\\n\\n另外，全国中成药集采及首批扩围接续中选结果实际执行效果仍待观望。\\n\\n展望2026 年，药店、中药板块都有望迎来触底回升的机会。\\n\\n药店：挑战与机遇并存，在政策持续推动行业规范发展的背景下，合规龙头优先受益。\\n\\n且我们同样能看到率先进行门店调整的龙头公司，2025 年Q3 收入端边际回暖。\\n\\n内生表现向好，且部分龙头公司现金流状况优秀，有望在出清期趁势提升市占率；\\n\\n另外，部分公司开始尝试积极拓展非药，优化产品结构，作为纯增量业务来看，非药后续若迎来超预期的表现，有望成为潜在的重要利润贡献点。\\n\\n中药：经历2024-2025 年的持续去库存、消化业绩基数，以及高峰发货的效期临近，加之2025 年Q4 \", \"paper_image\": \"图表20：年初至今涨跌幅，中药板块总体相对偏弱\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/医药生物行业跟踪周报：看好创新药出海，重点推荐恒瑞医药、百济神州等.pdf\", \"text\": \"医疗器械>药店等。具体标的选择思路：从中药角度，建议关注佐力药\\n从CXO、上游科研服务角度，建议关注药明康德、皓元医药、百奥赛图、奥浦迈、纳微科技、金斯瑞生物等。\\n\\n从医疗器械角度，建议关注联影医疗、鱼跃医疗等。\\n\\n从AI 制药角度，建议关注晶泰控股等。\\n\\n从GLP1 角度，建议关注联邦制药、博瑞医药、众生药业、信达生物等。\\n\\n从PD1/VEGF 双抗角度，建议关注三生制药、康方生物、荣昌生物等从创新药角度，建议关注信达生物、百济神州、石药集团、恒瑞医药、泽璟制药、百利天恒、科伦博泰、迪哲医药、海思科、科伦博泰等。\", \"paper_image\": \"图2：减重领域，体系化管线解决现有疗法核心痛点\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高.pdf\", \"text\": \"诺和诺德宣布司美格鲁肽注射液（商品名：诺和盈 ®）的心血管适应症\\n上市申请获得国家药品监督管理局批准，适用于降低已确诊为心血管疾病且BMI≥27kg/m2 成人患者的主要心血管不良事件的风险。该药品可作为当前肥胖症标准化治疗中的重要手段之一。◼ 具体思路:看好的子行业排序分别为:创新药>科研服务>CXO>中药>医\", \"paper_image\": \"图3：中美在研创新药赛道覆盖度及研发进度排名（截至2024 年）\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/医药健康行业研究：从2025医保谈判看行业风向：成功率提升，创新导向持续强化.pdf\", \"text\": \"三九、以岭药业、方盛制药、康缘药业、广东思济药业等药企。\\n中药经典名方申请较多，但政策鼓励创新方向明确。根据国家医保局25 年8 月公告，通过初步审查的中成药共23 种、合计25 个产品。今日公示名单，最终入选7 个产品，包括4 个1 类新药以及3 个3 类新药。本次整体入选比例不高，主要系经典名方申请较多，且多数未入选。通过初审名单中，共6 个1 类新药，最终入选4 个。12 个3 类中药，最终入选3 个。6 个进口中药，无入选。1 个天然药物1.1 类，未入选。\\n\\n投资建议西药：建议关注纳入新版医保目录创新药较多/品种重磅的恒瑞医药、百济神州、康方生物、科伦博泰、信达生物等，以及大单品首次纳入医保的康诺亚（IL4 单抗）、特宝生物（长效生长激素）等。中成药：建议关注入选新版医保目录的中药产品放量潜力，如华润三九的益气清肺颗粒、以岭药业的芪防鼻通片、方盛制药的养血祛风止痛颗粒、康缘药业的玉女煎颗粒/温阳解毒颗粒等。序号公司药品2025年医保目录价格2025年医保目录适应症用法用量注册分类\\n\\n于饮片52g))益气养阴，健脾和中，清热祛湿。适用于疫病后短期症状，气阴两虚，脾虚失运，余邪未尽证，症见倦怠乏力、动后气短、干咳少痰、咽喉不利、胃脘痞闷、纳呆便溏，舌淡或红、少津，脉细数。温水冲服。1次1袋，1日2次。疗程14天。中药3.2类\\n\\n片1.52g)/片)益气通窍。用于改善肺脾两虚型\", \"paper_image\": \"图表7：凭借商保，较高定价的药物能够实现患者渗透率的快速提升\"}]",
+  "notes": [
+    "route=industry_open_analysis",
+    "问题要求统计被评为“强烈推荐”的中药公司2025Q3的平均净利润同比增长率，并与行业均值对比。但存在以下限制：1) financials_view中没有研报评级字段；2) query_plan中的companies列表为空，不能手动枚举公司；3) 视图中也没有明确的行业分类字段。因此，SQL结构设计为：1) recommended_companies CTE应为空，实际公司列表需由外部提供；2) industry_avg计算全行业均值作为近似；3) recommended_avg计算推荐公司的均值；4) 最终结果对比两组数据。由于无法识别中药公司，行业均值实际是全行业均值。",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=20",
+    "rerank_strategy=reranker_model",
+    "rerank_kept=20",
+    "self_check={\"pass\": true, \"notes\": [\"1. 回答中的数字与SQL rows一致：行业平均净利润同比增长率6.22%正确对应。\", \"2. 回答正确指出无法筛选出“强烈推荐”中药公司，因为SQL结果中该群体的avg_net_profit_yoy_growth为NaN。\", \"3. 回答没有遗漏关键点：明确说明了无法计算目标群体平均值的原因，并提供了可用的行业均值作为参考。\", \"4. 指标名称使用正确：始终使用“净利润同比增长率”，没有与其他指标混淆。\", \"5. 聚合统计结果对应正确：正确将6.22%解释为行业平均值，没有错误对应到具体公司。\", \"6. 回答正确引用了Evidences：指出研报证据中没有直接提供所需的定量数据，这与提供的Evidences内容相符。\"]}"
+  ],
+  "final_status": "ok"
+}

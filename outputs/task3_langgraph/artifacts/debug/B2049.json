@@ -1,0 +1,1069 @@
+{
+  "question_id": "B2049",
+  "question_type": "多意图",
+  "raw_question": "围绕“销售费用管控”：①计算2025年第三季度各公司的销售费用率；②找出销售费用率低于行业均值的公司；③查询这些公司的营业总收入和净利润；④分析销售费用管控对净利润的影响。",
+  "raw_question_json": "[{\"Q\":\"围绕“销售费用管控”：①计算2025年第三季度各公司的销售费用率；②找出销售费用率低于行业均值的公司；③查询这些公司的营业总收入和净利润；④分析销售费用管控对净利润的影响。\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "metrics": [
+      "营业总收入",
+      "净利润",
+      "销售费用"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "focus_topics": [
+      "行业"
+    ],
+    "intent_type": "causal_analysis",
+    "needs_sql": true,
+    "needs_retrieval": true,
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "causal_analysis",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入",
+      "净利润",
+      "销售费用"
+    ],
+    "needs_sql": true,
+    "top_n": null,
+    "threshold": null,
+    "question": "围绕“销售费用管控”：①计算2025年第三季度各公司的销售费用率；②找出销售费用率低于行业均值的公司；③查询这些公司的营业总收入和净利润；④分析销售费用管控对净利润的影响。"
+  },
+  "retrieval_plan": {
+    "question": "围绕“销售费用管控”：①计算2025年第三季度各公司的销售费用率；②找出销售费用率低于行业均值的公司；③查询这些公司的营业总收入和净利润；④分析销售费用管控对净利润的影响。",
+    "companies": [
+      "莱茵生物",
+      "片仔癀",
+      "信邦制药",
+      "瑞康医药",
+      "新里程",
+      "天目药业",
+      "新光药业",
+      "白云山",
+      "太龙药业",
+      "仁和药业",
+      "康美药业",
+      "珍宝岛",
+      "云南白药",
+      "太极集团",
+      "万邦德",
+      "中恒集团",
+      "精华制药",
+      "亚宝药业",
+      "同仁堂",
+      "葵花药业",
+      "启迪药业",
+      "康泰医学",
+      "以岭药业",
+      "马应龙",
+      "昆药集团",
+      "千金药业",
+      "华润三九"
+    ],
+    "focus_topics": [
+      "销售费用管控",
+      "行业均值",
+      "净利润影响",
+      "主营业务收入",
+      "营业总收入",
+      "收入增长",
+      "主营业务",
+      "主营业务类型",
+      "业务类型",
+      "成本控制",
+      "成本结构",
+      "销售费用",
+      "研发费用",
+      "中药",
+      "创新药"
+    ],
+    "needs_retrieval": true,
+    "top_k": 8,
+    "source_scope": "industry",
+    "retrieval_mode": "hybrid"
+  },
+  "sql": "WITH industry_avg AS (\n    SELECT \n        AVG(selling_expenses * 1.0 / NULLIF(total_operating_revenue, 0)) * 100 AS avg_selling_expense_ratio\n    FROM financials_view \n    WHERE report_period = '2025Q3'\n        AND total_operating_revenue > 0\n),\ncompany_ratios AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        total_operating_revenue,\n        net_profit,\n        selling_expenses,\n        CASE \n            WHEN total_operating_revenue > 0 \n            THEN selling_expenses * 1.0 / total_operating_revenue * 100 \n            ELSE NULL \n        END AS selling_expense_ratio\n    FROM financials_view \n    WHERE report_period = '2025Q3'\n        AND total_operating_revenue > 0\n)\nSELECT \n    cr.stock_code,\n    cr.stock_abbr,\n    cr.selling_expense_ratio,\n    ia.avg_selling_expense_ratio,\n    cr.total_operating_revenue,\n    cr.net_profit,\n    cr.selling_expenses,\n    CASE \n        WHEN cr.net_profit > 0 AND cr.total_operating_revenue > 0 \n        THEN cr.net_profit * 1.0 / cr.total_operating_revenue * 100 \n        ELSE NULL \n    END AS net_profit_margin\nFROM company_ratios cr\nCROSS JOIN industry_avg ia\nWHERE cr.selling_expense_ratio < ia.avg_selling_expense_ratio\nORDER BY cr.selling_expense_ratio ASC;",
+  "sql_history": [
+    "WITH industry_avg AS (\n    SELECT \n        AVG(selling_expenses * 1.0 / NULLIF(total_operating_revenue, 0)) * 100 AS avg_selling_expense_ratio\n    FROM financials_view \n    WHERE report_period = '2025Q3'\n        AND total_operating_revenue > 0\n),\ncompany_ratios AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        total_operating_revenue,\n        net_profit,\n        selling_expenses,\n        CASE \n            WHEN total_operating_revenue > 0 \n            THEN selling_expenses * 1.0 / total_operating_revenue * 100 \n            ELSE NULL \n        END AS selling_expense_ratio\n    FROM financials_view \n    WHERE report_period = '2025Q3'\n        AND total_operating_revenue > 0\n)\nSELECT \n    cr.stock_code,\n    cr.stock_abbr,\n    cr.selling_expense_ratio,\n    ia.avg_selling_expense_ratio,\n    cr.total_operating_revenue,\n    cr.net_profit,\n    cr.selling_expenses,\n    CASE \n        WHEN cr.net_profit > 0 AND cr.total_operating_revenue > 0 \n        THEN cr.net_profit * 1.0 / cr.total_operating_revenue * 100 \n        ELSE NULL \n    END AS net_profit_margin\nFROM company_ratios cr\nCROSS JOIN industry_avg ia\nWHERE cr.selling_expense_ratio < ia.avg_selling_expense_ratio\nORDER BY cr.selling_expense_ratio ASC;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 27,
+  "result_rows": [
+    {
+      "stock_code": "002166",
+      "stock_abbr": "莱茵生物",
+      "selling_expense_ratio": 3.8566276277540146,
+      "avg_selling_expense_ratio": 29.228042235669655,
+      "total_operating_revenue": 127215.58173499999,
+      "net_profit": 7039.5252980000005,
+      "selling_expenses": 4906.231272,
+      "net_profit_margin": 5.533540154431619
+    },
+    {
+      "stock_code": "600436",
+      "stock_abbr": "片仔癀",
+      "selling_expense_ratio": 3.9920415090392356,
+      "avg_selling_expense_ratio": 29.228042235669655,
+      "total_operating_revenue": 744236.610835,
+      "net_profit": 212934.76773800002,
+      "selling_expenses": 29710.23443,
+      "net_profit_margin": 28.611165405998605
+    },
+    {
+      "stock_code": "002390",
+      "stock_abbr": "信邦制药",
+      "selling_expense_ratio": 4.595074634046494,
+      "avg_selling_expense_ratio": 29.228042235669655,
+      "total_operating_revenue": 426628.528811,
+      "net_profit": 15232.4953,
+      "selling_expenses": 19603.899309,
+      "net_profit_margin": 3.570435231430133
+    },
+    {
+      "stock_code": "002589",
+      "stock_abbr": "瑞康医药",
+      "selling_expense_ratio": 4.802964903419158,
+      "avg_selling_expense_ratio": 29.228042235669655,
+      "total_operating_revenue": 540653.364977,
+      "net_profit": 1213.662607,
+      "selling_expenses": 25967.391369,
+      "net_profit_margin": 0.22448072750858222
+    },
+    {
+      "stock_code": "002219",
+      "stock_abbr": "新里程",
+      "selling_expense_ratio": 5.533222822973222,
+      "avg_selling_expense_ratio": 29.228042235669655,
+      "total_operating_revenue": 225609.546848,
+      "net_profit": -3846.8212240000003,
+      "selling_expenses": 12483.478937,
+      "net_profit_margin": NaN
+    },
+    {
+      "stock_code": "600671",
+      "stock_abbr": "天目药业",
+      "selling_expense_ratio": 6.395547928861152,
+      "avg_selling_expense_ratio": 29.228042235669655,
+      "total_operating_revenue": 15894.041266,
+      "net_profit": 1420.87966,
+      "selling_expenses": 1016.5110269999999,
+      "net_profit_margin": 8.93970033310218
+    },
+    {
+      "stock_code": "300519",
+      "stock_abbr": "新光药业",
+      "selling_expense_ratio": 6.8961412412840835,
+      "avg_selling_expense_ratio": 29.228042235669655,
+      "total_operating_revenue": 20561.856788999998,
+      "net_profit": 4533.617834000001,
+      "selling_expenses": 1417.974686,
+      "net_profit_margin": 22.04867916610214
+    },
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "selling_expense_ratio": 7.0056005008110915,
+      "avg_selling_expense_ratio": 29.228042235669655,
+      "total_operating_revenue": 6160599.379554,
+      "net_profit": 331005.207786,
+      "selling_expenses": 431586.980987,
+      "net_profit_margin": 5.372938368376151
+    },
+    {
+      "stock_code": "600222",
+      "stock_abbr": "太龙药业",
+      "selling_expense_ratio": 7.4438106615972,
+      "avg_selling_expense_ratio": 29.228042235669655,
+      "total_operating_revenue": 118690.21734500001,
+      "net_profit": 2532.546125,
+      "selling_expenses": 8835.075053,
+      "net_profit_margin": 2.1337446182599704
+    },
+    {
+      "stock_code": "000650",
+      "stock_abbr": "仁和药业",
+      "selling_expense_ratio": 9.29564665294261,
+      "avg_selling_expense_ratio": 29.228042235669655,
+      "total_operating_revenue": 283345.176031,
+      "net_profit": 37913.517706,
+      "selling_expenses": 26338.766372,
+      "net_profit_margin": 13.38068226079557
+    },
+    {
+      "stock_code": "600518",
+      "stock_abbr": "康美药业",
+      "selling_expense_ratio": 9.74187410006687,
+      "avg_selling_expense_ratio": 29.228042235669655,
+      "total_operating_revenue": 395960.35146599996,
+      "net_profit": 1308.230931,
+      "selling_expenses": 38573.958926,
+      "net_profit_margin": 0.3303944261480772
+    },
+    {
+      "stock_code": "603567",
+      "stock_abbr": "珍宝岛",
+      "selling_expense_ratio": 10.7834849092377,
+      "avg_selling_expense_ratio": 29.228042235669655,
+      "total_operating_revenue": 91880.328812,
+      "net_profit": -37309.834572,
+      "selling_expenses": 9907.901392,
+      "net_profit_margin": NaN
+    },
+    {
+      "stock_code": "000538",
+      "stock_abbr": "云南白药",
+      "selling_expense_ratio": 12.120029437968713,
+      "avg_selling_expense_ratio": 29.228042235669655,
+      "total_operating_revenue": 3065421.420901,
+      "net_profit": 477711.965747,
+      "selling_expenses": 371529.978611,
+      "net_profit_margin": 15.583892070754471
+    },
+    {
+      "stock_code": "600129",
+      "stock_abbr": "太极集团",
+      "selling_expense_ratio": 15.33978132420278,
+      "avg_selling_expense_ratio": 29.228042235669655,
+      "total_operating_revenue": 808773.698907,
+      "net_profit": 16590.530672,
+      "selling_expenses": 124064.11682000001,
+      "net_profit_margin": 2.051319262040905
+    },
+    {
+      "stock_code": "002082",
+      "stock_abbr": "万邦德",
+      "selling_expense_ratio": 16.33803632194209,
+      "avg_selling_expense_ratio": 29.228042235669655,
+      "total_operating_revenue": 101770.643836,
+      "net_profit": 446.777245,
+      "selling_expenses": 16627.324755,
+      "net_profit_margin": 0.4390040469037089
+    },
+    {
+      "stock_code": "600252",
+      "stock_abbr": "中恒集团",
+      "selling_expense_ratio": 18.04955436142081,
+      "avg_selling_expense_ratio": 29.228042235669655,
+      "total_operating_revenue": 194813.103049,
+      "net_profit": 2464.037494,
+      "selling_expenses": 35162.896938,
+      "net_profit_margin": 1.2648212340112657
+    },
+    {
+      "stock_code": "002349",
+      "stock_abbr": "精华制药",
+      "selling_expense_ratio": 18.596230991361892,
+      "avg_selling_expense_ratio": 29.228042235669655,
+      "total_operating_revenue": 109228.53899500001,
+      "net_profit": 17637.268212,
+      "selling_expenses": 20312.39142,
+      "net_profit_margin": 16.147124528331698
+    },
+    {
+      "stock_code": "600351",
+      "stock_abbr": "亚宝药业",
+      "selling_expense_ratio": 19.164317009458557,
+      "avg_selling_expense_ratio": 29.228042235669655,
+      "total_operating_revenue": 170871.222313,
+      "net_profit": 21509.429385,
+      "selling_expenses": 32746.302722000004,
+      "net_profit_margin": 12.588093591090058
+    },
+    {
+      "stock_code": "600085",
+      "stock_abbr": "同仁堂",
+      "selling_expense_ratio": 19.62869899953825,
+      "avg_selling_expense_ratio": 29.228042235669655,
+      "total_operating_revenue": 1330791.480027,
+      "net_profit": 117755.58453,
+      "selling_expenses": 261217.05392600002,
+      "net_profit_margin": 8.848537603172128
+    },
+    {
+      "stock_code": "002737",
+      "stock_abbr": "葵花药业",
+      "selling_expense_ratio": 19.98113043894373,
+      "avg_selling_expense_ratio": 29.228042235669655,
+      "total_operating_revenue": 168398.40473900002,
+      "net_profit": -3353.869369,
+      "selling_expenses": 33647.904908,
+      "net_profit_margin": NaN
+    },
+    {
+      "stock_code": "000590",
+      "stock_abbr": "启迪药业",
+      "selling_expense_ratio": 20.202506221291383,
+      "avg_selling_expense_ratio": 29.228042235669655,
+      "total_operating_revenue": 22481.575188,
+      "net_profit": -1482.060447,
+      "selling_expenses": 4541.841625999999,
+      "net_profit_margin": NaN
+    },
+    {
+      "stock_code": "300869",
+      "stock_abbr": "康泰医学",
+      "selling_expense_ratio": 23.0460016593531,
+      "avg_selling_expense_ratio": 29.228042235669655,
+      "total_operating_revenue": 34399.269271,
+      "net_profit": 939.98424,
+      "selling_expenses": 7927.656167,
+      "net_profit_margin": 2.732570371174848
+    },
+    {
+      "stock_code": "002603",
+      "stock_abbr": "以岭药业",
+      "selling_expense_ratio": 23.058264553120104,
+      "avg_selling_expense_ratio": 29.228042235669655,
+      "total_operating_revenue": 586760.307361,
+      "net_profit": 100040.467191,
+      "selling_expenses": 135296.74396400002,
+      "net_profit_margin": 17.049630988322946
+    },
+    {
+      "stock_code": "600993",
+      "stock_abbr": "马应龙",
+      "selling_expense_ratio": 23.71079595347158,
+      "avg_selling_expense_ratio": 29.228042235669655,
+      "total_operating_revenue": 283728.18560799997,
+      "net_profit": 50101.071743,
+      "selling_expenses": 67274.211152,
+      "net_profit_margin": 17.658122909304417
+    },
+    {
+      "stock_code": "600422",
+      "stock_abbr": "昆药集团",
+      "selling_expense_ratio": 25.925224641011376,
+      "avg_selling_expense_ratio": 29.228042235669655,
+      "total_operating_revenue": 475120.60775799997,
+      "net_profit": 26936.779435000004,
+      "selling_expenses": 123176.084877,
+      "net_profit_margin": 5.669461394678149
+    },
+    {
+      "stock_code": "600479",
+      "stock_abbr": "千金药业",
+      "selling_expense_ratio": 26.558230992600595,
+      "avg_selling_expense_ratio": 29.228042235669655,
+      "total_operating_revenue": 271833.55465999997,
+      "net_profit": 18735.517374000003,
+      "selling_expenses": 72194.183362,
+      "net_profit_margin": 6.892275457838067
+    },
+    {
+      "stock_code": "000999",
+      "stock_abbr": "华润三九",
+      "selling_expense_ratio": 27.87257995833275,
+      "avg_selling_expense_ratio": 29.228042235669655,
+      "total_operating_revenue": 2198640.396207,
+      "net_profit": 235282.69556599998,
+      "selling_expenses": 612817.802429,
+      "net_profit_margin": 10.701281390622112
+    }
+  ],
+  "retrieved_evidence": [
+    {
+      "source_type": "industry",
+      "title": "医药行业：2024年&2025Q1总结：业绩持续探底，Q2有望企稳回升",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药行业：2024年&2025Q1总结：业绩持续探底，Q2有望企稳回升.pdf",
+      "publish_date": "2025-05-08 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "华源证券",
+      "metadata_ref": "industry::医药行业：2024年&2025Q1总结：业绩持续探底，Q2有望企稳回升::2025-05-08 00:00:00.000::华源证券::中药",
+      "snippet": "上市公司业绩：2024年行业持续承压，内部进一步分化\n8.39%，较2024Q1下降0.1pct 。\n➢费用率方面，2025Q1销售费用率为11.98%，较2024年同期下降0.53pct；管理费用率为5.02%，较2024年同期基本持平；研发费用率为3.89%，较2024年同期下降0.31pct。",
+      "score": 6.569438,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.706657
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药行业周报：中成药集采落地，重点推荐昆药集团",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药行业周报：中成药集采落地，重点推荐昆药集团.pdf",
+      "publish_date": "2025-01-05 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "华源证券",
+      "snippet": "医药行业周报：中成药集采落地，重点推荐昆药集团；中药；华源证券",
+      "score": 6.0,
+      "metadata_ref": "industry::医药行业周报：中成药集采落地，重点推荐昆药集团::2025-01-05 00:00:00.000::华源证券::中药",
+      "score_components": {
+        "metadata": 6.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会.pdf",
+      "publish_date": "2025-09-14 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "开源证券",
+      "snippet": "医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会；中药；开源证券",
+      "score": 5.717369,
+      "metadata_ref": "industry::医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会::2025-09-14 00:00:00.000::开源证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.717369
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药行业：2024年&2025H1总结：下半年业绩有望企稳回升，看好创新产业浪潮持续",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药行业：2024年&2025H1总结：下半年业绩有望企稳回升，看好创新产业浪潮持续.pdf",
+      "publish_date": "2025-09-11 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "华源证券",
+      "metadata_ref": "industry::医药行业：2024年&2025H1总结：下半年业绩有望企稳回升，看好创新产业浪潮持续::2025-09-11 00:00:00.000::华源证券::中药",
+      "snippet": "医疗服务：业绩短期承压，静待行业需求回暖\n销售费用率管理费用率财务费用率研发费用率",
+      "score": 5.11649,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.70956
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会.pdf",
+      "publish_date": "2025-12-29 00:00:00",
+      "company_or_industry": "中药",
+      "organization": "中邮证券",
+      "snippet": "医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会；中药；中邮证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会::2025-12-29T00:00:00::中邮证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高.pdf",
+      "publish_date": "2025-12-28 00:00:00",
+      "company_or_industry": "中药",
+      "organization": "东吴证券",
+      "snippet": "医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高；中药；东吴证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高::2025-12-28T00:00:00::东吴证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：新版“医保+商保”目录发布，协同保障体系提升创新药可及性",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：新版“医保+商保”目录发布，协同保障体系提升创新药可及性.pdf",
+      "publish_date": "2025-12-09 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "上海证券",
+      "snippet": "医药生物行业周报：新版“医保+商保”目录发布，协同保障体系提升创新药可及性；中药；上海证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业周报：新版“医保+商保”目录发布，协同保障体系提升创新药可及性::2025-12-09 00:00:00.000::上海证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业快评报告：医保赋能多方合力，共促创新药高质量发展",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业快评报告：医保赋能多方合力，共促创新药高质量发展.pdf",
+      "publish_date": "2025-12-08 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "万联证券",
+      "snippet": "医药生物行业快评报告：医保赋能多方合力，共促创新药高质量发展；中药；万联证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业快评报告：医保赋能多方合力，共促创新药高质量发展::2025-12-08 00:00:00.000::万联证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    }
+  ],
+  "reranked_evidence": [
+    {
+      "source_type": "industry",
+      "title": "医药行业：2024年&2025Q1总结：业绩持续探底，Q2有望企稳回升",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药行业：2024年&2025Q1总结：业绩持续探底，Q2有望企稳回升.pdf",
+      "publish_date": "2025-05-08 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "华源证券",
+      "metadata_ref": "industry::医药行业：2024年&2025Q1总结：业绩持续探底，Q2有望企稳回升::2025-05-08 00:00:00.000::华源证券::中药",
+      "snippet": "上市公司业绩：2024年行业持续承压，内部进一步分化\n8.39%，较2024Q1下降0.1pct 。\n➢费用率方面，2025Q1销售费用率为11.98%，较2024年同期下降0.53pct；管理费用率为5.02%，较2024年同期基本持平；研发费用率为3.89%，较2024年同期下降0.31pct。",
+      "score": 6.569438,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.706657
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药行业周报：中成药集采落地，重点推荐昆药集团",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药行业周报：中成药集采落地，重点推荐昆药集团.pdf",
+      "publish_date": "2025-01-05 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "华源证券",
+      "snippet": "医药行业周报：中成药集采落地，重点推荐昆药集团；中药；华源证券",
+      "score": 6.0,
+      "metadata_ref": "industry::医药行业周报：中成药集采落地，重点推荐昆药集团::2025-01-05 00:00:00.000::华源证券::中药",
+      "score_components": {
+        "metadata": 6.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会.pdf",
+      "publish_date": "2025-09-14 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "开源证券",
+      "snippet": "医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会；中药；开源证券",
+      "score": 5.717369,
+      "metadata_ref": "industry::医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会::2025-09-14 00:00:00.000::开源证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.717369
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药行业：2024年&2025H1总结：下半年业绩有望企稳回升，看好创新产业浪潮持续",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药行业：2024年&2025H1总结：下半年业绩有望企稳回升，看好创新产业浪潮持续.pdf",
+      "publish_date": "2025-09-11 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "华源证券",
+      "metadata_ref": "industry::医药行业：2024年&2025H1总结：下半年业绩有望企稳回升，看好创新产业浪潮持续::2025-09-11 00:00:00.000::华源证券::中药",
+      "snippet": "医疗服务：业绩短期承压，静待行业需求回暖\n销售费用率管理费用率财务费用率研发费用率",
+      "score": 5.11649,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.70956
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会.pdf",
+      "publish_date": "2025-12-29 00:00:00",
+      "company_or_industry": "中药",
+      "organization": "中邮证券",
+      "snippet": "医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会；中药；中邮证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会::2025-12-29T00:00:00::中邮证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高.pdf",
+      "publish_date": "2025-12-28 00:00:00",
+      "company_or_industry": "中药",
+      "organization": "东吴证券",
+      "snippet": "医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高；中药；东吴证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高::2025-12-28T00:00:00::东吴证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：新版“医保+商保”目录发布，协同保障体系提升创新药可及性",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：新版“医保+商保”目录发布，协同保障体系提升创新药可及性.pdf",
+      "publish_date": "2025-12-09 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "上海证券",
+      "snippet": "医药生物行业周报：新版“医保+商保”目录发布，协同保障体系提升创新药可及性；中药；上海证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业周报：新版“医保+商保”目录发布，协同保障体系提升创新药可及性::2025-12-09 00:00:00.000::上海证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业快评报告：医保赋能多方合力，共促创新药高质量发展",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业快评报告：医保赋能多方合力，共促创新药高质量发展.pdf",
+      "publish_date": "2025-12-08 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "万联证券",
+      "snippet": "医药生物行业快评报告：医保赋能多方合力，共促创新药高质量发展；中药；万联证券",
+      "score": 5.0,
+      "metadata_ref": "industry::医药生物行业快评报告：医保赋能多方合力，共促创新药高质量发展::2025-12-08 00:00:00.000::万联证券::中药",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    }
+  ],
+  "rerank_preview": "{\"strategy\": \"skipped_fast_path\", \"kept_count\": 8}",
+  "fused_context": {
+    "question": "围绕“销售费用管控”：①计算2025年第三季度各公司的销售费用率；②找出销售费用率低于行业均值的公司；③查询这些公司的营业总收入和净利润；④分析销售费用管控对净利润的影响。",
+    "sql_row_count": 27,
+    "evidence_count": 8,
+    "sql_preview": [
+      {
+        "stock_code": "002166",
+        "stock_abbr": "莱茵生物",
+        "selling_expense_ratio": 3.8566276277540146,
+        "avg_selling_expense_ratio": 29.228042235669655,
+        "total_operating_revenue": 127215.58173499999,
+        "net_profit": 7039.5252980000005,
+        "selling_expenses": 4906.231272,
+        "net_profit_margin": 5.533540154431619
+      },
+      {
+        "stock_code": "600436",
+        "stock_abbr": "片仔癀",
+        "selling_expense_ratio": 3.9920415090392356,
+        "avg_selling_expense_ratio": 29.228042235669655,
+        "total_operating_revenue": 744236.610835,
+        "net_profit": 212934.76773800002,
+        "selling_expenses": 29710.23443,
+        "net_profit_margin": 28.611165405998605
+      },
+      {
+        "stock_code": "002390",
+        "stock_abbr": "信邦制药",
+        "selling_expense_ratio": 4.595074634046494,
+        "avg_selling_expense_ratio": 29.228042235669655,
+        "total_operating_revenue": 426628.528811,
+        "net_profit": 15232.4953,
+        "selling_expenses": 19603.899309,
+        "net_profit_margin": 3.570435231430133
+      },
+      {
+        "stock_code": "002589",
+        "stock_abbr": "瑞康医药",
+        "selling_expense_ratio": 4.802964903419158,
+        "avg_selling_expense_ratio": 29.228042235669655,
+        "total_operating_revenue": 540653.364977,
+        "net_profit": 1213.662607,
+        "selling_expenses": 25967.391369,
+        "net_profit_margin": 0.22448072750858222
+      },
+      {
+        "stock_code": "002219",
+        "stock_abbr": "新里程",
+        "selling_expense_ratio": 5.533222822973222,
+        "avg_selling_expense_ratio": 29.228042235669655,
+        "total_operating_revenue": 225609.546848,
+        "net_profit": -3846.8212240000003,
+        "selling_expenses": 12483.478937,
+        "net_profit_margin": NaN
+      }
+    ],
+    "evidence_preview": [
+      {
+        "source_type": "industry",
+        "title": "医药行业：2024年&2025Q1总结：业绩持续探底，Q2有望企稳回升",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药行业：2024年&2025Q1总结：业绩持续探底，Q2有望企稳回升.pdf",
+        "publish_date": "2025-05-08 00:00:00.000",
+        "company_or_industry": "中药",
+        "organization": "华源证券",
+        "metadata_ref": "industry::医药行业：2024年&2025Q1总结：业绩持续探底，Q2有望企稳回升::2025-05-08 00:00:00.000::华源证券::中药",
+        "snippet": "上市公司业绩：2024年行业持续承压，内部进一步分化\n8.39%，较2024Q1下降0.1pct 。\n➢费用率方面，2025Q1销售费用率为11.98%，较2024年同期下降0.53pct；管理费用率为5.02%，较2024年同期基本持平；研发费用率为3.89%，较2024年同期下降0.31pct。",
+        "score": 6.569438,
+        "score_components": {
+          "metadata": 0.0,
+          "vector": 0.706657
+        }
+      },
+      {
+        "source_type": "industry",
+        "title": "医药行业周报：中成药集采落地，重点推荐昆药集团",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药行业周报：中成药集采落地，重点推荐昆药集团.pdf",
+        "publish_date": "2025-01-05 00:00:00.000",
+        "company_or_industry": "中药",
+        "organization": "华源证券",
+        "snippet": "医药行业周报：中成药集采落地，重点推荐昆药集团；中药；华源证券",
+        "score": 6.0,
+        "metadata_ref": "industry::医药行业周报：中成药集采落地，重点推荐昆药集团::2025-01-05 00:00:00.000::华源证券::中药",
+        "score_components": {
+          "metadata": 6.0,
+          "vector": 0.0
+        }
+      },
+      {
+        "source_type": "industry",
+        "title": "医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会.pdf",
+        "publish_date": "2025-09-14 00:00:00.000",
+        "company_or_industry": "中药",
+        "organization": "开源证券",
+        "snippet": "医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会；中药；开源证券",
+        "score": 5.717369,
+        "metadata_ref": "industry::医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会::2025-09-14 00:00:00.000::开源证券::中药",
+        "score_components": {
+          "metadata": 5.0,
+          "vector": 0.717369
+        }
+      },
+      {
+        "source_type": "industry",
+        "title": "医药行业：2024年&2025H1总结：下半年业绩有望企稳回升，看好创新产业浪潮持续",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药行业：2024年&2025H1总结：下半年业绩有望企稳回升，看好创新产业浪潮持续.pdf",
+        "publish_date": "2025-09-11 00:00:00.000",
+        "company_or_industry": "中药",
+        "organization": "华源证券",
+        "metadata_ref": "industry::医药行业：2024年&2025H1总结：下半年业绩有望企稳回升，看好创新产业浪潮持续::2025-09-11 00:00:00.000::华源证券::中药",
+        "snippet": "医疗服务：业绩短期承压，静待行业需求回暖\n销售费用率管理费用率财务费用率研发费用率",
+        "score": 5.11649,
+        "score_components": {
+          "metadata": 0.0,
+          "vector": 0.70956
+        }
+      },
+      {
+        "source_type": "industry",
+        "title": "医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会.pdf",
+        "publish_date": "2025-12-29 00:00:00",
+        "company_or_industry": "中药",
+        "organization": "中邮证券",
+        "snippet": "医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会；中药；中邮证券",
+        "score": 5.0,
+        "metadata_ref": "industry::医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会::2025-12-29T00:00:00::中邮证券::中药",
+        "score_components": {
+          "metadata": 5.0,
+          "vector": 0.0
+        }
+      }
+    ],
+    "evidence_titles": [
+      "医药行业：2024年&2025Q1总结：业绩持续探底，Q2有望企稳回升",
+      "医药行业周报：中成药集采落地，重点推荐昆药集团",
+      "医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会",
+      "医药行业：2024年&2025H1总结：下半年业绩有望企稳回升，看好创新产业浪潮持续",
+      "医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会"
+    ],
+    "source_breakdown": {
+      "industry": 8
+    }
+  },
+  "self_check": {
+    "pass": false,
+    "notes": [
+      "1. **数字不一致**：回答中提到行业平均销售费用率为29.23%，这与SQL rows中的`avg_selling_expense_ratio`一致。回答中列出了10家公司，SQL rows中也正好是10家公司，数量一致。",
+      "2. **引用证据不准确**：回答在“研报证据支撑”部分引用了华源证券报告，指出“2025Q1销售费用率为11.98%”。然而，SQL rows中计算出的2025年第三季度行业平均销售费用率为29.23%，两者存在巨大差异。回答错误地将2025年第一季度的行业数据（来自研报）与2025年第三季度的公司数据（来自SQL查询）进行了混合引用和对比，这可能导致读者对行业基准产生误解。正确的做法是明确指出SQL查询得出的行业均值（29.23%）是本次分析的基础，而研报中的11.98%是不同时期（Q1）的数据，不应直接用于解释Q3的情况。",
+      "3. **遗漏关键点**：问题要求“分析销售费用管控对净利润的影响”。回答进行了案例分析（正面、负面、中性），但分析深度可以加强。例如，可以更明确地指出，对于某些公司（如片仔癀、白云山），低销售费用率与高净利润率（回答中已计算）可能表明有效的费用管控直接贡献了利润；而对于新里程，低销售费用率未能阻止亏损，提示需要关注其他成本或收入问题。回答中提到了“净利率”，这是一个好的补充，但可以更直接地将其与销售费用率对比，以强化“管控效果”的分析。",
+      "4. **指标名称混淆**：未发现将利润总额与营业总收入混淆的情况。回答中正确使用了“净利润”和“营业总收入”。",
+      "5. **聚合统计结果对应错误**：未发现此类错误。回答中提到的行业均值29.23%是SQL查询计算出的所有公司的平均值（`avg_selling_expense_ratio`），并未错误地将其归因于某家具体公司。"
+    ]
+  },
+  "chart_plan": {
+    "chart_type": "table",
+    "title": "围绕“销售费用管控”：①计算2025年第三季度各... - 营业总收入",
+    "x_field": null,
+    "y_fields": [
+      "stock_code",
+      "selling_expense_ratio",
+      "avg_selling_expense_ratio",
+      "total_operating_revenue"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": null,
+    "sort_ascending": true,
+    "top_n": 12,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task3.chart-spec.v1",
+    "question_id": "B2049",
+    "image_index": 1,
+    "chart_type": "table",
+    "title": "围绕“销售费用管控”：①计算2025年第三季度各... - 营业总收入",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 27,
+      "preview_rows": [
+        {
+          "stock_code": "002166",
+          "stock_abbr": "莱茵生物",
+          "selling_expense_ratio": 3.8566276277540146,
+          "avg_selling_expense_ratio": 29.228042235669655,
+          "total_operating_revenue": 127215.58173499999,
+          "net_profit": 7039.5252980000005,
+          "selling_expenses": 4906.231272,
+          "net_profit_margin": 5.533540154431619
+        },
+        {
+          "stock_code": "600436",
+          "stock_abbr": "片仔癀",
+          "selling_expense_ratio": 3.9920415090392356,
+          "avg_selling_expense_ratio": 29.228042235669655,
+          "total_operating_revenue": 744236.610835,
+          "net_profit": 212934.76773800002,
+          "selling_expenses": 29710.23443,
+          "net_profit_margin": 28.611165405998605
+        },
+        {
+          "stock_code": "002390",
+          "stock_abbr": "信邦制药",
+          "selling_expense_ratio": 4.595074634046494,
+          "avg_selling_expense_ratio": 29.228042235669655,
+          "total_operating_revenue": 426628.528811,
+          "net_profit": 15232.4953,
+          "selling_expenses": 19603.899309,
+          "net_profit_margin": 3.570435231430133
+        },
+        {
+          "stock_code": "002589",
+          "stock_abbr": "瑞康医药",
+          "selling_expense_ratio": 4.802964903419158,
+          "avg_selling_expense_ratio": 29.228042235669655,
+          "total_operating_revenue": 540653.364977,
+          "net_profit": 1213.662607,
+          "selling_expenses": 25967.391369,
+          "net_profit_margin": 0.22448072750858222
+        },
+        {
+          "stock_code": "002219",
+          "stock_abbr": "新里程",
+          "selling_expense_ratio": 5.533222822973222,
+          "avg_selling_expense_ratio": 29.228042235669655,
+          "total_operating_revenue": 225609.546848,
+          "net_profit": -3846.8212240000003,
+          "selling_expenses": 12483.478937,
+          "net_profit_margin": NaN
+        },
+        {
+          "stock_code": "600671",
+          "stock_abbr": "天目药业",
+          "selling_expense_ratio": 6.395547928861152,
+          "avg_selling_expense_ratio": 29.228042235669655,
+          "total_operating_revenue": 15894.041266,
+          "net_profit": 1420.87966,
+          "selling_expenses": 1016.5110269999999,
+          "net_profit_margin": 8.93970033310218
+        },
+        {
+          "stock_code": "300519",
+          "stock_abbr": "新光药业",
+          "selling_expense_ratio": 6.8961412412840835,
+          "avg_selling_expense_ratio": 29.228042235669655,
+          "total_operating_revenue": 20561.856788999998,
+          "net_profit": 4533.617834000001,
+          "selling_expenses": 1417.974686,
+          "net_profit_margin": 22.04867916610214
+        },
+        {
+          "stock_code": "600332",
+          "stock_abbr": "白云山",
+          "selling_expense_ratio": 7.0056005008110915,
+          "avg_selling_expense_ratio": 29.228042235669655,
+          "total_operating_revenue": 6160599.379554,
+          "net_profit": 331005.207786,
+          "selling_expenses": 431586.980987,
+          "net_profit_margin": 5.372938368376151
+        },
+        {
+          "stock_code": "600222",
+          "stock_abbr": "太龙药业",
+          "selling_expense_ratio": 7.4438106615972,
+          "avg_selling_expense_ratio": 29.228042235669655,
+          "total_operating_revenue": 118690.21734500001,
+          "net_profit": 2532.546125,
+          "selling_expenses": 8835.075053,
+          "net_profit_margin": 2.1337446182599704
+        },
+        {
+          "stock_code": "000650",
+          "stock_abbr": "仁和药业",
+          "selling_expense_ratio": 9.29564665294261,
+          "avg_selling_expense_ratio": 29.228042235669655,
+          "total_operating_revenue": 283345.176031,
+          "net_profit": 37913.517706,
+          "selling_expenses": 26338.766372,
+          "net_profit_margin": 13.38068226079557
+        },
+        {
+          "stock_code": "600518",
+          "stock_abbr": "康美药业",
+          "selling_expense_ratio": 9.74187410006687,
+          "avg_selling_expense_ratio": 29.228042235669655,
+          "total_operating_revenue": 395960.35146599996,
+          "net_profit": 1308.230931,
+          "selling_expenses": 38573.958926,
+          "net_profit_margin": 0.3303944261480772
+        },
+        {
+          "stock_code": "603567",
+          "stock_abbr": "珍宝岛",
+          "selling_expense_ratio": 10.7834849092377,
+          "avg_selling_expense_ratio": 29.228042235669655,
+          "total_operating_revenue": 91880.328812,
+          "net_profit": -37309.834572,
+          "selling_expenses": 9907.901392,
+          "net_profit_margin": NaN
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": null,
+      "sort_ascending": true,
+      "top_n": 12,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "stock_code",
+        "data_type": "quantitative",
+        "label": "股票代码",
+        "unit": "万元"
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": false
+    },
+    "output": {
+      "filename": "B2049_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B2049_1.jpg"
+    },
+    "meta": {
+      "source_sql": "WITH industry_avg AS (\n    SELECT \n        AVG(selling_expenses * 1.0 / NULLIF(total_operating_revenue, 0)) * 100 AS avg_selling_expense_ratio\n    FROM financials_view \n    WHERE report_period = '2025Q3'\n        AND total_operating_revenue > 0\n),\ncompany_ratios AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        total_operating_revenue,\n        net_profit,\n        selling_expenses,\n        CASE \n            WHEN total_operating_revenue > 0 \n            THEN selling_expenses * 1.0 / total_operating_revenue * 100 \n            ELSE NULL \n        END AS selling_expense_ratio\n    FROM financials_view \n    WHERE report_period = '2025Q3'\n        AND total_operating_revenue > 0\n)\nSELECT \n    cr.stock_code,\n    cr.stock_abbr,\n    cr.selling_expense_ratio,\n    ia.avg_selling_expense_ratio,\n    cr.total_operating_revenue,\n    cr.net_profit,\n    cr.selling_expenses,\n    CASE \n        WHEN cr.net_profit > 0 AND cr.total_operating_revenue > 0 \n        THEN cr.net_profit * 1.0 / cr.total_operating_revenue * 100 \n        ELSE NULL \n    END AS net_profit_margin\nFROM company_ratios cr\nCROSS JOIN industry_avg ia\nWHERE cr.selling_expense_ratio < ia.avg_selling_expense_ratio\nORDER BY cr.selling_expense_ratio ASC;",
+      "value_fields": [
+        "stock_code",
+        "selling_expense_ratio",
+        "avg_selling_expense_ratio",
+        "total_operating_revenue"
+      ],
+      "value_labels": [
+        "股票代码",
+        "selling_expense_ratio",
+        "avg_selling_expense_ratio",
+        "营业总收入"
+      ],
+      "original_chart_plan": {
+        "chart_type": "table",
+        "x_field": null,
+        "y_fields": [
+          "stock_code",
+          "selling_expense_ratio",
+          "avg_selling_expense_ratio",
+          "total_operating_revenue"
+        ],
+        "category_field": "stock_abbr",
+        "sort_by": null,
+        "sort_ascending": true,
+        "top_n": 12
+      }
+    }
+  },
+  "current_chart_paths": [
+    "./result/B2049_1.jpg"
+  ],
+  "current_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task3_langgraph/artifacts/chart_specs/B2049_1.spec.json"
+  ],
+  "current_answer": "**直接结论：**\n根据2025年第三季度财务数据，在查询范围内，共有10家公司的销售费用率低于行业平均水平（29.23%）。这些公司包括莱茵生物、片仔癀、信邦制药、瑞康医药、新里程、天目药业、新光药业、白云山、太龙药业、仁和药业。销售费用管控对净利润的影响因公司而异，并非所有低销售费用率的公司都实现了高净利润或净利润增长。\n\n**财务数据支撑：**\n1.  **销售费用率计算与行业对比**：SQL查询已计算出各公司2025年第三季度的销售费用率（销售费用/营业总收入*100%）。行业平均销售费用率为29.23%。上述10家公司的销售费用率均低于此值，范围从莱茵生物的3.86%到仁和药业的9.30%不等。\n2.  **相关公司的营业总收入和净利润**（单位：万元）：\n    *   **莱茵生物**：营业总收入127,215.58，净利润7,039.53。\n    *   **片仔癀**：营业总收入744,236.61，净利润212,934.77。\n    *   **信邦制药**：营业总收入426,628.53，净利润15,232.50。\n    *   **瑞康医药**：营业总收入540,653.36，净利润1,213.66。\n    *   **新里程**：营业总收入225,609.55，净利润-3,846.82。\n    *   **天目药业**：营业总收入15,894.04，净利润1,420.88。\n    *   **新光药业**：营业总收入20,561.86，净利润4,533.62。\n    *   **白云山**：营业总收入6,160,599.38，净利润331,005.21。\n    *   **太龙药业**：营业总收入118,690.22，净利润2,532.55。\n    *   **仁和药业**：营业总收入283,345.18，净利润37,913.52。\n    （注：数据库金额单位为“万元”。若需换算为“亿元”，需除以10,000，例如片仔癀营业总收入约为74.42亿元。）\n\n3.  **销售费用管控与净利润的关联分析**：\n    *   **正面案例**：部分低销售费用率的公司实现了较高的净利润和净利率。例如，**片仔癀**销售费用率仅3.99%，但净利润高达21.29亿元，净利率达28.61%；**白云山**销售费用率7.01%，净利润33.10亿元，净利率5.37%。这表明其高效的销售费用管控可能对利润有积极贡献。\n    *   **负面案例**：同样存在销售费用率较低但净利润为负的公司。例如，**新里程**销售费用率5.53%，净利润为-0.38亿元。这说明仅凭低销售费用率不足以保证盈利，可能受营业总收入规模、成本控制、其他费用或非经常性损益等因素影响。\n    *   **中性/复杂案例**：如**瑞康医药**销售费用率4.80%很低，但净利润仅0.12亿元，净利率仅0.22%。其低销售费用率并未转化为高净利率，可能与其他成本费用高企或主营业务盈利能力较弱有关。\n\n**研报证据支撑：**\n未检索到直接针对上述具体公司在2025年第三季度销售费用管控如何影响其净利润的研报证据。检索到的行业研报主要提及2025年第一季度行业销售费用率同比下降（例如，华源证券报告指出2025Q1销售费用率为11.98%，较2024年同期下降0.53个百分点），但未提供2025年第三季度具体公司的因果分析。\n\n**综合判断：**\n1.  2025年第三季度，在本次查询结果中，有10家公司的销售费用率低于行业均值29.23%。\n2.  销售费用管控对净利润的影响不能一概而论。对于像片仔癀、白云山这样本身品牌力强、产品竞争力高的公司，较低且有效的销售投入可能直接贡献于更高的净利润率。然而，对于新里程等公司，低销售费用率并未阻止其亏损，表明其净利润受销售费用之外的因素主导，如市场需求、产品结构、其他运营成本等。\n3.  因此，销售费用管控是影响净利润的重要因素之一，但其效果取决于公司的整体经营效率、市场地位和成本结构的协同作用。仅凭销售费用率低于行业均值，不能直接推断其净利润必然受益或表现更优。",
+  "current_references": [
+    {
+      "paper_path": "./附件5：研报数据/行业研报/医药行业：2024年&2025Q1总结：业绩持续探底，Q2有望企稳回升.pdf",
+      "text": "总结：行业持续分化，创新药+原料药+CXO表现较好\n✓医药已较长时间内处于历史底部，部分赛道基本面向好，近期关注度提升。\n\n2023年至今，医药指数震荡向下，显著跑输沪深300。\n\n2023年至今指数下跌约21%，2024年至今指数下跌约14%，医药板块深度回调，但2025年以来（截至2025.4.30）医药指数上涨约0.18%，跑赢沪深300约4.35%，以创新药+AI医疗为代表的细分赛道表现亮眼，我们认为从整体板块来看，医药板块调整多年、且细分赛道基本面确定性向好或正在改善（如创新药/CXO等），全市场对医药关注度显著提升，医药行业有望迎来企稳回升。\n\n✓细分子板块：化学制剂和原料药板块表现相对抗跌。\n\n生物医药各子板块来看，2024年至今（2025年4月30日），化学制剂和化学原料药板块回调较小，涨跌幅分别为4.4%和-0.3%；\n\n生物制品和医疗服务板块回调较多，涨跌幅分别为-30.4%和-24.0%。\n\n各子板块估值：生物制品、医疗器械和医疗服务估值均超过30倍PE，医药商业、中药估值相对较低。\n\n◼2025Q1公募基金持仓医药占比环比开始提升。\n\n截至2025Q1，全市场主动公募基金的医药重仓合计市值为1661亿元，占公募基金总重仓占比9.97%，环比增长0.56pct，全市场主动基金（剔除医药基金）医药重仓合计市值为808亿元，占其全市场总重仓占比5.1%，环比提升0"
+    },
+    {
+      "paper_path": "./附件5：研报数据/行业研报/医药行业周报：中成药集采落地，重点推荐昆药集团.pdf",
+      "text": "2.行业观点：坚持创新+出海+老龄化主线，关注估\n本周，化学制剂（-4.8%）、化学原料药（-4.8%）、中药（-5.3%）表现相对较好，医药商业（-7.8%）、医疗服务（-7.0%）、医疗器械（-5.5%）相对跌幅较大。年初以来，化学原料药（-2.6%）、化学制剂（-2.8%）、生物制品（-3.1%）和中药（-3.3%）涨跌幅排名靠前，医疗服务（-4.5%）、医药商业（-4.5%）及医疗器械（-3.4%）相对跌幅较大。",
+      "paper_image": "图表2：首批扩围续约部分产品的拟中选结果"
+    },
+    {
+      "paper_path": "./附件5：研报数据/行业研报/医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会.pdf",
+      "text": "数据来源：Insight、开源证券研究所\n原料药化学制剂中药生物制品医药商业涨幅前5\n\n医疗研发外包医疗服务医疗设备医疗耗材体外诊断涨幅前5\n\n（1）政策波动风险。医保政策、价格调整等政策可能对医药行业产生影响。（2）市场震荡风险。若市场风险偏好改变或公司成长性预期调整，可能影响公司估值稳定性。（3）医保未准入风险。医保谈判结果还未正式落地，还需要以实际医保谈判结果为准。",
+      "paper_image": "图6：本周医疗设备板块涨幅最大，化学制剂板块跌幅最大"
+    },
+    {
+      "paper_path": "./附件5：研报数据/行业研报/医药行业：2024年&2025H1总结：下半年业绩有望企稳回升，看好创新产业浪潮持续.pdf",
+      "text": "总结：行业持续分化，创新药+原料药+CXO表现较好\n✓医药已较长时间内处于历史底部，部分赛道基本面向好，近期关注度提升。\n\n2024年至今，医药指数持续跑输沪深300，2024年至今医药指数上涨约8% （截至2025.8.29） ，但2025年以来（截至2025.8.29）医药指数上涨约28.4%，跑赢沪深300约10.6%，其中创新药表现较为亮眼，我们认为从整体板块来看，医药板块调整多年、且细分赛道基本面确定性向好或正在改善（如创新药/CXO等），全市场对医药关注度显著提升，医药行业有望迎来企稳回升。\n\n✓细分子板块：化学制剂和原料药板块表现亮眼。\n\n生物医药各子板块来看，2024年初至今（2025年8月29日），化学制剂和化学原料药板块表现亮眼，涨跌幅分别为38.4%和27.9%；\n\n生物制品和医疗商业板块有所回调，涨跌幅分别为-14.1%和-10.8%。\n\n各子板块估值：目前化学制剂板块估值相对较高，达到50倍PE，生物制品板块估值为47倍PE，化学原料药、医疗服务和医疗器械估值分别为47、41和40倍PE，医药商业、中药估值相对较低。\n\n◼2025Q2公募基金持仓医药占比环比持续提升。\n\n截至2025Q2，全市场主动公募基金的医药重仓合计市值为1881亿元，占公募基金总重仓占比11.47%，环比增长1.5pct。\n\n全市场主动基金（剔除医药基金）医药重仓合计市值为1010亿"
+    },
+    {
+      "paper_path": "./附件5：研报数据/行业研报/医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会.pdf",
+      "text": "1、创新药：国内放量与BD 出海双轮驱动下盈利拐点进一步明晰，看好长期\n近期创新药板块仍处于持续回调阶段，其核心仍是资金面主导的此前乐观BD预期的退潮，从基本面角度来看，近期不论是ESMO Asia（如映恩生物、复宏汉霖以及泽璟制药等）还是ASH（如百济神州、维立志博以及信达生物等），国产新药临床数据的验证和成熟趋势仍符合预期，BD 层面也不乏加科思、先声药业和荃信生物等优质项目的出海记录，展望26 年，我们认为临床数据的成熟将会是主导创新药行情的核心因素，市场关注度高的IO 双抗和ADC 如康方AK112、三生SSGJ-707、BioNTech/BMS 的BNT327 和科伦博泰Sac-TMT 等均已进入多项全球III\n\n原料药血液制品医疗研发外包医疗设备医疗耗材疫苗化学制剂其他生物制品中药体外诊断线下药店医药流通医院",
+      "paper_image": "图表1：中国非临床安全性评价市场规模"
+    }
+  ],
+  "answer_rewritten": true,
+  "turn_answers": [
+    {
+      "Q": "围绕“销售费用管控”：①计算2025年第三季度各公司的销售费用率；②找出销售费用率低于行业均值的公司；③查询这些公司的营业总收入和净利润；④分析销售费用管控对净利润的影响。",
+      "A": {
+        "content": "**直接结论：**\n根据2025年第三季度财务数据，在查询范围内，共有10家公司的销售费用率低于行业平均水平（29.23%）。这些公司包括莱茵生物、片仔癀、信邦制药、瑞康医药、新里程、天目药业、新光药业、白云山、太龙药业、仁和药业。销售费用管控对净利润的影响因公司而异，并非所有低销售费用率的公司都实现了高净利润或净利润增长。\n\n**财务数据支撑：**\n1.  **销售费用率计算与行业对比**：SQL查询已计算出各公司2025年第三季度的销售费用率（销售费用/营业总收入*100%）。行业平均销售费用率为29.23%。上述10家公司的销售费用率均低于此值，范围从莱茵生物的3.86%到仁和药业的9.30%不等。\n2.  **相关公司的营业总收入和净利润**（单位：万元）：\n    *   **莱茵生物**：营业总收入127,215.58，净利润7,039.53。\n    *   **片仔癀**：营业总收入744,236.61，净利润212,934.77。\n    *   **信邦制药**：营业总收入426,628.53，净利润15,232.50。\n    *   **瑞康医药**：营业总收入540,653.36，净利润1,213.66。\n    *   **新里程**：营业总收入225,609.55，净利润-3,846.82。\n    *   **天目药业**：营业总收入15,894.04，净利润1,420.88。\n    *   **新光药业**：营业总收入20,561.86，净利润4,533.62。\n    *   **白云山**：营业总收入6,160,599.38，净利润331,005.21。\n    *   **太龙药业**：营业总收入118,690.22，净利润2,532.55。\n    *   **仁和药业**：营业总收入283,345.18，净利润37,913.52。\n    （注：数据库金额单位为“万元”。若需换算为“亿元”，需除以10,000，例如片仔癀营业总收入约为74.42亿元。）\n\n3.  **销售费用管控与净利润的关联分析**：\n    *   **正面案例**：部分低销售费用率的公司实现了较高的净利润和净利率。例如，**片仔癀**销售费用率仅3.99%，但净利润高达21.29亿元，净利率达28.61%；**白云山**销售费用率7.01%，净利润33.10亿元，净利率5.37%。这表明其高效的销售费用管控可能对利润有积极贡献。\n    *   **负面案例**：同样存在销售费用率较低但净利润为负的公司。例如，**新里程**销售费用率5.53%，净利润为-0.38亿元。这说明仅凭低销售费用率不足以保证盈利，可能受营业总收入规模、成本控制、其他费用或非经常性损益等因素影响。\n    *   **中性/复杂案例**：如**瑞康医药**销售费用率4.80%很低，但净利润仅0.12亿元，净利率仅0.22%。其低销售费用率并未转化为高净利率，可能与其他成本费用高企或主营业务盈利能力较弱有关。\n\n**研报证据支撑：**\n未检索到直接针对上述具体公司在2025年第三季度销售费用管控如何影响其净利润的研报证据。检索到的行业研报主要提及2025年第一季度行业销售费用率同比下降（例如，华源证券报告指出2025Q1销售费用率为11.98%，较2024年同期下降0.53个百分点），但未提供2025年第三季度具体公司的因果分析。\n\n**综合判断：**\n1.  2025年第三季度，在本次查询结果中，有10家公司的销售费用率低于行业均值29.23%。\n2.  销售费用管控对净利润的影响不能一概而论。对于像片仔癀、白云山这样本身品牌力强、产品竞争力高的公司，较低且有效的销售投入可能直接贡献于更高的净利润率。然而，对于新里程等公司，低销售费用率并未阻止其亏损，表明其净利润受销售费用之外的因素主导，如市场需求、产品结构、其他运营成本等。\n3.  因此，销售费用管控是影响净利润的重要因素之一，但其效果取决于公司的整体经营效率、市场地位和成本结构的协同作用。仅凭销售费用率低于行业均值，不能直接推断其净利润必然受益或表现更优。",
+        "image": [
+          "./result/B2049_1.jpg"
+        ],
+        "references": [
+          {
+            "paper_path": "./附件5：研报数据/行业研报/医药行业：2024年&2025Q1总结：业绩持续探底，Q2有望企稳回升.pdf",
+            "text": "总结：行业持续分化，创新药+原料药+CXO表现较好\n✓医药已较长时间内处于历史底部，部分赛道基本面向好，近期关注度提升。\n\n2023年至今，医药指数震荡向下，显著跑输沪深300。\n\n2023年至今指数下跌约21%，2024年至今指数下跌约14%，医药板块深度回调，但2025年以来（截至2025.4.30）医药指数上涨约0.18%，跑赢沪深300约4.35%，以创新药+AI医疗为代表的细分赛道表现亮眼，我们认为从整体板块来看，医药板块调整多年、且细分赛道基本面确定性向好或正在改善（如创新药/CXO等），全市场对医药关注度显著提升，医药行业有望迎来企稳回升。\n\n✓细分子板块：化学制剂和原料药板块表现相对抗跌。\n\n生物医药各子板块来看，2024年至今（2025年4月30日），化学制剂和化学原料药板块回调较小，涨跌幅分别为4.4%和-0.3%；\n\n生物制品和医疗服务板块回调较多，涨跌幅分别为-30.4%和-24.0%。\n\n各子板块估值：生物制品、医疗器械和医疗服务估值均超过30倍PE，医药商业、中药估值相对较低。\n\n◼2025Q1公募基金持仓医药占比环比开始提升。\n\n截至2025Q1，全市场主动公募基金的医药重仓合计市值为1661亿元，占公募基金总重仓占比9.97%，环比增长0.56pct，全市场主动基金（剔除医药基金）医药重仓合计市值为808亿元，占其全市场总重仓占比5.1%，环比提升0"
+          },
+          {
+            "paper_path": "./附件5：研报数据/行业研报/医药行业周报：中成药集采落地，重点推荐昆药集团.pdf",
+            "text": "2.行业观点：坚持创新+出海+老龄化主线，关注估\n本周，化学制剂（-4.8%）、化学原料药（-4.8%）、中药（-5.3%）表现相对较好，医药商业（-7.8%）、医疗服务（-7.0%）、医疗器械（-5.5%）相对跌幅较大。年初以来，化学原料药（-2.6%）、化学制剂（-2.8%）、生物制品（-3.1%）和中药（-3.3%）涨跌幅排名靠前，医疗服务（-4.5%）、医药商业（-4.5%）及医疗器械（-3.4%）相对跌幅较大。",
+            "paper_image": "图表2：首批扩围续约部分产品的拟中选结果"
+          },
+          {
+            "paper_path": "./附件5：研报数据/行业研报/医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会.pdf",
+            "text": "数据来源：Insight、开源证券研究所\n原料药化学制剂中药生物制品医药商业涨幅前5\n\n医疗研发外包医疗服务医疗设备医疗耗材体外诊断涨幅前5\n\n（1）政策波动风险。医保政策、价格调整等政策可能对医药行业产生影响。（2）市场震荡风险。若市场风险偏好改变或公司成长性预期调整，可能影响公司估值稳定性。（3）医保未准入风险。医保谈判结果还未正式落地，还需要以实际医保谈判结果为准。",
+            "paper_image": "图6：本周医疗设备板块涨幅最大，化学制剂板块跌幅最大"
+          },
+          {
+            "paper_path": "./附件5：研报数据/行业研报/医药行业：2024年&2025H1总结：下半年业绩有望企稳回升，看好创新产业浪潮持续.pdf",
+            "text": "总结：行业持续分化，创新药+原料药+CXO表现较好\n✓医药已较长时间内处于历史底部，部分赛道基本面向好，近期关注度提升。\n\n2024年至今，医药指数持续跑输沪深300，2024年至今医药指数上涨约8% （截至2025.8.29） ，但2025年以来（截至2025.8.29）医药指数上涨约28.4%，跑赢沪深300约10.6%，其中创新药表现较为亮眼，我们认为从整体板块来看，医药板块调整多年、且细分赛道基本面确定性向好或正在改善（如创新药/CXO等），全市场对医药关注度显著提升，医药行业有望迎来企稳回升。\n\n✓细分子板块：化学制剂和原料药板块表现亮眼。\n\n生物医药各子板块来看，2024年初至今（2025年8月29日），化学制剂和化学原料药板块表现亮眼，涨跌幅分别为38.4%和27.9%；\n\n生物制品和医疗商业板块有所回调，涨跌幅分别为-14.1%和-10.8%。\n\n各子板块估值：目前化学制剂板块估值相对较高，达到50倍PE，生物制品板块估值为47倍PE，化学原料药、医疗服务和医疗器械估值分别为47、41和40倍PE，医药商业、中药估值相对较低。\n\n◼2025Q2公募基金持仓医药占比环比持续提升。\n\n截至2025Q2，全市场主动公募基金的医药重仓合计市值为1881亿元，占公募基金总重仓占比11.47%，环比增长1.5pct。\n\n全市场主动基金（剔除医药基金）医药重仓合计市值为1010亿"
+          },
+          {
+            "paper_path": "./附件5：研报数据/行业研报/医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会.pdf",
+            "text": "1、创新药：国内放量与BD 出海双轮驱动下盈利拐点进一步明晰，看好长期\n近期创新药板块仍处于持续回调阶段，其核心仍是资金面主导的此前乐观BD预期的退潮，从基本面角度来看，近期不论是ESMO Asia（如映恩生物、复宏汉霖以及泽璟制药等）还是ASH（如百济神州、维立志博以及信达生物等），国产新药临床数据的验证和成熟趋势仍符合预期，BD 层面也不乏加科思、先声药业和荃信生物等优质项目的出海记录，展望26 年，我们认为临床数据的成熟将会是主导创新药行情的核心因素，市场关注度高的IO 双抗和ADC 如康方AK112、三生SSGJ-707、BioNTech/BMS 的BNT327 和科伦博泰Sac-TMT 等均已进入多项全球III\n\n原料药血液制品医疗研发外包医疗设备医疗耗材疫苗化学制剂其他生物制品中药体外诊断线下药店医药流通医院",
+            "paper_image": "图表1：中国非临床安全性评价市场规模"
+          }
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"围绕“销售费用管控”：①计算2025年第三季度各公司的销售费用率；②找出销售费用率低于行业均值的公司；③查询这些公司的营业总收入和净利润；④分析销售费用管控对净利润的影响。\", \"A\": {\"content\": \"**直接结论：**\\n根据2025年第三季度财务数据，在查询范围内，共有10家公司的销售费用率低于行业平均水平（29.23%）。这些公司包括莱茵生物、片仔癀、信邦制药、瑞康医药、新里程、天目药业、新光药业、白云山、太龙药业、仁和药业。销售费用管控对净利润的影响因公司而异，并非所有低销售费用率的公司都实现了高净利润或净利润增长。\\n\\n**财务数据支撑：**\\n1.  **销售费用率计算与行业对比**：SQL查询已计算出各公司2025年第三季度的销售费用率（销售费用/营业总收入*100%）。行业平均销售费用率为29.23%。上述10家公司的销售费用率均低于此值，范围从莱茵生物的3.86%到仁和药业的9.30%不等。\\n2.  **相关公司的营业总收入和净利润**（单位：万元）：\\n    *   **莱茵生物**：营业总收入127,215.58，净利润7,039.53。\\n    *   **片仔癀**：营业总收入744,236.61，净利润212,934.77。\\n    *   **信邦制药**：营业总收入426,628.53，净利润15,232.50。\\n    *   **瑞康医药**：营业总收入540,653.36，净利润1,213.66。\\n    *   **新里程**：营业总收入225,609.55，净利润-3,846.82。\\n    *   **天目药业**：营业总收入15,894.04，净利润1,420.88。\\n    *   **新光药业**：营业总收入20,561.86，净利润4,533.62。\\n    *   **白云山**：营业总收入6,160,599.38，净利润331,005.21。\\n    *   **太龙药业**：营业总收入118,690.22，净利润2,532.55。\\n    *   **仁和药业**：营业总收入283,345.18，净利润37,913.52。\\n    （注：数据库金额单位为“万元”。若需换算为“亿元”，需除以10,000，例如片仔癀营业总收入约为74.42亿元。）\\n\\n3.  **销售费用管控与净利润的关联分析**：\\n    *   **正面案例**：部分低销售费用率的公司实现了较高的净利润和净利率。例如，**片仔癀**销售费用率仅3.99%，但净利润高达21.29亿元，净利率达28.61%；**白云山**销售费用率7.01%，净利润33.10亿元，净利率5.37%。这表明其高效的销售费用管控可能对利润有积极贡献。\\n    *   **负面案例**：同样存在销售费用率较低但净利润为负的公司。例如，**新里程**销售费用率5.53%，净利润为-0.38亿元。这说明仅凭低销售费用率不足以保证盈利，可能受营业总收入规模、成本控制、其他费用或非经常性损益等因素影响。\\n    *   **中性/复杂案例**：如**瑞康医药**销售费用率4.80%很低，但净利润仅0.12亿元，净利率仅0.22%。其低销售费用率并未转化为高净利率，可能与其他成本费用高企或主营业务盈利能力较弱有关。\\n\\n**研报证据支撑：**\\n未检索到直接针对上述具体公司在2025年第三季度销售费用管控如何影响其净利润的研报证据。检索到的行业研报主要提及2025年第一季度行业销售费用率同比下降（例如，华源证券报告指出2025Q1销售费用率为11.98%，较2024年同期下降0.53个百分点），但未提供2025年第三季度具体公司的因果分析。\\n\\n**综合判断：**\\n1.  2025年第三季度，在本次查询结果中，有10家公司的销售费用率低于行业均值29.23%。\\n2.  销售费用管控对净利润的影响不能一概而论。对于像片仔癀、白云山这样本身品牌力强、产品竞争力高的公司，较低且有效的销售投入可能直接贡献于更高的净利润率。然而，对于新里程等公司，低销售费用率并未阻止其亏损，表明其净利润受销售费用之外的因素主导，如市场需求、产品结构、其他运营成本等。\\n3.  因此，销售费用管控是影响净利润的重要因素之一，但其效果取决于公司的整体经营效率、市场地位和成本结构的协同作用。仅凭销售费用率低于行业均值，不能直接推断其净利润必然受益或表现更优。\", \"image\": [\"./result/B2049_1.jpg\"], \"references\": [{\"paper_path\": \"./附件5：研报数据/行业研报/医药行业：2024年&2025Q1总结：业绩持续探底，Q2有望企稳回升.pdf\", \"text\": \"总结：行业持续分化，创新药+原料药+CXO表现较好\\n✓医药已较长时间内处于历史底部，部分赛道基本面向好，近期关注度提升。\\n\\n2023年至今，医药指数震荡向下，显著跑输沪深300。\\n\\n2023年至今指数下跌约21%，2024年至今指数下跌约14%，医药板块深度回调，但2025年以来（截至2025.4.30）医药指数上涨约0.18%，跑赢沪深300约4.35%，以创新药+AI医疗为代表的细分赛道表现亮眼，我们认为从整体板块来看，医药板块调整多年、且细分赛道基本面确定性向好或正在改善（如创新药/CXO等），全市场对医药关注度显著提升，医药行业有望迎来企稳回升。\\n\\n✓细分子板块：化学制剂和原料药板块表现相对抗跌。\\n\\n生物医药各子板块来看，2024年至今（2025年4月30日），化学制剂和化学原料药板块回调较小，涨跌幅分别为4.4%和-0.3%；\\n\\n生物制品和医疗服务板块回调较多，涨跌幅分别为-30.4%和-24.0%。\\n\\n各子板块估值：生物制品、医疗器械和医疗服务估值均超过30倍PE，医药商业、中药估值相对较低。\\n\\n◼2025Q1公募基金持仓医药占比环比开始提升。\\n\\n截至2025Q1，全市场主动公募基金的医药重仓合计市值为1661亿元，占公募基金总重仓占比9.97%，环比增长0.56pct，全市场主动基金（剔除医药基金）医药重仓合计市值为808亿元，占其全市场总重仓占比5.1%，环比提升0\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/医药行业周报：中成药集采落地，重点推荐昆药集团.pdf\", \"text\": \"2.行业观点：坚持创新+出海+老龄化主线，关注估\\n本周，化学制剂（-4.8%）、化学原料药（-4.8%）、中药（-5.3%）表现相对较好，医药商业（-7.8%）、医疗服务（-7.0%）、医疗器械（-5.5%）相对跌幅较大。年初以来，化学原料药（-2.6%）、化学制剂（-2.8%）、生物制品（-3.1%）和中药（-3.3%）涨跌幅排名靠前，医疗服务（-4.5%）、医药商业（-4.5%）及医疗器械（-3.4%）相对跌幅较大。\", \"paper_image\": \"图表2：首批扩围续约部分产品的拟中选结果\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会.pdf\", \"text\": \"数据来源：Insight、开源证券研究所\\n原料药化学制剂中药生物制品医药商业涨幅前5\\n\\n医疗研发外包医疗服务医疗设备医疗耗材体外诊断涨幅前5\\n\\n（1）政策波动风险。医保政策、价格调整等政策可能对医药行业产生影响。（2）市场震荡风险。若市场风险偏好改变或公司成长性预期调整，可能影响公司估值稳定性。（3）医保未准入风险。医保谈判结果还未正式落地，还需要以实际医保谈判结果为准。\", \"paper_image\": \"图6：本周医疗设备板块涨幅最大，化学制剂板块跌幅最大\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/医药行业：2024年&2025H1总结：下半年业绩有望企稳回升，看好创新产业浪潮持续.pdf\", \"text\": \"总结：行业持续分化，创新药+原料药+CXO表现较好\\n✓医药已较长时间内处于历史底部，部分赛道基本面向好，近期关注度提升。\\n\\n2024年至今，医药指数持续跑输沪深300，2024年至今医药指数上涨约8% （截至2025.8.29） ，但2025年以来（截至2025.8.29）医药指数上涨约28.4%，跑赢沪深300约10.6%，其中创新药表现较为亮眼，我们认为从整体板块来看，医药板块调整多年、且细分赛道基本面确定性向好或正在改善（如创新药/CXO等），全市场对医药关注度显著提升，医药行业有望迎来企稳回升。\\n\\n✓细分子板块：化学制剂和原料药板块表现亮眼。\\n\\n生物医药各子板块来看，2024年初至今（2025年8月29日），化学制剂和化学原料药板块表现亮眼，涨跌幅分别为38.4%和27.9%；\\n\\n生物制品和医疗商业板块有所回调，涨跌幅分别为-14.1%和-10.8%。\\n\\n各子板块估值：目前化学制剂板块估值相对较高，达到50倍PE，生物制品板块估值为47倍PE，化学原料药、医疗服务和医疗器械估值分别为47、41和40倍PE，医药商业、中药估值相对较低。\\n\\n◼2025Q2公募基金持仓医药占比环比持续提升。\\n\\n截至2025Q2，全市场主动公募基金的医药重仓合计市值为1881亿元，占公募基金总重仓占比11.47%，环比增长1.5pct。\\n\\n全市场主动基金（剔除医药基金）医药重仓合计市值为1010亿\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会.pdf\", \"text\": \"1、创新药：国内放量与BD 出海双轮驱动下盈利拐点进一步明晰，看好长期\\n近期创新药板块仍处于持续回调阶段，其核心仍是资金面主导的此前乐观BD预期的退潮，从基本面角度来看，近期不论是ESMO Asia（如映恩生物、复宏汉霖以及泽璟制药等）还是ASH（如百济神州、维立志博以及信达生物等），国产新药临床数据的验证和成熟趋势仍符合预期，BD 层面也不乏加科思、先声药业和荃信生物等优质项目的出海记录，展望26 年，我们认为临床数据的成熟将会是主导创新药行情的核心因素，市场关注度高的IO 双抗和ADC 如康方AK112、三生SSGJ-707、BioNTech/BMS 的BNT327 和科伦博泰Sac-TMT 等均已进入多项全球III\\n\\n原料药血液制品医疗研发外包医疗设备医疗耗材疫苗化学制剂其他生物制品中药体外诊断线下药店医药流通医院\", \"paper_image\": \"图表1：中国非临床安全性评价市场规模\"}]}}]",
+  "references_json": "[{\"paper_path\": \"./附件5：研报数据/行业研报/医药行业：2024年&2025Q1总结：业绩持续探底，Q2有望企稳回升.pdf\", \"text\": \"总结：行业持续分化，创新药+原料药+CXO表现较好\\n✓医药已较长时间内处于历史底部，部分赛道基本面向好，近期关注度提升。\\n\\n2023年至今，医药指数震荡向下，显著跑输沪深300。\\n\\n2023年至今指数下跌约21%，2024年至今指数下跌约14%，医药板块深度回调，但2025年以来（截至2025.4.30）医药指数上涨约0.18%，跑赢沪深300约4.35%，以创新药+AI医疗为代表的细分赛道表现亮眼，我们认为从整体板块来看，医药板块调整多年、且细分赛道基本面确定性向好或正在改善（如创新药/CXO等），全市场对医药关注度显著提升，医药行业有望迎来企稳回升。\\n\\n✓细分子板块：化学制剂和原料药板块表现相对抗跌。\\n\\n生物医药各子板块来看，2024年至今（2025年4月30日），化学制剂和化学原料药板块回调较小，涨跌幅分别为4.4%和-0.3%；\\n\\n生物制品和医疗服务板块回调较多，涨跌幅分别为-30.4%和-24.0%。\\n\\n各子板块估值：生物制品、医疗器械和医疗服务估值均超过30倍PE，医药商业、中药估值相对较低。\\n\\n◼2025Q1公募基金持仓医药占比环比开始提升。\\n\\n截至2025Q1，全市场主动公募基金的医药重仓合计市值为1661亿元，占公募基金总重仓占比9.97%，环比增长0.56pct，全市场主动基金（剔除医药基金）医药重仓合计市值为808亿元，占其全市场总重仓占比5.1%，环比提升0\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/医药行业周报：中成药集采落地，重点推荐昆药集团.pdf\", \"text\": \"2.行业观点：坚持创新+出海+老龄化主线，关注估\\n本周，化学制剂（-4.8%）、化学原料药（-4.8%）、中药（-5.3%）表现相对较好，医药商业（-7.8%）、医疗服务（-7.0%）、医疗器械（-5.5%）相对跌幅较大。年初以来，化学原料药（-2.6%）、化学制剂（-2.8%）、生物制品（-3.1%）和中药（-3.3%）涨跌幅排名靠前，医疗服务（-4.5%）、医药商业（-4.5%）及医疗器械（-3.4%）相对跌幅较大。\", \"paper_image\": \"图表2：首批扩围续约部分产品的拟中选结果\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会.pdf\", \"text\": \"数据来源：Insight、开源证券研究所\\n原料药化学制剂中药生物制品医药商业涨幅前5\\n\\n医疗研发外包医疗服务医疗设备医疗耗材体外诊断涨幅前5\\n\\n（1）政策波动风险。医保政策、价格调整等政策可能对医药行业产生影响。（2）市场震荡风险。若市场风险偏好改变或公司成长性预期调整，可能影响公司估值稳定性。（3）医保未准入风险。医保谈判结果还未正式落地，还需要以实际医保谈判结果为准。\", \"paper_image\": \"图6：本周医疗设备板块涨幅最大，化学制剂板块跌幅最大\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/医药行业：2024年&2025H1总结：下半年业绩有望企稳回升，看好创新产业浪潮持续.pdf\", \"text\": \"总结：行业持续分化，创新药+原料药+CXO表现较好\\n✓医药已较长时间内处于历史底部，部分赛道基本面向好，近期关注度提升。\\n\\n2024年至今，医药指数持续跑输沪深300，2024年至今医药指数上涨约8% （截至2025.8.29） ，但2025年以来（截至2025.8.29）医药指数上涨约28.4%，跑赢沪深300约10.6%，其中创新药表现较为亮眼，我们认为从整体板块来看，医药板块调整多年、且细分赛道基本面确定性向好或正在改善（如创新药/CXO等），全市场对医药关注度显著提升，医药行业有望迎来企稳回升。\\n\\n✓细分子板块：化学制剂和原料药板块表现亮眼。\\n\\n生物医药各子板块来看，2024年初至今（2025年8月29日），化学制剂和化学原料药板块表现亮眼，涨跌幅分别为38.4%和27.9%；\\n\\n生物制品和医疗商业板块有所回调，涨跌幅分别为-14.1%和-10.8%。\\n\\n各子板块估值：目前化学制剂板块估值相对较高，达到50倍PE，生物制品板块估值为47倍PE，化学原料药、医疗服务和医疗器械估值分别为47、41和40倍PE，医药商业、中药估值相对较低。\\n\\n◼2025Q2公募基金持仓医药占比环比持续提升。\\n\\n截至2025Q2，全市场主动公募基金的医药重仓合计市值为1881亿元，占公募基金总重仓占比11.47%，环比增长1.5pct。\\n\\n全市场主动基金（剔除医药基金）医药重仓合计市值为1010亿\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会.pdf\", \"text\": \"1、创新药：国内放量与BD 出海双轮驱动下盈利拐点进一步明晰，看好长期\\n近期创新药板块仍处于持续回调阶段，其核心仍是资金面主导的此前乐观BD预期的退潮，从基本面角度来看，近期不论是ESMO Asia（如映恩生物、复宏汉霖以及泽璟制药等）还是ASH（如百济神州、维立志博以及信达生物等），国产新药临床数据的验证和成熟趋势仍符合预期，BD 层面也不乏加科思、先声药业和荃信生物等优质项目的出海记录，展望26 年，我们认为临床数据的成熟将会是主导创新药行情的核心因素，市场关注度高的IO 双抗和ADC 如康方AK112、三生SSGJ-707、BioNTech/BMS 的BNT327 和科伦博泰Sac-TMT 等均已进入多项全球III\\n\\n原料药血液制品医疗研发外包医疗设备医疗耗材疫苗化学制剂其他生物制品中药体外诊断线下药店医药流通医院\", \"paper_image\": \"图表1：中国非临床安全性评价市场规模\"}]",
+  "notes": [
+    "route=causal_analysis",
+    "1. 首先计算行业平均销售费用率（selling_expenses / total_operating_revenue * 100），使用2025Q3数据且营业收入大于0的公司\n2. 计算各公司2025Q3的销售费用率、营业总收入、净利润\n3. 筛选出销售费用率低于行业均值的公司\n4. 同时计算这些公司的净利润率（net_profit / total_operating_revenue * 100），用于分析销售费用管控对净利润的影响\n5. 按销售费用率升序排列，展示管控较好的公司\n6. 注意：查询计划中没有指定具体公司，因此不限制公司列表；所有计算都基于2025Q3单季度数据",
+    "retrieval_companies_seeded_from_sql=莱茵生物,片仔癀,信邦制药,瑞康医药,新里程",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=8",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=8",
+    "answer_rewritten_after_self_check",
+    "self_check={\"pass\": false, \"notes\": [\"1. **数字不一致**：回答中提到行业平均销售费用率为29.23%，这与SQL rows中的`avg_selling_expense_ratio`一致。回答中列出了10家公司，SQL rows中也正好是10家公司，数量一致。\", \"2. **引用证据不准确**：回答在“研报证据支撑”部分引用了华源证券报告，指出“2025Q1销售费用率为11.98%”。然而，SQL rows中计算出的2025年第三季度行业平均销售费用率为29.23%，两者存在巨大差异。回答错误地将2025年第一季度的行业数据（来自研报）与2025年第三季度的公司数据（来自SQL查询）进行了混合引用和对比，这可能导致读者对行业基准产生误解。正确的做法是明确指出SQL查询得出的行业均值（29.23%）是本次分析的基础，而研报中的11.98%是不同时期（Q1）的数据，不应直接用于解释Q3的情况。\", \"3. **遗漏关键点**：问题要求“分析销售费用管控对净利润的影响”。回答进行了案例分析（正面、负面、中性），但分析深度可以加强。例如，可以更明确地指出，对于某些公司（如片仔癀、白云山），低销售费用率与高净利润率（回答中已计算）可能表明有效的费用管控直接贡献了利润；而对于新里程，低销售费用率未能阻止亏损，提示需要关注其他成本或收入问题。回答中提到了“净利率”，这是一个好的补充，但可以更直接地将其与销售费用率对比，以强化“管控效果”的分析。\", \"4. **指标名称混淆**：未发现将利润总额与营业总收入混淆的情况。回答中正确使用了“净利润”和“营业总收入”。\", \"5. **聚合统计结果对应错误**：未发现此类错误。回答中提到的行业均值29.23%是SQL查询计算出的所有公司的平均值（`avg_selling_expense_ratio`），并未错误地将其归因于某家具体公司。\"]}"
+  ],
+  "final_status": "ok"
+}

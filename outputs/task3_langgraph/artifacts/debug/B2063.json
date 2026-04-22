@@ -1,0 +1,239 @@
+{
+  "question_id": "B2063",
+  "question_type": "归因分析",
+  "raw_question": "达仁堂2025年第三季度销售毛利率同比提升10个百分点，请结合利润表（营业收入、营业成本）和研报（如产品提价、原材料降价），分析毛利率提升的驱动因素。",
+  "raw_question_json": "[{\"Q\":\"达仁堂2025年第三季度销售毛利率同比提升10个百分点，请结合利润表（营业收入、营业成本）和研报（如产品提价、原材料降价），分析毛利率提升的驱动因素。\"}]",
+  "parsed_slots": {
+    "companies": [
+      "达仁堂"
+    ],
+    "stock_codes": [],
+    "metrics": [
+      "营业总收入",
+      "净利润",
+      "销售毛利率",
+      "营业成本"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "focus_topics": [
+      "驱动"
+    ],
+    "intent_type": "causal_analysis",
+    "needs_sql": true,
+    "needs_retrieval": true,
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "causal_analysis",
+    "companies": [
+      "达仁堂"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入",
+      "净利润",
+      "销售毛利率",
+      "营业成本"
+    ],
+    "needs_sql": true,
+    "top_n": null,
+    "threshold": null,
+    "question": "达仁堂2025年第三季度销售毛利率同比提升10个百分点，请结合利润表（营业收入、营业成本）和研报（如产品提价、原材料降价），分析毛利率提升的驱动因素。"
+  },
+  "retrieval_plan": {
+    "question": "达仁堂2025年第三季度销售毛利率同比提升10个百分点，请结合利润表（营业收入、营业成本）和研报（如产品提价、原材料降价），分析毛利率提升的驱动因素。",
+    "companies": [
+      "达仁堂"
+    ],
+    "focus_topics": [
+      "毛利率",
+      "驱动因素",
+      "产品提价",
+      "原材料成本",
+      "成本结构",
+      "增长驱动",
+      "业务结构",
+      "市场拓展",
+      "产品线",
+      "品牌",
+      "渠道",
+      "主营业务收入",
+      "营业总收入",
+      "收入增长",
+      "主营业务",
+      "主营业务类型",
+      "业务类型",
+      "成本控制",
+      "销售费用",
+      "研发费用",
+      "中药",
+      "创新药"
+    ],
+    "needs_retrieval": true,
+    "top_k": 8,
+    "source_scope": "stock",
+    "retrieval_mode": "hybrid"
+  },
+  "sql": "WITH current_period AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        total_operating_revenue AS revenue_current,\n        operating_cost AS cost_current,\n        (total_operating_revenue - operating_cost) / total_operating_revenue * 100 AS gross_margin_current\n    FROM financials_view\n    WHERE stock_abbr = '达仁堂' AND report_period = '2025Q3'\n),\nprevious_period AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        total_operating_revenue AS revenue_previous,\n        operating_cost AS cost_previous,\n        (total_operating_revenue - operating_cost) / total_operating_revenue * 100 AS gross_margin_previous\n    FROM financials_view\n    WHERE stock_abbr = '达仁堂' AND report_period = '2024Q3'\n)\nSELECT \n    c.stock_code,\n    c.stock_abbr,\n    c.report_period AS current_period,\n    p.report_period AS previous_period,\n    c.revenue_current,\n    p.revenue_previous,\n    c.cost_current,\n    p.cost_previous,\n    c.gross_margin_current,\n    p.gross_margin_previous,\n    c.gross_margin_current - p.gross_margin_previous AS gross_margin_change_pct,\n    -- 计算收入变化对毛利率的影响\n    (c.revenue_current - p.revenue_previous) / p.revenue_previous * 100 AS revenue_growth_pct,\n    -- 计算成本变化对毛利率的影响\n    (c.cost_current - p.cost_previous) / p.cost_previous * 100 AS cost_growth_pct,\n    -- 计算毛利率提升的分解：收入增长贡献 vs 成本控制贡献\n    CASE \n        WHEN c.revenue_current > 0 AND p.revenue_previous > 0 \n        THEN ((c.revenue_current - c.cost_current) / c.revenue_current - (p.revenue_previous - p.cost_previous) / p.revenue_previous) * 100\n        ELSE NULL\n    END AS actual_gross_margin_change\nFROM current_period c\nLEFT JOIN previous_period p ON c.stock_code = p.stock_code\nWHERE c.gross_margin_current - p.gross_margin_previous >= 10;",
+  "sql_history": [
+    "WITH current_period AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        total_operating_revenue AS revenue_current,\n        operating_cost AS cost_current,\n        (total_operating_revenue - operating_cost) / total_operating_revenue * 100 AS gross_margin_current\n    FROM financials_view\n    WHERE stock_abbr = '达仁堂' AND report_period = '2025Q3'\n),\nprevious_period AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        total_operating_revenue AS revenue_previous,\n        operating_cost AS cost_previous,\n        (total_operating_revenue - operating_cost) / total_operating_revenue * 100 AS gross_margin_previous\n    FROM financials_view\n    WHERE stock_abbr = '达仁堂' AND report_period = '2024Q3'\n)\nSELECT \n    c.stock_code,\n    c.stock_abbr,\n    c.report_period AS current_period,\n    p.report_period AS previous_period,\n    c.revenue_current,\n    p.revenue_previous,\n    c.cost_current,\n    p.cost_previous,\n    c.gross_margin_current,\n    p.gross_margin_previous,\n    c.gross_margin_current - p.gross_margin_previous AS gross_margin_change_pct,\n    -- 计算收入变化对毛利率的影响\n    (c.revenue_current - p.revenue_previous) / p.revenue_previous * 100 AS revenue_growth_pct,\n    -- 计算成本变化对毛利率的影响\n    (c.cost_current - p.cost_previous) / p.cost_previous * 100 AS cost_growth_pct,\n    -- 计算毛利率提升的分解：收入增长贡献 vs 成本控制贡献\n    CASE \n        WHEN c.revenue_current > 0 AND p.revenue_previous > 0 \n        THEN ((c.revenue_current - c.cost_current) / c.revenue_current - (p.revenue_previous - p.cost_previous) / p.revenue_previous) * 100\n        ELSE NULL\n    END AS actual_gross_margin_change\nFROM current_period c\nLEFT JOIN previous_period p ON c.stock_code = p.stock_code\nWHERE c.gross_margin_current - p.gross_margin_previous >= 10;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 1,
+  "result_rows": [
+    {
+      "stock_code": "600329",
+      "stock_abbr": "达仁堂",
+      "current_period": "2025Q3",
+      "previous_period": "2024Q3",
+      "revenue_current": 366986.1317,
+      "revenue_previous": 561093.255642,
+      "cost_current": 91808.98750399999,
+      "cost_previous": 286342.587753,
+      "gross_margin_current": 74.98298176045218,
+      "gross_margin_previous": 48.96702377479688,
+      "gross_margin_change_pct": 26.015957985655298,
+      "revenue_growth_pct": -34.594449673059,
+      "cost_growth_pct": -67.9373619465943,
+      "actual_gross_margin_change": 26.0159579856553
+    }
+  ],
+  "retrieved_evidence": [
+    {
+      "source_type": "stock",
+      "title": "商业板块剥离聚焦主业，B2C+O2O双轮驱动拓展海外零售网络",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/个股研报/商业板块剥离聚焦主业，B2C+O2O双轮驱动拓展海外零售网络.pdf",
+      "publish_date": "2025-08-22 00:00:00.000",
+      "company_or_industry": "达仁堂",
+      "organization": "西南证券",
+      "snippet": "商业板块剥离聚焦主业，B2C+O2O双轮驱动拓展海外零售网络；达仁堂；西南证券",
+      "score": 3.0,
+      "metadata_ref": "stock::商业板块剥离聚焦主业，B2C+O2O双轮驱动拓展海外零售网络::2025-08-22 00:00:00.000::西南证券::达仁堂",
+      "score_components": {
+        "metadata": 3.0,
+        "vector": 0.0
+      }
+    }
+  ],
+  "reranked_evidence": [
+    {
+      "source_type": "stock",
+      "title": "商业板块剥离聚焦主业，B2C+O2O双轮驱动拓展海外零售网络",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/个股研报/商业板块剥离聚焦主业，B2C+O2O双轮驱动拓展海外零售网络.pdf",
+      "publish_date": "2025-08-22 00:00:00.000",
+      "company_or_industry": "达仁堂",
+      "organization": "西南证券",
+      "snippet": "商业板块剥离聚焦主业，B2C+O2O双轮驱动拓展海外零售网络；达仁堂；西南证券",
+      "score": 3.0,
+      "metadata_ref": "stock::商业板块剥离聚焦主业，B2C+O2O双轮驱动拓展海外零售网络::2025-08-22 00:00:00.000::西南证券::达仁堂",
+      "score_components": {
+        "metadata": 3.0,
+        "vector": 0.0
+      }
+    }
+  ],
+  "rerank_preview": "{\"strategy\": \"skipped_fast_path\", \"kept_count\": 1}",
+  "fused_context": {
+    "question": "达仁堂2025年第三季度销售毛利率同比提升10个百分点，请结合利润表（营业收入、营业成本）和研报（如产品提价、原材料降价），分析毛利率提升的驱动因素。",
+    "sql_row_count": 1,
+    "evidence_count": 1,
+    "sql_preview": [
+      {
+        "stock_code": "600329",
+        "stock_abbr": "达仁堂",
+        "current_period": "2025Q3",
+        "previous_period": "2024Q3",
+        "revenue_current": 366986.1317,
+        "revenue_previous": 561093.255642,
+        "cost_current": 91808.98750399999,
+        "cost_previous": 286342.587753,
+        "gross_margin_current": 74.98298176045218,
+        "gross_margin_previous": 48.96702377479688,
+        "gross_margin_change_pct": 26.015957985655298,
+        "revenue_growth_pct": -34.594449673059,
+        "cost_growth_pct": -67.9373619465943,
+        "actual_gross_margin_change": 26.0159579856553
+      }
+    ],
+    "evidence_preview": [
+      {
+        "source_type": "stock",
+        "title": "商业板块剥离聚焦主业，B2C+O2O双轮驱动拓展海外零售网络",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/个股研报/商业板块剥离聚焦主业，B2C+O2O双轮驱动拓展海外零售网络.pdf",
+        "publish_date": "2025-08-22 00:00:00.000",
+        "company_or_industry": "达仁堂",
+        "organization": "西南证券",
+        "snippet": "商业板块剥离聚焦主业，B2C+O2O双轮驱动拓展海外零售网络；达仁堂；西南证券",
+        "score": 3.0,
+        "metadata_ref": "stock::商业板块剥离聚焦主业，B2C+O2O双轮驱动拓展海外零售网络::2025-08-22 00:00:00.000::西南证券::达仁堂",
+        "score_components": {
+          "metadata": 3.0,
+          "vector": 0.0
+        }
+      }
+    ],
+    "evidence_titles": [
+      "商业板块剥离聚焦主业，B2C+O2O双轮驱动拓展海外零售网络"
+    ],
+    "source_breakdown": {
+      "stock": 1
+    }
+  },
+  "self_check": {
+    "pass": true,
+    "notes": [
+      "1. 回答中的数字（毛利率、营业收入、营业成本及其变动百分比）与 SQL rows 中的数据完全一致，计算准确。",
+      "2. 回答正确引用了 Evidences 中唯一存在的研报片段（西南证券，2025-08-22），并准确指出该研报未提供问题所要求的“产品提价、原材料降价”等具体驱动因素信息，仅提及“商业板块剥离聚焦主业”。引用恰当，没有虚构内容。",
+      "3. 回答没有遗漏问题要求的关键点。它首先给出了毛利率提升的直接财务数据结论，然后分别从利润表（营业收入、营业成本）和研报两个角度进行了分析，并明确指出研报证据的缺失。",
+      "4. 回答中使用的指标名称准确，没有混淆。例如，正确使用了“销售毛利率”、“营业总收入”、“营业成本”等术语，与 SQL rows 中的字段对应。",
+      "5. 回答正确地将 SQL rows 中的聚合统计结果（此处是单条记录，代表达仁堂2025Q3与2024Q3的对比数据）对应到了具体公司“达仁堂”，没有发生错误对应。"
+    ]
+  },
+  "chart_plan": {},
+  "chart_spec": {},
+  "current_chart_paths": [],
+  "current_chart_specs": [],
+  "current_answer": "**直接结论**  \n根据财务数据，达仁堂2025年第三季度销售毛利率同比大幅提升约26.02个百分点（从48.97%提升至74.98%），远超问题中提到的10个百分点。毛利率提升的主要驱动因素是**营业成本同比大幅下降**，同时营业收入同比下降，但成本降幅远大于收入降幅，导致毛利率显著扩张。\n\n**财务数据支撑**  \n1. **毛利率变动**：2025Q3销售毛利率为74.98%，2024Q3为48.97%，同比提升26.02个百分点。  \n2. **营业收入**：2025Q3营业总收入为366,986.13万元（约36.70亿元），2024Q3为561,093.26万元（约56.11亿元），同比下降34.59%。  \n3. **营业成本**：2025Q3营业成本为91,808.99万元（约9.18亿元），2024Q3为286,342.59万元（约28.63亿元），同比下降67.94%。  \n   - 成本降幅（-67.94%）远大于收入降幅（-34.59%），是毛利率提升的核心财务原因。\n\n**研报证据支撑**  \n未检索到直接研报证据。现有研报片段（西南证券，2025-08-22）仅提及“商业板块剥离聚焦主业”，未具体说明产品提价、原材料降价或成本结构变化对2025Q3毛利率的影响。\n\n**综合判断**  \n- 毛利率提升主要源于**营业成本的大幅压缩**（同比下降约67.94%），而营业收入虽下降但降幅较小，使得毛利空间显著扩大。  \n- 财务数据未直接体现“产品提价”或“原材料降价”的影响；研报中提到的“商业板块剥离”可能通过业务结构调整影响成本与收入，但无具体证据说明其对2025Q3毛利率的直接影响。  \n- 结论：达仁堂2025Q3毛利率提升的驱动因素**在数据层面主要表现为营业成本的急剧下降**，但具体原因（如业务剥离、成本管控、产品结构变化等）需进一步结合更详细的业务分析或研报佐证。",
+  "current_references": [
+    {
+      "paper_path": "./附件5：研报数据/个股研报/商业板块剥离聚焦主业，B2C+O2O双轮驱动拓展海外零售网络.pdf",
+      "text": "商业板块剥离聚焦主业，B2C+O2O 双轮驱动拓展海外零售网络投资要点西南证券研究院\n\n 事件：公司发布2025 年半年报，上半年实现营收26.5亿元，同比-33.2%，营收下滑主要是因为医药商业板块已从公司层面剥离；\n\n实现归母净利润19.3亿元，同比+193.1%，主要是由于转让天津史克12%的股权实现税后净收益13.08 亿元；\n\n扣非后净利润6.0亿元，同比下降5.9%，主要是之前天津史克联营收益影响，扣除该投资收益后，扣非后归母净利润同比+12.9%。\n\n公司2025 年上半年中成药收入24.3 亿元，同比-33.1%，其中速效救心丸实现销售额 11.28 亿元，同比增长5.5%，占中成药收入比重超42%，清咽滴丸成增长亮点，销售额2.9 亿元，同比激增52.3%，展现出了良好的市场潜力。\n\n在业务拓展上，公司通过“三核九翼”战略，聚焦心脑血管、皮肤创面修复、精品国药三大核心领域，上半年完成4745家终端医院开发，渠道下沉效果初显。\n\n此外，公司积极开拓大健康业务，7月上市的“舒韧安肤系列”护肤品，将“京万红因子”应用其中，为未来大健康版图扩张埋下伏笔。\n\n 建立中药材及药品综合性产业链，出海打造新增长极。\n\n公司目前建立包括中药材种植和药品及大健康产品研发、生产、销售及国际拓展在内的综合性产业链，形成“供-产-销-研”一体化协同优势。\n\n上游包括自建3个GAP 基地"
+    }
+  ],
+  "answer_rewritten": false,
+  "turn_answers": [
+    {
+      "Q": "达仁堂2025年第三季度销售毛利率同比提升10个百分点，请结合利润表（营业收入、营业成本）和研报（如产品提价、原材料降价），分析毛利率提升的驱动因素。",
+      "A": {
+        "content": "**直接结论**  \n根据财务数据，达仁堂2025年第三季度销售毛利率同比大幅提升约26.02个百分点（从48.97%提升至74.98%），远超问题中提到的10个百分点。毛利率提升的主要驱动因素是**营业成本同比大幅下降**，同时营业收入同比下降，但成本降幅远大于收入降幅，导致毛利率显著扩张。\n\n**财务数据支撑**  \n1. **毛利率变动**：2025Q3销售毛利率为74.98%，2024Q3为48.97%，同比提升26.02个百分点。  \n2. **营业收入**：2025Q3营业总收入为366,986.13万元（约36.70亿元），2024Q3为561,093.26万元（约56.11亿元），同比下降34.59%。  \n3. **营业成本**：2025Q3营业成本为91,808.99万元（约9.18亿元），2024Q3为286,342.59万元（约28.63亿元），同比下降67.94%。  \n   - 成本降幅（-67.94%）远大于收入降幅（-34.59%），是毛利率提升的核心财务原因。\n\n**研报证据支撑**  \n未检索到直接研报证据。现有研报片段（西南证券，2025-08-22）仅提及“商业板块剥离聚焦主业”，未具体说明产品提价、原材料降价或成本结构变化对2025Q3毛利率的影响。\n\n**综合判断**  \n- 毛利率提升主要源于**营业成本的大幅压缩**（同比下降约67.94%），而营业收入虽下降但降幅较小，使得毛利空间显著扩大。  \n- 财务数据未直接体现“产品提价”或“原材料降价”的影响；研报中提到的“商业板块剥离”可能通过业务结构调整影响成本与收入，但无具体证据说明其对2025Q3毛利率的直接影响。  \n- 结论：达仁堂2025Q3毛利率提升的驱动因素**在数据层面主要表现为营业成本的急剧下降**，但具体原因（如业务剥离、成本管控、产品结构变化等）需进一步结合更详细的业务分析或研报佐证。",
+        "image": [],
+        "references": [
+          {
+            "paper_path": "./附件5：研报数据/个股研报/商业板块剥离聚焦主业，B2C+O2O双轮驱动拓展海外零售网络.pdf",
+            "text": "商业板块剥离聚焦主业，B2C+O2O 双轮驱动拓展海外零售网络投资要点西南证券研究院\n\n 事件：公司发布2025 年半年报，上半年实现营收26.5亿元，同比-33.2%，营收下滑主要是因为医药商业板块已从公司层面剥离；\n\n实现归母净利润19.3亿元，同比+193.1%，主要是由于转让天津史克12%的股权实现税后净收益13.08 亿元；\n\n扣非后净利润6.0亿元，同比下降5.9%，主要是之前天津史克联营收益影响，扣除该投资收益后，扣非后归母净利润同比+12.9%。\n\n公司2025 年上半年中成药收入24.3 亿元，同比-33.1%，其中速效救心丸实现销售额 11.28 亿元，同比增长5.5%，占中成药收入比重超42%，清咽滴丸成增长亮点，销售额2.9 亿元，同比激增52.3%，展现出了良好的市场潜力。\n\n在业务拓展上，公司通过“三核九翼”战略，聚焦心脑血管、皮肤创面修复、精品国药三大核心领域，上半年完成4745家终端医院开发，渠道下沉效果初显。\n\n此外，公司积极开拓大健康业务，7月上市的“舒韧安肤系列”护肤品，将“京万红因子”应用其中，为未来大健康版图扩张埋下伏笔。\n\n 建立中药材及药品综合性产业链，出海打造新增长极。\n\n公司目前建立包括中药材种植和药品及大健康产品研发、生产、销售及国际拓展在内的综合性产业链，形成“供-产-销-研”一体化协同优势。\n\n上游包括自建3个GAP 基地"
+          }
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"达仁堂2025年第三季度销售毛利率同比提升10个百分点，请结合利润表（营业收入、营业成本）和研报（如产品提价、原材料降价），分析毛利率提升的驱动因素。\", \"A\": {\"content\": \"**直接结论**  \\n根据财务数据，达仁堂2025年第三季度销售毛利率同比大幅提升约26.02个百分点（从48.97%提升至74.98%），远超问题中提到的10个百分点。毛利率提升的主要驱动因素是**营业成本同比大幅下降**，同时营业收入同比下降，但成本降幅远大于收入降幅，导致毛利率显著扩张。\\n\\n**财务数据支撑**  \\n1. **毛利率变动**：2025Q3销售毛利率为74.98%，2024Q3为48.97%，同比提升26.02个百分点。  \\n2. **营业收入**：2025Q3营业总收入为366,986.13万元（约36.70亿元），2024Q3为561,093.26万元（约56.11亿元），同比下降34.59%。  \\n3. **营业成本**：2025Q3营业成本为91,808.99万元（约9.18亿元），2024Q3为286,342.59万元（约28.63亿元），同比下降67.94%。  \\n   - 成本降幅（-67.94%）远大于收入降幅（-34.59%），是毛利率提升的核心财务原因。\\n\\n**研报证据支撑**  \\n未检索到直接研报证据。现有研报片段（西南证券，2025-08-22）仅提及“商业板块剥离聚焦主业”，未具体说明产品提价、原材料降价或成本结构变化对2025Q3毛利率的影响。\\n\\n**综合判断**  \\n- 毛利率提升主要源于**营业成本的大幅压缩**（同比下降约67.94%），而营业收入虽下降但降幅较小，使得毛利空间显著扩大。  \\n- 财务数据未直接体现“产品提价”或“原材料降价”的影响；研报中提到的“商业板块剥离”可能通过业务结构调整影响成本与收入，但无具体证据说明其对2025Q3毛利率的直接影响。  \\n- 结论：达仁堂2025Q3毛利率提升的驱动因素**在数据层面主要表现为营业成本的急剧下降**，但具体原因（如业务剥离、成本管控、产品结构变化等）需进一步结合更详细的业务分析或研报佐证。\", \"image\": [], \"references\": [{\"paper_path\": \"./附件5：研报数据/个股研报/商业板块剥离聚焦主业，B2C+O2O双轮驱动拓展海外零售网络.pdf\", \"text\": \"商业板块剥离聚焦主业，B2C+O2O 双轮驱动拓展海外零售网络投资要点西南证券研究院\\n\\n 事件：公司发布2025 年半年报，上半年实现营收26.5亿元，同比-33.2%，营收下滑主要是因为医药商业板块已从公司层面剥离；\\n\\n实现归母净利润19.3亿元，同比+193.1%，主要是由于转让天津史克12%的股权实现税后净收益13.08 亿元；\\n\\n扣非后净利润6.0亿元，同比下降5.9%，主要是之前天津史克联营收益影响，扣除该投资收益后，扣非后归母净利润同比+12.9%。\\n\\n公司2025 年上半年中成药收入24.3 亿元，同比-33.1%，其中速效救心丸实现销售额 11.28 亿元，同比增长5.5%，占中成药收入比重超42%，清咽滴丸成增长亮点，销售额2.9 亿元，同比激增52.3%，展现出了良好的市场潜力。\\n\\n在业务拓展上，公司通过“三核九翼”战略，聚焦心脑血管、皮肤创面修复、精品国药三大核心领域，上半年完成4745家终端医院开发，渠道下沉效果初显。\\n\\n此外，公司积极开拓大健康业务，7月上市的“舒韧安肤系列”护肤品，将“京万红因子”应用其中，为未来大健康版图扩张埋下伏笔。\\n\\n 建立中药材及药品综合性产业链，出海打造新增长极。\\n\\n公司目前建立包括中药材种植和药品及大健康产品研发、生产、销售及国际拓展在内的综合性产业链，形成“供-产-销-研”一体化协同优势。\\n\\n上游包括自建3个GAP 基地\"}]}}]",
+  "references_json": "[{\"paper_path\": \"./附件5：研报数据/个股研报/商业板块剥离聚焦主业，B2C+O2O双轮驱动拓展海外零售网络.pdf\", \"text\": \"商业板块剥离聚焦主业，B2C+O2O 双轮驱动拓展海外零售网络投资要点西南证券研究院\\n\\n 事件：公司发布2025 年半年报，上半年实现营收26.5亿元，同比-33.2%，营收下滑主要是因为医药商业板块已从公司层面剥离；\\n\\n实现归母净利润19.3亿元，同比+193.1%，主要是由于转让天津史克12%的股权实现税后净收益13.08 亿元；\\n\\n扣非后净利润6.0亿元，同比下降5.9%，主要是之前天津史克联营收益影响，扣除该投资收益后，扣非后归母净利润同比+12.9%。\\n\\n公司2025 年上半年中成药收入24.3 亿元，同比-33.1%，其中速效救心丸实现销售额 11.28 亿元，同比增长5.5%，占中成药收入比重超42%，清咽滴丸成增长亮点，销售额2.9 亿元，同比激增52.3%，展现出了良好的市场潜力。\\n\\n在业务拓展上，公司通过“三核九翼”战略，聚焦心脑血管、皮肤创面修复、精品国药三大核心领域，上半年完成4745家终端医院开发，渠道下沉效果初显。\\n\\n此外，公司积极开拓大健康业务，7月上市的“舒韧安肤系列”护肤品，将“京万红因子”应用其中，为未来大健康版图扩张埋下伏笔。\\n\\n 建立中药材及药品综合性产业链，出海打造新增长极。\\n\\n公司目前建立包括中药材种植和药品及大健康产品研发、生产、销售及国际拓展在内的综合性产业链，形成“供-产-销-研”一体化协同优势。\\n\\n上游包括自建3个GAP 基地\"}]",
+  "notes": [
+    "route=causal_analysis",
+    "该查询分析达仁堂2025年第三季度销售毛利率同比提升10个百分点的驱动因素。通过对比2025Q3和2024Q3的利润表数据（营业收入、营业成本），计算毛利率变化，并分解为收入增长和成本控制两方面的贡献。查询使用CTE分别获取当前期和对比期的数据，然后计算关键指标：毛利率变化、收入增长率、成本增长率，以及实际的毛利率变化值。WHERE子句确保只返回毛利率提升至少10个百分点的情况，符合问题描述。",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=1",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=1",
+    "self_check={\"pass\": true, \"notes\": [\"1. 回答中的数字（毛利率、营业收入、营业成本及其变动百分比）与 SQL rows 中的数据完全一致，计算准确。\", \"2. 回答正确引用了 Evidences 中唯一存在的研报片段（西南证券，2025-08-22），并准确指出该研报未提供问题所要求的“产品提价、原材料降价”等具体驱动因素信息，仅提及“商业板块剥离聚焦主业”。引用恰当，没有虚构内容。\", \"3. 回答没有遗漏问题要求的关键点。它首先给出了毛利率提升的直接财务数据结论，然后分别从利润表（营业收入、营业成本）和研报两个角度进行了分析，并明确指出研报证据的缺失。\", \"4. 回答中使用的指标名称准确，没有混淆。例如，正确使用了“销售毛利率”、“营业总收入”、“营业成本”等术语，与 SQL rows 中的字段对应。\", \"5. 回答正确地将 SQL rows 中的聚合统计结果（此处是单条记录，代表达仁堂2025Q3与2024Q3的对比数据）对应到了具体公司“达仁堂”，没有发生错误对应。\"]}"
+  ],
+  "final_status": "ok"
+}

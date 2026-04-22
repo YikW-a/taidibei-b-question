@@ -1,0 +1,195 @@
+{
+  "schema_version": "task3.chart-spec.v1",
+  "question_id": "B2049",
+  "image_index": 1,
+  "chart_type": "table",
+  "title": "围绕“销售费用管控”：①计算2025年第三季度各... - 营业总收入",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 27,
+    "preview_rows": [
+      {
+        "stock_code": "002166",
+        "stock_abbr": "莱茵生物",
+        "selling_expense_ratio": 3.8566276277540146,
+        "avg_selling_expense_ratio": 29.228042235669655,
+        "total_operating_revenue": 127215.58173499999,
+        "net_profit": 7039.5252980000005,
+        "selling_expenses": 4906.231272,
+        "net_profit_margin": 5.533540154431619
+      },
+      {
+        "stock_code": "600436",
+        "stock_abbr": "片仔癀",
+        "selling_expense_ratio": 3.9920415090392356,
+        "avg_selling_expense_ratio": 29.228042235669655,
+        "total_operating_revenue": 744236.610835,
+        "net_profit": 212934.76773800002,
+        "selling_expenses": 29710.23443,
+        "net_profit_margin": 28.611165405998605
+      },
+      {
+        "stock_code": "002390",
+        "stock_abbr": "信邦制药",
+        "selling_expense_ratio": 4.595074634046494,
+        "avg_selling_expense_ratio": 29.228042235669655,
+        "total_operating_revenue": 426628.528811,
+        "net_profit": 15232.4953,
+        "selling_expenses": 19603.899309,
+        "net_profit_margin": 3.570435231430133
+      },
+      {
+        "stock_code": "002589",
+        "stock_abbr": "瑞康医药",
+        "selling_expense_ratio": 4.802964903419158,
+        "avg_selling_expense_ratio": 29.228042235669655,
+        "total_operating_revenue": 540653.364977,
+        "net_profit": 1213.662607,
+        "selling_expenses": 25967.391369,
+        "net_profit_margin": 0.22448072750858222
+      },
+      {
+        "stock_code": "002219",
+        "stock_abbr": "新里程",
+        "selling_expense_ratio": 5.533222822973222,
+        "avg_selling_expense_ratio": 29.228042235669655,
+        "total_operating_revenue": 225609.546848,
+        "net_profit": -3846.8212240000003,
+        "selling_expenses": 12483.478937,
+        "net_profit_margin": NaN
+      },
+      {
+        "stock_code": "600671",
+        "stock_abbr": "天目药业",
+        "selling_expense_ratio": 6.395547928861152,
+        "avg_selling_expense_ratio": 29.228042235669655,
+        "total_operating_revenue": 15894.041266,
+        "net_profit": 1420.87966,
+        "selling_expenses": 1016.5110269999999,
+        "net_profit_margin": 8.93970033310218
+      },
+      {
+        "stock_code": "300519",
+        "stock_abbr": "新光药业",
+        "selling_expense_ratio": 6.8961412412840835,
+        "avg_selling_expense_ratio": 29.228042235669655,
+        "total_operating_revenue": 20561.856788999998,
+        "net_profit": 4533.617834000001,
+        "selling_expenses": 1417.974686,
+        "net_profit_margin": 22.04867916610214
+      },
+      {
+        "stock_code": "600332",
+        "stock_abbr": "白云山",
+        "selling_expense_ratio": 7.0056005008110915,
+        "avg_selling_expense_ratio": 29.228042235669655,
+        "total_operating_revenue": 6160599.379554,
+        "net_profit": 331005.207786,
+        "selling_expenses": 431586.980987,
+        "net_profit_margin": 5.372938368376151
+      },
+      {
+        "stock_code": "600222",
+        "stock_abbr": "太龙药业",
+        "selling_expense_ratio": 7.4438106615972,
+        "avg_selling_expense_ratio": 29.228042235669655,
+        "total_operating_revenue": 118690.21734500001,
+        "net_profit": 2532.546125,
+        "selling_expenses": 8835.075053,
+        "net_profit_margin": 2.1337446182599704
+      },
+      {
+        "stock_code": "000650",
+        "stock_abbr": "仁和药业",
+        "selling_expense_ratio": 9.29564665294261,
+        "avg_selling_expense_ratio": 29.228042235669655,
+        "total_operating_revenue": 283345.176031,
+        "net_profit": 37913.517706,
+        "selling_expenses": 26338.766372,
+        "net_profit_margin": 13.38068226079557
+      },
+      {
+        "stock_code": "600518",
+        "stock_abbr": "康美药业",
+        "selling_expense_ratio": 9.74187410006687,
+        "avg_selling_expense_ratio": 29.228042235669655,
+        "total_operating_revenue": 395960.35146599996,
+        "net_profit": 1308.230931,
+        "selling_expenses": 38573.958926,
+        "net_profit_margin": 0.3303944261480772
+      },
+      {
+        "stock_code": "603567",
+        "stock_abbr": "珍宝岛",
+        "selling_expense_ratio": 10.7834849092377,
+        "avg_selling_expense_ratio": 29.228042235669655,
+        "total_operating_revenue": 91880.328812,
+        "net_profit": -37309.834572,
+        "selling_expenses": 9907.901392,
+        "net_profit_margin": NaN
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": null,
+    "sort_ascending": true,
+    "top_n": 12,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "stock_code",
+      "data_type": "quantitative",
+      "label": "股票代码",
+      "unit": "万元"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": false
+  },
+  "output": {
+    "filename": "B2049_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B2049_1.jpg"
+  },
+  "meta": {
+    "source_sql": "WITH industry_avg AS (\n    SELECT \n        AVG(selling_expenses * 1.0 / NULLIF(total_operating_revenue, 0)) * 100 AS avg_selling_expense_ratio\n    FROM financials_view \n    WHERE report_period = '2025Q3'\n        AND total_operating_revenue > 0\n),\ncompany_ratios AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        total_operating_revenue,\n        net_profit,\n        selling_expenses,\n        CASE \n            WHEN total_operating_revenue > 0 \n            THEN selling_expenses * 1.0 / total_operating_revenue * 100 \n            ELSE NULL \n        END AS selling_expense_ratio\n    FROM financials_view \n    WHERE report_period = '2025Q3'\n        AND total_operating_revenue > 0\n)\nSELECT \n    cr.stock_code,\n    cr.stock_abbr,\n    cr.selling_expense_ratio,\n    ia.avg_selling_expense_ratio,\n    cr.total_operating_revenue,\n    cr.net_profit,\n    cr.selling_expenses,\n    CASE \n        WHEN cr.net_profit > 0 AND cr.total_operating_revenue > 0 \n        THEN cr.net_profit * 1.0 / cr.total_operating_revenue * 100 \n        ELSE NULL \n    END AS net_profit_margin\nFROM company_ratios cr\nCROSS JOIN industry_avg ia\nWHERE cr.selling_expense_ratio < ia.avg_selling_expense_ratio\nORDER BY cr.selling_expense_ratio ASC;",
+    "value_fields": [
+      "stock_code",
+      "selling_expense_ratio",
+      "avg_selling_expense_ratio",
+      "total_operating_revenue"
+    ],
+    "value_labels": [
+      "股票代码",
+      "selling_expense_ratio",
+      "avg_selling_expense_ratio",
+      "营业总收入"
+    ],
+    "original_chart_plan": {
+      "chart_type": "table",
+      "x_field": null,
+      "y_fields": [
+        "stock_code",
+        "selling_expense_ratio",
+        "avg_selling_expense_ratio",
+        "total_operating_revenue"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": null,
+      "sort_ascending": true,
+      "top_n": 12
+    }
+  }
+}

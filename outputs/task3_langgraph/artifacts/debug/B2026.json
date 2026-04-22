@@ -1,0 +1,1905 @@
+{
+  "question_id": "B2026",
+  "question_type": "融合查询",
+  "raw_question": "检索2025年研报中提到人工智能产业升级相关布局的公司，查询这些公司2025年第三季度的销售费用率变化情况",
+  "raw_question_json": "[{\"Q\":\"检索2025年研报中提到人工智能产业升级相关布局的公司，查询这些公司2025年第三季度的销售费用率变化情况\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "metrics": [
+      "销售费用"
+    ],
+    "periods": [
+      "2025Q3",
+      "2025FY"
+    ],
+    "focus_topics": [
+      "人工智能",
+      "产业升级"
+    ],
+    "intent_type": "hybrid_sql_rag",
+    "needs_sql": true,
+    "needs_retrieval": true,
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "hybrid_sql_rag",
+    "companies": [
+      "方盛制药"
+    ],
+    "periods": [
+      "2025Q3",
+      "2025FY"
+    ],
+    "metrics": [
+      "销售费用"
+    ],
+    "needs_sql": true,
+    "top_n": null,
+    "threshold": null,
+    "question": "查询2025年研报中提到人工智能产业升级相关布局的公司，这些公司2025年第三季度的销售费用率变化情况"
+  },
+  "retrieval_plan": {
+    "question": "检索2025年研报中提到人工智能产业升级相关布局的公司，查询这些公司2025年第三季度的销售费用率变化情况",
+    "companies": [],
+    "focus_topics": [
+      "人工智能",
+      "产业升级",
+      "AI",
+      "智能化",
+      "数字化",
+      "信息化",
+      "主营业务",
+      "主营业务类型",
+      "业务类型",
+      "成本控制",
+      "成本结构",
+      "销售费用",
+      "研发费用",
+      "中药",
+      "创新药"
+    ],
+    "needs_retrieval": true,
+    "top_k": 50,
+    "source_scope": "hybrid",
+    "retrieval_mode": "hybrid"
+  },
+  "sql": "WITH target_companies AS (\n    SELECT DISTINCT stock_code, stock_abbr\n    FROM financials_view\n    WHERE stock_abbr IN ('方盛制药')\n)\nSELECT \n    fv.stock_code,\n    fv.stock_abbr,\n    fv.report_period,\n    -- 销售费用率 = 销售费用 / 营业总收入，已存储为百分数，直接使用\n    fv.selling_expenses AS selling_expense_ratio,\n    -- 获取上一季度（2025Q2）的销售费用率用于计算变化\n    LAG(fv.selling_expenses) OVER (PARTITION BY fv.stock_code ORDER BY fv.report_period) AS prev_selling_expense_ratio,\n    -- 计算环比变化（百分点）\n    fv.selling_expenses - LAG(fv.selling_expenses) OVER (PARTITION BY fv.stock_code ORDER BY fv.report_period) AS selling_expense_ratio_change\nFROM financials_view fv\nINNER JOIN target_companies tc ON fv.stock_code = tc.stock_code\nWHERE fv.report_period IN ('2025Q3', '2025Q2')\nORDER BY fv.stock_abbr, fv.report_period;",
+  "sql_history": [
+    "WITH target_companies AS (\n    -- 由于query_plan中companies为空数组，这里不能枚举具体公司\n    -- 实际执行时，RAG模块会提供具体的公司列表\n    SELECT DISTINCT stock_code, stock_abbr\n    FROM financials_view\n    WHERE 1=0  -- 占位符，实际应由RAG填充\n)\nSELECT \n    fv.stock_code,\n    fv.stock_abbr,\n    fv.report_period,\n    -- 销售费用率 = 销售费用 / 营业总收入\n    CASE \n        WHEN fv.income_total_operating_revenue > 0 \n        THEN ROUND(fv.selling_expenses * 100.0 / fv.income_total_operating_revenue, 2)\n        ELSE NULL \n    END AS selling_expense_ratio,\n    -- 获取上一季度（2025Q2）的销售费用率用于计算变化\n    LAG(\n        CASE \n            WHEN fv.income_total_operating_revenue > 0 \n            THEN ROUND(fv.selling_expenses * 100.0 / fv.income_total_operating_revenue, 2)\n            ELSE NULL \n        END\n    ) OVER (PARTITION BY fv.stock_code ORDER BY fv.report_period) AS prev_selling_expense_ratio,\n    -- 计算环比变化（百分点）\n    CASE \n        WHEN fv.income_total_operating_revenue > 0 \n        THEN ROUND(fv.selling_expenses * 100.0 / fv.income_total_operating_revenue, 2)\n        ELSE NULL \n    END - \n    LAG(\n        CASE \n            WHEN fv.income_total_operating_revenue > 0 \n            THEN ROUND(fv.selling_expenses * 100.0 / fv.income_total_operating_revenue, 2)\n            ELSE NULL \n        END\n    ) OVER (PARTITION BY fv.stock_code ORDER BY fv.report_period) AS selling_expense_ratio_change\nFROM financials_view fv\nINNER JOIN target_companies tc ON fv.stock_code = tc.stock_code\nWHERE fv.report_period IN ('2025Q3', '2025Q2')\nORDER BY fv.stock_abbr, fv.report_period;",
+    "WITH target_companies AS (\n    SELECT DISTINCT stock_code, stock_abbr\n    FROM financials_view\n    WHERE stock_abbr IN ('方盛制药')\n)\nSELECT \n    fv.stock_code,\n    fv.stock_abbr,\n    fv.report_period,\n    -- 销售费用率 = 销售费用 / 营业总收入，已存储为百分数，直接使用\n    fv.selling_expenses AS selling_expense_ratio,\n    -- 获取上一季度（2025Q2）的销售费用率用于计算变化\n    LAG(fv.selling_expenses) OVER (PARTITION BY fv.stock_code ORDER BY fv.report_period) AS prev_selling_expense_ratio,\n    -- 计算环比变化（百分点）\n    fv.selling_expenses - LAG(fv.selling_expenses) OVER (PARTITION BY fv.stock_code ORDER BY fv.report_period) AS selling_expense_ratio_change\nFROM financials_view fv\nINNER JOIN target_companies tc ON fv.stock_code = tc.stock_code\nWHERE fv.report_period IN ('2025Q3', '2025Q2')\nORDER BY fv.stock_abbr, fv.report_period;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 2,
+  "result_rows": [
+    {
+      "stock_code": "603998",
+      "stock_abbr": "方盛制药",
+      "report_period": "2025Q2",
+      "selling_expense_ratio": NaN,
+      "prev_selling_expense_ratio": null,
+      "selling_expense_ratio_change": null
+    },
+    {
+      "stock_code": "603998",
+      "stock_abbr": "方盛制药",
+      "report_period": "2025Q3",
+      "selling_expense_ratio": 42025.624142,
+      "prev_selling_expense_ratio": null,
+      "selling_expense_ratio_change": null
+    }
+  ],
+  "retrieved_evidence": [
+    {
+      "source_type": "industry",
+      "title": "医药生物行业报告：美股“AI+医疗”板块爆发，看好AI助力国内医疗行业全面智能化升级",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业报告：美股“AI+医疗”板块爆发，看好AI助力国内医疗行业全面智能化升级.pdf",
+      "publish_date": "2025-02-10 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "中邮证券",
+      "snippet": "医药生物行业报告：美股“AI+医疗”板块爆发，看好AI助力国内医疗行业全面智能化升级；中药；中邮证券",
+      "score": 8.12016,
+      "metadata_ref": "industry::医药生物行业报告：美股“AI+医疗”板块爆发，看好AI助力国内医疗行业全面智能化升级::2025-02-10 00:00:00.000::中邮证券::中药",
+      "score_components": {
+        "metadata": 6.0,
+        "vector": 0.690961
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业报告：“AI+医疗”高景气度有望持续，创新药利好政策持续加码",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业报告：“AI+医疗”高景气度有望持续，创新药利好政策持续加码.pdf",
+      "publish_date": "2025-02-24 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "中邮证券",
+      "snippet": "医药生物行业报告：“AI+医疗”高景气度有望持续，创新药利好政策持续加码；中药；中邮证券",
+      "score": 6.720739,
+      "metadata_ref": "industry::医药生物行业报告：“AI+医疗”高景气度有望持续，创新药利好政策持续加码::2025-02-24 00:00:00.000::中邮证券::中药",
+      "score_components": {
+        "metadata": 6.0,
+        "vector": 0.720739
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：创新药行情开始分化，高端器械及AI医疗有望接力",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：创新药行情开始分化，高端器械及AI医疗有望接力.pdf",
+      "publish_date": "2025-09-08 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "信达证券",
+      "snippet": "医药生物行业周报：创新药行情开始分化，高端器械及AI医疗有望接力；中药；信达证券",
+      "score": 6.0,
+      "metadata_ref": "industry::医药生物行业周报：创新药行情开始分化，高端器械及AI医疗有望接力::2025-09-08 00:00:00.000::信达证券::中药",
+      "score_components": {
+        "metadata": 6.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：看好Q2板块复苏，重点关注创新药+AI医疗+消费医疗",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：看好Q2板块复苏，重点关注创新药+AI医疗+消费医疗.pdf",
+      "publish_date": "2025-04-27 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "信达证券",
+      "snippet": "医药生物行业周报：看好Q2板块复苏，重点关注创新药+AI医疗+消费医疗；中药；信达证券",
+      "score": 6.0,
+      "metadata_ref": "industry::医药生物行业周报：看好Q2板块复苏，重点关注创新药+AI医疗+消费医疗::2025-04-27 00:00:00.000::信达证券::中药",
+      "score_components": {
+        "metadata": 6.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会.pdf",
+      "publish_date": "2025-09-14 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "开源证券",
+      "snippet": "医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会；中药；开源证券",
+      "score": 5.447611,
+      "metadata_ref": "industry::医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会::2025-09-14 00:00:00.000::开源证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.715624
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业跟踪周报：AI制药产业兑现，重点推荐晶泰控股等",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：AI制药产业兑现，重点推荐晶泰控股等.pdf",
+      "publish_date": "2025-08-24 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东吴证券",
+      "snippet": "医药生物行业跟踪周报：AI制药产业兑现，重点推荐晶泰控股等；中药；东吴证券",
+      "score": 5.411185000000001,
+      "metadata_ref": "industry::医药生物行业跟踪周报：AI制药产业兑现，重点推荐晶泰控股等::2025-08-24 00:00:00.000::东吴证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.691798
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业报告：创新药主题热度仍在升温，关注中药创新药研发企业的投资机会",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业报告：创新药主题热度仍在升温，关注中药创新药研发企业的投资机会.pdf",
+      "publish_date": "2025-06-17 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "中邮证券",
+      "snippet": "医药生物行业报告：创新药主题热度仍在升温，关注中药创新药研发企业的投资机会；中药；中邮证券",
+      "score": 4.683167,
+      "metadata_ref": "industry::医药生物行业报告：创新药主题热度仍在升温，关注中药创新药研发企业的投资机会::2025-06-17 00:00:00.000::中邮证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.683167
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "2024年和2025Q1医药生物行业业绩总结",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/2024年和2025Q1医药生物行业业绩总结.pdf",
+      "publish_date": "2025-05-20 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "中航证券",
+      "metadata_ref": "industry::2024年和2025Q1医药生物行业业绩总结::2025-05-20 00:00:00.000::中航证券::中药",
+      "snippet": "现正增长，同比增速为：112.70%。三级板块中，化学制剂、血\n8.14%；研发费用率13.01%。\nØ2024年，中药板块毛利率41.76%，较2023年的44.16%有所提升；净利率8.07%，较2023年的9.35%有所下滑。2024年，医疗器械板块销售费用率21.97%；管理费用率5.99%；研发费用率2.95%。\n\n毛利率（%）净利率（%）销售费用率（%）管理费用率（%）财务费用率（%）研发费用率（%）",
+      "score": 4.1583760000000005,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.680736
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "单Q3扣非归母净利润增速超36％，中药创新药研产销路线已打通",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/个股研报/单Q3扣非归母净利润增速超36％，中药创新药研产销路线已打通.pdf",
+      "publish_date": "2025-10-31 00:00:00.000",
+      "company_or_industry": "方盛制药",
+      "organization": "信达证券",
+      "snippet": "单Q3扣非归母净利润增速超36％，中药创新药研产销路线已打通；方盛制药；信达证券",
+      "score": 4.0,
+      "metadata_ref": "stock::单Q3扣非归母净利润增速超36％，中药创新药研产销路线已打通::2025-10-31 00:00:00.000::信达证券::方盛制药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会.pdf",
+      "publish_date": "2025-12-29 00:00:00",
+      "company_or_industry": "中药",
+      "organization": "中邮证券",
+      "snippet": "医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会；中药；中邮证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会::2025-12-29T00:00:00::中邮证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高.pdf",
+      "publish_date": "2025-12-28 00:00:00",
+      "company_or_industry": "中药",
+      "organization": "东吴证券",
+      "snippet": "医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高；中药；东吴证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高::2025-12-28T00:00:00::东吴证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：新版“医保+商保”目录发布，协同保障体系提升创新药可及性",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：新版“医保+商保”目录发布，协同保障体系提升创新药可及性.pdf",
+      "publish_date": "2025-12-09 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "上海证券",
+      "snippet": "医药生物行业周报：新版“医保+商保”目录发布，协同保障体系提升创新药可及性；中药；上海证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报：新版“医保+商保”目录发布，协同保障体系提升创新药可及性::2025-12-09 00:00:00.000::上海证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业快评报告：医保赋能多方合力，共促创新药高质量发展",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业快评报告：医保赋能多方合力，共促创新药高质量发展.pdf",
+      "publish_date": "2025-12-08 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "万联证券",
+      "snippet": "医药生物行业快评报告：医保赋能多方合力，共促创新药高质量发展；中药；万联证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业快评报告：医保赋能多方合力，共促创新药高质量发展::2025-12-08 00:00:00.000::万联证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业跟踪周报：看好创新药出海，重点推荐恒瑞医药、百济神州等",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：看好创新药出海，重点推荐恒瑞医药、百济神州等.pdf",
+      "publish_date": "2025-12-07 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东吴证券",
+      "snippet": "医药生物行业跟踪周报：看好创新药出海，重点推荐恒瑞医药、百济神州等；中药；东吴证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业跟踪周报：看好创新药出海，重点推荐恒瑞医药、百济神州等::2025-12-07 00:00:00.000::东吴证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业跟踪周报：显著滞涨的潜在创新药MNC龙头，重点推荐百利天恒等",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：显著滞涨的潜在创新药MNC龙头，重点推荐百利天恒等.pdf",
+      "publish_date": "2025-11-16 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东吴证券",
+      "snippet": "医药生物行业跟踪周报：显著滞涨的潜在创新药MNC龙头，重点推荐百利天恒等；中药；东吴证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业跟踪周报：显著滞涨的潜在创新药MNC龙头，重点推荐百利天恒等::2025-11-16 00:00:00.000::东吴证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业跟踪周报：2025创新药医保谈判启动与调整到位，积极布局优质标的",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：2025创新药医保谈判启动与调整到位，积极布局优质标的.pdf",
+      "publish_date": "2025-11-02 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东吴证券",
+      "snippet": "医药生物行业跟踪周报：2025创新药医保谈判启动与调整到位，积极布局优质标的；中药；东吴证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业跟踪周报：2025创新药医保谈判启动与调整到位，积极布局优质标的::2025-11-02 00:00:00.000::东吴证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报（10月第4周）：创新药达成超百亿大额BD",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报（10月第4周）：创新药达成超百亿大额BD.pdf",
+      "publish_date": "2025-10-27 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "世纪证券",
+      "snippet": "医药生物行业周报（10月第4周）：创新药达成超百亿大额BD；中药；世纪证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报（10月第4周）：创新药达成超百亿大额BD::2025-10-27 00:00:00.000::世纪证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报（10月第3周）：创新药出海BD热度不减",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报（10月第3周）：创新药出海BD热度不减.pdf",
+      "publish_date": "2025-10-20 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "世纪证券",
+      "snippet": "医药生物行业周报（10月第3周）：创新药出海BD热度不减；中药；世纪证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报（10月第3周）：创新药出海BD热度不减::2025-10-20 00:00:00.000::世纪证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药行业周报：25Q3业绩前瞻：创新药持续快速放量，出口业务预计表现较好",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药行业周报：25Q3业绩前瞻：创新药持续快速放量，出口业务预计表现较好.pdf",
+      "publish_date": "2025-10-13 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "华源证券",
+      "snippet": "医药行业周报：25Q3业绩前瞻：创新药持续快速放量，出口业务预计表现较好；中药；华源证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药行业周报：25Q3业绩前瞻：创新药持续快速放量，出口业务预计表现较好::2025-10-13 00:00:00.000::华源证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业报告：关税实际影响小，下跌为创新药加仓良机",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业报告：关税实际影响小，下跌为创新药加仓良机.pdf",
+      "publish_date": "2025-09-29 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "中邮证券",
+      "snippet": "医药生物行业报告：关税实际影响小，下跌为创新药加仓良机；中药；中邮证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业报告：关税实际影响小，下跌为创新药加仓良机::2025-09-29 00:00:00.000::中邮证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物周报（25年第36周）：劲方医药在港交所上市，关注具备差异化的创新药公司",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物周报（25年第36周）：劲方医药在港交所上市，关注具备差异化的创新药公司.pdf",
+      "publish_date": "2025-09-26 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "国信证券",
+      "snippet": "医药生物周报（25年第36周）：劲方医药在港交所上市，关注具备差异化的创新药公司；中药；国信证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物周报（25年第36周）：劲方医药在港交所上市，关注具备差异化的创新药公司::2025-09-26 00:00:00.000::国信证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：创新药面临分化，持续看好医药板块创新方向（药+械）",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：创新药面临分化，持续看好医药板块创新方向（药+械）.pdf",
+      "publish_date": "2025-09-16 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "华安证券",
+      "snippet": "医药生物行业周报：创新药面临分化，持续看好医药板块创新方向（药+械）；中药；华安证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报：创新药面临分化，持续看好医药板块创新方向（药+械）::2025-09-16 00:00:00.000::华安证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药行业周报：持续关注海外行政令草案影响创新药板块情绪",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药行业周报：持续关注海外行政令草案影响创新药板块情绪.pdf",
+      "publish_date": "2025-09-14 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "西南证券",
+      "snippet": "医药行业周报：持续关注海外行政令草案影响创新药板块情绪；中药；西南证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药行业周报：持续关注海外行政令草案影响创新药板块情绪::2025-09-14 00:00:00.000::西南证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：创新药产业链迎来明确拐点，重点推荐板块性机会",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：创新药产业链迎来明确拐点，重点推荐板块性机会.pdf",
+      "publish_date": "2025-09-07 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "开源证券",
+      "snippet": "医药生物行业周报：创新药产业链迎来明确拐点，重点推荐板块性机会；中药；开源证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报：创新药产业链迎来明确拐点，重点推荐板块性机会::2025-09-07 00:00:00.000::开源证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：多家药企中期业绩亮眼，关注创新药产业链",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：多家药企中期业绩亮眼，关注创新药产业链.pdf",
+      "publish_date": "2025-09-05 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "上海证券",
+      "snippet": "医药生物行业周报：多家药企中期业绩亮眼，关注创新药产业链；中药；上海证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报：多家药企中期业绩亮眼，关注创新药产业链::2025-09-05 00:00:00.000::上海证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：中报业绩边际改善，创新药及配套产业链表现亮眼",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：中报业绩边际改善，创新药及配套产业链表现亮眼.pdf",
+      "publish_date": "2025-08-31 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "信达证券",
+      "snippet": "医药生物行业周报：中报业绩边际改善，创新药及配套产业链表现亮眼；中药；信达证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报：中报业绩边际改善，创新药及配套产业链表现亮眼::2025-08-31 00:00:00.000::信达证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报（25年第33周）：2025年WCLC摘要公布，推荐关注国产创新药公司",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报（25年第33周）：2025年WCLC摘要公布，推荐关注国产创新药公司.pdf",
+      "publish_date": "2025-08-27 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "国信证券",
+      "snippet": "医药生物行业周报（25年第33周）：2025年WCLC摘要公布，推荐关注国产创新药公司；中药；国信证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报（25年第33周）：2025年WCLC摘要公布，推荐关注国产创新药公司::2025-08-27 00:00:00.000::国信证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：政策催化脑机接口，建议关注AI医疗&创新",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：政策催化脑机接口，建议关注AI医疗&创新.pdf",
+      "publish_date": "2025-08-24 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "信达证券",
+      "snippet": "医药生物行业周报：政策催化脑机接口，建议关注AI医疗&创新；中药；信达证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报：政策催化脑机接口，建议关注AI医疗&创新::2025-08-24 00:00:00.000::信达证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业跟踪周报：WCLC展示创新药积极成果，产生新BD预期",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：WCLC展示创新药积极成果，产生新BD预期.pdf",
+      "publish_date": "2025-08-17 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东吴证券",
+      "snippet": "医药生物行业跟踪周报：WCLC展示创新药积极成果，产生新BD预期；中药；东吴证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业跟踪周报：WCLC展示创新药积极成果，产生新BD预期::2025-08-17 00:00:00.000::东吴证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：国家医保局连续召开五场“医保支持创新药械”座谈会，从研发、准入到支付全链条支持创新",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：国家医保局连续召开五场“医保支持创新药械”座谈会，从研发、准入到支付全链条支持创新.pdf",
+      "publish_date": "2025-08-11 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "中邮证券",
+      "snippet": "医药生物行业周报：国家医保局连续召开五场“医保支持创新药械”座谈会，从研发、准入到支付全链条支持创新；中药；中邮证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报：国家医保局连续召开五场“医保支持创新药械”座谈会，从研发、准入到支付全链条支持创新::2025-08-11 00:00:00.000::中邮证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物周报（25年第30周）：2025AAIC大会总结-阿尔茨海默病治疗领域更新",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物周报（25年第30周）：2025AAIC大会总结-阿尔茨海默病治疗领域更新.pdf",
+      "publish_date": "2025-08-04 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "国信证券",
+      "snippet": "医药生物周报（25年第30周）：2025AAIC大会总结-阿尔茨海默病治疗领域更新；中药；国信证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物周报（25年第30周）：2025AAIC大会总结-阿尔茨海默病治疗领域更新::2025-08-04 00:00:00.000::国信证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业跟踪周报：百济、恒瑞等创新药龙头为何要创2021年新高？",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：百济、恒瑞等创新药龙头为何要创2021年新高？.pdf",
+      "publish_date": "2025-08-04 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东吴证券",
+      "snippet": "医药生物行业跟踪周报：百济、恒瑞等创新药龙头为何要创2021年新高？；中药；东吴证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业跟踪周报：百济、恒瑞等创新药龙头为何要创2021年新高？::2025-08-04 00:00:00.000::东吴证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药健康行业研究：创新药龙头BD频出，关注慢病&小核酸赛道",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药健康行业研究：创新药龙头BD频出，关注慢病&小核酸赛道.pdf",
+      "publish_date": "2025-08-03 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "国金证券",
+      "snippet": "医药健康行业研究：创新药龙头BD频出，关注慢病&小核酸赛道；中药；国金证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药健康行业研究：创新药龙头BD频出，关注慢病&小核酸赛道::2025-08-03 00:00:00.000::国金证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业报告：2025年上半年License out创历史新高，看好创新药BD催化延续",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业报告：2025年上半年License out创历史新高，看好创新药BD催化延续.pdf",
+      "publish_date": "2025-07-14 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "中邮证券",
+      "snippet": "医药生物行业报告：2025年上半年License out创历史新高，看好创新药BD催化延续；中药；中邮证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业报告：2025年上半年License out创历史新高，看好创新药BD催化延续::2025-07-14 00:00:00.000::中邮证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "2025年中期医药生物行业投资策略报告：BD催化创新药资产价值重估",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/2025年中期医药生物行业投资策略报告：BD催化创新药资产价值重估.pdf",
+      "publish_date": "2025-07-13 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "万联证券",
+      "snippet": "2025年中期医药生物行业投资策略报告：BD催化创新药资产价值重估；中药；万联证券",
+      "score": 4.0,
+      "metadata_ref": "industry::2025年中期医药生物行业投资策略报告：BD催化创新药资产价值重估::2025-07-13 00:00:00.000::万联证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：创新药行情持续火热，建议关注PD-1/L1双抗及多抗",
+      "relative_path": "",
+      "publish_date": "2025-07-06 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "信达证券",
+      "snippet": "医药生物行业周报：创新药行情持续火热，建议关注PD-1/L1双抗及多抗；中药；信达证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报：创新药行情持续火热，建议关注PD-1/L1双抗及多抗::2025-07-06 00:00:00.000::信达证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业快评报告：优化创新药临床试验审评审批，加速创新药研发",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业快评报告：优化创新药临床试验审评审批，加速创新药研发.pdf",
+      "publish_date": "2025-06-17 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "万联证券",
+      "snippet": "医药生物行业快评报告：优化创新药临床试验审评审批，加速创新药研发；中药；万联证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业快评报告：优化创新药临床试验审评审批，加速创新药研发::2025-06-17 00:00:00.000::万联证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业跟踪周报：创新药BD推动及优秀临床数据，建议关注石药集团、千红制药等",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：创新药BD推动及优秀临床数据，建议关注石药集团、千红制药等.pdf",
+      "publish_date": "2025-06-15 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东吴证券",
+      "snippet": "医药生物行业跟踪周报：创新药BD推动及优秀临床数据，建议关注石药集团、千红制药等；中药；东吴证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业跟踪周报：创新药BD推动及优秀临床数据，建议关注石药集团、千红制药等::2025-06-15 00:00:00.000::东吴证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：双抗赛道交易火热，关注相关创新药企",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：双抗赛道交易火热，关注相关创新药企.pdf",
+      "publish_date": "2025-06-10 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东海证券",
+      "snippet": "医药生物行业周报：双抗赛道交易火热，关注相关创新药企；中药；东海证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报：双抗赛道交易火热，关注相关创新药企::2025-06-10 00:00:00.000::东海证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业跟踪周报：中国创新药在ASCO表现超预期，关注信达生物、科伦博泰等",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：中国创新药在ASCO表现超预期，关注信达生物、科伦博泰等.pdf",
+      "publish_date": "2025-06-08 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东吴证券",
+      "snippet": "医药生物行业跟踪周报：中国创新药在ASCO表现超预期，关注信达生物、科伦博泰等；中药；东吴证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业跟踪周报：中国创新药在ASCO表现超预期，关注信达生物、科伦博泰等::2025-06-08 00:00:00.000::东吴证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业报告：国产创新药密集获批上市，创新药关注度持续提升",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业报告：国产创新药密集获批上市，创新药关注度持续提升.pdf",
+      "publish_date": "2025-06-03 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "中邮证券",
+      "snippet": "医药生物行业报告：国产创新药密集获批上市，创新药关注度持续提升；中药；中邮证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业报告：国产创新药密集获批上市，创新药关注度持续提升::2025-06-03 00:00:00.000::中邮证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：创新药密集上市，关注后续医保谈判",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：创新药密集上市，关注后续医保谈判.pdf",
+      "publish_date": "2025-06-03 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东海证券",
+      "snippet": "医药生物行业周报：创新药密集上市，关注后续医保谈判；中药；东海证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报：创新药密集上市，关注后续医保谈判::2025-06-03 00:00:00.000::东海证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药行业周报：中国创新药BD能力显著提升，后续潜力值得继续期待",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药行业周报：中国创新药BD能力显著提升，后续潜力值得继续期待.pdf",
+      "publish_date": "2025-06-02 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "华源证券",
+      "snippet": "医药行业周报：中国创新药BD能力显著提升，后续潜力值得继续期待；中药；华源证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药行业周报：中国创新药BD能力显著提升，后续潜力值得继续期待::2025-06-02 00:00:00.000::华源证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：ASCO催化创新药投资热情，内需复苏&自主可控条线或值得重视",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：ASCO催化创新药投资热情，内需复苏&自主可控条线或值得重视.pdf",
+      "publish_date": "2025-06-02 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "信达证券",
+      "snippet": "医药生物行业周报：ASCO催化创新药投资热情，内需复苏&自主可控条线或值得重视；中药；信达证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报：ASCO催化创新药投资热情，内需复苏&自主可控条线或值得重视::2025-06-02 00:00:00.000::信达证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业跟踪周报：脑卒中千亿市场，千红制药创新药106有望成为50亿大单品",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：脑卒中千亿市场，千红制药创新药106有望成为50亿大单品.pdf",
+      "publish_date": "2025-06-02 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东吴证券",
+      "snippet": "医药生物行业跟踪周报：脑卒中千亿市场，千红制药创新药106有望成为50亿大单品；中药；东吴证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业跟踪周报：脑卒中千亿市场，千红制药创新药106有望成为50亿大单品::2025-06-02 00:00:00.000::东吴证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业双周报：创新药板块表现靓眼",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业双周报：创新药板块表现靓眼.pdf",
+      "publish_date": "2025-05-30 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东莞证券",
+      "snippet": "医药生物行业双周报：创新药板块表现靓眼；中药；东莞证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业双周报：创新药板块表现靓眼::2025-05-30 00:00:00.000::东莞证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：重磅BD交易再次带动创新药热度",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：重磅BD交易再次带动创新药热度.pdf",
+      "publish_date": "2025-05-26 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东海证券",
+      "snippet": "医药生物行业周报：重磅BD交易再次带动创新药热度；中药；东海证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报：重磅BD交易再次带动创新药热度::2025-05-26 00:00:00.000::东海证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：关注ASCO 2025数据发布，国产创新药展现丰硕成果",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：关注ASCO 2025数据发布，国产创新药展现丰硕成果.pdf",
+      "publish_date": "2025-05-26 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "中航证券",
+      "snippet": "医药生物行业周报：关注ASCO 2025数据发布，国产创新药展现丰硕成果；中药；中航证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报：关注ASCO 2025数据发布，国产创新药展现丰硕成果::2025-05-26 00:00:00.000::中航证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业跟踪周报：国产创新药闪耀ASCO国际舞台",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：国产创新药闪耀ASCO国际舞台.pdf",
+      "publish_date": "2025-05-25 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东吴证券",
+      "snippet": "医药生物行业跟踪周报：国产创新药闪耀ASCO国际舞台；中药；东吴证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业跟踪周报：国产创新药闪耀ASCO国际舞台::2025-05-25 00:00:00.000::东吴证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：创新药链热度持续，关注中药等细分板块",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：创新药链热度持续，关注中药等细分板块.pdf",
+      "publish_date": "2025-05-19 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东海证券",
+      "snippet": "医药生物行业周报：创新药链热度持续，关注中药等细分板块；中药；东海证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报：创新药链热度持续，关注中药等细分板块::2025-05-19 00:00:00.000::东海证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    }
+  ],
+  "reranked_evidence": [
+    {
+      "source_type": "industry",
+      "title": "医药生物行业报告：美股“AI+医疗”板块爆发，看好AI助力国内医疗行业全面智能化升级",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业报告：美股“AI+医疗”板块爆发，看好AI助力国内医疗行业全面智能化升级.pdf",
+      "publish_date": "2025-02-10 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "中邮证券",
+      "snippet": "医药生物行业报告：美股“AI+医疗”板块爆发，看好AI助力国内医疗行业全面智能化升级；中药；中邮证券",
+      "score": 8.12016,
+      "metadata_ref": "industry::医药生物行业报告：美股“AI+医疗”板块爆发，看好AI助力国内医疗行业全面智能化升级::2025-02-10 00:00:00.000::中邮证券::中药",
+      "score_components": {
+        "metadata": 6.0,
+        "vector": 0.690961
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业报告：“AI+医疗”高景气度有望持续，创新药利好政策持续加码",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业报告：“AI+医疗”高景气度有望持续，创新药利好政策持续加码.pdf",
+      "publish_date": "2025-02-24 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "中邮证券",
+      "snippet": "医药生物行业报告：“AI+医疗”高景气度有望持续，创新药利好政策持续加码；中药；中邮证券",
+      "score": 6.720739,
+      "metadata_ref": "industry::医药生物行业报告：“AI+医疗”高景气度有望持续，创新药利好政策持续加码::2025-02-24 00:00:00.000::中邮证券::中药",
+      "score_components": {
+        "metadata": 6.0,
+        "vector": 0.720739
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：创新药行情开始分化，高端器械及AI医疗有望接力",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：创新药行情开始分化，高端器械及AI医疗有望接力.pdf",
+      "publish_date": "2025-09-08 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "信达证券",
+      "snippet": "医药生物行业周报：创新药行情开始分化，高端器械及AI医疗有望接力；中药；信达证券",
+      "score": 6.0,
+      "metadata_ref": "industry::医药生物行业周报：创新药行情开始分化，高端器械及AI医疗有望接力::2025-09-08 00:00:00.000::信达证券::中药",
+      "score_components": {
+        "metadata": 6.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：看好Q2板块复苏，重点关注创新药+AI医疗+消费医疗",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：看好Q2板块复苏，重点关注创新药+AI医疗+消费医疗.pdf",
+      "publish_date": "2025-04-27 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "信达证券",
+      "snippet": "医药生物行业周报：看好Q2板块复苏，重点关注创新药+AI医疗+消费医疗；中药；信达证券",
+      "score": 6.0,
+      "metadata_ref": "industry::医药生物行业周报：看好Q2板块复苏，重点关注创新药+AI医疗+消费医疗::2025-04-27 00:00:00.000::信达证券::中药",
+      "score_components": {
+        "metadata": 6.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会.pdf",
+      "publish_date": "2025-09-14 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "开源证券",
+      "snippet": "医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会；中药；开源证券",
+      "score": 5.447611,
+      "metadata_ref": "industry::医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会::2025-09-14 00:00:00.000::开源证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.715624
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业跟踪周报：AI制药产业兑现，重点推荐晶泰控股等",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：AI制药产业兑现，重点推荐晶泰控股等.pdf",
+      "publish_date": "2025-08-24 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东吴证券",
+      "snippet": "医药生物行业跟踪周报：AI制药产业兑现，重点推荐晶泰控股等；中药；东吴证券",
+      "score": 5.411185000000001,
+      "metadata_ref": "industry::医药生物行业跟踪周报：AI制药产业兑现，重点推荐晶泰控股等::2025-08-24 00:00:00.000::东吴证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.691798
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业报告：创新药主题热度仍在升温，关注中药创新药研发企业的投资机会",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业报告：创新药主题热度仍在升温，关注中药创新药研发企业的投资机会.pdf",
+      "publish_date": "2025-06-17 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "中邮证券",
+      "snippet": "医药生物行业报告：创新药主题热度仍在升温，关注中药创新药研发企业的投资机会；中药；中邮证券",
+      "score": 4.683167,
+      "metadata_ref": "industry::医药生物行业报告：创新药主题热度仍在升温，关注中药创新药研发企业的投资机会::2025-06-17 00:00:00.000::中邮证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.683167
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "2024年和2025Q1医药生物行业业绩总结",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/2024年和2025Q1医药生物行业业绩总结.pdf",
+      "publish_date": "2025-05-20 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "中航证券",
+      "metadata_ref": "industry::2024年和2025Q1医药生物行业业绩总结::2025-05-20 00:00:00.000::中航证券::中药",
+      "snippet": "现正增长，同比增速为：112.70%。三级板块中，化学制剂、血\n8.14%；研发费用率13.01%。\nØ2024年，中药板块毛利率41.76%，较2023年的44.16%有所提升；净利率8.07%，较2023年的9.35%有所下滑。2024年，医疗器械板块销售费用率21.97%；管理费用率5.99%；研发费用率2.95%。\n\n毛利率（%）净利率（%）销售费用率（%）管理费用率（%）财务费用率（%）研发费用率（%）",
+      "score": 4.1583760000000005,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.680736
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "单Q3扣非归母净利润增速超36％，中药创新药研产销路线已打通",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/个股研报/单Q3扣非归母净利润增速超36％，中药创新药研产销路线已打通.pdf",
+      "publish_date": "2025-10-31 00:00:00.000",
+      "company_or_industry": "方盛制药",
+      "organization": "信达证券",
+      "snippet": "单Q3扣非归母净利润增速超36％，中药创新药研产销路线已打通；方盛制药；信达证券",
+      "score": 4.0,
+      "metadata_ref": "stock::单Q3扣非归母净利润增速超36％，中药创新药研产销路线已打通::2025-10-31 00:00:00.000::信达证券::方盛制药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会.pdf",
+      "publish_date": "2025-12-29 00:00:00",
+      "company_or_industry": "中药",
+      "organization": "中邮证券",
+      "snippet": "医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会；中药；中邮证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会::2025-12-29T00:00:00::中邮证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高.pdf",
+      "publish_date": "2025-12-28 00:00:00",
+      "company_or_industry": "中药",
+      "organization": "东吴证券",
+      "snippet": "医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高；中药；东吴证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高::2025-12-28T00:00:00::东吴证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：新版“医保+商保”目录发布，协同保障体系提升创新药可及性",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：新版“医保+商保”目录发布，协同保障体系提升创新药可及性.pdf",
+      "publish_date": "2025-12-09 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "上海证券",
+      "snippet": "医药生物行业周报：新版“医保+商保”目录发布，协同保障体系提升创新药可及性；中药；上海证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报：新版“医保+商保”目录发布，协同保障体系提升创新药可及性::2025-12-09 00:00:00.000::上海证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业快评报告：医保赋能多方合力，共促创新药高质量发展",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业快评报告：医保赋能多方合力，共促创新药高质量发展.pdf",
+      "publish_date": "2025-12-08 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "万联证券",
+      "snippet": "医药生物行业快评报告：医保赋能多方合力，共促创新药高质量发展；中药；万联证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业快评报告：医保赋能多方合力，共促创新药高质量发展::2025-12-08 00:00:00.000::万联证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业跟踪周报：看好创新药出海，重点推荐恒瑞医药、百济神州等",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：看好创新药出海，重点推荐恒瑞医药、百济神州等.pdf",
+      "publish_date": "2025-12-07 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东吴证券",
+      "snippet": "医药生物行业跟踪周报：看好创新药出海，重点推荐恒瑞医药、百济神州等；中药；东吴证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业跟踪周报：看好创新药出海，重点推荐恒瑞医药、百济神州等::2025-12-07 00:00:00.000::东吴证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业跟踪周报：显著滞涨的潜在创新药MNC龙头，重点推荐百利天恒等",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：显著滞涨的潜在创新药MNC龙头，重点推荐百利天恒等.pdf",
+      "publish_date": "2025-11-16 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东吴证券",
+      "snippet": "医药生物行业跟踪周报：显著滞涨的潜在创新药MNC龙头，重点推荐百利天恒等；中药；东吴证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业跟踪周报：显著滞涨的潜在创新药MNC龙头，重点推荐百利天恒等::2025-11-16 00:00:00.000::东吴证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业跟踪周报：2025创新药医保谈判启动与调整到位，积极布局优质标的",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：2025创新药医保谈判启动与调整到位，积极布局优质标的.pdf",
+      "publish_date": "2025-11-02 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东吴证券",
+      "snippet": "医药生物行业跟踪周报：2025创新药医保谈判启动与调整到位，积极布局优质标的；中药；东吴证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业跟踪周报：2025创新药医保谈判启动与调整到位，积极布局优质标的::2025-11-02 00:00:00.000::东吴证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报（10月第4周）：创新药达成超百亿大额BD",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报（10月第4周）：创新药达成超百亿大额BD.pdf",
+      "publish_date": "2025-10-27 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "世纪证券",
+      "snippet": "医药生物行业周报（10月第4周）：创新药达成超百亿大额BD；中药；世纪证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报（10月第4周）：创新药达成超百亿大额BD::2025-10-27 00:00:00.000::世纪证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报（10月第3周）：创新药出海BD热度不减",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报（10月第3周）：创新药出海BD热度不减.pdf",
+      "publish_date": "2025-10-20 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "世纪证券",
+      "snippet": "医药生物行业周报（10月第3周）：创新药出海BD热度不减；中药；世纪证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报（10月第3周）：创新药出海BD热度不减::2025-10-20 00:00:00.000::世纪证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药行业周报：25Q3业绩前瞻：创新药持续快速放量，出口业务预计表现较好",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药行业周报：25Q3业绩前瞻：创新药持续快速放量，出口业务预计表现较好.pdf",
+      "publish_date": "2025-10-13 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "华源证券",
+      "snippet": "医药行业周报：25Q3业绩前瞻：创新药持续快速放量，出口业务预计表现较好；中药；华源证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药行业周报：25Q3业绩前瞻：创新药持续快速放量，出口业务预计表现较好::2025-10-13 00:00:00.000::华源证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业报告：关税实际影响小，下跌为创新药加仓良机",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业报告：关税实际影响小，下跌为创新药加仓良机.pdf",
+      "publish_date": "2025-09-29 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "中邮证券",
+      "snippet": "医药生物行业报告：关税实际影响小，下跌为创新药加仓良机；中药；中邮证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业报告：关税实际影响小，下跌为创新药加仓良机::2025-09-29 00:00:00.000::中邮证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物周报（25年第36周）：劲方医药在港交所上市，关注具备差异化的创新药公司",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物周报（25年第36周）：劲方医药在港交所上市，关注具备差异化的创新药公司.pdf",
+      "publish_date": "2025-09-26 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "国信证券",
+      "snippet": "医药生物周报（25年第36周）：劲方医药在港交所上市，关注具备差异化的创新药公司；中药；国信证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物周报（25年第36周）：劲方医药在港交所上市，关注具备差异化的创新药公司::2025-09-26 00:00:00.000::国信证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：创新药面临分化，持续看好医药板块创新方向（药+械）",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：创新药面临分化，持续看好医药板块创新方向（药+械）.pdf",
+      "publish_date": "2025-09-16 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "华安证券",
+      "snippet": "医药生物行业周报：创新药面临分化，持续看好医药板块创新方向（药+械）；中药；华安证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报：创新药面临分化，持续看好医药板块创新方向（药+械）::2025-09-16 00:00:00.000::华安证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药行业周报：持续关注海外行政令草案影响创新药板块情绪",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药行业周报：持续关注海外行政令草案影响创新药板块情绪.pdf",
+      "publish_date": "2025-09-14 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "西南证券",
+      "snippet": "医药行业周报：持续关注海外行政令草案影响创新药板块情绪；中药；西南证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药行业周报：持续关注海外行政令草案影响创新药板块情绪::2025-09-14 00:00:00.000::西南证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：创新药产业链迎来明确拐点，重点推荐板块性机会",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：创新药产业链迎来明确拐点，重点推荐板块性机会.pdf",
+      "publish_date": "2025-09-07 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "开源证券",
+      "snippet": "医药生物行业周报：创新药产业链迎来明确拐点，重点推荐板块性机会；中药；开源证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报：创新药产业链迎来明确拐点，重点推荐板块性机会::2025-09-07 00:00:00.000::开源证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：多家药企中期业绩亮眼，关注创新药产业链",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：多家药企中期业绩亮眼，关注创新药产业链.pdf",
+      "publish_date": "2025-09-05 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "上海证券",
+      "snippet": "医药生物行业周报：多家药企中期业绩亮眼，关注创新药产业链；中药；上海证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报：多家药企中期业绩亮眼，关注创新药产业链::2025-09-05 00:00:00.000::上海证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：中报业绩边际改善，创新药及配套产业链表现亮眼",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：中报业绩边际改善，创新药及配套产业链表现亮眼.pdf",
+      "publish_date": "2025-08-31 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "信达证券",
+      "snippet": "医药生物行业周报：中报业绩边际改善，创新药及配套产业链表现亮眼；中药；信达证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报：中报业绩边际改善，创新药及配套产业链表现亮眼::2025-08-31 00:00:00.000::信达证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报（25年第33周）：2025年WCLC摘要公布，推荐关注国产创新药公司",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报（25年第33周）：2025年WCLC摘要公布，推荐关注国产创新药公司.pdf",
+      "publish_date": "2025-08-27 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "国信证券",
+      "snippet": "医药生物行业周报（25年第33周）：2025年WCLC摘要公布，推荐关注国产创新药公司；中药；国信证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报（25年第33周）：2025年WCLC摘要公布，推荐关注国产创新药公司::2025-08-27 00:00:00.000::国信证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：政策催化脑机接口，建议关注AI医疗&创新",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：政策催化脑机接口，建议关注AI医疗&创新.pdf",
+      "publish_date": "2025-08-24 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "信达证券",
+      "snippet": "医药生物行业周报：政策催化脑机接口，建议关注AI医疗&创新；中药；信达证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报：政策催化脑机接口，建议关注AI医疗&创新::2025-08-24 00:00:00.000::信达证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业跟踪周报：WCLC展示创新药积极成果，产生新BD预期",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：WCLC展示创新药积极成果，产生新BD预期.pdf",
+      "publish_date": "2025-08-17 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东吴证券",
+      "snippet": "医药生物行业跟踪周报：WCLC展示创新药积极成果，产生新BD预期；中药；东吴证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业跟踪周报：WCLC展示创新药积极成果，产生新BD预期::2025-08-17 00:00:00.000::东吴证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：国家医保局连续召开五场“医保支持创新药械”座谈会，从研发、准入到支付全链条支持创新",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：国家医保局连续召开五场“医保支持创新药械”座谈会，从研发、准入到支付全链条支持创新.pdf",
+      "publish_date": "2025-08-11 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "中邮证券",
+      "snippet": "医药生物行业周报：国家医保局连续召开五场“医保支持创新药械”座谈会，从研发、准入到支付全链条支持创新；中药；中邮证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报：国家医保局连续召开五场“医保支持创新药械”座谈会，从研发、准入到支付全链条支持创新::2025-08-11 00:00:00.000::中邮证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物周报（25年第30周）：2025AAIC大会总结-阿尔茨海默病治疗领域更新",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物周报（25年第30周）：2025AAIC大会总结-阿尔茨海默病治疗领域更新.pdf",
+      "publish_date": "2025-08-04 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "国信证券",
+      "snippet": "医药生物周报（25年第30周）：2025AAIC大会总结-阿尔茨海默病治疗领域更新；中药；国信证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物周报（25年第30周）：2025AAIC大会总结-阿尔茨海默病治疗领域更新::2025-08-04 00:00:00.000::国信证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业跟踪周报：百济、恒瑞等创新药龙头为何要创2021年新高？",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：百济、恒瑞等创新药龙头为何要创2021年新高？.pdf",
+      "publish_date": "2025-08-04 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东吴证券",
+      "snippet": "医药生物行业跟踪周报：百济、恒瑞等创新药龙头为何要创2021年新高？；中药；东吴证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业跟踪周报：百济、恒瑞等创新药龙头为何要创2021年新高？::2025-08-04 00:00:00.000::东吴证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药健康行业研究：创新药龙头BD频出，关注慢病&小核酸赛道",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药健康行业研究：创新药龙头BD频出，关注慢病&小核酸赛道.pdf",
+      "publish_date": "2025-08-03 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "国金证券",
+      "snippet": "医药健康行业研究：创新药龙头BD频出，关注慢病&小核酸赛道；中药；国金证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药健康行业研究：创新药龙头BD频出，关注慢病&小核酸赛道::2025-08-03 00:00:00.000::国金证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业报告：2025年上半年License out创历史新高，看好创新药BD催化延续",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业报告：2025年上半年License out创历史新高，看好创新药BD催化延续.pdf",
+      "publish_date": "2025-07-14 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "中邮证券",
+      "snippet": "医药生物行业报告：2025年上半年License out创历史新高，看好创新药BD催化延续；中药；中邮证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业报告：2025年上半年License out创历史新高，看好创新药BD催化延续::2025-07-14 00:00:00.000::中邮证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "2025年中期医药生物行业投资策略报告：BD催化创新药资产价值重估",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/2025年中期医药生物行业投资策略报告：BD催化创新药资产价值重估.pdf",
+      "publish_date": "2025-07-13 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "万联证券",
+      "snippet": "2025年中期医药生物行业投资策略报告：BD催化创新药资产价值重估；中药；万联证券",
+      "score": 4.0,
+      "metadata_ref": "industry::2025年中期医药生物行业投资策略报告：BD催化创新药资产价值重估::2025-07-13 00:00:00.000::万联证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：创新药行情持续火热，建议关注PD-1/L1双抗及多抗",
+      "relative_path": "",
+      "publish_date": "2025-07-06 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "信达证券",
+      "snippet": "医药生物行业周报：创新药行情持续火热，建议关注PD-1/L1双抗及多抗；中药；信达证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报：创新药行情持续火热，建议关注PD-1/L1双抗及多抗::2025-07-06 00:00:00.000::信达证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业快评报告：优化创新药临床试验审评审批，加速创新药研发",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业快评报告：优化创新药临床试验审评审批，加速创新药研发.pdf",
+      "publish_date": "2025-06-17 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "万联证券",
+      "snippet": "医药生物行业快评报告：优化创新药临床试验审评审批，加速创新药研发；中药；万联证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业快评报告：优化创新药临床试验审评审批，加速创新药研发::2025-06-17 00:00:00.000::万联证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业跟踪周报：创新药BD推动及优秀临床数据，建议关注石药集团、千红制药等",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：创新药BD推动及优秀临床数据，建议关注石药集团、千红制药等.pdf",
+      "publish_date": "2025-06-15 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东吴证券",
+      "snippet": "医药生物行业跟踪周报：创新药BD推动及优秀临床数据，建议关注石药集团、千红制药等；中药；东吴证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业跟踪周报：创新药BD推动及优秀临床数据，建议关注石药集团、千红制药等::2025-06-15 00:00:00.000::东吴证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：双抗赛道交易火热，关注相关创新药企",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：双抗赛道交易火热，关注相关创新药企.pdf",
+      "publish_date": "2025-06-10 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东海证券",
+      "snippet": "医药生物行业周报：双抗赛道交易火热，关注相关创新药企；中药；东海证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报：双抗赛道交易火热，关注相关创新药企::2025-06-10 00:00:00.000::东海证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业跟踪周报：中国创新药在ASCO表现超预期，关注信达生物、科伦博泰等",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：中国创新药在ASCO表现超预期，关注信达生物、科伦博泰等.pdf",
+      "publish_date": "2025-06-08 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东吴证券",
+      "snippet": "医药生物行业跟踪周报：中国创新药在ASCO表现超预期，关注信达生物、科伦博泰等；中药；东吴证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业跟踪周报：中国创新药在ASCO表现超预期，关注信达生物、科伦博泰等::2025-06-08 00:00:00.000::东吴证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业报告：国产创新药密集获批上市，创新药关注度持续提升",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业报告：国产创新药密集获批上市，创新药关注度持续提升.pdf",
+      "publish_date": "2025-06-03 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "中邮证券",
+      "snippet": "医药生物行业报告：国产创新药密集获批上市，创新药关注度持续提升；中药；中邮证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业报告：国产创新药密集获批上市，创新药关注度持续提升::2025-06-03 00:00:00.000::中邮证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：创新药密集上市，关注后续医保谈判",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：创新药密集上市，关注后续医保谈判.pdf",
+      "publish_date": "2025-06-03 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东海证券",
+      "snippet": "医药生物行业周报：创新药密集上市，关注后续医保谈判；中药；东海证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报：创新药密集上市，关注后续医保谈判::2025-06-03 00:00:00.000::东海证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药行业周报：中国创新药BD能力显著提升，后续潜力值得继续期待",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药行业周报：中国创新药BD能力显著提升，后续潜力值得继续期待.pdf",
+      "publish_date": "2025-06-02 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "华源证券",
+      "snippet": "医药行业周报：中国创新药BD能力显著提升，后续潜力值得继续期待；中药；华源证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药行业周报：中国创新药BD能力显著提升，后续潜力值得继续期待::2025-06-02 00:00:00.000::华源证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：ASCO催化创新药投资热情，内需复苏&自主可控条线或值得重视",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：ASCO催化创新药投资热情，内需复苏&自主可控条线或值得重视.pdf",
+      "publish_date": "2025-06-02 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "信达证券",
+      "snippet": "医药生物行业周报：ASCO催化创新药投资热情，内需复苏&自主可控条线或值得重视；中药；信达证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报：ASCO催化创新药投资热情，内需复苏&自主可控条线或值得重视::2025-06-02 00:00:00.000::信达证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业跟踪周报：脑卒中千亿市场，千红制药创新药106有望成为50亿大单品",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：脑卒中千亿市场，千红制药创新药106有望成为50亿大单品.pdf",
+      "publish_date": "2025-06-02 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东吴证券",
+      "snippet": "医药生物行业跟踪周报：脑卒中千亿市场，千红制药创新药106有望成为50亿大单品；中药；东吴证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业跟踪周报：脑卒中千亿市场，千红制药创新药106有望成为50亿大单品::2025-06-02 00:00:00.000::东吴证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业双周报：创新药板块表现靓眼",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业双周报：创新药板块表现靓眼.pdf",
+      "publish_date": "2025-05-30 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东莞证券",
+      "snippet": "医药生物行业双周报：创新药板块表现靓眼；中药；东莞证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业双周报：创新药板块表现靓眼::2025-05-30 00:00:00.000::东莞证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：重磅BD交易再次带动创新药热度",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：重磅BD交易再次带动创新药热度.pdf",
+      "publish_date": "2025-05-26 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东海证券",
+      "snippet": "医药生物行业周报：重磅BD交易再次带动创新药热度；中药；东海证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报：重磅BD交易再次带动创新药热度::2025-05-26 00:00:00.000::东海证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：关注ASCO 2025数据发布，国产创新药展现丰硕成果",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：关注ASCO 2025数据发布，国产创新药展现丰硕成果.pdf",
+      "publish_date": "2025-05-26 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "中航证券",
+      "snippet": "医药生物行业周报：关注ASCO 2025数据发布，国产创新药展现丰硕成果；中药；中航证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报：关注ASCO 2025数据发布，国产创新药展现丰硕成果::2025-05-26 00:00:00.000::中航证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业跟踪周报：国产创新药闪耀ASCO国际舞台",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：国产创新药闪耀ASCO国际舞台.pdf",
+      "publish_date": "2025-05-25 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东吴证券",
+      "snippet": "医药生物行业跟踪周报：国产创新药闪耀ASCO国际舞台；中药；东吴证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业跟踪周报：国产创新药闪耀ASCO国际舞台::2025-05-25 00:00:00.000::东吴证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：创新药链热度持续，关注中药等细分板块",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：创新药链热度持续，关注中药等细分板块.pdf",
+      "publish_date": "2025-05-19 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "东海证券",
+      "snippet": "医药生物行业周报：创新药链热度持续，关注中药等细分板块；中药；东海证券",
+      "score": 4.0,
+      "metadata_ref": "industry::医药生物行业周报：创新药链热度持续，关注中药等细分板块::2025-05-19 00:00:00.000::东海证券::中药",
+      "score_components": {
+        "metadata": 4.0,
+        "vector": 0.0
+      }
+    }
+  ],
+  "rerank_preview": "{\"strategy\": \"skipped_fast_path\", \"kept_count\": 50}",
+  "fused_context": {
+    "question": "检索2025年研报中提到人工智能产业升级相关布局的公司，查询这些公司2025年第三季度的销售费用率变化情况",
+    "sql_row_count": 2,
+    "evidence_count": 50,
+    "sql_preview": [
+      {
+        "stock_code": "603998",
+        "stock_abbr": "方盛制药",
+        "report_period": "2025Q2",
+        "selling_expense_ratio": NaN,
+        "prev_selling_expense_ratio": null,
+        "selling_expense_ratio_change": null
+      },
+      {
+        "stock_code": "603998",
+        "stock_abbr": "方盛制药",
+        "report_period": "2025Q3",
+        "selling_expense_ratio": 42025.624142,
+        "prev_selling_expense_ratio": null,
+        "selling_expense_ratio_change": null
+      }
+    ],
+    "evidence_preview": [
+      {
+        "source_type": "industry",
+        "title": "医药生物行业报告：美股“AI+医疗”板块爆发，看好AI助力国内医疗行业全面智能化升级",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业报告：美股“AI+医疗”板块爆发，看好AI助力国内医疗行业全面智能化升级.pdf",
+        "publish_date": "2025-02-10 00:00:00.000",
+        "company_or_industry": "中药",
+        "organization": "中邮证券",
+        "snippet": "医药生物行业报告：美股“AI+医疗”板块爆发，看好AI助力国内医疗行业全面智能化升级；中药；中邮证券",
+        "score": 8.12016,
+        "metadata_ref": "industry::医药生物行业报告：美股“AI+医疗”板块爆发，看好AI助力国内医疗行业全面智能化升级::2025-02-10 00:00:00.000::中邮证券::中药",
+        "score_components": {
+          "metadata": 6.0,
+          "vector": 0.690961
+        }
+      },
+      {
+        "source_type": "industry",
+        "title": "医药生物行业报告：“AI+医疗”高景气度有望持续，创新药利好政策持续加码",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业报告：“AI+医疗”高景气度有望持续，创新药利好政策持续加码.pdf",
+        "publish_date": "2025-02-24 00:00:00.000",
+        "company_or_industry": "中药",
+        "organization": "中邮证券",
+        "snippet": "医药生物行业报告：“AI+医疗”高景气度有望持续，创新药利好政策持续加码；中药；中邮证券",
+        "score": 6.720739,
+        "metadata_ref": "industry::医药生物行业报告：“AI+医疗”高景气度有望持续，创新药利好政策持续加码::2025-02-24 00:00:00.000::中邮证券::中药",
+        "score_components": {
+          "metadata": 6.0,
+          "vector": 0.720739
+        }
+      },
+      {
+        "source_type": "industry",
+        "title": "医药生物行业周报：创新药行情开始分化，高端器械及AI医疗有望接力",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：创新药行情开始分化，高端器械及AI医疗有望接力.pdf",
+        "publish_date": "2025-09-08 00:00:00.000",
+        "company_or_industry": "中药",
+        "organization": "信达证券",
+        "snippet": "医药生物行业周报：创新药行情开始分化，高端器械及AI医疗有望接力；中药；信达证券",
+        "score": 6.0,
+        "metadata_ref": "industry::医药生物行业周报：创新药行情开始分化，高端器械及AI医疗有望接力::2025-09-08 00:00:00.000::信达证券::中药",
+        "score_components": {
+          "metadata": 6.0,
+          "vector": 0.0
+        }
+      },
+      {
+        "source_type": "industry",
+        "title": "医药生物行业周报：看好Q2板块复苏，重点关注创新药+AI医疗+消费医疗",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：看好Q2板块复苏，重点关注创新药+AI医疗+消费医疗.pdf",
+        "publish_date": "2025-04-27 00:00:00.000",
+        "company_or_industry": "中药",
+        "organization": "信达证券",
+        "snippet": "医药生物行业周报：看好Q2板块复苏，重点关注创新药+AI医疗+消费医疗；中药；信达证券",
+        "score": 6.0,
+        "metadata_ref": "industry::医药生物行业周报：看好Q2板块复苏，重点关注创新药+AI医疗+消费医疗::2025-04-27 00:00:00.000::信达证券::中药",
+        "score_components": {
+          "metadata": 6.0,
+          "vector": 0.0
+        }
+      },
+      {
+        "source_type": "industry",
+        "title": "医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会.pdf",
+        "publish_date": "2025-09-14 00:00:00.000",
+        "company_or_industry": "中药",
+        "organization": "开源证券",
+        "snippet": "医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会；中药；开源证券",
+        "score": 5.447611,
+        "metadata_ref": "industry::医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会::2025-09-14 00:00:00.000::开源证券::中药",
+        "score_components": {
+          "metadata": 4.0,
+          "vector": 0.715624
+        }
+      }
+    ],
+    "evidence_titles": [
+      "医药生物行业报告：美股“AI+医疗”板块爆发，看好AI助力国内医疗行业全面智能化升级",
+      "医药生物行业报告：“AI+医疗”高景气度有望持续，创新药利好政策持续加码",
+      "医药生物行业周报：创新药行情开始分化，高端器械及AI医疗有望接力",
+      "医药生物行业周报：看好Q2板块复苏，重点关注创新药+AI医疗+消费医疗",
+      "医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会"
+    ],
+    "source_breakdown": {
+      "industry": 49,
+      "stock": 1
+    }
+  },
+  "self_check": {
+    "pass": true,
+    "notes": [
+      "1. 回答中的数字与SQL rows一致：正确指出SQL查询仅返回一家公司（方盛制药），并准确引用了其2025Q3销售费用率（42025.624142）和2025Q2销售费用率（null）。",
+      "2. 回答正确引用了Evidences：明确指出所有研报证据均为行业层面讨论（如'AI+医疗'、'AI医疗'），涉及'中药'行业，但没有任何证据直接提及方盛制药在人工智能产业升级方面的具体布局。",
+      "3. 回答未遗漏问题要求的关键点：完整回应了'2025年研报中提到人工智能产业升级相关布局的公司'和'2025年第三季度的销售费用率变化情况'两个核心要求，并基于数据缺失给出了明确结论。",
+      "4. 回答未混淆指标名称：正确使用了'销售费用率'这一指标，没有与其他财务指标混淆。",
+      "5. 回答未错误对应聚合统计结果：SQL rows中仅包含具体公司（方盛制药）的数据，回答正确对应到该公司，没有误用聚合统计结果。"
+    ]
+  },
+  "chart_plan": {
+    "chart_type": "line",
+    "title": "检索2025年研报中提到人工智能产业升级相关布局... - 销售费用",
+    "x_field": "report_period",
+    "y_fields": [
+      "selling_expense_ratio"
+    ],
+    "category_field": null,
+    "sort_by": "report_period",
+    "sort_ascending": true,
+    "top_n": null,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task3.chart-spec.v1",
+    "question_id": "B2026",
+    "image_index": 1,
+    "chart_type": "line",
+    "title": "检索2025年研报中提到人工智能产业升级相关布局... - 销售费用",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 2,
+      "preview_rows": [
+        {
+          "stock_code": "603998",
+          "stock_abbr": "方盛制药",
+          "report_period": "2025Q2",
+          "selling_expense_ratio": NaN,
+          "prev_selling_expense_ratio": null,
+          "selling_expense_ratio_change": null
+        },
+        {
+          "stock_code": "603998",
+          "stock_abbr": "方盛制药",
+          "report_period": "2025Q3",
+          "selling_expense_ratio": 42025.624142,
+          "prev_selling_expense_ratio": null,
+          "selling_expense_ratio_change": null
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "report_period",
+      "sort_ascending": true,
+      "top_n": null,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "selling_expense_ratio",
+        "data_type": "quantitative",
+        "label": "selling_expense_ratio",
+        "unit": "%"
+      },
+      "x": {
+        "field": "report_period",
+        "data_type": "temporal",
+        "label": "报告期",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": false
+    },
+    "output": {
+      "filename": "B2026_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B2026_1.jpg"
+    },
+    "meta": {
+      "source_sql": "WITH target_companies AS (\n    SELECT DISTINCT stock_code, stock_abbr\n    FROM financials_view\n    WHERE stock_abbr IN ('方盛制药')\n)\nSELECT \n    fv.stock_code,\n    fv.stock_abbr,\n    fv.report_period,\n    -- 销售费用率 = 销售费用 / 营业总收入，已存储为百分数，直接使用\n    fv.selling_expenses AS selling_expense_ratio,\n    -- 获取上一季度（2025Q2）的销售费用率用于计算变化\n    LAG(fv.selling_expenses) OVER (PARTITION BY fv.stock_code ORDER BY fv.report_period) AS prev_selling_expense_ratio,\n    -- 计算环比变化（百分点）\n    fv.selling_expenses - LAG(fv.selling_expenses) OVER (PARTITION BY fv.stock_code ORDER BY fv.report_period) AS selling_expense_ratio_change\nFROM financials_view fv\nINNER JOIN target_companies tc ON fv.stock_code = tc.stock_code\nWHERE fv.report_period IN ('2025Q3', '2025Q2')\nORDER BY fv.stock_abbr, fv.report_period;",
+      "value_fields": [
+        "selling_expense_ratio"
+      ],
+      "value_labels": [
+        "selling_expense_ratio"
+      ],
+      "original_chart_plan": {
+        "chart_type": "line",
+        "x_field": "report_period",
+        "y_fields": [
+          "selling_expense_ratio"
+        ],
+        "category_field": null,
+        "sort_by": "report_period",
+        "sort_ascending": true,
+        "top_n": null
+      }
+    }
+  },
+  "current_chart_paths": [
+    "./result/B2026_1.jpg"
+  ],
+  "current_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task3_langgraph/artifacts/chart_specs/B2026_1.spec.json"
+  ],
+  "current_answer": "根据提供的SQL查询结果和研报证据，现就“2025年研报中提到人工智能产业升级相关布局的公司，其2025年第三季度的销售费用率变化情况”回答如下：\n\n**直接结论：**\n根据现有数据，**没有公司能够同时满足“2025年研报中提及人工智能产业升级相关布局”以及“能计算出2025年第三季度销售费用率变化”这两个条件。**\n\n**财务数据支撑：**\n1.  **查询结果分析**：SQL查询仅返回一家公司——**方盛制药**（股票代码：603998）。\n2.  **销售费用率数据**：\n    *   2025年第二季度（2025Q2）：销售费用率为 `null`（空值）。\n    *   2025年第三季度（2025Q3）：销售费用率为 **42025.624142**（此为百分比数值，数据库口径）。\n3.  **变化情况**：由于2025年第二季度的销售费用率数据缺失，无法计算2025年第三季度相对于第二季度的环比变化（`selling_expense_ratio_change` 字段为 `null`）。因此，**无法判断方盛制药在2025年第三季度的销售费用率是上升、下降还是持平。**\n\n**研报证据支撑：**\n**未检索到直接提及“方盛制药”在人工智能产业升级方面具体布局的研报证据。** 所提供的研报证据均为行业层面（如“AI+医疗”、“AI医疗”）的讨论，涉及“中药”行业或板块，但**没有任何一份证据明确指出方盛制药这家公司自身在2025年有AI相关的产业升级布局。**\n\n**综合判断：**\n1.  **核心矛盾**：问题要求查找的是“2025年研报中提到人工智能产业升级相关布局的公司”。虽然财务数据库中包含了方盛制药，但研报证据库中**没有证据支持**方盛制药符合“有AI产业升级布局”这一前提。\n2.  **数据结论**：即使仅从财务数据角度观察方盛制药，由于其2025年第二季度的销售费用率数据缺失，也无法完成对其2025年第三季度销售费用率“变化情况”的分析。\n3.  **最终回答**：因此，综合财务数据与研报证据，**目前无法提供任何一家既在2025年研报中被证实有AI产业升级布局、又能分析其2025年第三季度销售费用率变化情况的公司的信息。**",
+  "current_references": [
+    {
+      "paper_path": "./附件5：研报数据/行业研报/医药生物行业报告：美股“AI+医疗”板块爆发，看好AI助力国内医疗行业全面智能化升级.pdf",
+      "text": "一周观点：美股“AI+医疗”板块爆发，看好AI 助力国\n内医疗行业全面智能化升级近期美股“AI+医疗” 优异，有望映射国内同类公司。\n\nAI+医疗应用前景广泛，药物研发、癌症诊断等领域有望迎来巨变。\n\n根据ARK 近期发布的《Big Ideas 2025》，利用人工智能来“操作”数据将颠覆诊断、药物发现和治疗，到2030 年，整个行业的表现将提升几个数量级。\n\nAI 将彻底改变多组学工具、药物研发、分子诊断，并显著改善药物的经济回报。\n\n如AI 将使DNA 等生物信息的读取和写入成本分别降低100 倍和1000 倍；\n\nAI 将使药物开发成本降低4 倍，并将研发投入的回报提高5 倍；\n\nAI 将使癌症筛查的效率提高20 倍，并且将市场规模扩大10 倍；\n\nAI 药物的商业价值将比标准药物高20 倍，比同类最佳的精准药物高2.4 倍。\n\n未来有望改变单细胞测序、蛋白质结构预测底层技术基础，在药物研发、癌症诊断、疫苗开发、虚拟细胞、器官芯片、影像识别、数据服务等领域得到广泛应用。\n\n从长远来看，医疗将成为AI 最为深远的应用领域。\n\nl本周细分板块表现本周医药生物上涨3.21%，跑赢沪深300 指数1.23pct，在31 个子行业中排名第9 位。\n\n本周医院板块涨幅最大，上涨6.84%；\n\n医疗研发外包板块上涨6.17%，医疗设备板块上涨5.23%，疫苗板块上涨\n\n剂板块上涨1.85%",
+      "paper_image": "图表1：国内“AI+医疗”概念相关标的梳理（1）"
+    },
+    {
+      "paper_path": "./附件5：研报数据/行业研报/医药生物行业报告：“AI+医疗”高景气度有望持续，创新药利好政策持续加码.pdf",
+      "text": "3.1 本周医药生物上涨1.88%，医疗研发外包板块涨幅最大\n线下药店板块跌幅最大，下跌3.06%，血液制品板块下跌3.04%，中药板块下跌",
+      "paper_image": "图表8：本周医疗研发外包板块涨幅最大，上涨11.3%"
+    },
+    {
+      "paper_path": "./附件5：研报数据/行业研报/医药生物行业周报：创新药行情开始分化，高端器械及AI医疗有望接力.pdf",
+      "text": "1.1 上周行情及上周重点关注新闻政策动态\n上周医药生物板块收益率为1.40%，板块相对沪深300 收益率为2.21%，在31 个一级子行业指数中涨跌幅排名第4。\n\n6 个子板块中，化学制药周收益率排名第一，涨跌幅为3.92%（相对沪深300 收益率为4.73%）；\n\n周收益率排名第六的为中药Ⅱ，涨跌幅为-1.39%（相对沪深300 收益率为-0.58%）。\n\n近一个月医药生物板块收益率为3.50%，板块相对沪深300 收益率为-5.20%，在31 个一级子行业指数中涨跌幅排名第20。\n\n6 个子板块中，医疗服务月收益率第一，涨跌幅7.96%（相对沪深300 收益率为-1.62%）；\n\n月收益率排名第六的为医药商业，涨跌幅为-3.28%（相对沪深300 收益率为-12.85%）。\n\n8 月27-30 日，国务院国资委与中国科学院联合举办中央企业生物科技产业高级研修班，国务院国资委副主任谭作钧出席开班式、结业式并讲话，强调要加快发展中央企业生物医药产业，坚持创新驱动、长周期、差异化发展，推动与中科院产学研用协同创新打造生物医药领域国家队，助力我国生物医药产业高质量发展。\n\n9 月2 日，国家药监局综合司公示《采用脑机接口技术的医疗器械 RACA 机器人运动意图编解码性能测试方法》推荐性医疗器械行业标准立项，为该类前沿医疗器械的性能评估与规范化发展提供支撑，助力行业有序创新。\n\n9 月",
+      "paper_image": "表1：医药生物指数涨跌幅 ............................................................................................................... 13"
+    },
+    {
+      "paper_path": "./附件5：研报数据/行业研报/医药生物行业周报：看好Q2板块复苏，重点关注创新药+AI医疗+消费医疗.pdf",
+      "text": "消费复苏条线：近期关于消费刺激的政策预期较强，消费医疗方向有\n望受益。①眼科口腔产业链，建议关注爱尔眼科、普瑞眼科、华厦眼科、爱博医疗、欧普康视、通策医疗、时代天使等；②医疗美容产业链，建议关注爱美客、华熙生物、华东医药、锦波生物、江苏吴中等；③中药补益类产品，建议重点关注东阿阿胶、同仁堂、片仔癀；④医药零售龙头，建议关注益丰药房、大参林、国药一致、老百姓、一心堂、健之佳等。➢",
+      "paper_image": "表1：25Q1 业绩披露进展及统计 ........................................................................................................................ 5"
+    },
+    {
+      "paper_path": "./附件5：研报数据/行业研报/医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会.pdf",
+      "text": "数据来源：Insight、开源证券研究所\n原料药化学制剂中药生物制品医药商业涨幅前5\n\n医疗研发外包医疗服务医疗设备医疗耗材体外诊断涨幅前5\n\n（1）政策波动风险。医保政策、价格调整等政策可能对医药行业产生影响。（2）市场震荡风险。若市场风险偏好改变或公司成长性预期调整，可能影响公司估值稳定性。（3）医保未准入风险。医保谈判结果还未正式落地，还需要以实际医保谈判结果为准。",
+      "paper_image": "图6：本周医疗设备板块涨幅最大，化学制剂板块跌幅最大"
+    }
+  ],
+  "answer_rewritten": true,
+  "turn_answers": [
+    {
+      "Q": "检索2025年研报中提到人工智能产业升级相关布局的公司，查询这些公司2025年第三季度的销售费用率变化情况",
+      "A": {
+        "content": "根据提供的SQL查询结果和研报证据，现就“2025年研报中提到人工智能产业升级相关布局的公司，其2025年第三季度的销售费用率变化情况”回答如下：\n\n**直接结论：**\n根据现有数据，**没有公司能够同时满足“2025年研报中提及人工智能产业升级相关布局”以及“能计算出2025年第三季度销售费用率变化”这两个条件。**\n\n**财务数据支撑：**\n1.  **查询结果分析**：SQL查询仅返回一家公司——**方盛制药**（股票代码：603998）。\n2.  **销售费用率数据**：\n    *   2025年第二季度（2025Q2）：销售费用率为 `null`（空值）。\n    *   2025年第三季度（2025Q3）：销售费用率为 **42025.624142**（此为百分比数值，数据库口径）。\n3.  **变化情况**：由于2025年第二季度的销售费用率数据缺失，无法计算2025年第三季度相对于第二季度的环比变化（`selling_expense_ratio_change` 字段为 `null`）。因此，**无法判断方盛制药在2025年第三季度的销售费用率是上升、下降还是持平。**\n\n**研报证据支撑：**\n**未检索到直接提及“方盛制药”在人工智能产业升级方面具体布局的研报证据。** 所提供的研报证据均为行业层面（如“AI+医疗”、“AI医疗”）的讨论，涉及“中药”行业或板块，但**没有任何一份证据明确指出方盛制药这家公司自身在2025年有AI相关的产业升级布局。**\n\n**综合判断：**\n1.  **核心矛盾**：问题要求查找的是“2025年研报中提到人工智能产业升级相关布局的公司”。虽然财务数据库中包含了方盛制药，但研报证据库中**没有证据支持**方盛制药符合“有AI产业升级布局”这一前提。\n2.  **数据结论**：即使仅从财务数据角度观察方盛制药，由于其2025年第二季度的销售费用率数据缺失，也无法完成对其2025年第三季度销售费用率“变化情况”的分析。\n3.  **最终回答**：因此，综合财务数据与研报证据，**目前无法提供任何一家既在2025年研报中被证实有AI产业升级布局、又能分析其2025年第三季度销售费用率变化情况的公司的信息。**",
+        "image": [
+          "./result/B2026_1.jpg"
+        ],
+        "references": [
+          {
+            "paper_path": "./附件5：研报数据/行业研报/医药生物行业报告：美股“AI+医疗”板块爆发，看好AI助力国内医疗行业全面智能化升级.pdf",
+            "text": "一周观点：美股“AI+医疗”板块爆发，看好AI 助力国\n内医疗行业全面智能化升级近期美股“AI+医疗” 优异，有望映射国内同类公司。\n\nAI+医疗应用前景广泛，药物研发、癌症诊断等领域有望迎来巨变。\n\n根据ARK 近期发布的《Big Ideas 2025》，利用人工智能来“操作”数据将颠覆诊断、药物发现和治疗，到2030 年，整个行业的表现将提升几个数量级。\n\nAI 将彻底改变多组学工具、药物研发、分子诊断，并显著改善药物的经济回报。\n\n如AI 将使DNA 等生物信息的读取和写入成本分别降低100 倍和1000 倍；\n\nAI 将使药物开发成本降低4 倍，并将研发投入的回报提高5 倍；\n\nAI 将使癌症筛查的效率提高20 倍，并且将市场规模扩大10 倍；\n\nAI 药物的商业价值将比标准药物高20 倍，比同类最佳的精准药物高2.4 倍。\n\n未来有望改变单细胞测序、蛋白质结构预测底层技术基础，在药物研发、癌症诊断、疫苗开发、虚拟细胞、器官芯片、影像识别、数据服务等领域得到广泛应用。\n\n从长远来看，医疗将成为AI 最为深远的应用领域。\n\nl本周细分板块表现本周医药生物上涨3.21%，跑赢沪深300 指数1.23pct，在31 个子行业中排名第9 位。\n\n本周医院板块涨幅最大，上涨6.84%；\n\n医疗研发外包板块上涨6.17%，医疗设备板块上涨5.23%，疫苗板块上涨\n\n剂板块上涨1.85%",
+            "paper_image": "图表1：国内“AI+医疗”概念相关标的梳理（1）"
+          },
+          {
+            "paper_path": "./附件5：研报数据/行业研报/医药生物行业报告：“AI+医疗”高景气度有望持续，创新药利好政策持续加码.pdf",
+            "text": "3.1 本周医药生物上涨1.88%，医疗研发外包板块涨幅最大\n线下药店板块跌幅最大，下跌3.06%，血液制品板块下跌3.04%，中药板块下跌",
+            "paper_image": "图表8：本周医疗研发外包板块涨幅最大，上涨11.3%"
+          },
+          {
+            "paper_path": "./附件5：研报数据/行业研报/医药生物行业周报：创新药行情开始分化，高端器械及AI医疗有望接力.pdf",
+            "text": "1.1 上周行情及上周重点关注新闻政策动态\n上周医药生物板块收益率为1.40%，板块相对沪深300 收益率为2.21%，在31 个一级子行业指数中涨跌幅排名第4。\n\n6 个子板块中，化学制药周收益率排名第一，涨跌幅为3.92%（相对沪深300 收益率为4.73%）；\n\n周收益率排名第六的为中药Ⅱ，涨跌幅为-1.39%（相对沪深300 收益率为-0.58%）。\n\n近一个月医药生物板块收益率为3.50%，板块相对沪深300 收益率为-5.20%，在31 个一级子行业指数中涨跌幅排名第20。\n\n6 个子板块中，医疗服务月收益率第一，涨跌幅7.96%（相对沪深300 收益率为-1.62%）；\n\n月收益率排名第六的为医药商业，涨跌幅为-3.28%（相对沪深300 收益率为-12.85%）。\n\n8 月27-30 日，国务院国资委与中国科学院联合举办中央企业生物科技产业高级研修班，国务院国资委副主任谭作钧出席开班式、结业式并讲话，强调要加快发展中央企业生物医药产业，坚持创新驱动、长周期、差异化发展，推动与中科院产学研用协同创新打造生物医药领域国家队，助力我国生物医药产业高质量发展。\n\n9 月2 日，国家药监局综合司公示《采用脑机接口技术的医疗器械 RACA 机器人运动意图编解码性能测试方法》推荐性医疗器械行业标准立项，为该类前沿医疗器械的性能评估与规范化发展提供支撑，助力行业有序创新。\n\n9 月",
+            "paper_image": "表1：医药生物指数涨跌幅 ............................................................................................................... 13"
+          },
+          {
+            "paper_path": "./附件5：研报数据/行业研报/医药生物行业周报：看好Q2板块复苏，重点关注创新药+AI医疗+消费医疗.pdf",
+            "text": "消费复苏条线：近期关于消费刺激的政策预期较强，消费医疗方向有\n望受益。①眼科口腔产业链，建议关注爱尔眼科、普瑞眼科、华厦眼科、爱博医疗、欧普康视、通策医疗、时代天使等；②医疗美容产业链，建议关注爱美客、华熙生物、华东医药、锦波生物、江苏吴中等；③中药补益类产品，建议重点关注东阿阿胶、同仁堂、片仔癀；④医药零售龙头，建议关注益丰药房、大参林、国药一致、老百姓、一心堂、健之佳等。➢",
+            "paper_image": "表1：25Q1 业绩披露进展及统计 ........................................................................................................................ 5"
+          },
+          {
+            "paper_path": "./附件5：研报数据/行业研报/医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会.pdf",
+            "text": "数据来源：Insight、开源证券研究所\n原料药化学制剂中药生物制品医药商业涨幅前5\n\n医疗研发外包医疗服务医疗设备医疗耗材体外诊断涨幅前5\n\n（1）政策波动风险。医保政策、价格调整等政策可能对医药行业产生影响。（2）市场震荡风险。若市场风险偏好改变或公司成长性预期调整，可能影响公司估值稳定性。（3）医保未准入风险。医保谈判结果还未正式落地，还需要以实际医保谈判结果为准。",
+            "paper_image": "图6：本周医疗设备板块涨幅最大，化学制剂板块跌幅最大"
+          }
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"检索2025年研报中提到人工智能产业升级相关布局的公司，查询这些公司2025年第三季度的销售费用率变化情况\", \"A\": {\"content\": \"根据提供的SQL查询结果和研报证据，现就“2025年研报中提到人工智能产业升级相关布局的公司，其2025年第三季度的销售费用率变化情况”回答如下：\\n\\n**直接结论：**\\n根据现有数据，**没有公司能够同时满足“2025年研报中提及人工智能产业升级相关布局”以及“能计算出2025年第三季度销售费用率变化”这两个条件。**\\n\\n**财务数据支撑：**\\n1.  **查询结果分析**：SQL查询仅返回一家公司——**方盛制药**（股票代码：603998）。\\n2.  **销售费用率数据**：\\n    *   2025年第二季度（2025Q2）：销售费用率为 `null`（空值）。\\n    *   2025年第三季度（2025Q3）：销售费用率为 **42025.624142**（此为百分比数值，数据库口径）。\\n3.  **变化情况**：由于2025年第二季度的销售费用率数据缺失，无法计算2025年第三季度相对于第二季度的环比变化（`selling_expense_ratio_change` 字段为 `null`）。因此，**无法判断方盛制药在2025年第三季度的销售费用率是上升、下降还是持平。**\\n\\n**研报证据支撑：**\\n**未检索到直接提及“方盛制药”在人工智能产业升级方面具体布局的研报证据。** 所提供的研报证据均为行业层面（如“AI+医疗”、“AI医疗”）的讨论，涉及“中药”行业或板块，但**没有任何一份证据明确指出方盛制药这家公司自身在2025年有AI相关的产业升级布局。**\\n\\n**综合判断：**\\n1.  **核心矛盾**：问题要求查找的是“2025年研报中提到人工智能产业升级相关布局的公司”。虽然财务数据库中包含了方盛制药，但研报证据库中**没有证据支持**方盛制药符合“有AI产业升级布局”这一前提。\\n2.  **数据结论**：即使仅从财务数据角度观察方盛制药，由于其2025年第二季度的销售费用率数据缺失，也无法完成对其2025年第三季度销售费用率“变化情况”的分析。\\n3.  **最终回答**：因此，综合财务数据与研报证据，**目前无法提供任何一家既在2025年研报中被证实有AI产业升级布局、又能分析其2025年第三季度销售费用率变化情况的公司的信息。**\", \"image\": [\"./result/B2026_1.jpg\"], \"references\": [{\"paper_path\": \"./附件5：研报数据/行业研报/医药生物行业报告：美股“AI+医疗”板块爆发，看好AI助力国内医疗行业全面智能化升级.pdf\", \"text\": \"一周观点：美股“AI+医疗”板块爆发，看好AI 助力国\\n内医疗行业全面智能化升级近期美股“AI+医疗” 优异，有望映射国内同类公司。\\n\\nAI+医疗应用前景广泛，药物研发、癌症诊断等领域有望迎来巨变。\\n\\n根据ARK 近期发布的《Big Ideas 2025》，利用人工智能来“操作”数据将颠覆诊断、药物发现和治疗，到2030 年，整个行业的表现将提升几个数量级。\\n\\nAI 将彻底改变多组学工具、药物研发、分子诊断，并显著改善药物的经济回报。\\n\\n如AI 将使DNA 等生物信息的读取和写入成本分别降低100 倍和1000 倍；\\n\\nAI 将使药物开发成本降低4 倍，并将研发投入的回报提高5 倍；\\n\\nAI 将使癌症筛查的效率提高20 倍，并且将市场规模扩大10 倍；\\n\\nAI 药物的商业价值将比标准药物高20 倍，比同类最佳的精准药物高2.4 倍。\\n\\n未来有望改变单细胞测序、蛋白质结构预测底层技术基础，在药物研发、癌症诊断、疫苗开发、虚拟细胞、器官芯片、影像识别、数据服务等领域得到广泛应用。\\n\\n从长远来看，医疗将成为AI 最为深远的应用领域。\\n\\nl本周细分板块表现本周医药生物上涨3.21%，跑赢沪深300 指数1.23pct，在31 个子行业中排名第9 位。\\n\\n本周医院板块涨幅最大，上涨6.84%；\\n\\n医疗研发外包板块上涨6.17%，医疗设备板块上涨5.23%，疫苗板块上涨\\n\\n剂板块上涨1.85%\", \"paper_image\": \"图表1：国内“AI+医疗”概念相关标的梳理（1）\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/医药生物行业报告：“AI+医疗”高景气度有望持续，创新药利好政策持续加码.pdf\", \"text\": \"3.1 本周医药生物上涨1.88%，医疗研发外包板块涨幅最大\\n线下药店板块跌幅最大，下跌3.06%，血液制品板块下跌3.04%，中药板块下跌\", \"paper_image\": \"图表8：本周医疗研发外包板块涨幅最大，上涨11.3%\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/医药生物行业周报：创新药行情开始分化，高端器械及AI医疗有望接力.pdf\", \"text\": \"1.1 上周行情及上周重点关注新闻政策动态\\n上周医药生物板块收益率为1.40%，板块相对沪深300 收益率为2.21%，在31 个一级子行业指数中涨跌幅排名第4。\\n\\n6 个子板块中，化学制药周收益率排名第一，涨跌幅为3.92%（相对沪深300 收益率为4.73%）；\\n\\n周收益率排名第六的为中药Ⅱ，涨跌幅为-1.39%（相对沪深300 收益率为-0.58%）。\\n\\n近一个月医药生物板块收益率为3.50%，板块相对沪深300 收益率为-5.20%，在31 个一级子行业指数中涨跌幅排名第20。\\n\\n6 个子板块中，医疗服务月收益率第一，涨跌幅7.96%（相对沪深300 收益率为-1.62%）；\\n\\n月收益率排名第六的为医药商业，涨跌幅为-3.28%（相对沪深300 收益率为-12.85%）。\\n\\n8 月27-30 日，国务院国资委与中国科学院联合举办中央企业生物科技产业高级研修班，国务院国资委副主任谭作钧出席开班式、结业式并讲话，强调要加快发展中央企业生物医药产业，坚持创新驱动、长周期、差异化发展，推动与中科院产学研用协同创新打造生物医药领域国家队，助力我国生物医药产业高质量发展。\\n\\n9 月2 日，国家药监局综合司公示《采用脑机接口技术的医疗器械 RACA 机器人运动意图编解码性能测试方法》推荐性医疗器械行业标准立项，为该类前沿医疗器械的性能评估与规范化发展提供支撑，助力行业有序创新。\\n\\n9 月\", \"paper_image\": \"表1：医药生物指数涨跌幅 ............................................................................................................... 13\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/医药生物行业周报：看好Q2板块复苏，重点关注创新药+AI医疗+消费医疗.pdf\", \"text\": \"消费复苏条线：近期关于消费刺激的政策预期较强，消费医疗方向有\\n望受益。①眼科口腔产业链，建议关注爱尔眼科、普瑞眼科、华厦眼科、爱博医疗、欧普康视、通策医疗、时代天使等；②医疗美容产业链，建议关注爱美客、华熙生物、华东医药、锦波生物、江苏吴中等；③中药补益类产品，建议重点关注东阿阿胶、同仁堂、片仔癀；④医药零售龙头，建议关注益丰药房、大参林、国药一致、老百姓、一心堂、健之佳等。➢\", \"paper_image\": \"表1：25Q1 业绩披露进展及统计 ........................................................................................................................ 5\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会.pdf\", \"text\": \"数据来源：Insight、开源证券研究所\\n原料药化学制剂中药生物制品医药商业涨幅前5\\n\\n医疗研发外包医疗服务医疗设备医疗耗材体外诊断涨幅前5\\n\\n（1）政策波动风险。医保政策、价格调整等政策可能对医药行业产生影响。（2）市场震荡风险。若市场风险偏好改变或公司成长性预期调整，可能影响公司估值稳定性。（3）医保未准入风险。医保谈判结果还未正式落地，还需要以实际医保谈判结果为准。\", \"paper_image\": \"图6：本周医疗设备板块涨幅最大，化学制剂板块跌幅最大\"}]}}]",
+  "references_json": "[{\"paper_path\": \"./附件5：研报数据/行业研报/医药生物行业报告：美股“AI+医疗”板块爆发，看好AI助力国内医疗行业全面智能化升级.pdf\", \"text\": \"一周观点：美股“AI+医疗”板块爆发，看好AI 助力国\\n内医疗行业全面智能化升级近期美股“AI+医疗” 优异，有望映射国内同类公司。\\n\\nAI+医疗应用前景广泛，药物研发、癌症诊断等领域有望迎来巨变。\\n\\n根据ARK 近期发布的《Big Ideas 2025》，利用人工智能来“操作”数据将颠覆诊断、药物发现和治疗，到2030 年，整个行业的表现将提升几个数量级。\\n\\nAI 将彻底改变多组学工具、药物研发、分子诊断，并显著改善药物的经济回报。\\n\\n如AI 将使DNA 等生物信息的读取和写入成本分别降低100 倍和1000 倍；\\n\\nAI 将使药物开发成本降低4 倍，并将研发投入的回报提高5 倍；\\n\\nAI 将使癌症筛查的效率提高20 倍，并且将市场规模扩大10 倍；\\n\\nAI 药物的商业价值将比标准药物高20 倍，比同类最佳的精准药物高2.4 倍。\\n\\n未来有望改变单细胞测序、蛋白质结构预测底层技术基础，在药物研发、癌症诊断、疫苗开发、虚拟细胞、器官芯片、影像识别、数据服务等领域得到广泛应用。\\n\\n从长远来看，医疗将成为AI 最为深远的应用领域。\\n\\nl本周细分板块表现本周医药生物上涨3.21%，跑赢沪深300 指数1.23pct，在31 个子行业中排名第9 位。\\n\\n本周医院板块涨幅最大，上涨6.84%；\\n\\n医疗研发外包板块上涨6.17%，医疗设备板块上涨5.23%，疫苗板块上涨\\n\\n剂板块上涨1.85%\", \"paper_image\": \"图表1：国内“AI+医疗”概念相关标的梳理（1）\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/医药生物行业报告：“AI+医疗”高景气度有望持续，创新药利好政策持续加码.pdf\", \"text\": \"3.1 本周医药生物上涨1.88%，医疗研发外包板块涨幅最大\\n线下药店板块跌幅最大，下跌3.06%，血液制品板块下跌3.04%，中药板块下跌\", \"paper_image\": \"图表8：本周医疗研发外包板块涨幅最大，上涨11.3%\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/医药生物行业周报：创新药行情开始分化，高端器械及AI医疗有望接力.pdf\", \"text\": \"1.1 上周行情及上周重点关注新闻政策动态\\n上周医药生物板块收益率为1.40%，板块相对沪深300 收益率为2.21%，在31 个一级子行业指数中涨跌幅排名第4。\\n\\n6 个子板块中，化学制药周收益率排名第一，涨跌幅为3.92%（相对沪深300 收益率为4.73%）；\\n\\n周收益率排名第六的为中药Ⅱ，涨跌幅为-1.39%（相对沪深300 收益率为-0.58%）。\\n\\n近一个月医药生物板块收益率为3.50%，板块相对沪深300 收益率为-5.20%，在31 个一级子行业指数中涨跌幅排名第20。\\n\\n6 个子板块中，医疗服务月收益率第一，涨跌幅7.96%（相对沪深300 收益率为-1.62%）；\\n\\n月收益率排名第六的为医药商业，涨跌幅为-3.28%（相对沪深300 收益率为-12.85%）。\\n\\n8 月27-30 日，国务院国资委与中国科学院联合举办中央企业生物科技产业高级研修班，国务院国资委副主任谭作钧出席开班式、结业式并讲话，强调要加快发展中央企业生物医药产业，坚持创新驱动、长周期、差异化发展，推动与中科院产学研用协同创新打造生物医药领域国家队，助力我国生物医药产业高质量发展。\\n\\n9 月2 日，国家药监局综合司公示《采用脑机接口技术的医疗器械 RACA 机器人运动意图编解码性能测试方法》推荐性医疗器械行业标准立项，为该类前沿医疗器械的性能评估与规范化发展提供支撑，助力行业有序创新。\\n\\n9 月\", \"paper_image\": \"表1：医药生物指数涨跌幅 ............................................................................................................... 13\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/医药生物行业周报：看好Q2板块复苏，重点关注创新药+AI医疗+消费医疗.pdf\", \"text\": \"消费复苏条线：近期关于消费刺激的政策预期较强，消费医疗方向有\\n望受益。①眼科口腔产业链，建议关注爱尔眼科、普瑞眼科、华厦眼科、爱博医疗、欧普康视、通策医疗、时代天使等；②医疗美容产业链，建议关注爱美客、华熙生物、华东医药、锦波生物、江苏吴中等；③中药补益类产品，建议重点关注东阿阿胶、同仁堂、片仔癀；④医药零售龙头，建议关注益丰药房、大参林、国药一致、老百姓、一心堂、健之佳等。➢\", \"paper_image\": \"表1：25Q1 业绩披露进展及统计 ........................................................................................................................ 5\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会.pdf\", \"text\": \"数据来源：Insight、开源证券研究所\\n原料药化学制剂中药生物制品医药商业涨幅前5\\n\\n医疗研发外包医疗服务医疗设备医疗耗材体外诊断涨幅前5\\n\\n（1）政策波动风险。医保政策、价格调整等政策可能对医药行业产生影响。（2）市场震荡风险。若市场风险偏好改变或公司成长性预期调整，可能影响公司估值稳定性。（3）医保未准入风险。医保谈判结果还未正式落地，还需要以实际医保谈判结果为准。\", \"paper_image\": \"图6：本周医疗设备板块涨幅最大，化学制剂板块跌幅最大\"}]",
+  "notes": [
+    "route=hybrid_sql_rag",
+    "1. 由于query_plan中companies为空数组，不能自行枚举公司列表，因此使用CTE target_companies作为占位符，实际应由RAG模块填充具体公司。\n2. 查询2025年第三季度（2025Q3）的销售费用率，同时获取2025Q2的数据用于计算环比变化。\n3. 销售费用率计算公式：销售费用 / 营业总收入 * 100（因为数据库中存储的是原始数值，需要计算百分比）。\n4. 使用LAG窗口函数获取上一季度的销售费用率，并计算环比变化（百分点）。\n5. 按公司简称和报告期排序，便于查看变化情况。\n6. 注意：如果RAG模块没有提供具体公司，这个查询将返回空结果，符合安全要求。",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=50",
+    "sql_backfilled_from_evidence_companies",
+    "修复了之前的SQL错误：\n1. 根据query_plan中明确的companies列表（['方盛制药']），在target_companies CTE中使用了stock_abbr IN ('方盛制药')来筛选公司，而不是之前的1=0占位符。\n2. 简化了销售费用率的计算：因为financials_view中selling_expenses列已经存储为百分数（销售费用率），所以直接使用该列，无需重新计算。\n3. 相应地调整了LAG函数和变化计算，直接使用selling_expenses列。\n4. 保持了查询2025Q3和2025Q2两个季度的数据，以计算环比变化。\n5. 输出包括公司代码、简称、报告期、销售费用率、上一季度销售费用率以及环比变化（百分点）。",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=50",
+    "answer_rewritten_after_self_check",
+    "self_check={\"pass\": true, \"notes\": [\"1. 回答中的数字与SQL rows一致：正确指出SQL查询仅返回一家公司（方盛制药），并准确引用了其2025Q3销售费用率（42025.624142）和2025Q2销售费用率（null）。\", \"2. 回答正确引用了Evidences：明确指出所有研报证据均为行业层面讨论（如'AI+医疗'、'AI医疗'），涉及'中药'行业，但没有任何证据直接提及方盛制药在人工智能产业升级方面的具体布局。\", \"3. 回答未遗漏问题要求的关键点：完整回应了'2025年研报中提到人工智能产业升级相关布局的公司'和'2025年第三季度的销售费用率变化情况'两个核心要求，并基于数据缺失给出了明确结论。\", \"4. 回答未混淆指标名称：正确使用了'销售费用率'这一指标，没有与其他财务指标混淆。\", \"5. 回答未错误对应聚合统计结果：SQL rows中仅包含具体公司（方盛制药）的数据，回答正确对应到该公司，没有误用聚合统计结果。\"]}"
+  ],
+  "final_status": "ok"
+}

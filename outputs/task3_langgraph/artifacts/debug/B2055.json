@@ -1,0 +1,108 @@
+{
+  "question_id": "B2055",
+  "question_type": "多意图",
+  "raw_question": "针对2022-2025年第三季度：①找出连续四个报告期营业总收入增长的公司；②计算这些公司的平均复合增长率；③查询它们的研发投入累计金额；④验证持续增长与研发投入的关联性。",
+  "raw_question_json": "[{\"Q\":\"针对2022-2025年第三季度：①找出连续四个报告期营业总收入增长的公司；②计算这些公司的平均复合增长率；③查询它们的研发投入累计金额；④验证持续增长与研发投入的关联性。\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "metrics": [
+      "营业总收入"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "focus_topics": [],
+    "intent_type": "sql_only",
+    "needs_sql": true,
+    "needs_retrieval": false,
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "sql_only",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入"
+    ],
+    "needs_sql": true,
+    "top_n": null,
+    "threshold": null,
+    "question": "针对2022-2025年第三季度：①找出连续四个报告期营业总收入增长的公司；②计算这些公司的平均复合增长率；③查询它们的研发投入累计金额；④验证持续增长与研发投入的关联性。"
+  },
+  "retrieval_plan": {
+    "question": "针对2022-2025年第三季度：①找出连续四个报告期营业总收入增长的公司；②计算这些公司的平均复合增长率；③查询它们的研发投入累计金额；④验证持续增长与研发投入的关联性。",
+    "companies": [],
+    "focus_topics": [
+      "研发投入与营收增长关联性",
+      "企业创新驱动因素",
+      "主营业务收入",
+      "营业总收入",
+      "收入增长"
+    ],
+    "needs_retrieval": false,
+    "top_k": 0,
+    "source_scope": "hybrid",
+    "retrieval_mode": "hybrid"
+  },
+  "sql": "WITH quarterly_revenue AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        total_operating_revenue,\n        LAG(total_operating_revenue, 1) OVER (PARTITION BY stock_code ORDER BY report_period) AS prev_revenue\n    FROM financials_view\n    WHERE report_period IN ('2022Q3', '2023Q3', '2024Q3', '2025Q3')\n        AND total_operating_revenue IS NOT NULL\n),\ngrowth_flags AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        COUNT(*) AS periods_count,\n        SUM(CASE WHEN total_operating_revenue > prev_revenue THEN 1 ELSE 0 END) AS growth_count\n    FROM quarterly_revenue\n    WHERE prev_revenue IS NOT NULL\n    GROUP BY stock_code, stock_abbr\n    HAVING COUNT(*) = 3  -- 三个增长比较（2023Q3 vs 2022Q3, 2024Q3 vs 2023Q3, 2025Q3 vs 2024Q3）\n        AND SUM(CASE WHEN total_operating_revenue > prev_revenue THEN 1 ELSE 0 END) = 3\n),\ncompound_growth AS (\n    SELECT \n        gr.stock_code,\n        gr.stock_abbr,\n        MAX(CASE WHEN qr.report_period = '2025Q3' THEN qr.total_operating_revenue END) AS latest_revenue,\n        MIN(CASE WHEN qr.report_period = '2022Q3' THEN qr.total_operating_revenue END) AS earliest_revenue,\n        POWER(\n            MAX(CASE WHEN qr.report_period = '2025Q3' THEN qr.total_operating_revenue END) / \n            MIN(CASE WHEN qr.report_period = '2022Q3' THEN qr.total_operating_revenue END),\n            1.0/3\n        ) - 1 AS cagr\n    FROM growth_flags gr\n    JOIN quarterly_revenue qr ON gr.stock_code = qr.stock_code\n    WHERE qr.report_period IN ('2022Q3', '2025Q3')\n    GROUP BY gr.stock_code, gr.stock_abbr\n    HAVING earliest_revenue > 0\n),\nrnd_cumulative AS (\n    SELECT \n        gr.stock_code,\n        gr.stock_abbr,\n        SUM(operating_expense_rnd_expenses) AS total_rnd_expenses\n    FROM growth_flags gr\n    JOIN financials_view fv ON gr.stock_code = fv.stock_code\n    WHERE fv.report_period IN ('2022Q3', '2023Q3', '2024Q3', '2025Q3')\n        AND operating_expense_rnd_expenses IS NOT NULL\n    GROUP BY gr.stock_code, gr.stock_abbr\n)\nSELECT \n    cg.stock_code,\n    cg.stock_abbr,\n    cg.earliest_revenue AS revenue_2022q3,\n    cg.latest_revenue AS revenue_2025q3,\n    ROUND(cg.cagr * 100, 2) AS cagr_percent,\n    rc.total_rnd_expenses,\n    CASE \n        WHEN rc.total_rnd_expenses > 0 THEN ROUND(rc.total_rnd_expenses / cg.latest_revenue * 100, 2)\n        ELSE NULL\n    END AS rnd_to_revenue_ratio\nFROM compound_growth cg\nLEFT JOIN rnd_cumulative rc ON cg.stock_code = rc.stock_code\nORDER BY cg.cagr DESC;",
+  "sql_history": [
+    "WITH quarterly_revenue AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        total_operating_revenue,\n        LAG(total_operating_revenue, 1) OVER (PARTITION BY stock_code ORDER BY report_period) AS prev_revenue\n    FROM financials_view\n    WHERE report_period IN ('2022Q3', '2023Q3', '2024Q3', '2025Q3')\n        AND total_operating_revenue IS NOT NULL\n),\ngrowth_flags AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        COUNT(*) AS periods_count,\n        SUM(CASE WHEN total_operating_revenue > prev_revenue THEN 1 ELSE 0 END) AS growth_count\n    FROM quarterly_revenue\n    WHERE prev_revenue IS NOT NULL\n    GROUP BY stock_code, stock_abbr\n    HAVING COUNT(*) = 3  -- 三个增长比较（2023Q3 vs 2022Q3, 2024Q3 vs 2023Q3, 2025Q3 vs 2024Q3）\n        AND SUM(CASE WHEN total_operating_revenue > prev_revenue THEN 1 ELSE 0 END) = 3\n),\ncompound_growth AS (\n    SELECT \n        gr.stock_code,\n        gr.stock_abbr,\n        MAX(CASE WHEN qr.report_period = '2025Q3' THEN qr.total_operating_revenue END) AS latest_revenue,\n        MIN(CASE WHEN qr.report_period = '2022Q3' THEN qr.total_operating_revenue END) AS earliest_revenue,\n        POWER(\n            MAX(CASE WHEN qr.report_period = '2025Q3' THEN qr.total_operating_revenue END) / \n            MIN(CASE WHEN qr.report_period = '2022Q3' THEN qr.total_operating_revenue END),\n            1.0/3\n        ) - 1 AS cagr\n    FROM growth_flags gr\n    JOIN quarterly_revenue qr ON gr.stock_code = qr.stock_code\n    WHERE qr.report_period IN ('2022Q3', '2025Q3')\n    GROUP BY gr.stock_code, gr.stock_abbr\n    HAVING earliest_revenue > 0\n),\nrnd_cumulative AS (\n    SELECT \n        gr.stock_code,\n        gr.stock_abbr,\n        SUM(operating_expense_rnd_expenses) AS total_rnd_expenses\n    FROM growth_flags gr\n    JOIN financials_view fv ON gr.stock_code = fv.stock_code\n    WHERE fv.report_period IN ('2022Q3', '2023Q3', '2024Q3', '2025Q3')\n        AND operating_expense_rnd_expenses IS NOT NULL\n    GROUP BY gr.stock_code, gr.stock_abbr\n)\nSELECT \n    cg.stock_code,\n    cg.stock_abbr,\n    cg.earliest_revenue AS revenue_2022q3,\n    cg.latest_revenue AS revenue_2025q3,\n    ROUND(cg.cagr * 100, 2) AS cagr_percent,\n    rc.total_rnd_expenses,\n    CASE \n        WHEN rc.total_rnd_expenses > 0 THEN ROUND(rc.total_rnd_expenses / cg.latest_revenue * 100, 2)\n        ELSE NULL\n    END AS rnd_to_revenue_ratio\nFROM compound_growth cg\nLEFT JOIN rnd_cumulative rc ON cg.stock_code = rc.stock_code\nORDER BY cg.cagr DESC;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 0,
+  "result_rows": [],
+  "retrieved_evidence": [],
+  "reranked_evidence": [],
+  "rerank_preview": "{\"strategy\": \"skipped_fast_path\", \"kept_count\": 0}",
+  "fused_context": {
+    "question": "针对2022-2025年第三季度：①找出连续四个报告期营业总收入增长的公司；②计算这些公司的平均复合增长率；③查询它们的研发投入累计金额；④验证持续增长与研发投入的关联性。",
+    "sql_row_count": 0,
+    "evidence_count": 0,
+    "sql_preview": [],
+    "evidence_preview": [],
+    "evidence_titles": [],
+    "source_breakdown": {}
+  },
+  "self_check": {
+    "pass": true,
+    "notes": [
+      "self_check_skipped_fast_path"
+    ]
+  },
+  "chart_plan": {},
+  "chart_spec": {},
+  "current_chart_paths": [],
+  "current_chart_specs": [],
+  "current_answer": "根据SQL查询结果和研报证据，回答如下：\n\n**直接结论：**\n在2022年第三季度至2025年第三季度这四个连续的报告期内，**没有找到任何一家公司满足“营业总收入”连续四个季度环比增长的条件**。因此，无法进行后续的平均复合增长率计算、研发投入累计金额查询以及关联性验证。\n\n**财务数据支撑：**\nSQL查询旨在筛选出在2022Q3、2023Q3、2024Q3、2025Q3这四个时点上，每个季度“营业总收入”均高于前一季度的公司。查询结果返回了0行数据，表明在当前数据库覆盖的范围内，没有公司符合这一严格的连续增长标准。\n\n**研报证据支撑：**\n未检索到直接研报证据。\n\n**综合判断：**\n基于现有财务数据，无法完成问题中要求的识别连续增长公司、计算平均复合增长率、查询研发投入累计金额及验证关联性等一系列分析。这可能意味着：\n1.  在2022-2025年第三季度的时间窗口内，宏观经济、行业周期或特定市场环境使得所有公司的季度营收均未能实现连续四个报告期的稳定增长。\n2.  部分公司可能在某些季度实现了增长，但未能满足“连续四个报告期”的完整条件。\n\n如需进一步分析，可能需要放宽增长条件（如允许个别季度下滑），或调整分析的时间范围。",
+  "current_references": [],
+  "answer_rewritten": false,
+  "turn_answers": [
+    {
+      "Q": "针对2022-2025年第三季度：①找出连续四个报告期营业总收入增长的公司；②计算这些公司的平均复合增长率；③查询它们的研发投入累计金额；④验证持续增长与研发投入的关联性。",
+      "A": {
+        "content": "根据SQL查询结果和研报证据，回答如下：\n\n**直接结论：**\n在2022年第三季度至2025年第三季度这四个连续的报告期内，**没有找到任何一家公司满足“营业总收入”连续四个季度环比增长的条件**。因此，无法进行后续的平均复合增长率计算、研发投入累计金额查询以及关联性验证。\n\n**财务数据支撑：**\nSQL查询旨在筛选出在2022Q3、2023Q3、2024Q3、2025Q3这四个时点上，每个季度“营业总收入”均高于前一季度的公司。查询结果返回了0行数据，表明在当前数据库覆盖的范围内，没有公司符合这一严格的连续增长标准。\n\n**研报证据支撑：**\n未检索到直接研报证据。\n\n**综合判断：**\n基于现有财务数据，无法完成问题中要求的识别连续增长公司、计算平均复合增长率、查询研发投入累计金额及验证关联性等一系列分析。这可能意味着：\n1.  在2022-2025年第三季度的时间窗口内，宏观经济、行业周期或特定市场环境使得所有公司的季度营收均未能实现连续四个报告期的稳定增长。\n2.  部分公司可能在某些季度实现了增长，但未能满足“连续四个报告期”的完整条件。\n\n如需进一步分析，可能需要放宽增长条件（如允许个别季度下滑），或调整分析的时间范围。",
+        "image": [],
+        "references": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"针对2022-2025年第三季度：①找出连续四个报告期营业总收入增长的公司；②计算这些公司的平均复合增长率；③查询它们的研发投入累计金额；④验证持续增长与研发投入的关联性。\", \"A\": {\"content\": \"根据SQL查询结果和研报证据，回答如下：\\n\\n**直接结论：**\\n在2022年第三季度至2025年第三季度这四个连续的报告期内，**没有找到任何一家公司满足“营业总收入”连续四个季度环比增长的条件**。因此，无法进行后续的平均复合增长率计算、研发投入累计金额查询以及关联性验证。\\n\\n**财务数据支撑：**\\nSQL查询旨在筛选出在2022Q3、2023Q3、2024Q3、2025Q3这四个时点上，每个季度“营业总收入”均高于前一季度的公司。查询结果返回了0行数据，表明在当前数据库覆盖的范围内，没有公司符合这一严格的连续增长标准。\\n\\n**研报证据支撑：**\\n未检索到直接研报证据。\\n\\n**综合判断：**\\n基于现有财务数据，无法完成问题中要求的识别连续增长公司、计算平均复合增长率、查询研发投入累计金额及验证关联性等一系列分析。这可能意味着：\\n1.  在2022-2025年第三季度的时间窗口内，宏观经济、行业周期或特定市场环境使得所有公司的季度营收均未能实现连续四个报告期的稳定增长。\\n2.  部分公司可能在某些季度实现了增长，但未能满足“连续四个报告期”的完整条件。\\n\\n如需进一步分析，可能需要放宽增长条件（如允许个别季度下滑），或调整分析的时间范围。\", \"image\": [], \"references\": []}}]",
+  "references_json": "[]",
+  "notes": [
+    "route=sql_only",
+    "1. 首先筛选2022-2025年四个第三季度的数据，计算每个公司每个季度的营业总收入及与前一年的比较。\n2. 找出连续四个报告期（2022Q3到2025Q3）营业总收入逐年增长的公司，即2023Q3>2022Q3、2024Q3>2023Q3、2025Q3>2024Q3。\n3. 计算这些公司的复合年均增长率（CAGR），公式为：(最新收入/最早收入)^(1/年数)-1，年数为3（2022到2025是3个增长期）。\n4. 查询这些公司在四个报告期的研发投入累计金额（operating_expense_rnd_expenses）。\n5. 通过计算研发投入占最新营业收入的比例来初步验证持续增长与研发投入的关联性。\n6. 按CAGR降序排列，便于观察增长最快的公司。\n7. 注意：由于query_plan中companies为空，不限制特定公司，而是基于增长条件动态筛选。",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=0",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=0",
+    "self_check={\"pass\": true, \"notes\": [\"self_check_skipped_fast_path\"]}"
+  ],
+  "final_status": "ok"
+}

@@ -1,0 +1,82 @@
+{
+  "schema_version": "task3.chart-spec.v1",
+  "question_id": "B2006",
+  "image_index": 1,
+  "chart_type": "line",
+  "title": "片仔癀近几年的利润总额变化趋势是什么样的 - 净利润",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 4,
+    "preview_rows": [
+      {
+        "report_period": "2022FY",
+        "利润总额": "297773.548327"
+      },
+      {
+        "report_period": "2023FY",
+        "利润总额": "336891.250702"
+      },
+      {
+        "report_period": "2024FY",
+        "利润总额": "353874.062167"
+      },
+      {
+        "report_period": "2025H1",
+        "利润总额": "170575.930642"
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "report_period",
+    "sort_ascending": true,
+    "top_n": null,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "利润总额",
+      "data_type": "quantitative",
+      "label": "利润总额",
+      "unit": "万元"
+    },
+    "x": {
+      "field": "report_period",
+      "data_type": "temporal",
+      "label": "报告期",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": false
+  },
+  "output": {
+    "filename": "B2006_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B2006_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT \n    report_period,\n    total_profit AS 利润总额\nFROM financials_view \nWHERE stock_abbr = '片仔癀' \n    AND report_period IN ('2021FY', '2022FY', '2023FY', '2024FY', '2025H1') \nORDER BY \n    CASE \n        WHEN report_period LIKE '%FY' THEN CAST(SUBSTR(report_period, 1, 4) AS INTEGER) \n        WHEN report_period LIKE '%H1' THEN CAST(SUBSTR(report_period, 1, 4) AS INTEGER) \n        ELSE 0 \n    END,\n    CASE \n        WHEN report_period LIKE '%H1' THEN 1 \n        WHEN report_period LIKE '%FY' THEN 2 \n        ELSE 3 \n    END;",
+    "value_fields": [
+      "利润总额"
+    ],
+    "value_labels": [
+      "利润总额"
+    ],
+    "original_chart_plan": {
+      "chart_type": "line",
+      "x_field": "report_period",
+      "y_fields": [
+        "利润总额"
+      ],
+      "category_field": null,
+      "sort_by": "report_period",
+      "sort_ascending": true,
+      "top_n": null
+    }
+  }
+}

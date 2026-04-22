@@ -1,0 +1,106 @@
+{
+  "schema_version": "task3.chart-spec.v1",
+  "question_id": "B2054",
+  "image_index": 1,
+  "chart_type": "table",
+  "title": "查询2025年第三季度货币资金占总资产比例前五的... - 投资性现金流量净额",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 5,
+    "preview_rows": [
+      {
+        "stock_code": "002864",
+        "stock_abbr": "盘龙药业",
+        "货币资金": 116462.96655999999,
+        "总资产": 240103.25196999998,
+        "货币资金占总资产比例": 48.51,
+        "投资性现金流量净额": "-4780.803726"
+      },
+      {
+        "stock_code": "000423",
+        "stock_abbr": "东阿阿胶",
+        "货币资金": 556227.410312,
+        "总资产": 1274859.410103,
+        "货币资金占总资产比例": 43.63,
+        "投资性现金流量净额": "81312.033906"
+      },
+      {
+        "stock_code": "002107",
+        "stock_abbr": "沃华医药",
+        "货币资金": 39295.923705,
+        "总资产": 97369.414552,
+        "货币资金占总资产比例": 40.36,
+        "投资性现金流量净额": "1492.359447"
+      },
+      {
+        "stock_code": "002773",
+        "stock_abbr": "康弘药业",
+        "货币资金": 382807.109877,
+        "总资产": 987003.3859620001,
+        "货币资金占总资产比例": 38.78,
+        "投资性现金流量净额": "-273263.309812"
+      },
+      {
+        "stock_code": "600252",
+        "stock_abbr": "中恒集团",
+        "货币资金": 405705.846238,
+        "总资产": 1106425.351924,
+        "货币资金占总资产比例": 36.67,
+        "投资性现金流量净额": "-2367.455579"
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": null,
+    "sort_ascending": false,
+    "top_n": 5,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "投资性现金流量净额",
+      "data_type": "quantitative",
+      "label": "投资性现金流量净额",
+      "unit": "万元"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": false
+  },
+  "output": {
+    "filename": "B2054_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B2054_1.jpg"
+  },
+  "meta": {
+    "source_sql": "WITH cash_ratio AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        asset_cash_and_cash_equivalents AS 货币资金,\n        total_assets AS 总资产,\n        ROUND(CAST(asset_cash_and_cash_equivalents AS REAL) / NULLIF(total_assets, 0) * 100, 2) AS 货币资金占总资产比例,\n        investing_cf_net_amount AS 投资性现金流量净额\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n        AND total_assets IS NOT NULL\n        AND asset_cash_and_cash_equivalents IS NOT NULL\n        AND investing_cf_net_amount IS NOT NULL\n)\nSELECT \n    stock_code,\n    stock_abbr,\n    货币资金,\n    总资产,\n    货币资金占总资产比例,\n    投资性现金流量净额\nFROM cash_ratio\nORDER BY 货币资金占总资产比例 DESC\nLIMIT 5;",
+    "value_fields": [
+      "投资性现金流量净额"
+    ],
+    "value_labels": [
+      "投资性现金流量净额"
+    ],
+    "original_chart_plan": {
+      "chart_type": "table",
+      "x_field": null,
+      "y_fields": [
+        "投资性现金流量净额"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": null,
+      "sort_ascending": false,
+      "top_n": 5
+    }
+  }
+}

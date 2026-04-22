@@ -1,0 +1,169 @@
+{
+  "question_id": "B2014",
+  "question_type": "多意图",
+  "raw_question": "对比一下各个中药相关上市企业上半年的销售额，看看谁的增速更快？ | 给出的数据是从哪里来的？",
+  "raw_question_json": "[{\"Q\":\"对比一下各个中药相关上市企业上半年的销售额，看看谁的增速更快？\"},{\"Q\":\"给出的数据是从哪里来的？\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "metrics": [
+      "营业总收入"
+    ],
+    "periods": [],
+    "focus_topics": [],
+    "intent_type": "sql_only",
+    "needs_sql": true,
+    "needs_retrieval": false,
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "sql_only",
+    "companies": [],
+    "periods": [],
+    "metrics": [
+      "营业总收入"
+    ],
+    "needs_sql": true,
+    "top_n": null,
+    "threshold": null,
+    "question": "给出的数据是从哪里来的？"
+  },
+  "retrieval_plan": {
+    "question": "给出的数据是从哪里来的？",
+    "companies": [],
+    "focus_topics": [],
+    "needs_retrieval": false,
+    "top_k": 0,
+    "source_scope": "hybrid",
+    "retrieval_mode": "hybrid"
+  },
+  "sql": "SELECT DISTINCT stock_code, stock_abbr FROM financials_view LIMIT 10;",
+  "sql_history": [
+    "SELECT DISTINCT stock_code, stock_abbr FROM financials_view LIMIT 10;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 10,
+  "result_rows": [
+    {
+      "stock_code": "600080",
+      "stock_abbr": "金花股份"
+    },
+    {
+      "stock_code": "600085",
+      "stock_abbr": "同仁堂"
+    },
+    {
+      "stock_code": "600129",
+      "stock_abbr": "太极集团"
+    },
+    {
+      "stock_code": "600222",
+      "stock_abbr": "太龙药业"
+    },
+    {
+      "stock_code": "600252",
+      "stock_abbr": "中恒集团"
+    },
+    {
+      "stock_code": "600285",
+      "stock_abbr": "羚锐制药"
+    },
+    {
+      "stock_code": "600329",
+      "stock_abbr": "达仁堂"
+    },
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山"
+    },
+    {
+      "stock_code": "600351",
+      "stock_abbr": "亚宝药业"
+    },
+    {
+      "stock_code": "600422",
+      "stock_abbr": "昆药集团"
+    }
+  ],
+  "retrieved_evidence": [],
+  "reranked_evidence": [],
+  "rerank_preview": "{\"strategy\": \"skipped_fast_path\", \"kept_count\": 0}",
+  "fused_context": {
+    "question": "给出的数据是从哪里来的？",
+    "sql_row_count": 10,
+    "evidence_count": 0,
+    "sql_preview": [
+      {
+        "stock_code": "600080",
+        "stock_abbr": "金花股份"
+      },
+      {
+        "stock_code": "600085",
+        "stock_abbr": "同仁堂"
+      },
+      {
+        "stock_code": "600129",
+        "stock_abbr": "太极集团"
+      },
+      {
+        "stock_code": "600222",
+        "stock_abbr": "太龙药业"
+      },
+      {
+        "stock_code": "600252",
+        "stock_abbr": "中恒集团"
+      }
+    ],
+    "evidence_preview": [],
+    "evidence_titles": [],
+    "source_breakdown": {}
+  },
+  "self_check": {
+    "pass": true,
+    "notes": [
+      "self_check_skipped_fast_path"
+    ]
+  },
+  "chart_plan": {},
+  "chart_spec": {},
+  "current_chart_paths": [],
+  "current_chart_specs": [],
+  "current_answer": "根据SQL查询结果，当前给出的数据来源于财务数据库中的“financials_view”视图，具体展示了部分上市公司的股票代码和简称。  \n**直接结论**：数据来源是数据库中的财务视图。  \n**财务数据支撑**：查询返回了10家公司的示例数据，包括金花股份（600080）、同仁堂（600085）、太极集团（600129）、太龙药业（600222）、中恒集团（600252）、羚锐制药（600285）、达仁堂（600329）、白云山（600332）、亚宝药业（600351）和昆药集团（600422）。  \n**研报证据支撑**：未检索到直接研报证据。  \n**综合判断**：问题询问数据来源，SQL结果明确指向了数据库视图，但未提供更详细的数据背景或出处说明。",
+  "current_references": [],
+  "answer_rewritten": false,
+  "turn_answers": [
+    {
+      "Q": "对比一下各个中药相关上市企业上半年的销售额，看看谁的增速更快？",
+      "A": {
+        "content": "请问您想对比哪个具体报告期的销售额增速呢？例如2025年上半年或2024年上半年？",
+        "image": [],
+        "references": []
+      }
+    },
+    {
+      "Q": "给出的数据是从哪里来的？",
+      "A": {
+        "content": "根据SQL查询结果，当前给出的数据来源于财务数据库中的“financials_view”视图，具体展示了部分上市公司的股票代码和简称。  \n**直接结论**：数据来源是数据库中的财务视图。  \n**财务数据支撑**：查询返回了10家公司的示例数据，包括金花股份（600080）、同仁堂（600085）、太极集团（600129）、太龙药业（600222）、中恒集团（600252）、羚锐制药（600285）、达仁堂（600329）、白云山（600332）、亚宝药业（600351）和昆药集团（600422）。  \n**研报证据支撑**：未检索到直接研报证据。  \n**综合判断**：问题询问数据来源，SQL结果明确指向了数据库视图，但未提供更详细的数据背景或出处说明。",
+        "image": [],
+        "references": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"对比一下各个中药相关上市企业上半年的销售额，看看谁的增速更快？\", \"A\": {\"content\": \"请问您想对比哪个具体报告期的销售额增速呢？例如2025年上半年或2024年上半年？\", \"image\": [], \"references\": []}}, {\"Q\": \"给出的数据是从哪里来的？\", \"A\": {\"content\": \"根据SQL查询结果，当前给出的数据来源于财务数据库中的“financials_view”视图，具体展示了部分上市公司的股票代码和简称。  \\n**直接结论**：数据来源是数据库中的财务视图。  \\n**财务数据支撑**：查询返回了10家公司的示例数据，包括金花股份（600080）、同仁堂（600085）、太极集团（600129）、太龙药业（600222）、中恒集团（600252）、羚锐制药（600285）、达仁堂（600329）、白云山（600332）、亚宝药业（600351）和昆药集团（600422）。  \\n**研报证据支撑**：未检索到直接研报证据。  \\n**综合判断**：问题询问数据来源，SQL结果明确指向了数据库视图，但未提供更详细的数据背景或出处说明。\", \"image\": [], \"references\": []}}]",
+  "references_json": "[]",
+  "notes": [
+    "route=sql_only",
+    "route=sql_only",
+    "用户询问数据来源，但这是一个元数据问题而非数据查询问题。根据要求只能生成SELECT查询，且只能查询financials_view表。因此返回一个简单的查询来展示数据中的部分公司代码和简称，以表明数据来自financials_view表。由于query_plan中没有指定companies，所以不能枚举具体公司列表，使用LIMIT 10来限制返回数量。",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=0",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=0",
+    "self_check={\"pass\": true, \"notes\": [\"self_check_skipped_fast_path\"]}"
+  ],
+  "final_status": "ok"
+}

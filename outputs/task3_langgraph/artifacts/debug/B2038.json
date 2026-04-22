@@ -1,0 +1,264 @@
+{
+  "question_id": "B2038",
+  "question_type": "数据校验",
+  "raw_question": "统计2025年第三季度净利润同比增长率超过100%的公司 | 这些公司的2024年同期净利润是否为正数，若存在基数为负的情况请标注并重新计算增长率。",
+  "raw_question_json": "[{\"Q\":\"统计2025年第三季度净利润同比增长率超过100%的公司\"},{\"Q\":\"这些公司的2024年同期净利润是否为正数，若存在基数为负的情况请标注并重新计算增长率。\"}]",
+  "parsed_slots": {
+    "companies": [
+      "特一药业",
+      "嘉应制药",
+      "天目药业",
+      "步长制药",
+      "沃华医药",
+      "达仁堂"
+    ],
+    "stock_codes": [],
+    "metrics": [
+      "净利润"
+    ],
+    "periods": [
+      "2025Q3",
+      "2024Q3"
+    ],
+    "focus_topics": [],
+    "intent_type": "sql_only",
+    "needs_sql": true,
+    "needs_retrieval": false,
+    "top_n": null,
+    "threshold": 100.0
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "sql_only",
+    "companies": [
+      "特一药业",
+      "嘉应制药",
+      "天目药业",
+      "步长制药",
+      "沃华医药",
+      "达仁堂"
+    ],
+    "periods": [
+      "2025Q3",
+      "2024Q3"
+    ],
+    "metrics": [
+      "净利润"
+    ],
+    "needs_sql": true,
+    "top_n": null,
+    "threshold": 100.0,
+    "question": "查询这些公司2024年第三季度的净利润数值，用于判断基期是否为正数并重新计算增长率"
+  },
+  "retrieval_plan": {
+    "question": "这些公司的2024年同期净利润是否为正数，若存在基数为负的情况请标注并重新计算增长率。",
+    "companies": [
+      "特一药业",
+      "嘉应制药",
+      "天目药业",
+      "步长制药",
+      "沃华医药",
+      "达仁堂"
+    ],
+    "focus_topics": [],
+    "needs_retrieval": false,
+    "top_k": 0,
+    "source_scope": "hybrid",
+    "retrieval_mode": "hybrid"
+  },
+  "sql": "WITH base_data AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        net_profit,\n        net_profit_yoy_growth\n    FROM financials_view\n    WHERE stock_abbr IN ('特一药业', '嘉应制药', '天目药业', '步长制药', '沃华医药', '达仁堂')\n        AND report_period IN ('2024Q3', '2025Q3')\n),\ncurrent_q3 AS (\n    SELECT * FROM base_data WHERE report_period = '2025Q3'\n),\nprev_q3 AS (\n    SELECT * FROM base_data WHERE report_period = '2024Q3'\n)\nSELECT \n    c.stock_code,\n    c.stock_abbr,\n    '2024Q3' AS base_period,\n    p.net_profit AS base_net_profit,\n    CASE \n        WHEN p.net_profit > 0 THEN '正数'\n        WHEN p.net_profit < 0 THEN '负数'\n        ELSE '零'\n    END AS base_status,\n    '2025Q3' AS current_period,\n    c.net_profit AS current_net_profit,\n    c.net_profit_yoy_growth AS original_growth_rate,\n    CASE \n        WHEN p.net_profit > 0 THEN c.net_profit_yoy_growth\n        WHEN p.net_profit < 0 THEN \n            CASE \n                WHEN c.net_profit > 0 THEN '基期为负，转为正增长'\n                WHEN c.net_profit < 0 THEN \n                    ROUND((c.net_profit - p.net_profit) / ABS(p.net_profit) * 100, 2) || '%'\n                ELSE '转为零'\n            END\n        ELSE '基期为零，无法计算'\n    END AS adjusted_growth_rate\nFROM current_q3 c\nLEFT JOIN prev_q3 p ON c.stock_code = p.stock_code\nORDER BY c.stock_abbr;",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, report_period, net_profit, net_profit_yoy_growth FROM financials_view WHERE report_period = '2025Q3' AND net_profit_yoy_growth > 100.0 ORDER BY net_profit_yoy_growth DESC",
+    "WITH base_data AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        net_profit,\n        net_profit_yoy_growth\n    FROM financials_view\n    WHERE stock_abbr IN ('特一药业', '嘉应制药', '天目药业', '步长制药', '沃华医药', '达仁堂')\n        AND report_period IN ('2024Q3', '2025Q3')\n),\ncurrent_q3 AS (\n    SELECT * FROM base_data WHERE report_period = '2025Q3'\n),\nprev_q3 AS (\n    SELECT * FROM base_data WHERE report_period = '2024Q3'\n)\nSELECT \n    c.stock_code,\n    c.stock_abbr,\n    '2024Q3' AS base_period,\n    p.net_profit AS base_net_profit,\n    CASE \n        WHEN p.net_profit > 0 THEN '正数'\n        WHEN p.net_profit < 0 THEN '负数'\n        ELSE '零'\n    END AS base_status,\n    '2025Q3' AS current_period,\n    c.net_profit AS current_net_profit,\n    c.net_profit_yoy_growth AS original_growth_rate,\n    CASE \n        WHEN p.net_profit > 0 THEN c.net_profit_yoy_growth\n        WHEN p.net_profit < 0 THEN \n            CASE \n                WHEN c.net_profit > 0 THEN '基期为负，转为正增长'\n                WHEN c.net_profit < 0 THEN \n                    ROUND((c.net_profit - p.net_profit) / ABS(p.net_profit) * 100, 2) || '%'\n                ELSE '转为零'\n            END\n        ELSE '基期为零，无法计算'\n    END AS adjusted_growth_rate\nFROM current_q3 c\nLEFT JOIN prev_q3 p ON c.stock_code = p.stock_code\nORDER BY c.stock_abbr;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 6,
+  "result_rows": [
+    {
+      "stock_code": "002198",
+      "stock_abbr": "嘉应制药",
+      "base_period": "2024Q3",
+      "base_net_profit": 287.33459500000004,
+      "base_status": "正数",
+      "current_period": "2025Q3",
+      "current_net_profit": 2179.4297699999997,
+      "original_growth_rate": 658.498909607456,
+      "adjusted_growth_rate": 658.498909607456
+    },
+    {
+      "stock_code": "600671",
+      "stock_abbr": "天目药业",
+      "base_period": "2024Q3",
+      "base_net_profit": -369.554606,
+      "base_status": "负数",
+      "current_period": "2025Q3",
+      "current_net_profit": 1420.87966,
+      "original_growth_rate": 299.6262083844167,
+      "adjusted_growth_rate": "基期为负，转为正增长"
+    },
+    {
+      "stock_code": "603858",
+      "stock_abbr": "步长制药",
+      "base_period": "2024Q3",
+      "base_net_profit": 31286.320089999997,
+      "base_status": "正数",
+      "current_period": "2025Q3",
+      "current_net_profit": 86832.371842,
+      "original_growth_rate": 263.1097634092608,
+      "adjusted_growth_rate": 263.1097634092608
+    },
+    {
+      "stock_code": "002107",
+      "stock_abbr": "沃华医药",
+      "base_period": "2024Q3",
+      "base_net_profit": 2290.962829,
+      "base_status": "正数",
+      "current_period": "2025Q3",
+      "current_net_profit": 6399.499235,
+      "original_growth_rate": 192.81517145896942,
+      "adjusted_growth_rate": 192.81517145896942
+    },
+    {
+      "stock_code": "002728",
+      "stock_abbr": "特一药业",
+      "base_period": "2024Q3",
+      "base_net_profit": 600.980032,
+      "base_status": "正数",
+      "current_period": "2025Q3",
+      "current_net_profit": 6521.712979,
+      "original_growth_rate": 985.1796452032535,
+      "adjusted_growth_rate": 985.1796452032535
+    },
+    {
+      "stock_code": "600329",
+      "stock_abbr": "达仁堂",
+      "base_period": "2024Q3",
+      "base_net_profit": 80385.581593,
+      "base_status": "正数",
+      "current_period": "2025Q3",
+      "current_net_profit": 215218.218452,
+      "original_growth_rate": 170.59938256580205,
+      "adjusted_growth_rate": 170.59938256580205
+    }
+  ],
+  "retrieved_evidence": [],
+  "reranked_evidence": [],
+  "rerank_preview": "{\"strategy\": \"skipped_fast_path\", \"kept_count\": 0}",
+  "fused_context": {
+    "question": "这些公司的2024年同期净利润是否为正数，若存在基数为负的情况请标注并重新计算增长率。",
+    "sql_row_count": 6,
+    "evidence_count": 0,
+    "sql_preview": [
+      {
+        "stock_code": "002198",
+        "stock_abbr": "嘉应制药",
+        "base_period": "2024Q3",
+        "base_net_profit": 287.33459500000004,
+        "base_status": "正数",
+        "current_period": "2025Q3",
+        "current_net_profit": 2179.4297699999997,
+        "original_growth_rate": 658.498909607456,
+        "adjusted_growth_rate": 658.498909607456
+      },
+      {
+        "stock_code": "600671",
+        "stock_abbr": "天目药业",
+        "base_period": "2024Q3",
+        "base_net_profit": -369.554606,
+        "base_status": "负数",
+        "current_period": "2025Q3",
+        "current_net_profit": 1420.87966,
+        "original_growth_rate": 299.6262083844167,
+        "adjusted_growth_rate": "基期为负，转为正增长"
+      },
+      {
+        "stock_code": "603858",
+        "stock_abbr": "步长制药",
+        "base_period": "2024Q3",
+        "base_net_profit": 31286.320089999997,
+        "base_status": "正数",
+        "current_period": "2025Q3",
+        "current_net_profit": 86832.371842,
+        "original_growth_rate": 263.1097634092608,
+        "adjusted_growth_rate": 263.1097634092608
+      },
+      {
+        "stock_code": "002107",
+        "stock_abbr": "沃华医药",
+        "base_period": "2024Q3",
+        "base_net_profit": 2290.962829,
+        "base_status": "正数",
+        "current_period": "2025Q3",
+        "current_net_profit": 6399.499235,
+        "original_growth_rate": 192.81517145896942,
+        "adjusted_growth_rate": 192.81517145896942
+      },
+      {
+        "stock_code": "002728",
+        "stock_abbr": "特一药业",
+        "base_period": "2024Q3",
+        "base_net_profit": 600.980032,
+        "base_status": "正数",
+        "current_period": "2025Q3",
+        "current_net_profit": 6521.712979,
+        "original_growth_rate": 985.1796452032535,
+        "adjusted_growth_rate": 985.1796452032535
+      }
+    ],
+    "evidence_preview": [],
+    "evidence_titles": [],
+    "source_breakdown": {}
+  },
+  "self_check": {
+    "pass": true,
+    "notes": [
+      "self_check_skipped_fast_path"
+    ]
+  },
+  "chart_plan": {},
+  "chart_spec": {},
+  "current_chart_paths": [],
+  "current_chart_specs": [],
+  "current_answer": "根据SQL查询结果，对所列公司2024年同期（2024年第三季度）的净利润正负情况判断及增长率重新计算如下：\n\n**直接结论：**\n在六家公司中，仅**天目药业**的2024年第三季度净利润基数为负数，其余五家公司（嘉应制药、步长制药、沃华医药、特一药业、达仁堂）的基数均为正数。对于基数为负的情况，已按规则重新标注并计算增长率。\n\n**财务数据支撑（单位：万元）：**\n1.  **嘉应制药**：2024Q3净利润为287.33万元（正数），2025Q3净利润为2179.43万元，原始同比增长率为658.50%。\n2.  **天目药业**：2024Q3净利润为-369.55万元（**负数**），2025Q3净利润为1420.88万元。由于基期为负且当期转为正数，调整后的增长率为“**基期为负，转为正增长**”。\n3.  **步长制药**：2024Q3净利润为31,286.32万元（正数），2025Q3净利润为86,832.37万元，原始同比增长率为263.11%。\n4.  **沃华医药**：2024Q3净利润为2,290.96万元（正数），2025Q3净利润为6,399.50万元，原始同比增长率为192.82%。\n5.  **特一药业**：2024Q3净利润为600.98万元（正数），2025Q3净利润为6,521.71万元，原始同比增长率为985.18%。\n6.  **达仁堂**：2024Q3净利润为80,385.58万元（正数），2025Q3净利润为215,218.22万元，原始同比增长率为170.60%。\n\n**研报证据支撑：**\n未检索到直接研报证据。\n\n**综合判断：**\n基于结构化财务数据，天目药业是唯一一家在2024年第三季度净利润为负的公司。对于该公司，由于基期为负而2025年同期转为正数，其增长情况已标注为“基期为负，转为正增长”，而未采用原始增长率。其余五家基数为正的公司，其原始同比增长率可直接用于反映增长趋势。",
+  "current_references": [],
+  "answer_rewritten": false,
+  "turn_answers": [
+    {
+      "Q": "统计2025年第三季度净利润同比增长率超过100%的公司",
+      "A": {
+        "content": "根据SQL查询结果，满足条件的公司如下：\n1. **特一药业 (002728)**：净利润为6521.71万元。\n2. **嘉应制药 (002198)**：净利润为2179.43万元。\n3. **天目药业 (600671)**：净利润为1420.88万元。\n4. **步长制药 (603858)**：净利润为8.68亿元。\n5. **沃华医药 (002107)**：净利润为6399.50万元。\n6. **达仁堂 (600329)**：净利润为21.52亿元。",
+        "image": [],
+        "references": []
+      }
+    },
+    {
+      "Q": "这些公司的2024年同期净利润是否为正数，若存在基数为负的情况请标注并重新计算增长率。",
+      "A": {
+        "content": "根据SQL查询结果，对所列公司2024年同期（2024年第三季度）的净利润正负情况判断及增长率重新计算如下：\n\n**直接结论：**\n在六家公司中，仅**天目药业**的2024年第三季度净利润基数为负数，其余五家公司（嘉应制药、步长制药、沃华医药、特一药业、达仁堂）的基数均为正数。对于基数为负的情况，已按规则重新标注并计算增长率。\n\n**财务数据支撑（单位：万元）：**\n1.  **嘉应制药**：2024Q3净利润为287.33万元（正数），2025Q3净利润为2179.43万元，原始同比增长率为658.50%。\n2.  **天目药业**：2024Q3净利润为-369.55万元（**负数**），2025Q3净利润为1420.88万元。由于基期为负且当期转为正数，调整后的增长率为“**基期为负，转为正增长**”。\n3.  **步长制药**：2024Q3净利润为31,286.32万元（正数），2025Q3净利润为86,832.37万元，原始同比增长率为263.11%。\n4.  **沃华医药**：2024Q3净利润为2,290.96万元（正数），2025Q3净利润为6,399.50万元，原始同比增长率为192.82%。\n5.  **特一药业**：2024Q3净利润为600.98万元（正数），2025Q3净利润为6,521.71万元，原始同比增长率为985.18%。\n6.  **达仁堂**：2024Q3净利润为80,385.58万元（正数），2025Q3净利润为215,218.22万元，原始同比增长率为170.60%。\n\n**研报证据支撑：**\n未检索到直接研报证据。\n\n**综合判断：**\n基于结构化财务数据，天目药业是唯一一家在2024年第三季度净利润为负的公司。对于该公司，由于基期为负而2025年同期转为正数，其增长情况已标注为“基期为负，转为正增长”，而未采用原始增长率。其余五家基数为正的公司，其原始同比增长率可直接用于反映增长趋势。",
+        "image": [],
+        "references": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"统计2025年第三季度净利润同比增长率超过100%的公司\", \"A\": {\"content\": \"根据SQL查询结果，满足条件的公司如下：\\n1. **特一药业 (002728)**：净利润为6521.71万元。\\n2. **嘉应制药 (002198)**：净利润为2179.43万元。\\n3. **天目药业 (600671)**：净利润为1420.88万元。\\n4. **步长制药 (603858)**：净利润为8.68亿元。\\n5. **沃华医药 (002107)**：净利润为6399.50万元。\\n6. **达仁堂 (600329)**：净利润为21.52亿元。\", \"image\": [], \"references\": []}}, {\"Q\": \"这些公司的2024年同期净利润是否为正数，若存在基数为负的情况请标注并重新计算增长率。\", \"A\": {\"content\": \"根据SQL查询结果，对所列公司2024年同期（2024年第三季度）的净利润正负情况判断及增长率重新计算如下：\\n\\n**直接结论：**\\n在六家公司中，仅**天目药业**的2024年第三季度净利润基数为负数，其余五家公司（嘉应制药、步长制药、沃华医药、特一药业、达仁堂）的基数均为正数。对于基数为负的情况，已按规则重新标注并计算增长率。\\n\\n**财务数据支撑（单位：万元）：**\\n1.  **嘉应制药**：2024Q3净利润为287.33万元（正数），2025Q3净利润为2179.43万元，原始同比增长率为658.50%。\\n2.  **天目药业**：2024Q3净利润为-369.55万元（**负数**），2025Q3净利润为1420.88万元。由于基期为负且当期转为正数，调整后的增长率为“**基期为负，转为正增长**”。\\n3.  **步长制药**：2024Q3净利润为31,286.32万元（正数），2025Q3净利润为86,832.37万元，原始同比增长率为263.11%。\\n4.  **沃华医药**：2024Q3净利润为2,290.96万元（正数），2025Q3净利润为6,399.50万元，原始同比增长率为192.82%。\\n5.  **特一药业**：2024Q3净利润为600.98万元（正数），2025Q3净利润为6,521.71万元，原始同比增长率为985.18%。\\n6.  **达仁堂**：2024Q3净利润为80,385.58万元（正数），2025Q3净利润为215,218.22万元，原始同比增长率为170.60%。\\n\\n**研报证据支撑：**\\n未检索到直接研报证据。\\n\\n**综合判断：**\\n基于结构化财务数据，天目药业是唯一一家在2024年第三季度净利润为负的公司。对于该公司，由于基期为负而2025年同期转为正数，其增长情况已标注为“基期为负，转为正增长”，而未采用原始增长率。其余五家基数为正的公司，其原始同比增长率可直接用于反映增长趋势。\", \"image\": [], \"references\": []}}]",
+  "references_json": "[]",
+  "notes": [
+    "route=sql_only",
+    "根据查询计划，需要统计2025年第三季度净利润同比增长率超过100%的公司。查询计划中companies为空列表，表示不需要限定具体公司，而是全市场筛选。因此：\n1. 使用report_period = '2025Q3'筛选季度\n2. 使用net_profit_yoy_growth > 100.0筛选同比增长率超过100%\n3. 按net_profit_yoy_growth降序排列，便于查看高增长公司\n4. 选择必要的列：股票代码、简称、报告期、净利润、净利润同比增长率",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=0",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=0",
+    "self_check={\"pass\": true, \"notes\": [\"self_check_skipped_fast_path\"]}",
+    "route=sql_only",
+    "1. 根据query_plan明确给出的companies列表，使用stock_abbr IN筛选指定的6家公司。\n2. 查询2024Q3和2025Q3两个报告期的净利润数据，用于基期判断和增长率计算。\n3. 通过CTE分别获取当前期和基期数据，然后进行关联。\n4. 判断基期（2024Q3）净利润是否为正数，标注base_status。\n5. 当基期为负时，重新计算增长率：如果当前期转为正数，则标注'基期为负，转为正增长'；如果当前期仍为负数，则计算基于基期绝对值的变化率（(当前-基期)/|基期|*100%）。\n6. 基期为零时标注'无法计算'。\n7. 按公司简称排序输出结果。",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=0",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=0",
+    "self_check={\"pass\": true, \"notes\": [\"self_check_skipped_fast_path\"]}"
+  ],
+  "final_status": "ok"
+}

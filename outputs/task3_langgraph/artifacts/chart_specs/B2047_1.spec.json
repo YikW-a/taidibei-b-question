@@ -1,0 +1,106 @@
+{
+  "schema_version": "task3.chart-spec.v1",
+  "question_id": "B2047",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "查询2025年第三季度存货金额前五的公司；计算它... - 存货周转率",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 5,
+    "preview_rows": [
+      {
+        "stock_code": "600085",
+        "stock_abbr": "同仁堂",
+        "inventory_amount": 1112490.3777649999,
+        "inventory_turnover_ratio": 0.23480387709131176,
+        "avg_inventory_turnover": 1.3384376965494673,
+        "comparison_status": "低于行业均值"
+      },
+      {
+        "stock_code": "600332",
+        "stock_abbr": "白云山",
+        "inventory_amount": 1108068.571539,
+        "inventory_turnover_ratio": 0.38949483098105336,
+        "avg_inventory_turnover": 1.3384376965494673,
+        "comparison_status": "低于行业均值"
+      },
+      {
+        "stock_code": "000999",
+        "stock_abbr": "华润三九",
+        "inventory_amount": 638694.735653,
+        "inventory_turnover_ratio": 0.9594846617961499,
+        "avg_inventory_turnover": 1.3384376965494673,
+        "comparison_status": "低于行业均值"
+      },
+      {
+        "stock_code": "600436",
+        "stock_abbr": "片仔癀",
+        "inventory_amount": 616018.511233,
+        "inventory_turnover_ratio": 0.048229450719805625,
+        "avg_inventory_turnover": 1.3384376965494673,
+        "comparison_status": "低于行业均值"
+      },
+      {
+        "stock_code": "000538",
+        "stock_abbr": "云南白药",
+        "inventory_amount": 577721.565187,
+        "inventory_turnover_ratio": 0.6430952226800487,
+        "avg_inventory_turnover": 1.3384376965494673,
+        "comparison_status": "低于行业均值"
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": null,
+    "sort_ascending": false,
+    "top_n": 5,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "inventory_amount",
+      "data_type": "quantitative",
+      "label": "inventory_amount",
+      "unit": "万元"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B2047_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B2047_1.jpg"
+  },
+  "meta": {
+    "source_sql": "WITH top5_inventory AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        asset_inventory AS inventory_amount,\n        inventory_turnover_ratio\n    FROM financials_view \n    WHERE report_period = '2025Q3'\n      AND asset_inventory IS NOT NULL\n    ORDER BY asset_inventory DESC\n    LIMIT 5\n),\nindustry_avg AS (\n    SELECT \n        AVG(inventory_turnover_ratio) AS avg_inventory_turnover\n    FROM financials_view \n    WHERE report_period = '2025Q3'\n      AND inventory_turnover_ratio IS NOT NULL\n)\nSELECT \n    t.stock_code,\n    t.stock_abbr,\n    t.inventory_amount,\n    t.inventory_turnover_ratio,\n    i.avg_inventory_turnover,\n    CASE \n        WHEN t.inventory_turnover_ratio < i.avg_inventory_turnover THEN '低于行业均值'\n        ELSE '不低于行业均值'\n    END AS comparison_status\nFROM top5_inventory t\nCROSS JOIN industry_avg i\nWHERE t.inventory_turnover_ratio < i.avg_inventory_turnover\nORDER BY t.inventory_amount DESC;",
+    "value_fields": [
+      "inventory_amount"
+    ],
+    "value_labels": [
+      "inventory_amount"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "inventory_amount"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": null,
+      "sort_ascending": false,
+      "top_n": 5
+    }
+  }
+}

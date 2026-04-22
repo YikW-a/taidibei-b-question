@@ -1,0 +1,179 @@
+{
+  "question_id": "B2024",
+  "question_type": "融合查询",
+  "raw_question": "结合2025年个股研报的风险提示，查询存在“应收账款回收风险”的公司2025年第三季度应收账款占营业总收入的比例。",
+  "raw_question_json": "[{\"Q\":\"结合2025年个股研报的风险提示，查询存在“应收账款回收风险”的公司2025年第三季度应收账款占营业总收入的比例。\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "metrics": [
+      "营业总收入",
+      "应收账款"
+    ],
+    "periods": [
+      "2025Q3",
+      "2025FY"
+    ],
+    "focus_topics": [
+      "应收账款回收风险",
+      "风险"
+    ],
+    "intent_type": "hybrid_sql_rag",
+    "needs_sql": true,
+    "needs_retrieval": true,
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "hybrid_sql_rag",
+    "companies": [],
+    "periods": [
+      "2025Q3",
+      "2025FY"
+    ],
+    "metrics": [
+      "营业总收入",
+      "应收账款"
+    ],
+    "needs_sql": true,
+    "top_n": null,
+    "threshold": null,
+    "question": "查询存在'应收账款回收风险'的公司2025年第三季度应收账款占营业总收入的比例"
+  },
+  "retrieval_plan": {
+    "question": "结合2025年个股研报的风险提示，查询存在“应收账款回收风险”的公司2025年第三季度应收账款占营业总收入的比例。",
+    "companies": [],
+    "focus_topics": [
+      "应收账款回收风险",
+      "主营业务收入",
+      "营业总收入",
+      "收入增长"
+    ],
+    "needs_retrieval": true,
+    "top_k": 20,
+    "source_scope": "hybrid",
+    "retrieval_mode": "hybrid"
+  },
+  "sql": "SELECT stock_code, stock_abbr, report_period, accounts_receivable_ratio FROM financials_view WHERE report_period = '2025Q3' AND stock_abbr IN (SELECT DISTINCT stock_abbr FROM financials_view WHERE report_period IN ('2025Q3', '2025FY') AND (stock_abbr LIKE '%应收账款回收风险%' OR stock_abbr LIKE '%应收款回收风险%' OR stock_abbr LIKE '%坏账风险%')) ORDER BY accounts_receivable_ratio DESC",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, report_period, accounts_receivable_ratio FROM financials_view WHERE report_period = '2025Q3' AND stock_abbr IN (SELECT DISTINCT stock_abbr FROM financials_view WHERE report_period IN ('2025Q3', '2025FY') AND (stock_abbr LIKE '%应收账款回收风险%' OR stock_abbr LIKE '%应收款回收风险%' OR stock_abbr LIKE '%坏账风险%')) ORDER BY accounts_receivable_ratio DESC"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 0,
+  "result_rows": [],
+  "retrieved_evidence": [
+    {
+      "source_type": "stock",
+      "title": "单Q2收入增长约7%，期待25H2业绩边际改善",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/个股研报/单Q2收入增长约7%，期待25H2业绩边际改善.pdf",
+      "publish_date": "2025-08-19 00:00:00.000",
+      "company_or_industry": "白云山",
+      "organization": "信达证券",
+      "snippet": "单Q2收入增长约7%，期待25H2业绩边际改善；白云山；信达证券",
+      "score": 2.0,
+      "metadata_ref": "stock::单Q2收入增长约7%，期待25H2业绩边际改善::2025-08-19 00:00:00.000::信达证券::白云山",
+      "score_components": {
+        "metadata": 2.0,
+        "vector": 0.0
+      }
+    }
+  ],
+  "reranked_evidence": [
+    {
+      "source_type": "stock",
+      "title": "单Q2收入增长约7%，期待25H2业绩边际改善",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/个股研报/单Q2收入增长约7%，期待25H2业绩边际改善.pdf",
+      "publish_date": "2025-08-19 00:00:00.000",
+      "company_or_industry": "白云山",
+      "organization": "信达证券",
+      "snippet": "单Q2收入增长约7%，期待25H2业绩边际改善；白云山；信达证券",
+      "score": 2.0,
+      "metadata_ref": "stock::单Q2收入增长约7%，期待25H2业绩边际改善::2025-08-19 00:00:00.000::信达证券::白云山",
+      "score_components": {
+        "metadata": 2.0,
+        "vector": 0.0
+      }
+    }
+  ],
+  "rerank_preview": "{\"strategy\": \"skipped_fast_path\", \"kept_count\": 1}",
+  "fused_context": {
+    "question": "结合2025年个股研报的风险提示，查询存在“应收账款回收风险”的公司2025年第三季度应收账款占营业总收入的比例。",
+    "sql_row_count": 0,
+    "evidence_count": 1,
+    "sql_preview": [],
+    "evidence_preview": [
+      {
+        "source_type": "stock",
+        "title": "单Q2收入增长约7%，期待25H2业绩边际改善",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/个股研报/单Q2收入增长约7%，期待25H2业绩边际改善.pdf",
+        "publish_date": "2025-08-19 00:00:00.000",
+        "company_or_industry": "白云山",
+        "organization": "信达证券",
+        "snippet": "单Q2收入增长约7%，期待25H2业绩边际改善；白云山；信达证券",
+        "score": 2.0,
+        "metadata_ref": "stock::单Q2收入增长约7%，期待25H2业绩边际改善::2025-08-19 00:00:00.000::信达证券::白云山",
+        "score_components": {
+          "metadata": 2.0,
+          "vector": 0.0
+        }
+      }
+    ],
+    "evidence_titles": [
+      "单Q2收入增长约7%，期待25H2业绩边际改善"
+    ],
+    "source_breakdown": {
+      "stock": 1
+    }
+  },
+  "self_check": {
+    "pass": true,
+    "notes": [
+      "回答准确反映了SQL查询结果为空的情况，结论与数据一致。",
+      "回答正确指出提供的研报证据（关于白云山）不涉及“应收账款回收风险”，因此无法作为支撑。",
+      "回答没有遗漏问题要求的关键点，并解释了可能的原因。",
+      "回答没有混淆指标名称或错误对应聚合统计结果。"
+    ]
+  },
+  "chart_plan": {},
+  "chart_spec": {},
+  "current_chart_paths": [],
+  "current_chart_specs": [],
+  "current_answer": "根据查询结果，当前结构化财务数据中**未检索到**在2025年第三季度明确存在“应收账款回收风险”且同时披露了应收账款与营业总收入数据的公司记录。\n\n**结论与说明：**\n1.  **直接结论**：无法提供存在“应收账款回收风险”的公司2025年第三季度应收账款占营业总收入的比例。\n2.  **财务数据支撑**：SQL查询结果为空，表明在当前的财务数据视图中，没有同时满足“报告期=2025Q3”和“公司简称包含特定风险关键词”这两个条件的记录。\n3.  **研报证据支撑**：未检索到直接研报证据。提供的研报片段（关于白云山）内容不涉及“应收账款回收风险”的提示，因此无法作为支撑。\n4.  **综合判断**：可能的原因包括：① 相关公司的风险提示可能出现在研报正文而非公司简称中，当前SQL的筛选逻辑（基于`stock_abbr`字段）可能无法有效捕获；② 相关公司可能在2025年第三季度未披露完整的财务数据。因此，基于现有数据无法回答该问题。",
+  "current_references": [
+    {
+      "paper_path": "../附件 5：研报数据/个股研报/单Q2收入增长约7%，期待25H2业绩边际改善.pdf",
+      "text": "大健康板块收入及利润表现突出，大南药板块业绩承压明显：①从收入\n结构上看，2025H1 大商业收入290 亿元（同比+4.25%），大健康收入70.23 亿元（同比+7.42%），大南药收入为52.41 亿元（同比-15.23%）。在大南药板块中，中成药收入32.46 亿元（同比-20.12%），化学药收入"
+    }
+  ],
+  "answer_rewritten": false,
+  "turn_answers": [
+    {
+      "Q": "结合2025年个股研报的风险提示，查询存在“应收账款回收风险”的公司2025年第三季度应收账款占营业总收入的比例。",
+      "A": {
+        "content": "根据查询结果，当前结构化财务数据中**未检索到**在2025年第三季度明确存在“应收账款回收风险”且同时披露了应收账款与营业总收入数据的公司记录。\n\n**结论与说明：**\n1.  **直接结论**：无法提供存在“应收账款回收风险”的公司2025年第三季度应收账款占营业总收入的比例。\n2.  **财务数据支撑**：SQL查询结果为空，表明在当前的财务数据视图中，没有同时满足“报告期=2025Q3”和“公司简称包含特定风险关键词”这两个条件的记录。\n3.  **研报证据支撑**：未检索到直接研报证据。提供的研报片段（关于白云山）内容不涉及“应收账款回收风险”的提示，因此无法作为支撑。\n4.  **综合判断**：可能的原因包括：① 相关公司的风险提示可能出现在研报正文而非公司简称中，当前SQL的筛选逻辑（基于`stock_abbr`字段）可能无法有效捕获；② 相关公司可能在2025年第三季度未披露完整的财务数据。因此，基于现有数据无法回答该问题。",
+        "image": [],
+        "references": [
+          {
+            "paper_path": "../附件 5：研报数据/个股研报/单Q2收入增长约7%，期待25H2业绩边际改善.pdf",
+            "text": "大健康板块收入及利润表现突出，大南药板块业绩承压明显：①从收入\n结构上看，2025H1 大商业收入290 亿元（同比+4.25%），大健康收入70.23 亿元（同比+7.42%），大南药收入为52.41 亿元（同比-15.23%）。在大南药板块中，中成药收入32.46 亿元（同比-20.12%），化学药收入"
+          }
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"结合2025年个股研报的风险提示，查询存在“应收账款回收风险”的公司2025年第三季度应收账款占营业总收入的比例。\", \"A\": {\"content\": \"根据查询结果，当前结构化财务数据中**未检索到**在2025年第三季度明确存在“应收账款回收风险”且同时披露了应收账款与营业总收入数据的公司记录。\\n\\n**结论与说明：**\\n1.  **直接结论**：无法提供存在“应收账款回收风险”的公司2025年第三季度应收账款占营业总收入的比例。\\n2.  **财务数据支撑**：SQL查询结果为空，表明在当前的财务数据视图中，没有同时满足“报告期=2025Q3”和“公司简称包含特定风险关键词”这两个条件的记录。\\n3.  **研报证据支撑**：未检索到直接研报证据。提供的研报片段（关于白云山）内容不涉及“应收账款回收风险”的提示，因此无法作为支撑。\\n4.  **综合判断**：可能的原因包括：① 相关公司的风险提示可能出现在研报正文而非公司简称中，当前SQL的筛选逻辑（基于`stock_abbr`字段）可能无法有效捕获；② 相关公司可能在2025年第三季度未披露完整的财务数据。因此，基于现有数据无法回答该问题。\", \"image\": [], \"references\": [{\"paper_path\": \"../附件 5：研报数据/个股研报/单Q2收入增长约7%，期待25H2业绩边际改善.pdf\", \"text\": \"大健康板块收入及利润表现突出，大南药板块业绩承压明显：①从收入\\n结构上看，2025H1 大商业收入290 亿元（同比+4.25%），大健康收入70.23 亿元（同比+7.42%），大南药收入为52.41 亿元（同比-15.23%）。在大南药板块中，中成药收入32.46 亿元（同比-20.12%），化学药收入\"}]}}]",
+  "references_json": "[{\"paper_path\": \"../附件 5：研报数据/个股研报/单Q2收入增长约7%，期待25H2业绩边际改善.pdf\", \"text\": \"大健康板块收入及利润表现突出，大南药板块业绩承压明显：①从收入\\n结构上看，2025H1 大商业收入290 亿元（同比+4.25%），大健康收入70.23 亿元（同比+7.42%），大南药收入为52.41 亿元（同比-15.23%）。在大南药板块中，中成药收入32.46 亿元（同比-20.12%），化学药收入\"}]",
+  "notes": [
+    "route=hybrid_sql_rag",
+    "根据查询计划，需要查找存在'应收账款回收风险'的公司2025年第三季度应收账款占营业总收入的比例。由于查询计划中没有明确提供公司列表，且financials_view中没有专门的风险提示字段，我假设风险提示信息可能包含在stock_abbr字段中（如公司简称后可能带有风险标记）。因此使用子查询筛选包含相关风险关键词的公司，然后查询这些公司2025Q3的accounts_receivable_ratio（应收账款占营业总收入比例）。按比例降序排列以便查看风险较高的公司。",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=1",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=1",
+    "self_check={\"pass\": true, \"notes\": [\"回答准确反映了SQL查询结果为空的情况，结论与数据一致。\", \"回答正确指出提供的研报证据（关于白云山）不涉及“应收账款回收风险”，因此无法作为支撑。\", \"回答没有遗漏问题要求的关键点，并解释了可能的原因。\", \"回答没有混淆指标名称或错误对应聚合统计结果。\"]}"
+  ],
+  "final_status": "ok"
+}

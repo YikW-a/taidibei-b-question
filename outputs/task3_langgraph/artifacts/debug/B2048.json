@@ -1,0 +1,134 @@
+{
+  "question_id": "B2048",
+  "question_type": "多意图",
+  "raw_question": "找出2025年第三季度净利润为负的公司；查询它们的资产负债率和经营性现金流量净额；筛选出负债率高于60%且现金流为负的公司；结合研报给出这些公司的风险预警。",
+  "raw_question_json": "[{\"Q\":\"找出2025年第三季度净利润为负的公司；查询它们的资产负债率和经营性现金流量净额；筛选出负债率高于60%且现金流为负的公司；结合研报给出这些公司的风险预警。\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "metrics": [
+      "净利润",
+      "资产负债率",
+      "经营性现金流量净额"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "focus_topics": [
+      "风险"
+    ],
+    "intent_type": "hybrid_sql_rag",
+    "needs_sql": true,
+    "needs_retrieval": true,
+    "top_n": null,
+    "threshold": 60.0
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "hybrid_sql_rag",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "净利润",
+      "资产负债率",
+      "经营性现金流量净额"
+    ],
+    "needs_sql": true,
+    "top_n": null,
+    "threshold": 60.0,
+    "question": "找出2025年第三季度净利润为负的公司；查询它们的资产负债率和经营性现金流量净额；筛选出负债率高于60%且现金流为负的公司"
+  },
+  "retrieval_plan": {
+    "question": "找出2025年第三季度净利润为负的公司；查询它们的资产负债率和经营性现金流量净额；筛选出负债率高于60%且现金流为负的公司；结合研报给出这些公司的风险预警。",
+    "companies": [
+      "康惠制药"
+    ],
+    "focus_topics": [
+      "风险预警",
+      "财务风险",
+      "偿债风险",
+      "现金流风险"
+    ],
+    "needs_retrieval": true,
+    "top_k": 8,
+    "source_scope": "stock",
+    "retrieval_mode": "hybrid"
+  },
+  "sql": "WITH negative_profit_companies AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        kpi_net_profit AS net_profit,\n        asset_liability_ratio,\n        operating_cf_net_amount\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n        AND kpi_net_profit < 0\n)\nSELECT \n    stock_code,\n    stock_abbr,\n    report_period,\n    net_profit,\n    asset_liability_ratio,\n    operating_cf_net_amount\nFROM negative_profit_companies\nWHERE asset_liability_ratio > 60.0\n    AND operating_cf_net_amount < 0\nORDER BY asset_liability_ratio DESC, operating_cf_net_amount ASC;",
+  "sql_history": [
+    "WITH negative_profit_companies AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        kpi_net_profit AS net_profit,\n        asset_liability_ratio,\n        operating_cf_net_amount\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n        AND kpi_net_profit < 0\n)\nSELECT \n    stock_code,\n    stock_abbr,\n    report_period,\n    net_profit,\n    asset_liability_ratio,\n    operating_cf_net_amount\nFROM negative_profit_companies\nWHERE asset_liability_ratio > 60.0\n    AND operating_cf_net_amount < 0\nORDER BY asset_liability_ratio DESC, operating_cf_net_amount ASC;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 1,
+  "result_rows": [
+    {
+      "stock_code": "603139",
+      "stock_abbr": "康惠制药",
+      "report_period": "2025Q3",
+      "net_profit": "-13250.394158",
+      "asset_liability_ratio": 60.48459682796709,
+      "operating_cf_net_amount": "-923.802967"
+    }
+  ],
+  "retrieved_evidence": [],
+  "reranked_evidence": [],
+  "rerank_preview": "{\"strategy\": \"skipped_fast_path\", \"kept_count\": 0}",
+  "fused_context": {
+    "question": "找出2025年第三季度净利润为负的公司；查询它们的资产负债率和经营性现金流量净额；筛选出负债率高于60%且现金流为负的公司；结合研报给出这些公司的风险预警。",
+    "sql_row_count": 1,
+    "evidence_count": 0,
+    "sql_preview": [
+      {
+        "stock_code": "603139",
+        "stock_abbr": "康惠制药",
+        "report_period": "2025Q3",
+        "net_profit": "-13250.394158",
+        "asset_liability_ratio": 60.48459682796709,
+        "operating_cf_net_amount": "-923.802967"
+      }
+    ],
+    "evidence_preview": [],
+    "evidence_titles": [],
+    "source_breakdown": {}
+  },
+  "self_check": {
+    "pass": true,
+    "notes": [
+      "self_check_skipped_fast_path"
+    ]
+  },
+  "chart_plan": {},
+  "chart_spec": {},
+  "current_chart_paths": [],
+  "current_chart_specs": [],
+  "current_answer": "根据查询结果，2025年第三季度净利润为负、且同时满足资产负债率高于60%和经营性现金流量净额为负的公司仅有1家。\n\n**直接结论：**\n康惠制药（603139）在2025年第三季度存在净利润亏损、高负债且经营现金流为负的风险状况。\n\n**财务数据支撑：**\n- **净利润**：为-13,250.39万元（约-1.33亿元）。数据库金额单位为万元，换算关系为：1亿元 = 10,000万元。\n- **资产负债率**：为60.48%，高于60%的筛选阈值。\n- **经营性现金流量净额**：为-923.80万元（约-0.09亿元）。\n\n**研报证据支撑：**\n未检索到直接研报证据。\n\n**综合判断：**\n康惠制药在2025年第三季度同时出现净利润亏损、资产负债率偏高（超过60%）以及经营现金流为负的情况。这通常意味着公司面临盈利能力下滑、偿债压力较大以及主营业务“造血”能力不足的多重风险。由于未检索到相关研报，无法获得关于其具体业务、行业背景或管理层应对措施的定性分析。投资者需警惕该公司潜在的财务风险和持续经营能力。",
+  "current_references": [],
+  "answer_rewritten": false,
+  "turn_answers": [
+    {
+      "Q": "找出2025年第三季度净利润为负的公司；查询它们的资产负债率和经营性现金流量净额；筛选出负债率高于60%且现金流为负的公司；结合研报给出这些公司的风险预警。",
+      "A": {
+        "content": "根据查询结果，2025年第三季度净利润为负、且同时满足资产负债率高于60%和经营性现金流量净额为负的公司仅有1家。\n\n**直接结论：**\n康惠制药（603139）在2025年第三季度存在净利润亏损、高负债且经营现金流为负的风险状况。\n\n**财务数据支撑：**\n- **净利润**：为-13,250.39万元（约-1.33亿元）。数据库金额单位为万元，换算关系为：1亿元 = 10,000万元。\n- **资产负债率**：为60.48%，高于60%的筛选阈值。\n- **经营性现金流量净额**：为-923.80万元（约-0.09亿元）。\n\n**研报证据支撑：**\n未检索到直接研报证据。\n\n**综合判断：**\n康惠制药在2025年第三季度同时出现净利润亏损、资产负债率偏高（超过60%）以及经营现金流为负的情况。这通常意味着公司面临盈利能力下滑、偿债压力较大以及主营业务“造血”能力不足的多重风险。由于未检索到相关研报，无法获得关于其具体业务、行业背景或管理层应对措施的定性分析。投资者需警惕该公司潜在的财务风险和持续经营能力。",
+        "image": [],
+        "references": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"找出2025年第三季度净利润为负的公司；查询它们的资产负债率和经营性现金流量净额；筛选出负债率高于60%且现金流为负的公司；结合研报给出这些公司的风险预警。\", \"A\": {\"content\": \"根据查询结果，2025年第三季度净利润为负、且同时满足资产负债率高于60%和经营性现金流量净额为负的公司仅有1家。\\n\\n**直接结论：**\\n康惠制药（603139）在2025年第三季度存在净利润亏损、高负债且经营现金流为负的风险状况。\\n\\n**财务数据支撑：**\\n- **净利润**：为-13,250.39万元（约-1.33亿元）。数据库金额单位为万元，换算关系为：1亿元 = 10,000万元。\\n- **资产负债率**：为60.48%，高于60%的筛选阈值。\\n- **经营性现金流量净额**：为-923.80万元（约-0.09亿元）。\\n\\n**研报证据支撑：**\\n未检索到直接研报证据。\\n\\n**综合判断：**\\n康惠制药在2025年第三季度同时出现净利润亏损、资产负债率偏高（超过60%）以及经营现金流为负的情况。这通常意味着公司面临盈利能力下滑、偿债压力较大以及主营业务“造血”能力不足的多重风险。由于未检索到相关研报，无法获得关于其具体业务、行业背景或管理层应对措施的定性分析。投资者需警惕该公司潜在的财务风险和持续经营能力。\", \"image\": [], \"references\": []}}]",
+  "references_json": "[]",
+  "notes": [
+    "route=hybrid_sql_rag",
+    "1. 首先筛选2025Q3净利润为负的公司（kpi_net_profit < 0）。\n2. 然后从这些公司中筛选出资产负债率高于60%且经营性现金流量净额为负的公司。\n3. 按资产负债率降序、经营性现金流量净额升序（即更负的在前）排序，便于风险识别。\n4. 使用WITH子句提高可读性，但最终查询是SELECT。\n5. 没有使用PERCENTILE_CONT等不支持的函数。\n6. 查询计划中没有指定具体公司，因此不添加stock_abbr IN (...)条件。",
+    "retrieval_companies_seeded_from_sql=康惠制药",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=0",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=0",
+    "self_check={\"pass\": true, \"notes\": [\"self_check_skipped_fast_path\"]}"
+  ],
+  "final_status": "ok"
+}

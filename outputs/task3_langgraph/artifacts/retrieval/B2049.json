@@ -1,0 +1,122 @@
+[
+  {
+    "source_type": "industry",
+    "title": "医药行业：2024年&2025Q1总结：业绩持续探底，Q2有望企稳回升",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药行业：2024年&2025Q1总结：业绩持续探底，Q2有望企稳回升.pdf",
+    "publish_date": "2025-05-08 00:00:00.000",
+    "company_or_industry": "中药",
+    "organization": "华源证券",
+    "metadata_ref": "industry::医药行业：2024年&2025Q1总结：业绩持续探底，Q2有望企稳回升::2025-05-08 00:00:00.000::华源证券::中药",
+    "snippet": "上市公司业绩：2024年行业持续承压，内部进一步分化\n8.39%，较2024Q1下降0.1pct 。\n➢费用率方面，2025Q1销售费用率为11.98%，较2024年同期下降0.53pct；管理费用率为5.02%，较2024年同期基本持平；研发费用率为3.89%，较2024年同期下降0.31pct。",
+    "score": 6.569438,
+    "score_components": {
+      "metadata": 0.0,
+      "vector": 0.706657
+    }
+  },
+  {
+    "source_type": "industry",
+    "title": "医药行业周报：中成药集采落地，重点推荐昆药集团",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药行业周报：中成药集采落地，重点推荐昆药集团.pdf",
+    "publish_date": "2025-01-05 00:00:00.000",
+    "company_or_industry": "中药",
+    "organization": "华源证券",
+    "snippet": "医药行业周报：中成药集采落地，重点推荐昆药集团；中药；华源证券",
+    "score": 6.0,
+    "metadata_ref": "industry::医药行业周报：中成药集采落地，重点推荐昆药集团::2025-01-05 00:00:00.000::华源证券::中药",
+    "score_components": {
+      "metadata": 6.0,
+      "vector": 0.0
+    }
+  },
+  {
+    "source_type": "industry",
+    "title": "医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会.pdf",
+    "publish_date": "2025-09-14 00:00:00.000",
+    "company_or_industry": "中药",
+    "organization": "开源证券",
+    "snippet": "医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会；中药；开源证券",
+    "score": 5.717369,
+    "metadata_ref": "industry::医药生物行业周报：创新药行业进入快速成长期，关注未来6-12个月投资机会::2025-09-14 00:00:00.000::开源证券::中药",
+    "score_components": {
+      "metadata": 5.0,
+      "vector": 0.717369
+    }
+  },
+  {
+    "source_type": "industry",
+    "title": "医药行业：2024年&2025H1总结：下半年业绩有望企稳回升，看好创新产业浪潮持续",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药行业：2024年&2025H1总结：下半年业绩有望企稳回升，看好创新产业浪潮持续.pdf",
+    "publish_date": "2025-09-11 00:00:00.000",
+    "company_or_industry": "中药",
+    "organization": "华源证券",
+    "metadata_ref": "industry::医药行业：2024年&2025H1总结：下半年业绩有望企稳回升，看好创新产业浪潮持续::2025-09-11 00:00:00.000::华源证券::中药",
+    "snippet": "医疗服务：业绩短期承压，静待行业需求回暖\n销售费用率管理费用率财务费用率研发费用率",
+    "score": 5.11649,
+    "score_components": {
+      "metadata": 0.0,
+      "vector": 0.70956
+    }
+  },
+  {
+    "source_type": "industry",
+    "title": "医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会.pdf",
+    "publish_date": "2025-12-29 00:00:00",
+    "company_or_industry": "中药",
+    "organization": "中邮证券",
+    "snippet": "医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会；中药；中邮证券",
+    "score": 5.0,
+    "metadata_ref": "industry::医药生物行业周报：国内创新药研发景气回暖，关注非临床安评行业投资机会::2025-12-29T00:00:00::中邮证券::中药",
+    "score_components": {
+      "metadata": 5.0,
+      "vector": 0.0
+    }
+  },
+  {
+    "source_type": "industry",
+    "title": "医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高.pdf",
+    "publish_date": "2025-12-28 00:00:00",
+    "company_or_industry": "中药",
+    "organization": "东吴证券",
+    "snippet": "医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高；中药；东吴证券",
+    "score": 5.0,
+    "metadata_ref": "industry::医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高::2025-12-28T00:00:00::东吴证券::中药",
+    "score_components": {
+      "metadata": 5.0,
+      "vector": 0.0
+    }
+  },
+  {
+    "source_type": "industry",
+    "title": "医药生物行业周报：新版“医保+商保”目录发布，协同保障体系提升创新药可及性",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：新版“医保+商保”目录发布，协同保障体系提升创新药可及性.pdf",
+    "publish_date": "2025-12-09 00:00:00.000",
+    "company_or_industry": "中药",
+    "organization": "上海证券",
+    "snippet": "医药生物行业周报：新版“医保+商保”目录发布，协同保障体系提升创新药可及性；中药；上海证券",
+    "score": 5.0,
+    "metadata_ref": "industry::医药生物行业周报：新版“医保+商保”目录发布，协同保障体系提升创新药可及性::2025-12-09 00:00:00.000::上海证券::中药",
+    "score_components": {
+      "metadata": 5.0,
+      "vector": 0.0
+    }
+  },
+  {
+    "source_type": "industry",
+    "title": "医药生物行业快评报告：医保赋能多方合力，共促创新药高质量发展",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业快评报告：医保赋能多方合力，共促创新药高质量发展.pdf",
+    "publish_date": "2025-12-08 00:00:00.000",
+    "company_or_industry": "中药",
+    "organization": "万联证券",
+    "snippet": "医药生物行业快评报告：医保赋能多方合力，共促创新药高质量发展；中药；万联证券",
+    "score": 5.0,
+    "metadata_ref": "industry::医药生物行业快评报告：医保赋能多方合力，共促创新药高质量发展::2025-12-08 00:00:00.000::万联证券::中药",
+    "score_components": {
+      "metadata": 5.0,
+      "vector": 0.0
+    }
+  }
+]

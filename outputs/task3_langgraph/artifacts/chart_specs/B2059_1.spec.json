@@ -1,0 +1,156 @@
+{
+  "schema_version": "task3.chart-spec.v1",
+  "question_id": "B2059",
+  "image_index": 1,
+  "chart_type": "line",
+  "title": "针对三九、白云山、云南白药、片仔癀等企业，查询2... - 营业总收入",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 16,
+    "preview_rows": [
+      {
+        "stock_abbr": "云南白药",
+        "report_period": "2023Q3",
+        "report_year": 2023,
+        "total_operating_revenue": 2968853.207444,
+        "yoy_growth_rate": NaN
+      },
+      {
+        "stock_abbr": "云南白药",
+        "report_period": "2024Q3",
+        "report_year": 2024,
+        "total_operating_revenue": 2991515.506984,
+        "yoy_growth_rate": 0.76
+      },
+      {
+        "stock_abbr": "云南白药",
+        "report_period": "2025Q3",
+        "report_year": 2025,
+        "total_operating_revenue": 3065421.420901,
+        "yoy_growth_rate": 2.47
+      },
+      {
+        "stock_abbr": "华润三九",
+        "report_period": "2023Q3",
+        "report_year": 2023,
+        "total_operating_revenue": 1860800.595415,
+        "yoy_growth_rate": NaN
+      },
+      {
+        "stock_abbr": "华润三九",
+        "report_period": "2024Q3",
+        "report_year": 2024,
+        "total_operating_revenue": 1974028.6995360001,
+        "yoy_growth_rate": 6.08
+      },
+      {
+        "stock_abbr": "华润三九",
+        "report_period": "2025Q3",
+        "report_year": 2025,
+        "total_operating_revenue": 2198640.396207,
+        "yoy_growth_rate": 11.38
+      },
+      {
+        "stock_abbr": "片仔癀",
+        "report_period": "2023Q3",
+        "report_year": 2023,
+        "total_operating_revenue": 759987.676677,
+        "yoy_growth_rate": NaN
+      },
+      {
+        "stock_abbr": "片仔癀",
+        "report_period": "2024Q3",
+        "report_year": 2024,
+        "total_operating_revenue": 845032.210075,
+        "yoy_growth_rate": 11.19
+      },
+      {
+        "stock_abbr": "片仔癀",
+        "report_period": "2025Q3",
+        "report_year": 2025,
+        "total_operating_revenue": 744236.610835,
+        "yoy_growth_rate": -11.93
+      },
+      {
+        "stock_abbr": "白云山",
+        "report_period": "2023Q3",
+        "report_year": 2023,
+        "total_operating_revenue": 5818454.951602,
+        "yoy_growth_rate": NaN
+      },
+      {
+        "stock_abbr": "白云山",
+        "report_period": "2024Q3",
+        "report_year": 2024,
+        "total_operating_revenue": 5906000.030402,
+        "yoy_growth_rate": 1.5
+      },
+      {
+        "stock_abbr": "白云山",
+        "report_period": "2025Q3",
+        "report_year": 2025,
+        "total_operating_revenue": 6160599.379554,
+        "yoy_growth_rate": 4.31
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "report_period",
+    "sort_ascending": true,
+    "top_n": null,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "total_operating_revenue",
+      "data_type": "quantitative",
+      "label": "营业总收入",
+      "unit": "万元"
+    },
+    "x": {
+      "field": "report_period",
+      "data_type": "temporal",
+      "label": "报告期",
+      "unit": null
+    },
+    "series": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": true,
+    "rotate_xticks": 30,
+    "show_value_labels": false
+  },
+  "output": {
+    "filename": "B2059_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B2059_1.jpg"
+  },
+  "meta": {
+    "source_sql": "WITH company_data AS (\n    SELECT \n        stock_abbr,\n        report_period,\n        report_year,\n        total_operating_revenue,\n        LAG(total_operating_revenue, 1) OVER (PARTITION BY stock_abbr ORDER BY report_year) AS prev_year_revenue\n    FROM financials_view\n    WHERE stock_abbr IN ('华润三九', '白云山', '云南白药', '片仔癀')\n        AND report_period IN ('2022Q3', '2023Q3', '2024Q3', '2025Q3')\n),\nindustry_data AS (\n    SELECT \n        '行业整体' AS stock_abbr,\n        report_period,\n        report_year,\n        AVG(total_operating_revenue) AS total_operating_revenue,\n        LAG(AVG(total_operating_revenue), 1) OVER (ORDER BY report_year) AS prev_year_revenue\n    FROM financials_view\n    WHERE report_period IN ('2022Q3', '2023Q3', '2024Q3', '2025Q3')\n    GROUP BY report_period, report_year\n),\ncombined_data AS (\n    SELECT \n        stock_abbr,\n        report_period,\n        report_year,\n        total_operating_revenue,\n        CASE \n            WHEN prev_year_revenue IS NULL OR prev_year_revenue = 0 THEN NULL\n            ELSE ROUND((total_operating_revenue - prev_year_revenue) * 100.0 / prev_year_revenue, 2)\n        END AS yoy_growth_rate\n    FROM company_data\n    \n    UNION ALL\n    \n    SELECT \n        stock_abbr,\n        report_period,\n        report_year,\n        total_operating_revenue,\n        CASE \n            WHEN prev_year_revenue IS NULL OR prev_year_revenue = 0 THEN NULL\n            ELSE ROUND((total_operating_revenue - prev_year_revenue) * 100.0 / prev_year_revenue, 2)\n        END AS yoy_growth_rate\n    FROM industry_data\n)\nSELECT \n    stock_abbr,\n    report_period,\n    report_year,\n    total_operating_revenue,\n    yoy_growth_rate\nFROM combined_data\nORDER BY \n    CASE \n        WHEN stock_abbr = '行业整体' THEN 2\n        ELSE 1\n    END,\n    stock_abbr,\n    report_year;",
+    "value_fields": [
+      "total_operating_revenue"
+    ],
+    "value_labels": [
+      "营业总收入"
+    ],
+    "original_chart_plan": {
+      "chart_type": "line",
+      "x_field": "report_period",
+      "y_fields": [
+        "total_operating_revenue"
+      ],
+      "category_field": null,
+      "sort_by": "report_period",
+      "sort_ascending": true,
+      "top_n": null
+    }
+  }
+}

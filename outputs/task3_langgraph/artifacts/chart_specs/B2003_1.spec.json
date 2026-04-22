@@ -1,0 +1,76 @@
+{
+  "schema_version": "task3.chart-spec.v1",
+  "question_id": "B2003",
+  "image_index": 1,
+  "chart_type": "line",
+  "title": "华润三九近三年的主营业务收入情况做可视化绘图 - 营业总收入",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 2,
+    "preview_rows": [
+      {
+        "stock_abbr": "华润三九",
+        "report_period": "2023FY",
+        "total_operating_revenue": 2473896.3319759998
+      },
+      {
+        "stock_abbr": "华润三九",
+        "report_period": "2024FY",
+        "total_operating_revenue": 2761661.177261
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "report_period",
+    "sort_ascending": true,
+    "top_n": null,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "total_operating_revenue",
+      "data_type": "quantitative",
+      "label": "营业总收入",
+      "unit": "万元"
+    },
+    "x": {
+      "field": "report_period",
+      "data_type": "temporal",
+      "label": "报告期",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": false
+  },
+  "output": {
+    "filename": "B2003_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B2003_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT stock_abbr, report_period, total_operating_revenue FROM financials_view WHERE stock_abbr = '华润三九' AND report_period IN ('2023FY', '2024FY', '2025FY') ORDER BY report_period;",
+    "value_fields": [
+      "total_operating_revenue"
+    ],
+    "value_labels": [
+      "营业总收入"
+    ],
+    "original_chart_plan": {
+      "chart_type": "line",
+      "x_field": "report_period",
+      "y_fields": [
+        "total_operating_revenue"
+      ],
+      "category_field": null,
+      "sort_by": "report_period",
+      "sort_ascending": true,
+      "top_n": null
+    }
+  }
+}

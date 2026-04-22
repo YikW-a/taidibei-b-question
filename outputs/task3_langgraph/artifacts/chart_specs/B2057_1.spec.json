@@ -1,0 +1,171 @@
+{
+  "schema_version": "task3.chart-spec.v1",
+  "question_id": "B2057",
+  "image_index": 1,
+  "chart_type": "table",
+  "title": "围绕“分红潜力”：①计算2025年第三季度各公司... - 净利润",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 43,
+    "preview_rows": [
+      {
+        "stock_code": "002082",
+        "stock_abbr": "万邦德",
+        "未分配利润": 166038.481983,
+        "净利润": "446.777245",
+        "未分配利润净利润比": 371.63594126867406,
+        "资产负债率": 39.08874449203515
+      },
+      {
+        "stock_code": "300869",
+        "stock_abbr": "康泰医学",
+        "未分配利润": 80135.562448,
+        "净利润": "939.98424",
+        "未分配利润净利润比": 85.25202768080452,
+        "资产负债率": 36.71807786802857
+      },
+      {
+        "stock_code": "600252",
+        "stock_abbr": "中恒集团",
+        "未分配利润": 194680.640851,
+        "净利润": "2464.037494",
+        "未分配利润净利润比": 79.00879809055373,
+        "资产负债率": 34.35981863095572
+      },
+      {
+        "stock_code": "300026",
+        "stock_abbr": "红日药业",
+        "未分配利润": 473428.440122,
+        "净利润": "8076.293464",
+        "未分配利润净利润比": 58.619519242620726,
+        "资产负债率": 18.244297921464334
+      },
+      {
+        "stock_code": "002566",
+        "stock_abbr": "益盛药业",
+        "未分配利润": 91560.587734,
+        "净利润": "2412.83185",
+        "未分配利润净利润比": 37.947355400667476,
+        "资产负债率": 22.082613757106078
+      },
+      {
+        "stock_code": "002873",
+        "stock_abbr": "新天药业",
+        "未分配利润": 56545.937491,
+        "净利润": "1618.094017",
+        "未分配利润净利润比": 34.946014815528486,
+        "资产负债率": 39.63907334619394
+      },
+      {
+        "stock_code": "002424",
+        "stock_abbr": "贵州百灵",
+        "未分配利润": 160385.641542,
+        "净利润": "5681.443227",
+        "未分配利润净利润比": 28.229735849475208,
+        "资产负债率": 47.77848378605162
+      },
+      {
+        "stock_code": "002589",
+        "stock_abbr": "瑞康医药",
+        "未分配利润": 25421.706428999998,
+        "净利润": "1213.662607",
+        "未分配利润净利润比": 20.94627146158751,
+        "资产负债率": 64.41909829327216
+      },
+      {
+        "stock_code": "600557",
+        "stock_abbr": "康缘药业",
+        "未分配利润": 414805.875542,
+        "净利润": "19964.174677",
+        "未分配利润净利润比": 20.7775118307236,
+        "资产负债率": 27.112686811581217
+      },
+      {
+        "stock_code": "600080",
+        "stock_abbr": "金花股份",
+        "未分配利润": 53600.564816000006,
+        "净利润": "3448.124386",
+        "未分配利润净利润比": 15.544846651596403,
+        "资产负债率": 19.093473288907134
+      },
+      {
+        "stock_code": "600613",
+        "stock_abbr": "神奇制药",
+        "未分配利润": 72236.573611,
+        "净利润": "5030.160435",
+        "未分配利润净利润比": 14.360689791994677,
+        "资产负债率": 21.92929319343745
+      },
+      {
+        "stock_code": "603896",
+        "stock_abbr": "寿仙谷",
+        "未分配利润": 107525.69249100001,
+        "净利润": "7634.174313",
+        "未分配利润净利润比": 14.084783511937607,
+        "资产负债率": 26.687413710391773
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": null,
+    "sort_ascending": true,
+    "top_n": 12,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "stock_code",
+      "data_type": "quantitative",
+      "label": "股票代码",
+      "unit": "万元"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": false
+  },
+  "output": {
+    "filename": "B2057_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B2057_1.jpg"
+  },
+  "meta": {
+    "source_sql": "WITH ratio_data AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        equity_unappropriated_profit AS 未分配利润,\n        kpi_net_profit AS 净利润,\n        CASE \n            WHEN kpi_net_profit > 0 THEN equity_unappropriated_profit * 1.0 / kpi_net_profit\n            ELSE NULL \n        END AS 未分配利润净利润比,\n        asset_liability_ratio AS 资产负债率\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n        AND kpi_net_profit IS NOT NULL\n        AND equity_unappropriated_profit IS NOT NULL\n        AND asset_liability_ratio IS NOT NULL\n)\nSELECT \n    stock_code,\n    stock_abbr,\n    未分配利润,\n    净利润,\n    未分配利润净利润比,\n    资产负债率\nFROM ratio_data\nWHERE 未分配利润净利润比 > 5\nORDER BY 未分配利润净利润比 DESC;",
+    "value_fields": [
+      "stock_code",
+      "未分配利润",
+      "净利润",
+      "未分配利润净利润比"
+    ],
+    "value_labels": [
+      "股票代码",
+      "未分配利润",
+      "净利润",
+      "未分配利润净利润比"
+    ],
+    "original_chart_plan": {
+      "chart_type": "table",
+      "x_field": null,
+      "y_fields": [
+        "stock_code",
+        "未分配利润",
+        "净利润",
+        "未分配利润净利润比"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": null,
+      "sort_ascending": true,
+      "top_n": 12
+    }
+  }
+}

@@ -1,0 +1,157 @@
+{
+  "question_id": "B2008",
+  "question_type": "归因分析",
+  "raw_question": "2025年前三季度，公司实现收入超过200亿元的企业有哪些 | 他们有什么共同点？",
+  "raw_question_json": "[{\"Q\":\"2025年前三季度，公司实现收入超过200亿元的企业有哪些\"},{\"Q\":\"他们有什么共同点？\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "metrics": [
+      "营业总收入"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "focus_topics": [],
+    "intent_type": "sql_only",
+    "needs_sql": true,
+    "needs_retrieval": false,
+    "top_n": 3,
+    "threshold": 2000000.0
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "sql_only",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入"
+    ],
+    "needs_sql": true,
+    "top_n": 3,
+    "threshold": 2000000.0,
+    "question": "他们有什么共同点？"
+  },
+  "retrieval_plan": {
+    "question": "他们有什么共同点？",
+    "companies": [],
+    "focus_topics": [],
+    "needs_retrieval": false,
+    "top_k": 0,
+    "source_scope": "hybrid",
+    "retrieval_mode": "hybrid"
+  },
+  "sql": "WITH ranked_companies AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        total_operating_revenue,\n        ROW_NUMBER() OVER (ORDER BY total_operating_revenue DESC) AS rn,\n        COUNT(*) OVER () AS total_count\n    FROM financials_view \n    WHERE report_period = '2025Q3' \n        AND total_operating_revenue >= 2000000.0\n    ORDER BY total_operating_revenue DESC\n    LIMIT 3\n)\nSELECT \n    stock_code,\n    stock_abbr,\n    report_period,\n    total_operating_revenue\nFROM ranked_companies\nORDER BY total_operating_revenue DESC;",
+  "sql_history": [
+    "WITH filtered_data AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        total_operating_revenue\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n        AND total_operating_revenue > 20000000000\n)\nSELECT \n    stock_code,\n    stock_abbr,\n    report_period,\n    total_operating_revenue\nFROM filtered_data\nORDER BY total_operating_revenue DESC\nLIMIT 3;",
+    "WITH ranked_companies AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        total_operating_revenue,\n        ROW_NUMBER() OVER (ORDER BY total_operating_revenue DESC) AS rn,\n        COUNT(*) OVER () AS total_count\n    FROM financials_view \n    WHERE report_period = '2025Q3' \n        AND total_operating_revenue >= 2000000.0\n    ORDER BY total_operating_revenue DESC\n    LIMIT 3\n)\nSELECT \n    stock_code,\n    stock_abbr,\n    report_period,\n    total_operating_revenue\nFROM ranked_companies\nORDER BY total_operating_revenue DESC;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 3,
+  "result_rows": [
+    {
+      "stock_code": "600332",
+      "stock_abbr": "白云山",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 6160599.379554
+    },
+    {
+      "stock_code": "000538",
+      "stock_abbr": "云南白药",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 3065421.420901
+    },
+    {
+      "stock_code": "000999",
+      "stock_abbr": "华润三九",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 2198640.396207
+    }
+  ],
+  "retrieved_evidence": [],
+  "reranked_evidence": [],
+  "rerank_preview": "{\"strategy\": \"skipped_fast_path\", \"kept_count\": 0}",
+  "fused_context": {
+    "question": "他们有什么共同点？",
+    "sql_row_count": 3,
+    "evidence_count": 0,
+    "sql_preview": [
+      {
+        "stock_code": "600332",
+        "stock_abbr": "白云山",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 6160599.379554
+      },
+      {
+        "stock_code": "000538",
+        "stock_abbr": "云南白药",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 3065421.420901
+      },
+      {
+        "stock_code": "000999",
+        "stock_abbr": "华润三九",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 2198640.396207
+      }
+    ],
+    "evidence_preview": [],
+    "evidence_titles": [],
+    "source_breakdown": {}
+  },
+  "self_check": {
+    "pass": true,
+    "notes": [
+      "回答中的数字与SQL rows完全一致，且正确进行了单位换算。由于Evidences为空，回答中未引用不存在的证据，处理得当。回答准确抓住了问题要求的共同点（营业总收入均超过200亿元），且没有混淆指标名称。"
+    ]
+  },
+  "chart_plan": {},
+  "chart_spec": {},
+  "current_chart_paths": [],
+  "current_chart_specs": [],
+  "current_answer": "根据SQL查询结果，在2025年第三季度，营业总收入最高的三家公司分别是白云山、云南白药和华润三九。它们的共同点是：**在2025年第三季度的营业总收入均超过了200亿元（注：数据库金额单位为万元，换算关系为1亿元=10000万元）**。\n\n具体财务数据支撑如下：\n- **白云山 (600332)**：营业总收入为6160599.38万元，约合616.06亿元。\n- **云南白药 (000538)**：营业总收入为3065421.42万元，约合306.54亿元。\n- **华润三九 (000999)**：营业总收入为2198640.40万元，约合219.86亿元。\n\n未检索到直接研报证据。\n\n综合判断：当前数据表明，这三家公司在2025年第三季度均属于营业总收入规模领先的群体，其共同特征是该指标均高于200亿元的门槛。",
+  "current_references": [],
+  "answer_rewritten": true,
+  "turn_answers": [
+    {
+      "Q": "2025年前三季度，公司实现收入超过200亿元的企业有哪些",
+      "A": {
+        "content": "根据查询结果，当前数据库中未找到满足条件的公司。 条件为：超过2000000亿元",
+        "image": [],
+        "references": []
+      }
+    },
+    {
+      "Q": "他们有什么共同点？",
+      "A": {
+        "content": "根据SQL查询结果，在2025年第三季度，营业总收入最高的三家公司分别是白云山、云南白药和华润三九。它们的共同点是：**在2025年第三季度的营业总收入均超过了200亿元（注：数据库金额单位为万元，换算关系为1亿元=10000万元）**。\n\n具体财务数据支撑如下：\n- **白云山 (600332)**：营业总收入为6160599.38万元，约合616.06亿元。\n- **云南白药 (000538)**：营业总收入为3065421.42万元，约合306.54亿元。\n- **华润三九 (000999)**：营业总收入为2198640.40万元，约合219.86亿元。\n\n未检索到直接研报证据。\n\n综合判断：当前数据表明，这三家公司在2025年第三季度均属于营业总收入规模领先的群体，其共同特征是该指标均高于200亿元的门槛。",
+        "image": [],
+        "references": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"2025年前三季度，公司实现收入超过200亿元的企业有哪些\", \"A\": {\"content\": \"根据查询结果，当前数据库中未找到满足条件的公司。 条件为：超过2000000亿元\", \"image\": [], \"references\": []}}, {\"Q\": \"他们有什么共同点？\", \"A\": {\"content\": \"根据SQL查询结果，在2025年第三季度，营业总收入最高的三家公司分别是白云山、云南白药和华润三九。它们的共同点是：**在2025年第三季度的营业总收入均超过了200亿元（注：数据库金额单位为万元，换算关系为1亿元=10000万元）**。\\n\\n具体财务数据支撑如下：\\n- **白云山 (600332)**：营业总收入为6160599.38万元，约合616.06亿元。\\n- **云南白药 (000538)**：营业总收入为3065421.42万元，约合306.54亿元。\\n- **华润三九 (000999)**：营业总收入为2198640.40万元，约合219.86亿元。\\n\\n未检索到直接研报证据。\\n\\n综合判断：当前数据表明，这三家公司在2025年第三季度均属于营业总收入规模领先的群体，其共同特征是该指标均高于200亿元的门槛。\", \"image\": [], \"references\": []}}]",
+  "references_json": "[]",
+  "notes": [
+    "route=sql_only",
+    "1. 查询计划指定了periods为2025Q3，这是前三季度的标准格式。\n2. 查询计划中的threshold为20000000000.0（200亿元），因此筛选条件为total_operating_revenue > 20000000000。\n3. 查询计划中的top_n为3，因此使用ORDER BY total_operating_revenue DESC和LIMIT 3。\n4. 查询计划中的companies为空列表，因此不添加stock_abbr IN (...)条件。\n5. 使用WITH子句提高可读性，但这不是必须的。",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=0",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=0",
+    "self_check={\"pass\": true, \"notes\": [\"self_check_skipped_fast_path\"]}",
+    "route=sql_only",
+    "根据查询计划，需要查询2025Q3期间营业总收入（total_operating_revenue）大于等于2000000.0的前3家公司。由于查询计划中没有明确提供公司列表（companies数组为空），因此不能手动枚举公司简称。SQL使用WITH子句创建临时表ranked_companies，按营业总收入降序排列并限制返回3条记录，符合TopN要求。report_period使用标准格式'2025Q3'。",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=0",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=0",
+    "answer_rewritten_after_self_check",
+    "self_check={\"pass\": true, \"notes\": [\"回答中的数字与SQL rows完全一致，且正确进行了单位换算。由于Evidences为空，回答中未引用不存在的证据，处理得当。回答准确抓住了问题要求的共同点（营业总收入均超过200亿元），且没有混淆指标名称。\"]}"
+  ],
+  "final_status": "ok"
+}

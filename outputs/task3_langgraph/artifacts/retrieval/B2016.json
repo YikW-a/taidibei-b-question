@@ -1,0 +1,62 @@
+[
+  {
+    "source_type": "stock",
+    "title": "公司信息更新报告：2025H1利润增长稳健，深化数字赋能助力提质增效",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/个股研报/公司信息更新报告：2025H1利润增长稳健，深化数字赋能助力提质增效.pdf",
+    "publish_date": "2025-08-22 00:00:00.000",
+    "company_or_industry": "江中药业",
+    "organization": "开源证券",
+    "snippet": "公司信息更新报告：2025H1利润增长稳健，深化数字赋能助力提质增效；江中药业；开源证券",
+    "score": 5.0,
+    "metadata_ref": "stock::公司信息更新报告：2025H1利润增长稳健，深化数字赋能助力提质增效::2025-08-22 00:00:00.000::开源证券::江中药业",
+    "score_components": {
+      "metadata": 5.0,
+      "vector": 0.0
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "OTC稳健增长，持续高分红",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/个股研报/OTC稳健增长，持续高分红.pdf",
+    "publish_date": "2025-03-27 00:00:00.000",
+    "company_or_industry": "江中药业",
+    "organization": "西南证券",
+    "snippet": "OTC稳健增长，持续高分红；江中药业；西南证券",
+    "score": 5.0,
+    "metadata_ref": "stock::OTC稳健增长，持续高分红::2025-03-27 00:00:00.000::西南证券::江中药业",
+    "score_components": {
+      "metadata": 5.0,
+      "vector": 0.0
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "公司信息更新报告：2024年营收利润稳健提升，品牌优势赋能未来成长",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/个股研报/公司信息更新报告：2024年营收利润稳健提升，品牌优势赋能未来成长.pdf",
+    "publish_date": "2025-03-20 00:00:00.000",
+    "company_or_industry": "江中药业",
+    "organization": "开源证券",
+    "snippet": "公司信息更新报告：2024年营收利润稳健提升，品牌优势赋能未来成长；江中药业；开源证券",
+    "score": 5.0,
+    "metadata_ref": "stock::公司信息更新报告：2024年营收利润稳健提升，品牌优势赋能未来成长::2025-03-20 00:00:00.000::开源证券::江中药业",
+    "score_components": {
+      "metadata": 5.0,
+      "vector": 0.0
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "公司首次覆盖报告：胃肠用药领导者，“高股息+股权激励”彰显发展信心",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/个股研报/公司首次覆盖报告：胃肠用药领导者，“高股息+股权激励”彰显发展信心.pdf",
+    "publish_date": "2025-02-25 00:00:00.000",
+    "company_or_industry": "江中药业",
+    "organization": "开源证券",
+    "snippet": "公司首次覆盖报告：胃肠用药领导者，“高股息+股权激励”彰显发展信心；江中药业；开源证券",
+    "score": 5.0,
+    "metadata_ref": "stock::公司首次覆盖报告：胃肠用药领导者，“高股息+股权激励”彰显发展信心::2025-02-25 00:00:00.000::开源证券::江中药业",
+    "score_components": {
+      "metadata": 5.0,
+      "vector": 0.0
+    }
+  }
+]

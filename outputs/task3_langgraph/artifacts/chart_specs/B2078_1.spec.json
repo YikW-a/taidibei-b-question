@@ -1,0 +1,114 @@
+{
+  "schema_version": "task3.chart-spec.v1",
+  "question_id": "B2078",
+  "image_index": 1,
+  "chart_type": "line",
+  "title": "中药上市企业的研发投入结构与新品上市周期存在怎样... - 研发投入结构",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 4,
+    "preview_rows": [
+      {
+        "stock_code": "600750",
+        "stock_abbr": "江中药业",
+        "report_period": "2025Q3",
+        "rnd_expenses": "9713.972032",
+        "rnd_expense_ratio": 0.03311763267283347,
+        "rnd_in_total_expenses_ratio": 0.04625321573458501,
+        "operating_revenue_yoy_growth": -6.279688528656716,
+        "operating_revenue_qoq_growth": -17.237365525311876,
+        "net_profit_yoy_growth": 6.0155139619969615,
+        "net_profit_qoq_growth": -32.14120907846906
+      },
+      {
+        "stock_code": "600750",
+        "stock_abbr": "江中药业",
+        "report_period": "2025H1",
+        "rnd_expenses": "4854.915217",
+        "rnd_expense_ratio": 0.022674672268708427,
+        "rnd_in_total_expenses_ratio": 0.0321715863071664,
+        "operating_revenue_yoy_growth": -5.786065891602467,
+        "operating_revenue_qoq_growth": -19.177470251582534,
+        "net_profit_yoy_growth": 4.970275185134179,
+        "net_profit_qoq_growth": -16.668531743524266
+      },
+      {
+        "stock_code": "600750",
+        "stock_abbr": "江中药业",
+        "report_period": "2025Q2",
+        "rnd_expenses": "2160.281853",
+        "rnd_expense_ratio": 0.022573031472444875,
+        "rnd_in_total_expenses_ratio": 0.033125017805201225,
+        "operating_revenue_yoy_growth": NaN,
+        "operating_revenue_qoq_growth": NaN,
+        "net_profit_yoy_growth": NaN,
+        "net_profit_qoq_growth": NaN
+      },
+      {
+        "stock_code": "600750",
+        "stock_abbr": "江中药业",
+        "report_period": "2024FY",
+        "rnd_expenses": "9652.397587",
+        "rnd_expense_ratio": 0.021761932388951216,
+        "rnd_in_total_expenses_ratio": 0.02788657298878688,
+        "operating_revenue_yoy_growth": -2.586334010446145,
+        "operating_revenue_qoq_growth": 83.09471186803268,
+        "net_profit_yoy_growth": 9.339228381101696,
+        "net_profit_qoq_growth": 5.676454095286411
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "report_period",
+    "sort_ascending": true,
+    "top_n": null,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "rnd_expense_ratio",
+      "data_type": "quantitative",
+      "label": "研发费用占比",
+      "unit": "%"
+    },
+    "x": {
+      "field": "report_period",
+      "data_type": "temporal",
+      "label": "报告期",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": false
+  },
+  "output": {
+    "filename": "B2078_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B2078_1.jpg"
+  },
+  "meta": {
+    "source_sql": "WITH rnd_structure AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        operating_expense_rnd_expenses AS rnd_expenses,\n        total_operating_revenue,\n        operating_expense_rnd_expenses * 1.0 / NULLIF(total_operating_revenue, 0) AS rnd_expense_ratio,\n        operating_expense_rnd_expenses * 1.0 / NULLIF(total_operating_expenses, 0) AS rnd_in_total_expenses_ratio\n    FROM financials_view\n    WHERE report_period IN ('2024FY', '2025Q3', '2025H1', '2025Q2', '2025Q4')\n        AND stock_abbr LIKE '%中药%'\n),\nnew_product_cycle AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        operating_revenue_yoy_growth,\n        operating_revenue_qoq_growth,\n        net_profit_yoy_growth,\n        net_profit_qoq_growth\n    FROM financials_view\n    WHERE report_period IN ('2024FY', '2025Q3', '2025H1', '2025Q2', '2025Q4')\n        AND stock_abbr LIKE '%中药%'\n)\nSELECT \n    r.stock_code,\n    r.stock_abbr,\n    r.report_period,\n    r.rnd_expenses,\n    r.rnd_expense_ratio,\n    r.rnd_in_total_expenses_ratio,\n    n.operating_revenue_yoy_growth,\n    n.operating_revenue_qoq_growth,\n    n.net_profit_yoy_growth,\n    n.net_profit_qoq_growth\nFROM rnd_structure r\nJOIN new_product_cycle n \n    ON r.stock_code = n.stock_code \n    AND r.report_period = n.report_period\nORDER BY r.rnd_expense_ratio DESC, r.rnd_in_total_expenses_ratio DESC\nLIMIT 50;",
+    "value_fields": [
+      "rnd_expense_ratio"
+    ],
+    "value_labels": [
+      "研发费用占比"
+    ],
+    "original_chart_plan": {
+      "chart_type": "line",
+      "x_field": "report_period",
+      "y_fields": [
+        "rnd_expense_ratio"
+      ],
+      "category_field": null,
+      "sort_by": "report_period",
+      "sort_ascending": true,
+      "top_n": null
+    }
+  }
+}

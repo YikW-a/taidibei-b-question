@@ -1,0 +1,106 @@
+{
+  "schema_version": "task3.chart-spec.v1",
+  "question_id": "B2032",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "2025年中药电商渠道销售额增长，请查询2025... - 营业总收入",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 5,
+    "preview_rows": [
+      {
+        "stock_code": "600080",
+        "stock_abbr": "金花股份",
+        "report_period": "2025Q3",
+        "selling_expenses": 22422.031459,
+        "total_operating_revenue": 38390.836363,
+        "selling_expense_ratio_percent": 58.4
+      },
+      {
+        "stock_code": "002107",
+        "stock_abbr": "沃华医药",
+        "report_period": "2025Q3",
+        "selling_expenses": 32234.440175,
+        "total_operating_revenue": 62461.33542999999,
+        "selling_expense_ratio_percent": 51.61
+      },
+      {
+        "stock_code": "002566",
+        "stock_abbr": "益盛药业",
+        "report_period": "2025Q3",
+        "selling_expenses": 23746.815446,
+        "total_operating_revenue": 47619.523312,
+        "selling_expense_ratio_percent": 49.87
+      },
+      {
+        "stock_code": "301111",
+        "stock_abbr": "粤万年青",
+        "report_period": "2025Q3",
+        "selling_expenses": 11369.241349,
+        "total_operating_revenue": 22841.486264,
+        "selling_expense_ratio_percent": 49.77
+      },
+      {
+        "stock_code": "300878",
+        "stock_abbr": "维康药业",
+        "report_period": "2025Q3",
+        "selling_expenses": 7462.980106999999,
+        "total_operating_revenue": 15131.775430000002,
+        "selling_expense_ratio_percent": 49.32
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": null,
+    "sort_ascending": false,
+    "top_n": 5,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "total_operating_revenue",
+      "data_type": "quantitative",
+      "label": "营业总收入",
+      "unit": null
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B2032_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B2032_1.jpg"
+  },
+  "meta": {
+    "source_sql": "WITH financials_2025q3 AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        selling_expenses,\n        total_operating_revenue\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n        AND selling_expenses IS NOT NULL\n        AND total_operating_revenue IS NOT NULL\n        AND total_operating_revenue > 0\n)\nSELECT \n    stock_code,\n    stock_abbr,\n    report_period,\n    selling_expenses,\n    total_operating_revenue,\n    ROUND((selling_expenses * 1.0 / total_operating_revenue) * 100, 2) AS selling_expense_ratio_percent\nFROM financials_2025q3\nORDER BY selling_expense_ratio_percent DESC\nLIMIT 5;",
+    "value_fields": [
+      "total_operating_revenue"
+    ],
+    "value_labels": [
+      "营业总收入"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "total_operating_revenue"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": null,
+      "sort_ascending": false,
+      "top_n": 5
+    }
+  }
+}

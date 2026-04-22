@@ -1,0 +1,195 @@
+{
+  "schema_version": "task3.chart-spec.v1",
+  "question_id": "B2056",
+  "image_index": 1,
+  "chart_type": "table",
+  "title": "统计2025年第三季度各公司的营业总成本构成（营... - 营业成本",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 68,
+    "preview_rows": [
+      {
+        "stock_code": "002773",
+        "stock_abbr": "康弘药业",
+        "report_period": "2025Q3",
+        "operating_cost_ratio": 14.38252919039173,
+        "selling_expenses_ratio": 57.262893878184805,
+        "administrative_expenses_ratio": 14.641782256355393,
+        "rnd_expenses_ratio": 13.712794675068073,
+        "main_business_type": "需从其他表获取主营业务类型"
+      },
+      {
+        "stock_code": "002773",
+        "stock_abbr": "康弘药业",
+        "report_period": "2025Q3",
+        "operating_cost_ratio": 14.38252919039173,
+        "selling_expenses_ratio": 57.262893878184805,
+        "administrative_expenses_ratio": 14.641782256355393,
+        "rnd_expenses_ratio": 13.712794675068073,
+        "main_business_type": "需从其他表获取主营业务类型"
+      },
+      {
+        "stock_code": "603896",
+        "stock_abbr": "寿仙谷",
+        "report_period": "2025Q3",
+        "operating_cost_ratio": 23.2325469011041,
+        "selling_expenses_ratio": 47.52528006766293,
+        "administrative_expenses_ratio": 18.382882783083748,
+        "rnd_expenses_ratio": 10.859290248149208,
+        "main_business_type": "需从其他表获取主营业务类型"
+      },
+      {
+        "stock_code": "002287",
+        "stock_abbr": "奇正藏药",
+        "report_period": "2025Q3",
+        "operating_cost_ratio": 23.75842612221958,
+        "selling_expenses_ratio": 60.2596897053238,
+        "administrative_expenses_ratio": 11.61708658863986,
+        "rnd_expenses_ratio": 4.364797583816764,
+        "main_business_type": "需从其他表获取主营业务类型"
+      },
+      {
+        "stock_code": "600080",
+        "stock_abbr": "金花股份",
+        "report_period": "2025Q3",
+        "operating_cost_ratio": 24.30363388069367,
+        "selling_expenses_ratio": 60.53445619770952,
+        "administrative_expenses_ratio": 9.13304311103559,
+        "rnd_expenses_ratio": 6.028866810561227,
+        "main_business_type": "需从其他表获取主营业务类型"
+      },
+      {
+        "stock_code": "600285",
+        "stock_abbr": "羚锐制药",
+        "report_period": "2025Q3",
+        "operating_cost_ratio": 25.140614093952628,
+        "selling_expenses_ratio": 62.59633085520197,
+        "administrative_expenses_ratio": 7.707828697282235,
+        "rnd_expenses_ratio": 4.555226353563149,
+        "main_business_type": "需从其他表获取主营业务类型"
+      },
+      {
+        "stock_code": "002566",
+        "stock_abbr": "益盛药业",
+        "report_period": "2025Q3",
+        "operating_cost_ratio": 26.92354981335702,
+        "selling_expenses_ratio": 53.947645816335076,
+        "administrative_expenses_ratio": 16.503870303705675,
+        "rnd_expenses_ratio": 2.624934066602237,
+        "main_business_type": "需从其他表获取主营业务类型"
+      },
+      {
+        "stock_code": "002107",
+        "stock_abbr": "沃华医药",
+        "report_period": "2025Q3",
+        "operating_cost_ratio": 28.021940721453152,
+        "selling_expenses_ratio": 58.134137627688254,
+        "administrative_expenses_ratio": 8.934227435101796,
+        "rnd_expenses_ratio": 4.909694215756804,
+        "main_business_type": "需从其他表获取主营业务类型"
+      },
+      {
+        "stock_code": "002873",
+        "stock_abbr": "新天药业",
+        "report_period": "2025Q3",
+        "operating_cost_ratio": 30.243250113675984,
+        "selling_expenses_ratio": 46.01884452776159,
+        "administrative_expenses_ratio": 17.567706633486818,
+        "rnd_expenses_ratio": 6.170198725075602,
+        "main_business_type": "需从其他表获取主营业务类型"
+      },
+      {
+        "stock_code": "000766",
+        "stock_abbr": "通化金马",
+        "report_period": "2025Q3",
+        "operating_cost_ratio": 30.91045431572432,
+        "selling_expenses_ratio": 54.91490852802475,
+        "administrative_expenses_ratio": 10.638696910089608,
+        "rnd_expenses_ratio": 3.53594024616133,
+        "main_business_type": "需从其他表获取主营业务类型"
+      },
+      {
+        "stock_code": "600566",
+        "stock_abbr": "济川药业",
+        "report_period": "2025Q3",
+        "operating_cost_ratio": 32.53021018080083,
+        "selling_expenses_ratio": 46.69117232582801,
+        "administrative_expenses_ratio": 11.296125188475582,
+        "rnd_expenses_ratio": 9.482492304895592,
+        "main_business_type": "需从其他表获取主营业务类型"
+      },
+      {
+        "stock_code": "600329",
+        "stock_abbr": "达仁堂",
+        "report_period": "2025Q3",
+        "operating_cost_ratio": 33.46234032616511,
+        "selling_expenses_ratio": 51.652083082261235,
+        "administrative_expenses_ratio": 11.07234654827797,
+        "rnd_expenses_ratio": 3.8132300432956794,
+        "main_business_type": "需从其他表获取主营业务类型"
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": null,
+    "sort_ascending": true,
+    "top_n": 12,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "stock_code",
+      "data_type": "quantitative",
+      "label": "股票代码",
+      "unit": "万元"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": false
+  },
+  "output": {
+    "filename": "B2056_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B2056_1.jpg"
+  },
+  "meta": {
+    "source_sql": "WITH cost_components AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        operating_cost,\n        selling_expenses,\n        administrative_expenses,\n        rnd_expense_ratio,\n        -- 计算营业总成本（营业成本+销售费用+管理费用+研发费用）\n        (operating_cost + selling_expenses + administrative_expenses + (rnd_expense_ratio * income_total_operating_revenue / 100)) AS total_operating_cost,\n        -- 计算各项占比\n        CASE \n            WHEN (operating_cost + selling_expenses + administrative_expenses + (rnd_expense_ratio * income_total_operating_revenue / 100)) > 0 \n            THEN (operating_cost * 100.0) / (operating_cost + selling_expenses + administrative_expenses + (rnd_expense_ratio * income_total_operating_revenue / 100))\n            ELSE NULL \n        END AS operating_cost_ratio,\n        CASE \n            WHEN (operating_cost + selling_expenses + administrative_expenses + (rnd_expense_ratio * income_total_operating_revenue / 100)) > 0 \n            THEN (selling_expenses * 100.0) / (operating_cost + selling_expenses + administrative_expenses + (rnd_expense_ratio * income_total_operating_revenue / 100))\n            ELSE NULL \n        END AS selling_expenses_ratio,\n        CASE \n            WHEN (operating_cost + selling_expenses + administrative_expenses + (rnd_expense_ratio * income_total_operating_revenue / 100)) > 0 \n            THEN (administrative_expenses * 100.0) / (operating_cost + selling_expenses + administrative_expenses + (rnd_expense_ratio * income_total_operating_revenue / 100))\n            ELSE NULL \n        END AS administrative_expenses_ratio,\n        CASE \n            WHEN (operating_cost + selling_expenses + administrative_expenses + (rnd_expense_ratio * income_total_operating_revenue / 100)) > 0 \n            THEN ((rnd_expense_ratio * income_total_operating_revenue / 100) * 100.0) / (operating_cost + selling_expenses + administrative_expenses + (rnd_expense_ratio * income_total_operating_revenue / 100))\n            ELSE NULL \n        END AS rnd_expenses_ratio\n    FROM financials_view \n    WHERE report_period = '2025Q3'\n        AND operating_cost IS NOT NULL\n        AND selling_expenses IS NOT NULL\n        AND administrative_expenses IS NOT NULL\n        AND rnd_expense_ratio IS NOT NULL\n        AND income_total_operating_revenue IS NOT NULL\n),\nmin_operating_cost_company AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        operating_cost_ratio\n    FROM cost_components\n    WHERE operating_cost_ratio IS NOT NULL\n    ORDER BY operating_cost_ratio ASC\n    LIMIT 1\n)\nSELECT \n    cc.stock_code,\n    cc.stock_abbr,\n    cc.report_period,\n    cc.operating_cost_ratio,\n    cc.selling_expenses_ratio,\n    cc.administrative_expenses_ratio,\n    cc.rnd_expenses_ratio,\n    -- 主营业务类型（这里用行业分类或主营业务描述，但表中无此字段，暂用占位）\n    '需从其他表获取主营业务类型' AS main_business_type\nFROM cost_components cc\nJOIN min_operating_cost_company moc ON cc.stock_code = moc.stock_code\nUNION ALL\nSELECT \n    stock_code,\n    stock_abbr,\n    report_period,\n    operating_cost_ratio,\n    selling_expenses_ratio,\n    administrative_expenses_ratio,\n    rnd_expenses_ratio,\n    '需从其他表获取主营业务类型' AS main_business_type\nFROM cost_components\nORDER BY operating_cost_ratio ASC;",
+    "value_fields": [
+      "stock_code",
+      "operating_cost_ratio",
+      "selling_expenses_ratio",
+      "administrative_expenses_ratio"
+    ],
+    "value_labels": [
+      "股票代码",
+      "operating_cost_ratio",
+      "selling_expenses_ratio",
+      "administrative_expenses_ratio"
+    ],
+    "original_chart_plan": {
+      "chart_type": "table",
+      "x_field": null,
+      "y_fields": [
+        "stock_code",
+        "operating_cost_ratio",
+        "selling_expenses_ratio",
+        "administrative_expenses_ratio"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": null,
+      "sort_ascending": true,
+      "top_n": 12
+    }
+  }
+}

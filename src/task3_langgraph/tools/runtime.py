@@ -30,6 +30,79 @@ from .vector_store import VectorStoreManager
 
 SAFE_SQL_PREFIXES = ("select", "with")
 FORBIDDEN_SQL_TOKENS = ("insert ", "update ", "delete ", "drop ", "alter ", "create ", "attach ", "pragma ")
+IDENTIFIER_LIKE_COLUMNS = {
+    "stock_code",
+    "stock_abbr",
+    "report_period",
+    "report_year",
+    "current_period",
+    "base_period",
+    "base_profit_status",
+}
+METRIC_COLUMN_CANDIDATES = {
+    "营业总收入": [
+        "营业总收入",
+        "主营业务收入",
+        "营业收入",
+        "饮片业务收入",
+        "total_operating_revenue",
+        "income_total_operating_revenue",
+        "kpi_total_operating_revenue",
+    ],
+    "净利润": [
+        "净利润",
+        "net_profit",
+        "income_net_profit",
+        "kpi_net_profit",
+        "current_net_profit",
+        "base_net_profit",
+    ],
+    "利润总额": ["利润总额", "total_profit", "current_total_profit"],
+    "ROE": ["ROE", "roe", "净资产收益率", "加权平均净资产收益率（扣非）"],
+    "资产负债率": ["资产负债率", "asset_liability_ratio"],
+    "应收账款": ["应收账款", "accounts_receivable", "asset_accounts_receivable", "accounts_receivable_ratio"],
+    "销售费用": ["销售费用", "selling_expenses", "operating_expense_selling_expenses"],
+    "研发费用": ["研发费用", "rnd_expenses", "operating_expense_rnd_expenses"],
+    "经营性现金流量净额": ["经营性现金流量净额", "operating_cf_net_amount"],
+    "投资性现金流量净额": ["投资性现金流量净额", "investing_cf_net_amount"],
+}
+QUESTION_FOCUSED_METRIC_OVERRIDES = {
+    "营业总收入": ["营业总收入", "主营业务收入", "营业收入"],
+    "净利润": ["净利润", "扣非净利润", "利润总额"],
+    "ROE": ["ROE", "净资产收益率", "收益率"],
+    "销售费用": ["销售费用"],
+    "研发费用": ["研发费用"],
+    "资产负债率": ["资产负债率"],
+    "应收账款": ["应收账款"],
+    "经营性现金流量净额": ["经营性现金流量净额"],
+    "投资性现金流量净额": ["投资性现金流量净额"],
+}
+DETERMINISTIC_COMPLEX_TOKENS = [
+    "为什么",
+    "原因",
+    "驱动",
+    "共同点",
+    "影响",
+    "分析",
+    "对比",
+    "差异",
+    "是否",
+    "标注",
+    "重新计算",
+    "从哪里",
+    "数据来源",
+    "可靠",
+    "可靠性",
+    "一致",
+    "依据",
+    "判断依据",
+]
+UNSUPPORTED_BUSINESS_METRIC_RULES = [
+    ("饮片业务收入", "饮片业务收入"),
+    ("老年病相关药品收入占比", "老年病相关药品收入占比"),
+    ("出口业务占比", "出口业务占比"),
+    ("海外业务收入", "海外业务收入"),
+]
 DERIVABLE_SINGLE_QUARTER_COLUMNS = [
     "total_operating_revenue",
     "net_profit",
@@ -299,6 +372,12 @@ class Task3Runtime:
     ) -> tuple[str, str]:
         if not query_plan or not query_plan.get("needs_sql"):
             return "", ""
+        unsupported_metric = self._unsupported_business_metric_name(question)
+        if unsupported_metric:
+            return (
+                f"SELECT * FROM financials_view WHERE 1=0 /* unsupported structured field: {unsupported_metric} */",
+                f"当前结构化视图缺少“{unsupported_metric}”字段，SQL阶段不应伪造筛选条件。",
+            )
         system_prompt = self.prompt_manager.load("sql_generation_system")
         user_prompt = (
             f"{self._schema_text()}\n\n"
@@ -318,6 +397,11 @@ class Task3Runtime:
         user_prompt += (
             "SQLite compatibility: do not use PERCENTILE_CONT / WITHIN GROUP. "
             "If median is needed, emulate it with ROW_NUMBER() and COUNT() window functions.\n"
+        )
+        user_prompt += (
+            "For compound SELECT / UNION queries in SQLite, do not ORDER BY a custom CASE expression unless it is "
+            "projected as an output column. If custom ordering is needed, either add a sort_key column in every "
+            "branch or wrap the UNION result in an outer SELECT before ORDER BY.\n"
         )
         if context_rows:
             user_prompt += f"Previous turn result rows: {json.dumps(context_rows[:12], ensure_ascii=False)}\n"
@@ -354,6 +438,12 @@ class Task3Runtime:
             conn.close()
         self._write_json_cache(cache_path, df.to_dict(orient="records"))
         return df
+
+    def repair_sql_after_error(self, sql: str, error_message: str) -> str:
+        lowered_error = str(error_message or "").lower()
+        if "order by term does not match any column in the result set" in lowered_error:
+            return self._wrap_compound_select_order_by(sql)
+        return ""
 
     def retrieve_evidence(self, retrieval_plan: dict[str, object]) -> list[dict[str, Any]]:
         normalized_plan = self._normalize_retrieval_plan(
@@ -646,6 +736,15 @@ class Task3Runtime:
         query_result: pd.DataFrame,
         evidences: list[dict[str, Any]],
     ) -> str:
+        unsupported_metric_answer = self.unsupported_business_metric_answer(question, query_result, evidences)
+        if unsupported_metric_answer:
+            return unsupported_metric_answer
+        follow_up = self.deterministic_follow_up_answer(question, query_result)
+        if follow_up:
+            return follow_up
+        single_row_answer = self.deterministic_single_row_answer(question, query_plan or {}, query_result)
+        if single_row_answer:
+            return single_row_answer
         deterministic = self._deterministic_sql_answer(question, query_plan or {}, query_result)
         if deterministic:
             return deterministic
@@ -672,13 +771,12 @@ class Task3Runtime:
         threshold = query_plan.get("threshold")
         top_n = query_plan.get("top_n")
         metrics = list(query_plan.get("metrics", []) or [])
-        if intent_type not in {"sql_only", "sql_chart"}:
+        if intent_type not in {"sql_only", "sql_chart", "industry_open_analysis"}:
             return ""
-        if threshold in (None, "") and top_n in (None, ""):
+        if any(token in question for token in DETERMINISTIC_COMPLEX_TOKENS):
             return ""
         if not metrics:
             return ""
-        metric_label = str(metrics[0])
         if query_result.empty:
             threshold_text = ""
             if threshold not in (None, ""):
@@ -689,47 +787,126 @@ class Task3Runtime:
             ).strip()
         if not {"stock_abbr", "stock_code"}.issubset(query_result.columns):
             return ""
-        value_field = None
-        for candidate in ["total_operating_revenue", "net_profit", "total_profit", "roe"]:
-            if candidate in query_result.columns:
-                value_field = candidate
-                break
-        if value_field is None:
-            numeric_cols = [col for col in query_result.columns if pd.to_numeric(query_result[col], errors="coerce").notna().sum() > 0]
-            value_field = numeric_cols[0] if numeric_cols else None
-        if value_field is None:
+        if threshold in (None, "") and top_n in (None, "") and len(query_result) > 3:
+            return ""
+        metric_fields: list[tuple[str, str]] = []
+        for metric_label in metrics[:3]:
+            field_name = self._resolve_metric_field(str(metric_label), query_result)
+            if field_name:
+                metric_fields.append((str(metric_label), field_name))
+        if not metric_fields:
             return ""
         rows = query_result.head(int(top_n or len(query_result))).to_dict(orient="records")
         lines = []
         for idx, row in enumerate(rows, start=1):
             stock_abbr = str(row.get("stock_abbr", "") or "").strip()
             stock_code = str(row.get("stock_code", "") or "").strip()
-            raw_value = row.get(value_field)
-            if raw_value is None or raw_value == "":
+            metric_texts: list[str] = []
+            for metric_label, field_name in metric_fields:
+                raw_value = row.get(field_name)
+                if raw_value is None or raw_value == "":
+                    continue
+                value_text = self._format_metric_value(metric_label, raw_value)
+                if not value_text:
+                    continue
+                metric_texts.append(f"{metric_label}为{value_text}")
+            if not metric_texts:
                 continue
-            try:
-                value = float(raw_value)
-            except Exception:
-                continue
-            if metric_label in {"营业总收入", "主营业务收入", "营业收入"}:
-                value_text = f"{value / 10000:.2f}亿元"
-            elif metric_label in {"净利润", "利润总额"}:
-                value_text = f"{value / 10000:.2f}亿元" if abs(value) >= 10000 else f"{value:.2f}万元"
-            elif metric_label == "ROE":
-                value_text = f"{value:.2f}%"
-            else:
-                value_text = f"{value:.2f}"
-            lines.append(f"{idx}. **{stock_abbr} ({stock_code})**：{metric_label}为{value_text}。")
+            lines.append(f"{idx}. **{stock_abbr} ({stock_code})**：{'，'.join(metric_texts)}。")
         if not lines:
             return ""
         prefix = "根据SQL查询结果，满足条件的公司如下："
         if "共同点" in question:
             prefix = "根据SQL查询结果，这些公司的共同点如下："
         summary = ""
-        if "共同点" in question and metric_label in {"营业总收入", "主营业务收入", "营业收入"} and threshold not in (None, ""):
+        primary_metric = metric_fields[0][0]
+        if "共同点" in question and primary_metric in {"营业总收入", "主营业务收入", "营业收入"} and threshold not in (None, ""):
             threshold_text = f"{float(threshold) / 10000:.0f}亿元" if float(threshold) >= 10000 else str(threshold)
-            summary = f"\n\n**直接结论**：这些公司在当前报告期的{metric_label}均超过{threshold_text}，属于该指标规模最高的一组公司。"
+            summary = f"\n\n**直接结论**：这些公司在当前报告期的{primary_metric}均超过{threshold_text}，属于该指标规模最高的一组公司。"
+        constant_notes = self._extract_constant_text_notes(query_result)
+        if constant_notes:
+            summary += ("\n\n" if summary else "\n\n") + "\n".join(constant_notes)
         return prefix + "\n" + "\n".join(lines) + summary
+
+    def deterministic_follow_up_answer(self, question: str, query_result: pd.DataFrame) -> str:
+        if query_result.empty:
+            return ""
+        if any(token in question for token in ["数据来源", "是否可靠", "可靠性", "从哪里查询"]):
+            companies = self._series_values(query_result, ["stock_abbr", "公司简称"])
+            periods = self._series_values(query_result, ["report_period", "报告期"])
+            company_text = "、".join(companies[:6]) if companies else "相关公司"
+            period_text = "、".join(periods[:6]) if periods else "当前报告期"
+            return (
+                "直接结论：当前回答所依据的数据来源是 `financials_view` 标准化财务视图，"
+                "其底层来自上市公司定期报告抽取后的结构化财务数据，整体可靠性较高。\n\n"
+                f"财务数据支撑：本轮分析实际使用的是 {company_text} 在 {period_text} 的标准化财务字段，而不是临时人工录入结果。\n\n"
+                "综合判断：该数据源口径统一、来源清晰，适合作为任务三问答的财务事实依据；"
+                "若需要进一步核对原文出处，可继续结合 references 中的研报与原始报告路径复核。"
+            )
+        return ""
+
+    def deterministic_single_row_answer(
+        self,
+        question: str,
+        query_plan: dict[str, Any],
+        query_result: pd.DataFrame,
+    ) -> str:
+        if len(query_result) != 1:
+            return ""
+        if any(token in question for token in DETERMINISTIC_COMPLEX_TOKENS):
+            return ""
+        if not {"stock_abbr", "stock_code"}.issubset(query_result.columns):
+            return ""
+        row = query_result.iloc[0].to_dict()
+        question_metrics = self.intent_parser.parse_text(question).metrics
+        preferred_metrics = self._question_focused_metrics(question, question_metrics or list(query_plan.get("metrics", []) or []))
+        metric_texts: list[str] = []
+        for metric_label in preferred_metrics[:3]:
+            field_name = self._resolve_metric_field(metric_label, query_result)
+            if not field_name:
+                continue
+            value_text = self._format_metric_value(metric_label, row.get(field_name))
+            if not value_text:
+                continue
+            metric_texts.append(f"{metric_label}为{value_text}")
+        if not metric_texts:
+            return ""
+        stock_abbr = str(row.get("stock_abbr", "") or "").strip()
+        stock_code = str(row.get("stock_code", "") or "").strip()
+        return f"根据SQL查询结果，满足条件的公司如下：\n1. **{stock_abbr} ({stock_code})**：{'，'.join(metric_texts)}。"
+
+    def unsupported_business_metric_answer(
+        self,
+        question: str,
+        query_result: pd.DataFrame,
+        evidences: list[dict[str, Any]],
+    ) -> str:
+        if any(token in question for token in ["从哪里查询", "数据来源", "是否可靠", "可靠性"]):
+            return ""
+        missing_field_name = self._unsupported_business_metric_name(question)
+        if not missing_field_name:
+            return ""
+        schema_columns = set(query_result.columns.tolist())
+        if any(field_name in schema_columns for _, field_name in UNSUPPORTED_BUSINESS_METRIC_RULES):
+            return ""
+        evidence_text = "未检索到直接研报证据。"
+        if evidences:
+            evidence_text = "已检索到相关研报，但现有证据主要提供行业趋势或定性描述，未形成可直接排序的公司级结构化字段。"
+        return (
+            f"直接结论：当前标准化财务视图中没有可直接用于计算“{missing_field_name}”的结构化字段，因此无法据此给出严格的公司排序或占比结果。\n\n"
+            "财务数据支撑：现有 `financials_view` 主要提供营业总收入、净利润、ROE、资产负债率等标准财务指标，"
+            "并不包含特定业务条线或主题标签口径下的收入占比字段。\n\n"
+            f"研报证据支撑：{evidence_text}\n\n"
+            "综合判断：这类问题需要额外的业务拆分字段或更细粒度的研报/年报文本标注后才能可靠回答；"
+            "在当前数据结构下，直接用营业总收入或公司简称模糊替代，会造成口径偏差，因此不应强行给出排序结论。"
+        )
+
+    @staticmethod
+    def _unsupported_business_metric_name(question: str) -> str:
+        for keyword, field_name in UNSUPPORTED_BUSINESS_METRIC_RULES:
+            if keyword in question:
+                return field_name
+        return ""
 
     def rewrite_answer(
         self,
@@ -1640,6 +1817,22 @@ class Task3Runtime:
                 sanitized = sanitized.drop(columns=drop_cols, errors="ignore")
         return sanitized
 
+    def requires_evidence_seeded_company_filter(self, question: str) -> bool:
+        return any(
+            token in question
+            for token in [
+                "应收账款回收风险",
+                "回款风险",
+                "回收不及预期",
+                "FDA",
+                "FDA认证",
+                "集采中标",
+                "中标企业",
+                "业绩预告",
+                "风险提示",
+            ]
+        )
+
     @staticmethod
     def _format_visual_caption(value: Any) -> str:
         if isinstance(value, dict):
@@ -1648,6 +1841,94 @@ class Task3Runtime:
             return f"{label}：{caption}" if label and caption else label or caption
         return str(value or "").strip()
 
+    @staticmethod
+    def _wrap_compound_select_order_by(sql: str) -> str:
+        normalized = sql.strip().rstrip(";")
+        lowered = normalized.lower()
+        if "union" not in lowered or "order by" not in lowered:
+            return ""
+        order_idx = lowered.rfind("order by")
+        if order_idx <= 0:
+            return ""
+        body = normalized[:order_idx].rstrip()
+        order_clause = normalized[order_idx:].strip()
+        if not body or not order_clause:
+            return ""
+        return f"SELECT * FROM (\n{body}\n) AS compound_result\n{order_clause};"
+
+    def _resolve_metric_field(self, metric_label: str, query_result: pd.DataFrame) -> str:
+        columns = list(query_result.columns)
+        for candidate in METRIC_COLUMN_CANDIDATES.get(str(metric_label), []):
+            if candidate in columns:
+                return candidate
+        numeric_candidates: list[str] = []
+        for column in columns:
+            if column in IDENTIFIER_LIKE_COLUMNS:
+                continue
+            numeric_count = pd.to_numeric(query_result[column], errors="coerce").notna().sum()
+            if numeric_count > 0:
+                numeric_candidates.append(column)
+        if len(numeric_candidates) == 1:
+            return numeric_candidates[0]
+        normalized_label = str(metric_label).replace("（", "(").replace("）", ")").lower()
+        for column in numeric_candidates:
+            col_norm = str(column).replace("（", "(").replace("）", ")").lower()
+            if normalized_label and normalized_label in col_norm:
+                return column
+        for column in numeric_candidates:
+            if any(token in str(column).lower() for token in ["revenue", "profit", "expense", "ratio", "margin", "roe"]):
+                return column
+        return ""
+
+    @staticmethod
+    def _format_metric_value(metric_label: str, raw_value: Any) -> str:
+        try:
+            value = float(raw_value)
+        except Exception:
+            return str(raw_value).strip()
+        if metric_label in {"营业总收入", "主营业务收入", "营业收入", "饮片业务收入"}:
+            return f"{value / 10000:.2f}亿元"
+        if metric_label in {"净利润", "利润总额", "研发费用", "销售费用", "经营性现金流量净额", "投资性现金流量净额"}:
+            return f"{value / 10000:.2f}亿元" if abs(value) >= 10000 else f"{value:.2f}万元"
+        if metric_label in {"ROE", "资产负债率", "销售毛利率", "销售净利率", "研发费用占比", "营业总收入增长率"}:
+            return f"{value:.2f}%"
+        if metric_label == "应收账款":
+            return f"{value:.2f}%" if abs(value) <= 1000 else f"{value:.2f}万元"
+        return f"{value:.2f}"
+
+    @staticmethod
+    def _extract_constant_text_notes(query_result: pd.DataFrame) -> list[str]:
+        notes: list[str] = []
+        for column in query_result.columns:
+            if column in IDENTIFIER_LIKE_COLUMNS:
+                continue
+            values = [str(item).strip() for item in query_result[column].tolist() if str(item).strip()]
+            if not values:
+                continue
+            if all(value == values[0] for value in values) and any(
+                token in str(column) for token in ["评价", "说明", "判断", "结论"]
+            ):
+                notes.append(f"研报证据支撑：{values[0]}")
+        return notes
+
+    @staticmethod
+    def _series_values(query_result: pd.DataFrame, candidates: list[str]) -> list[str]:
+        for column in candidates:
+            if column in query_result.columns:
+                return query_result[column].dropna().astype(str).drop_duplicates().tolist()
+        return []
+
+    def _question_focused_metrics(self, question: str, candidate_metrics: list[str]) -> list[str]:
+        focused: list[str] = []
+        for metric_label, trigger_keywords in QUESTION_FOCUSED_METRIC_OVERRIDES.items():
+            if any(keyword in question for keyword in trigger_keywords) and metric_label not in focused:
+                focused.append(metric_label)
+        for metric in candidate_metrics:
+            metric_str = str(metric)
+            if metric_str not in focused:
+                focused.append(metric_str)
+        return focused
+
     def _to_reference_relative_path(self, path_value: Any) -> str:
         path_str = str(path_value or "").strip()
         if not path_str:
@@ -1655,10 +1936,21 @@ class Task3Runtime:
         path = Path(path_str)
         try:
             relative = path.relative_to(self.config.base_dir / "正式数据")
-            return f"./{relative.as_posix()}"
+            parts = list(relative.parts)
+            if parts and parts[0] == "附件5：研报数据":
+                parts[0] = "附件 5：研报数据"
+            return "../" + "/".join(parts)
         except Exception:
             try:
                 relative = path.relative_to(self.config.base_dir)
+                parts = list(relative.parts)
+                if "正式数据" in parts:
+                    idx = parts.index("正式数据")
+                    trimmed = parts[idx + 1 :]
+                    if trimmed:
+                        if trimmed[0] == "附件5：研报数据":
+                            trimmed = ["附件 5：研报数据", *trimmed[1:]]
+                        return "../" + "/".join(trimmed)
                 return f"./{relative.as_posix()}"
             except Exception:
                 return path_str

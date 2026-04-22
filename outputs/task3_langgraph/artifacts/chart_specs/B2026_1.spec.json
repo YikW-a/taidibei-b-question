@@ -1,0 +1,82 @@
+{
+  "schema_version": "task3.chart-spec.v1",
+  "question_id": "B2026",
+  "image_index": 1,
+  "chart_type": "line",
+  "title": "检索2025年研报中提到人工智能产业升级相关布局... - 销售费用",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 2,
+    "preview_rows": [
+      {
+        "stock_code": "603998",
+        "stock_abbr": "方盛制药",
+        "report_period": "2025Q2",
+        "selling_expense_ratio": NaN,
+        "prev_selling_expense_ratio": null,
+        "selling_expense_ratio_change": null
+      },
+      {
+        "stock_code": "603998",
+        "stock_abbr": "方盛制药",
+        "report_period": "2025Q3",
+        "selling_expense_ratio": 42025.624142,
+        "prev_selling_expense_ratio": null,
+        "selling_expense_ratio_change": null
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "report_period",
+    "sort_ascending": true,
+    "top_n": null,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "selling_expense_ratio",
+      "data_type": "quantitative",
+      "label": "selling_expense_ratio",
+      "unit": "%"
+    },
+    "x": {
+      "field": "report_period",
+      "data_type": "temporal",
+      "label": "报告期",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": false
+  },
+  "output": {
+    "filename": "B2026_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B2026_1.jpg"
+  },
+  "meta": {
+    "source_sql": "WITH target_companies AS (\n    SELECT DISTINCT stock_code, stock_abbr\n    FROM financials_view\n    WHERE stock_abbr IN ('方盛制药')\n)\nSELECT \n    fv.stock_code,\n    fv.stock_abbr,\n    fv.report_period,\n    -- 销售费用率 = 销售费用 / 营业总收入，已存储为百分数，直接使用\n    fv.selling_expenses AS selling_expense_ratio,\n    -- 获取上一季度（2025Q2）的销售费用率用于计算变化\n    LAG(fv.selling_expenses) OVER (PARTITION BY fv.stock_code ORDER BY fv.report_period) AS prev_selling_expense_ratio,\n    -- 计算环比变化（百分点）\n    fv.selling_expenses - LAG(fv.selling_expenses) OVER (PARTITION BY fv.stock_code ORDER BY fv.report_period) AS selling_expense_ratio_change\nFROM financials_view fv\nINNER JOIN target_companies tc ON fv.stock_code = tc.stock_code\nWHERE fv.report_period IN ('2025Q3', '2025Q2')\nORDER BY fv.stock_abbr, fv.report_period;",
+    "value_fields": [
+      "selling_expense_ratio"
+    ],
+    "value_labels": [
+      "selling_expense_ratio"
+    ],
+    "original_chart_plan": {
+      "chart_type": "line",
+      "x_field": "report_period",
+      "y_fields": [
+        "selling_expense_ratio"
+      ],
+      "category_field": null,
+      "sort_by": "report_period",
+      "sort_ascending": true,
+      "top_n": null
+    }
+  }
+}

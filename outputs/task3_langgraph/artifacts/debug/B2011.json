@@ -1,0 +1,255 @@
+{
+  "question_id": "B2011",
+  "question_type": "归因分析",
+  "raw_question": "哪些企业是亏钱的？ | “亏钱”在业务场景中，指的是经审计财务报表的核心利润指标为负的数据。 | 哪些共同因素导致企业亏钱",
+  "raw_question_json": "[{\"Q\":\"哪些企业是亏钱的？\"},{\"Q\":\"“亏钱”在业务场景中，指的是经审计财务报表的核心利润指标为负的数据。\"},{\"Q\":\"哪些共同因素导致企业亏钱\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "metrics": [
+      "净利润"
+    ],
+    "periods": [],
+    "focus_topics": [],
+    "intent_type": "sql_only",
+    "needs_sql": true,
+    "needs_retrieval": false,
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "sql_only",
+    "companies": [
+      "珍宝岛",
+      "康惠制药",
+      "维康药业",
+      "华神科技",
+      "益佰制药",
+      "新里程",
+      "葵花药业",
+      "启迪药业",
+      "粤万年青"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "净利润"
+    ],
+    "needs_sql": true,
+    "top_n": null,
+    "threshold": null,
+    "question": "哪些共同因素导致企业亏钱"
+  },
+  "retrieval_plan": {
+    "question": "哪些共同因素导致企业亏钱",
+    "companies": [
+      "珍宝岛",
+      "康惠制药",
+      "维康药业",
+      "华神科技",
+      "益佰制药",
+      "新里程",
+      "葵花药业",
+      "启迪药业",
+      "粤万年青"
+    ],
+    "focus_topics": [
+      "亏损原因",
+      "业绩下滑",
+      "经营风险",
+      "行业困境"
+    ],
+    "needs_retrieval": false,
+    "top_k": 0,
+    "source_scope": "hybrid",
+    "retrieval_mode": "hybrid"
+  },
+  "sql": "WITH loss_companies AS (\n  SELECT \n    stock_code,\n    stock_abbr,\n    report_period,\n    net_profit,\n    total_operating_revenue,\n    operating_cost,\n    selling_expenses,\n    administrative_expenses,\n    financial_expenses,\n    taxes_and_surcharges,\n    gross_profit_margin,\n    net_profit_margin,\n    asset_liability_ratio,\n    accounts_receivable_ratio,\n    inventory_turnover_ratio,\n    rnd_expense_ratio,\n    operating_cf_net_amount,\n    investing_cf_net_amount,\n    financing_cf_net_amount\n  FROM financials_view\n  WHERE stock_abbr IN ('珍宝岛', '康惠制药', '维康药业', '华神科技', '益佰制药', '新里程', '葵花药业', '启迪药业', '粤万年青')\n    AND report_period = '2025Q3'\n    AND net_profit < 0\n)\nSELECT \n  '毛利率' AS factor,\n  AVG(gross_profit_margin) AS avg_value,\n  MIN(gross_profit_margin) AS min_value,\n  MAX(gross_profit_margin) AS max_value\nFROM loss_companies\nUNION ALL\nSELECT \n  '净利率',\n  AVG(net_profit_margin),\n  MIN(net_profit_margin),\n  MAX(net_profit_margin)\nFROM loss_companies\nUNION ALL\nSELECT \n  '资产负债率',\n  AVG(asset_liability_ratio),\n  MIN(asset_liability_ratio),\n  MAX(asset_liability_ratio)\nFROM loss_companies\nUNION ALL\nSELECT \n  '应收账款占比',\n  AVG(accounts_receivable_ratio),\n  MIN(accounts_receivable_ratio),\n  MAX(accounts_receivable_ratio)\nFROM loss_companies\nUNION ALL\nSELECT \n  '存货周转率',\n  AVG(inventory_turnover_ratio),\n  MIN(inventory_turnover_ratio),\n  MAX(inventory_turnover_ratio)\nFROM loss_companies\nUNION ALL\nSELECT \n  '研发费用率',\n  AVG(rnd_expense_ratio),\n  MIN(rnd_expense_ratio),\n  MAX(rnd_expense_ratio)\nFROM loss_companies\nUNION ALL\nSELECT \n  '销售费用率',\n  AVG(selling_expenses * 100.0 / NULLIF(total_operating_revenue, 0)),\n  MIN(selling_expenses * 100.0 / NULLIF(total_operating_revenue, 0)),\n  MAX(selling_expenses * 100.0 / NULLIF(total_operating_revenue, 0))\nFROM loss_companies\nUNION ALL\nSELECT \n  '管理费用率',\n  AVG(administrative_expenses * 100.0 / NULLIF(total_operating_revenue, 0)),\n  MIN(administrative_expenses * 100.0 / NULLIF(total_operating_revenue, 0)),\n  MAX(administrative_expenses * 100.0 / NULLIF(total_operating_revenue, 0))\nFROM loss_companies\nUNION ALL\nSELECT \n  '财务费用率',\n  AVG(financial_expenses * 100.0 / NULLIF(total_operating_revenue, 0)),\n  MIN(financial_expenses * 100.0 / NULLIF(total_operating_revenue, 0)),\n  MAX(financial_expenses * 100.0 / NULLIF(total_operating_revenue, 0))\nFROM loss_companies\nUNION ALL\nSELECT \n  '营业成本率',\n  AVG(operating_cost * 100.0 / NULLIF(total_operating_revenue, 0)),\n  MIN(operating_cost * 100.0 / NULLIF(total_operating_revenue, 0)),\n  MAX(operating_cost * 100.0 / NULLIF(total_operating_revenue, 0))\nFROM loss_companies\nUNION ALL\nSELECT \n  '经营活动现金流净额',\n  AVG(operating_cf_net_amount),\n  MIN(operating_cf_net_amount),\n  MAX(operating_cf_net_amount)\nFROM loss_companies\nORDER BY factor;",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, report_period, net_profit FROM financials_view WHERE report_period IN (SELECT MAX(report_period) FROM financials_view) AND net_profit < 0 ORDER BY net_profit;",
+    "SELECT stock_code, stock_abbr, report_period, net_profit FROM financials_view WHERE stock_abbr IN ('珍宝岛', '康惠制药', '维康药业', '华神科技', '益佰制药', '新里程', '葵花药业', '启迪药业', '粤万年青') AND report_period = '2025Q3' AND net_profit < 0 ORDER BY net_profit ASC;",
+    "WITH loss_companies AS (\n  SELECT \n    stock_code,\n    stock_abbr,\n    report_period,\n    net_profit,\n    total_operating_revenue,\n    operating_cost,\n    selling_expenses,\n    administrative_expenses,\n    financial_expenses,\n    taxes_and_surcharges,\n    gross_profit_margin,\n    net_profit_margin,\n    asset_liability_ratio,\n    accounts_receivable_ratio,\n    inventory_turnover_ratio,\n    rnd_expense_ratio,\n    operating_cf_net_amount,\n    investing_cf_net_amount,\n    financing_cf_net_amount\n  FROM financials_view\n  WHERE stock_abbr IN ('珍宝岛', '康惠制药', '维康药业', '华神科技', '益佰制药', '新里程', '葵花药业', '启迪药业', '粤万年青')\n    AND report_period = '2025Q3'\n    AND net_profit < 0\n)\nSELECT \n  '毛利率' AS factor,\n  AVG(gross_profit_margin) AS avg_value,\n  MIN(gross_profit_margin) AS min_value,\n  MAX(gross_profit_margin) AS max_value\nFROM loss_companies\nUNION ALL\nSELECT \n  '净利率',\n  AVG(net_profit_margin),\n  MIN(net_profit_margin),\n  MAX(net_profit_margin)\nFROM loss_companies\nUNION ALL\nSELECT \n  '资产负债率',\n  AVG(asset_liability_ratio),\n  MIN(asset_liability_ratio),\n  MAX(asset_liability_ratio)\nFROM loss_companies\nUNION ALL\nSELECT \n  '应收账款占比',\n  AVG(accounts_receivable_ratio),\n  MIN(accounts_receivable_ratio),\n  MAX(accounts_receivable_ratio)\nFROM loss_companies\nUNION ALL\nSELECT \n  '存货周转率',\n  AVG(inventory_turnover_ratio),\n  MIN(inventory_turnover_ratio),\n  MAX(inventory_turnover_ratio)\nFROM loss_companies\nUNION ALL\nSELECT \n  '研发费用率',\n  AVG(rnd_expense_ratio),\n  MIN(rnd_expense_ratio),\n  MAX(rnd_expense_ratio)\nFROM loss_companies\nUNION ALL\nSELECT \n  '销售费用率',\n  AVG(selling_expenses * 100.0 / NULLIF(total_operating_revenue, 0)),\n  MIN(selling_expenses * 100.0 / NULLIF(total_operating_revenue, 0)),\n  MAX(selling_expenses * 100.0 / NULLIF(total_operating_revenue, 0))\nFROM loss_companies\nUNION ALL\nSELECT \n  '管理费用率',\n  AVG(administrative_expenses * 100.0 / NULLIF(total_operating_revenue, 0)),\n  MIN(administrative_expenses * 100.0 / NULLIF(total_operating_revenue, 0)),\n  MAX(administrative_expenses * 100.0 / NULLIF(total_operating_revenue, 0))\nFROM loss_companies\nUNION ALL\nSELECT \n  '财务费用率',\n  AVG(financial_expenses * 100.0 / NULLIF(total_operating_revenue, 0)),\n  MIN(financial_expenses * 100.0 / NULLIF(total_operating_revenue, 0)),\n  MAX(financial_expenses * 100.0 / NULLIF(total_operating_revenue, 0))\nFROM loss_companies\nUNION ALL\nSELECT \n  '营业成本率',\n  AVG(operating_cost * 100.0 / NULLIF(total_operating_revenue, 0)),\n  MIN(operating_cost * 100.0 / NULLIF(total_operating_revenue, 0)),\n  MAX(operating_cost * 100.0 / NULLIF(total_operating_revenue, 0))\nFROM loss_companies\nUNION ALL\nSELECT \n  '经营活动现金流净额',\n  AVG(operating_cf_net_amount),\n  MIN(operating_cf_net_amount),\n  MAX(operating_cf_net_amount)\nFROM loss_companies\nORDER BY factor;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 11,
+  "result_rows": [
+    {
+      "factor": "净利率",
+      "avg_value": -22.31932210558819,
+      "min_value": "-1.70507909693721",
+      "max_value": "-81.8506595230379"
+    },
+    {
+      "factor": "存货周转率",
+      "avg_value": 0.9860105694007496,
+      "min_value": 0.06513494049672847,
+      "max_value": 3.4007278399611076
+    },
+    {
+      "factor": "应收账款占比",
+      "avg_value": 70.45240762346413,
+      "min_value": 1.4387688019861358,
+      "max_value": 338.10230035814556
+    },
+    {
+      "factor": "毛利率",
+      "avg_value": 39.594181357572836,
+      "min_value": "15.3428859405165",
+      "max_value": "61.7593469398415"
+    },
+    {
+      "factor": "研发费用率",
+      "avg_value": 3.087065464532584,
+      "min_value": 0.5385317624961006,
+      "max_value": 5.187840675072184
+    },
+    {
+      "factor": "管理费用率",
+      "avg_value": 17.55365263703881,
+      "min_value": 11.568756670661143,
+      "max_value": 29.38097892057723
+    },
+    {
+      "factor": "经营活动现金流净额",
+      "avg_value": 9478.491208222222,
+      "min_value": "-1034.070071",
+      "max_value": "4298.146828"
+    },
+    {
+      "factor": "营业成本率",
+      "avg_value": 60.40581864242716,
+      "min_value": 38.24065306015851,
+      "max_value": 84.65711405948349
+    },
+    {
+      "factor": "财务费用率",
+      "avg_value": 3.556679844470743,
+      "min_value": -0.23304253481987608,
+      "max_value": 12.260590269599394
+    },
+    {
+      "factor": "资产负债率",
+      "avg_value": 39.58285714276736,
+      "min_value": 17.401428783983604,
+      "max_value": 69.12801378944201
+    },
+    {
+      "factor": "销售费用率",
+      "avg_value": 30.33562766602647,
+      "min_value": 5.533222822973221,
+      "max_value": 49.774525254597066
+    }
+  ],
+  "retrieved_evidence": [],
+  "reranked_evidence": [],
+  "rerank_preview": "{\"strategy\": \"skipped_fast_path\", \"kept_count\": 0}",
+  "fused_context": {
+    "question": "哪些共同因素导致企业亏钱",
+    "sql_row_count": 11,
+    "evidence_count": 0,
+    "sql_preview": [
+      {
+        "factor": "净利率",
+        "avg_value": -22.31932210558819,
+        "min_value": "-1.70507909693721",
+        "max_value": "-81.8506595230379"
+      },
+      {
+        "factor": "存货周转率",
+        "avg_value": 0.9860105694007496,
+        "min_value": 0.06513494049672847,
+        "max_value": 3.4007278399611076
+      },
+      {
+        "factor": "应收账款占比",
+        "avg_value": 70.45240762346413,
+        "min_value": 1.4387688019861358,
+        "max_value": 338.10230035814556
+      },
+      {
+        "factor": "毛利率",
+        "avg_value": 39.594181357572836,
+        "min_value": "15.3428859405165",
+        "max_value": "61.7593469398415"
+      },
+      {
+        "factor": "研发费用率",
+        "avg_value": 3.087065464532584,
+        "min_value": 0.5385317624961006,
+        "max_value": 5.187840675072184
+      }
+    ],
+    "evidence_preview": [],
+    "evidence_titles": [],
+    "source_breakdown": {}
+  },
+  "self_check": {
+    "pass": true,
+    "notes": [
+      "self_check_skipped_fast_path"
+    ]
+  },
+  "chart_plan": {},
+  "chart_spec": {},
+  "current_chart_paths": [],
+  "current_chart_specs": [],
+  "current_answer": "根据提供的财务数据分析，在2025年第三季度，**珍宝岛、康惠制药、维康药业、华神科技、益佰制药、新里程、葵花药业、启迪药业、粤万年青** 这9家公司均出现净利润为负的情况。通过对比这些亏损公司的多项财务比率，可以观察到一些普遍存在的财务特征，这些特征可能是导致其亏损的共同结构性因素。\n\n**直接结论：**\n导致这些企业亏损的共同因素可能包括：**盈利能力严重下滑、销售与管理费用高企、以及部分公司运营效率偏低**。\n\n**财务数据支撑：**\n1.  **盈利能力严重不足**：所有亏损公司的平均净利率为 **-22.32%**，最低值低至 **-81.85%**，表明整体盈利能力极差，是亏损的直接财务表现。\n2.  **费用率普遍较高**：\n    *   **销售费用率**平均高达 **30.34%**，最高接近 **49.77%**，显示市场推广和销售投入巨大。\n    *   **管理费用率**平均为 **17.55%**，最高达 **29.38%**，表明公司日常运营的行政开支负担较重。\n    *   这两项高费用率严重侵蚀了利润空间。\n3.  **运营效率存在隐忧**：\n    *   **应收账款占比**平均值高达 **70.45%**，且最大值异常突出（**338.10%**），表明部分公司回款周期可能很长，资金被大量占用，存在坏账风险并影响现金流。\n    *   **存货周转率**平均值仅为 **0.99**，最低值低至 **0.07**，反映出部分公司存货积压、变现能力较弱，占用了营运资金并可能产生跌价损失。\n4.  **其他财务特征**：\n    *   平均毛利率为 **39.59%**，但营业成本率平均也达到 **60.41%**，成本控制压力依然存在。\n    *   平均资产负债率为 **39.58%**，整体负债水平尚可，但财务费用率平均为 **3.56%**，对部分公司仍构成一定压力。\n    *   经营活动现金流净额平均值为正（**9478.49万元**，约合 **0.95亿元**），但最小值也为负（**-1034.07万元**），表明现金流状况在公司间分化明显，并非所有公司都因现金流断裂而亏损。\n\n**研报证据支撑：**\n未检索到直接研报证据。\n\n**综合判断：**\n综合以上财务数据分析，这些医药企业在2025年第三季度亏损的共同结构性因素可能在于：**在毛利率空间有限的情况下，高昂的销售与管理费用大幅压低了利润；同时，偏高的应收账款和偏低的存货周转率反映了在运营效率和资金回收方面存在普遍挑战，进一步加剧了盈利困难。** 当前只有统计摘要数据，无法直接证明上述每一项因素都同时作用于名单中的每一家公司，但这些指标的平均水平揭示了亏损企业群体中普遍存在的财务特征。",
+  "current_references": [],
+  "answer_rewritten": false,
+  "turn_answers": [
+    {
+      "Q": "哪些企业是亏钱的？",
+      "A": {
+        "content": "根据SQL查询结果，满足条件的公司如下：\n1. **珍宝岛 (603567)**：net_profit为-37309.83。\n2. **康惠制药 (603139)**：net_profit为-13250.39。\n3. **维康药业 (300878)**：net_profit为-12385.46。\n4. **华神科技 (000790)**：net_profit为-9778.53。\n5. **益佰制药 (600594)**：net_profit为-8656.26。\n6. **新里程 (002219)**：net_profit为-3846.82。\n7. **葵花药业 (002737)**：net_profit为-3353.87。\n8. **启迪药业 (000590)**：net_profit为-1482.06。\n9. **粤万年青 (301111)**：net_profit为-812.95。",
+        "image": [],
+        "references": []
+      }
+    },
+    {
+      "Q": "“亏钱”在业务场景中，指的是经审计财务报表的核心利润指标为负的数据。",
+      "A": {
+        "content": "根据SQL查询结果，满足条件的公司如下：\n1. **珍宝岛 (603567)**：净利润为-3.73亿元。\n2. **康惠制药 (603139)**：净利润为-1.33亿元。\n3. **维康药业 (300878)**：净利润为-1.24亿元。\n4. **华神科技 (000790)**：净利润为-9778.53万元。\n5. **益佰制药 (600594)**：净利润为-8656.26万元。\n6. **新里程 (002219)**：净利润为-3846.82万元。\n7. **葵花药业 (002737)**：净利润为-3353.87万元。\n8. **启迪药业 (000590)**：净利润为-1482.06万元。\n9. **粤万年青 (301111)**：净利润为-812.95万元。",
+        "image": [],
+        "references": []
+      }
+    },
+    {
+      "Q": "哪些共同因素导致企业亏钱",
+      "A": {
+        "content": "根据提供的财务数据分析，在2025年第三季度，**珍宝岛、康惠制药、维康药业、华神科技、益佰制药、新里程、葵花药业、启迪药业、粤万年青** 这9家公司均出现净利润为负的情况。通过对比这些亏损公司的多项财务比率，可以观察到一些普遍存在的财务特征，这些特征可能是导致其亏损的共同结构性因素。\n\n**直接结论：**\n导致这些企业亏损的共同因素可能包括：**盈利能力严重下滑、销售与管理费用高企、以及部分公司运营效率偏低**。\n\n**财务数据支撑：**\n1.  **盈利能力严重不足**：所有亏损公司的平均净利率为 **-22.32%**，最低值低至 **-81.85%**，表明整体盈利能力极差，是亏损的直接财务表现。\n2.  **费用率普遍较高**：\n    *   **销售费用率**平均高达 **30.34%**，最高接近 **49.77%**，显示市场推广和销售投入巨大。\n    *   **管理费用率**平均为 **17.55%**，最高达 **29.38%**，表明公司日常运营的行政开支负担较重。\n    *   这两项高费用率严重侵蚀了利润空间。\n3.  **运营效率存在隐忧**：\n    *   **应收账款占比**平均值高达 **70.45%**，且最大值异常突出（**338.10%**），表明部分公司回款周期可能很长，资金被大量占用，存在坏账风险并影响现金流。\n    *   **存货周转率**平均值仅为 **0.99**，最低值低至 **0.07**，反映出部分公司存货积压、变现能力较弱，占用了营运资金并可能产生跌价损失。\n4.  **其他财务特征**：\n    *   平均毛利率为 **39.59%**，但营业成本率平均也达到 **60.41%**，成本控制压力依然存在。\n    *   平均资产负债率为 **39.58%**，整体负债水平尚可，但财务费用率平均为 **3.56%**，对部分公司仍构成一定压力。\n    *   经营活动现金流净额平均值为正（**9478.49万元**，约合 **0.95亿元**），但最小值也为负（**-1034.07万元**），表明现金流状况在公司间分化明显，并非所有公司都因现金流断裂而亏损。\n\n**研报证据支撑：**\n未检索到直接研报证据。\n\n**综合判断：**\n综合以上财务数据分析，这些医药企业在2025年第三季度亏损的共同结构性因素可能在于：**在毛利率空间有限的情况下，高昂的销售与管理费用大幅压低了利润；同时，偏高的应收账款和偏低的存货周转率反映了在运营效率和资金回收方面存在普遍挑战，进一步加剧了盈利困难。** 当前只有统计摘要数据，无法直接证明上述每一项因素都同时作用于名单中的每一家公司，但这些指标的平均水平揭示了亏损企业群体中普遍存在的财务特征。",
+        "image": [],
+        "references": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"哪些企业是亏钱的？\", \"A\": {\"content\": \"根据SQL查询结果，满足条件的公司如下：\\n1. **珍宝岛 (603567)**：net_profit为-37309.83。\\n2. **康惠制药 (603139)**：net_profit为-13250.39。\\n3. **维康药业 (300878)**：net_profit为-12385.46。\\n4. **华神科技 (000790)**：net_profit为-9778.53。\\n5. **益佰制药 (600594)**：net_profit为-8656.26。\\n6. **新里程 (002219)**：net_profit为-3846.82。\\n7. **葵花药业 (002737)**：net_profit为-3353.87。\\n8. **启迪药业 (000590)**：net_profit为-1482.06。\\n9. **粤万年青 (301111)**：net_profit为-812.95。\", \"image\": [], \"references\": []}}, {\"Q\": \"“亏钱”在业务场景中，指的是经审计财务报表的核心利润指标为负的数据。\", \"A\": {\"content\": \"根据SQL查询结果，满足条件的公司如下：\\n1. **珍宝岛 (603567)**：净利润为-3.73亿元。\\n2. **康惠制药 (603139)**：净利润为-1.33亿元。\\n3. **维康药业 (300878)**：净利润为-1.24亿元。\\n4. **华神科技 (000790)**：净利润为-9778.53万元。\\n5. **益佰制药 (600594)**：净利润为-8656.26万元。\\n6. **新里程 (002219)**：净利润为-3846.82万元。\\n7. **葵花药业 (002737)**：净利润为-3353.87万元。\\n8. **启迪药业 (000590)**：净利润为-1482.06万元。\\n9. **粤万年青 (301111)**：净利润为-812.95万元。\", \"image\": [], \"references\": []}}, {\"Q\": \"哪些共同因素导致企业亏钱\", \"A\": {\"content\": \"根据提供的财务数据分析，在2025年第三季度，**珍宝岛、康惠制药、维康药业、华神科技、益佰制药、新里程、葵花药业、启迪药业、粤万年青** 这9家公司均出现净利润为负的情况。通过对比这些亏损公司的多项财务比率，可以观察到一些普遍存在的财务特征，这些特征可能是导致其亏损的共同结构性因素。\\n\\n**直接结论：**\\n导致这些企业亏损的共同因素可能包括：**盈利能力严重下滑、销售与管理费用高企、以及部分公司运营效率偏低**。\\n\\n**财务数据支撑：**\\n1.  **盈利能力严重不足**：所有亏损公司的平均净利率为 **-22.32%**，最低值低至 **-81.85%**，表明整体盈利能力极差，是亏损的直接财务表现。\\n2.  **费用率普遍较高**：\\n    *   **销售费用率**平均高达 **30.34%**，最高接近 **49.77%**，显示市场推广和销售投入巨大。\\n    *   **管理费用率**平均为 **17.55%**，最高达 **29.38%**，表明公司日常运营的行政开支负担较重。\\n    *   这两项高费用率严重侵蚀了利润空间。\\n3.  **运营效率存在隐忧**：\\n    *   **应收账款占比**平均值高达 **70.45%**，且最大值异常突出（**338.10%**），表明部分公司回款周期可能很长，资金被大量占用，存在坏账风险并影响现金流。\\n    *   **存货周转率**平均值仅为 **0.99**，最低值低至 **0.07**，反映出部分公司存货积压、变现能力较弱，占用了营运资金并可能产生跌价损失。\\n4.  **其他财务特征**：\\n    *   平均毛利率为 **39.59%**，但营业成本率平均也达到 **60.41%**，成本控制压力依然存在。\\n    *   平均资产负债率为 **39.58%**，整体负债水平尚可，但财务费用率平均为 **3.56%**，对部分公司仍构成一定压力。\\n    *   经营活动现金流净额平均值为正（**9478.49万元**，约合 **0.95亿元**），但最小值也为负（**-1034.07万元**），表明现金流状况在公司间分化明显，并非所有公司都因现金流断裂而亏损。\\n\\n**研报证据支撑：**\\n未检索到直接研报证据。\\n\\n**综合判断：**\\n综合以上财务数据分析，这些医药企业在2025年第三季度亏损的共同结构性因素可能在于：**在毛利率空间有限的情况下，高昂的销售与管理费用大幅压低了利润；同时，偏高的应收账款和偏低的存货周转率反映了在运营效率和资金回收方面存在普遍挑战，进一步加剧了盈利困难。** 当前只有统计摘要数据，无法直接证明上述每一项因素都同时作用于名单中的每一家公司，但这些指标的平均水平揭示了亏损企业群体中普遍存在的财务特征。\", \"image\": [], \"references\": []}}]",
+  "references_json": "[]",
+  "notes": [
+    "route=sql_only",
+    "问题要求找出哪些企业是亏钱的，即净利润为负的企业。根据查询计划，需要查询最新报告期（periods: [\"latest\"]）的净利润（metrics: [\"net_profit\"]），且没有指定具体公司（companies: []），因此不能限制公司列表。使用子查询获取最新的report_period，然后筛选net_profit < 0，并按净利润排序以显示亏损程度。",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=0",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=0",
+    "self_check={\"pass\": true, \"notes\": [\"self_check_skipped_fast_path\"]}",
+    "route=sql_only",
+    "根据query_plan，需要查询指定9家公司在2025Q3期间净利润为负的数据。由于query_plan明确给出了companies列表，可以使用stock_abbr IN (...)来限定公司范围。条件设置为report_period = '2025Q3' AND net_profit < 0，并按net_profit升序排列（从最负到最接近0），以便清晰展示亏损程度。",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=0",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=0",
+    "self_check={\"pass\": true, \"notes\": [\"self_check_skipped_fast_path\"]}",
+    "route=sql_only",
+    "根据查询计划，需要分析指定9家公司在2025Q3净利润为负的共同因素。SQL查询首先筛选出这些亏损公司，然后计算多个可能影响盈利的关键财务指标的平均值、最小值和最大值，包括：毛利率、净利率、资产负债率、应收账款占比、存货周转率、研发费用率、销售费用率、管理费用率、财务费用率、营业成本率和经营活动现金流净额。这些指标可以帮助识别导致亏损的共同因素，如成本控制、费用结构、资产质量、现金流状况等。查询使用UNION ALL将各指标结果合并，并按指标名称排序。",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=0",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=0",
+    "self_check={\"pass\": true, \"notes\": [\"self_check_skipped_fast_path\"]}"
+  ],
+  "final_status": "ok"
+}

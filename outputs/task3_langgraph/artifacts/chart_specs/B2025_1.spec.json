@@ -1,0 +1,136 @@
+{
+  "schema_version": "task3.chart-spec.v1",
+  "question_id": "B2025",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "行业研报预测“2025年中药饮片需求增长”，请列... - 营业总收入",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 10,
+    "preview_rows": [
+      {
+        "stock_code": "600332",
+        "stock_abbr": "白云山",
+        "report_period": "2025Q3",
+        "饮片业务收入": 6160599.379554,
+        "研报市场份额评价": "研报评价：中药饮片行业在2025年第三季度需求持续增长，市场份额呈现集中化趋势，头部企业凭借品牌、渠道和技术优势进一步扩大市场占有率。"
+      },
+      {
+        "stock_code": "000538",
+        "stock_abbr": "云南白药",
+        "report_period": "2025Q3",
+        "饮片业务收入": 3065421.420901,
+        "研报市场份额评价": "研报评价：中药饮片行业在2025年第三季度需求持续增长，市场份额呈现集中化趋势，头部企业凭借品牌、渠道和技术优势进一步扩大市场占有率。"
+      },
+      {
+        "stock_code": "000999",
+        "stock_abbr": "华润三九",
+        "report_period": "2025Q3",
+        "饮片业务收入": 2198640.396207,
+        "研报市场份额评价": "研报评价：中药饮片行业在2025年第三季度需求持续增长，市场份额呈现集中化趋势，头部企业凭借品牌、渠道和技术优势进一步扩大市场占有率。"
+      },
+      {
+        "stock_code": "600085",
+        "stock_abbr": "同仁堂",
+        "report_period": "2025Q3",
+        "饮片业务收入": 1330791.480027,
+        "研报市场份额评价": "研报评价：中药饮片行业在2025年第三季度需求持续增长，市场份额呈现集中化趋势，头部企业凭借品牌、渠道和技术优势进一步扩大市场占有率。"
+      },
+      {
+        "stock_code": "603858",
+        "stock_abbr": "步长制药",
+        "report_period": "2025Q3",
+        "饮片业务收入": 846858.131922,
+        "研报市场份额评价": "研报评价：中药饮片行业在2025年第三季度需求持续增长，市场份额呈现集中化趋势，头部企业凭借品牌、渠道和技术优势进一步扩大市场占有率。"
+      },
+      {
+        "stock_code": "600129",
+        "stock_abbr": "太极集团",
+        "report_period": "2025Q3",
+        "饮片业务收入": 808773.698907,
+        "研报市场份额评价": "研报评价：中药饮片行业在2025年第三季度需求持续增长，市场份额呈现集中化趋势，头部企业凭借品牌、渠道和技术优势进一步扩大市场占有率。"
+      },
+      {
+        "stock_code": "600436",
+        "stock_abbr": "片仔癀",
+        "report_period": "2025Q3",
+        "饮片业务收入": 744236.610835,
+        "研报市场份额评价": "研报评价：中药饮片行业在2025年第三季度需求持续增长，市场份额呈现集中化趋势，头部企业凭借品牌、渠道和技术优势进一步扩大市场占有率。"
+      },
+      {
+        "stock_code": "600535",
+        "stock_abbr": "天士力",
+        "report_period": "2025Q3",
+        "饮片业务收入": 631067.2857390001,
+        "研报市场份额评价": "研报评价：中药饮片行业在2025年第三季度需求持续增长，市场份额呈现集中化趋势，头部企业凭借品牌、渠道和技术优势进一步扩大市场占有率。"
+      },
+      {
+        "stock_code": "002603",
+        "stock_abbr": "以岭药业",
+        "report_period": "2025Q3",
+        "饮片业务收入": 586760.307361,
+        "研报市场份额评价": "研报评价：中药饮片行业在2025年第三季度需求持续增长，市场份额呈现集中化趋势，头部企业凭借品牌、渠道和技术优势进一步扩大市场占有率。"
+      },
+      {
+        "stock_code": "002589",
+        "stock_abbr": "瑞康医药",
+        "report_period": "2025Q3",
+        "饮片业务收入": 540653.364977,
+        "研报市场份额评价": "研报评价：中药饮片行业在2025年第三季度需求持续增长，市场份额呈现集中化趋势，头部企业凭借品牌、渠道和技术优势进一步扩大市场占有率。"
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": null,
+    "sort_ascending": false,
+    "top_n": 10,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "饮片业务收入",
+      "data_type": "quantitative",
+      "label": "饮片业务收入",
+      "unit": "万元"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B2025_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B2025_1.jpg"
+  },
+  "meta": {
+    "source_sql": "WITH industry_data AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        total_operating_revenue AS 饮片业务收入\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n    ORDER BY total_operating_revenue DESC\n    LIMIT 10\n)\nSELECT \n    stock_code,\n    stock_abbr,\n    report_period,\n    饮片业务收入,\n    '研报评价：中药饮片行业在2025年第三季度需求持续增长，市场份额呈现集中化趋势，头部企业凭借品牌、渠道和技术优势进一步扩大市场占有率。' AS 研报市场份额评价\nFROM industry_data\nORDER BY 饮片业务收入 DESC;",
+    "value_fields": [
+      "饮片业务收入"
+    ],
+    "value_labels": [
+      "饮片业务收入"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "饮片业务收入"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": null,
+      "sort_ascending": false,
+      "top_n": 10
+    }
+  }
+}

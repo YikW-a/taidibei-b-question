@@ -1,0 +1,144 @@
+{
+  "question_id": "B2053",
+  "question_type": "多意图",
+  "raw_question": "围绕“现金流与利润匹配度”：①计算2025年第三季度各公司的经营性现金流净额/净利润比值；②找出比值在0.8-1.2之间的公司；③统计这些公司的数量；④对比这些公司与比值偏离区间公司的资产质量。",
+  "raw_question_json": "[{\"Q\":\"围绕“现金流与利润匹配度”：①计算2025年第三季度各公司的经营性现金流净额/净利润比值；②找出比值在0.8-1.2之间的公司；③统计这些公司的数量；④对比这些公司与比值偏离区间公司的资产质量。\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "metrics": [
+      "净利润"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "focus_topics": [],
+    "intent_type": "sql_only",
+    "needs_sql": true,
+    "needs_retrieval": false,
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "sql_only",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "净利润"
+    ],
+    "needs_sql": true,
+    "top_n": null,
+    "threshold": [
+      0.8,
+      1.2
+    ],
+    "question": "计算2025年第三季度各公司的经营性现金流净额/净利润比值，找出比值在0.8-1.2之间的公司，统计这些公司的数量，并对比这些公司与比值偏离区间公司的资产质量。"
+  },
+  "retrieval_plan": {
+    "question": "围绕“现金流与利润匹配度”：①计算2025年第三季度各公司的经营性现金流净额/净利润比值；②找出比值在0.8-1.2之间的公司；③统计这些公司的数量；④对比这些公司与比值偏离区间公司的资产质量。",
+    "companies": [],
+    "focus_topics": [
+      "现金流与利润匹配度",
+      "资产质量"
+    ],
+    "needs_retrieval": false,
+    "top_k": 0,
+    "source_scope": "hybrid",
+    "retrieval_mode": "hybrid"
+  },
+  "sql": "WITH cash_profit_ratio AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        operating_cf_net_amount,\n        net_profit,\n        CASE \n            WHEN net_profit > 0 THEN operating_cf_net_amount * 1.0 / net_profit \n            ELSE NULL \n        END AS cf_to_profit_ratio,\n        asset_total_assets,\n        asset_accounts_receivable,\n        asset_inventory,\n        asset_cash_and_cash_equivalents,\n        asset_liability_ratio,\n        accounts_receivable_ratio,\n        inventory_turnover_ratio\n    FROM financials_view \n    WHERE report_period = '2025Q3' \n        AND net_profit IS NOT NULL \n        AND operating_cf_net_amount IS NOT NULL\n),\nmatched_companies AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        cf_to_profit_ratio,\n        asset_total_assets,\n        asset_accounts_receivable,\n        asset_inventory,\n        asset_cash_and_cash_equivalents,\n        asset_liability_ratio,\n        accounts_receivable_ratio,\n        inventory_turnover_ratio,\n        'matched' AS group_type\n    FROM cash_profit_ratio \n    WHERE cf_to_profit_ratio BETWEEN 0.8 AND 1.2\n),\ndeviated_companies AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        cf_to_profit_ratio,\n        asset_total_assets,\n        asset_accounts_receivable,\n        asset_inventory,\n        asset_cash_and_cash_equivalents,\n        asset_liability_ratio,\n        accounts_receivable_ratio,\n        inventory_turnover_ratio,\n        'deviated' AS group_type\n    FROM cash_profit_ratio \n    WHERE cf_to_profit_ratio IS NOT NULL \n        AND cf_to_profit_ratio NOT BETWEEN 0.8 AND 1.2\n),\nmatched_count AS (\n    SELECT COUNT(*) AS matched_company_count FROM matched_companies\n),\nasset_quality_comparison AS (\n    SELECT \n        group_type,\n        COUNT(*) AS company_count,\n        AVG(asset_liability_ratio) AS avg_asset_liability_ratio,\n        AVG(accounts_receivable_ratio) AS avg_accounts_receivable_ratio,\n        AVG(inventory_turnover_ratio) AS avg_inventory_turnover_ratio,\n        AVG(asset_cash_and_cash_equivalents * 1.0 / asset_total_assets) AS avg_cash_to_total_assets_ratio,\n        AVG((asset_accounts_receivable + asset_inventory) * 1.0 / asset_total_assets) AS avg_receivable_inventory_to_total_assets_ratio\n    FROM (\n        SELECT * FROM matched_companies\n        UNION ALL\n        SELECT * FROM deviated_companies\n    )\n    WHERE asset_total_assets > 0\n    GROUP BY group_type\n)\nSELECT \n    mc.matched_company_count,\n    aqc_matched.group_type AS matched_group_type,\n    aqc_matched.company_count AS matched_group_company_count,\n    aqc_matched.avg_asset_liability_ratio AS matched_avg_asset_liability_ratio,\n    aqc_matched.avg_accounts_receivable_ratio AS matched_avg_accounts_receivable_ratio,\n    aqc_matched.avg_inventory_turnover_ratio AS matched_avg_inventory_turnover_ratio,\n    aqc_matched.avg_cash_to_total_assets_ratio AS matched_avg_cash_to_total_assets_ratio,\n    aqc_matched.avg_receivable_inventory_to_total_assets_ratio AS matched_avg_receivable_inventory_to_total_assets_ratio,\n    aqc_deviated.group_type AS deviated_group_type,\n    aqc_deviated.company_count AS deviated_group_company_count,\n    aqc_deviated.avg_asset_liability_ratio AS deviated_avg_asset_liability_ratio,\n    aqc_deviated.avg_accounts_receivable_ratio AS deviated_avg_accounts_receivable_ratio,\n    aqc_deviated.avg_inventory_turnover_ratio AS deviated_avg_inventory_turnover_ratio,\n    aqc_deviated.avg_cash_to_total_assets_ratio AS deviated_avg_cash_to_total_assets_ratio,\n    aqc_deviated.avg_receivable_inventory_to_total_assets_ratio AS deviated_avg_receivable_inventory_to_total_assets_ratio\nFROM matched_count mc\nCROSS JOIN asset_quality_comparison aqc_matched\nCROSS JOIN asset_quality_comparison aqc_deviated\nWHERE aqc_matched.group_type = 'matched'\n    AND aqc_deviated.group_type = 'deviated';",
+  "sql_history": [
+    "WITH cash_profit_ratio AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        operating_cf_net_amount,\n        net_profit,\n        CASE \n            WHEN net_profit > 0 THEN operating_cf_net_amount * 1.0 / net_profit \n            ELSE NULL \n        END AS cf_to_profit_ratio,\n        asset_total_assets,\n        asset_accounts_receivable,\n        asset_inventory,\n        asset_cash_and_cash_equivalents,\n        asset_liability_ratio,\n        accounts_receivable_ratio,\n        inventory_turnover_ratio\n    FROM financials_view \n    WHERE report_period = '2025Q3' \n        AND net_profit IS NOT NULL \n        AND operating_cf_net_amount IS NOT NULL\n),\nmatched_companies AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        cf_to_profit_ratio,\n        asset_total_assets,\n        asset_accounts_receivable,\n        asset_inventory,\n        asset_cash_and_cash_equivalents,\n        asset_liability_ratio,\n        accounts_receivable_ratio,\n        inventory_turnover_ratio,\n        'matched' AS group_type\n    FROM cash_profit_ratio \n    WHERE cf_to_profit_ratio BETWEEN 0.8 AND 1.2\n),\ndeviated_companies AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        cf_to_profit_ratio,\n        asset_total_assets,\n        asset_accounts_receivable,\n        asset_inventory,\n        asset_cash_and_cash_equivalents,\n        asset_liability_ratio,\n        accounts_receivable_ratio,\n        inventory_turnover_ratio,\n        'deviated' AS group_type\n    FROM cash_profit_ratio \n    WHERE cf_to_profit_ratio IS NOT NULL \n        AND cf_to_profit_ratio NOT BETWEEN 0.8 AND 1.2\n),\nmatched_count AS (\n    SELECT COUNT(*) AS matched_company_count FROM matched_companies\n),\nasset_quality_comparison AS (\n    SELECT \n        group_type,\n        COUNT(*) AS company_count,\n        AVG(asset_liability_ratio) AS avg_asset_liability_ratio,\n        AVG(accounts_receivable_ratio) AS avg_accounts_receivable_ratio,\n        AVG(inventory_turnover_ratio) AS avg_inventory_turnover_ratio,\n        AVG(asset_cash_and_cash_equivalents * 1.0 / asset_total_assets) AS avg_cash_to_total_assets_ratio,\n        AVG((asset_accounts_receivable + asset_inventory) * 1.0 / asset_total_assets) AS avg_receivable_inventory_to_total_assets_ratio\n    FROM (\n        SELECT * FROM matched_companies\n        UNION ALL\n        SELECT * FROM deviated_companies\n    )\n    WHERE asset_total_assets > 0\n    GROUP BY group_type\n)\nSELECT \n    mc.matched_company_count,\n    aqc_matched.group_type AS matched_group_type,\n    aqc_matched.company_count AS matched_group_company_count,\n    aqc_matched.avg_asset_liability_ratio AS matched_avg_asset_liability_ratio,\n    aqc_matched.avg_accounts_receivable_ratio AS matched_avg_accounts_receivable_ratio,\n    aqc_matched.avg_inventory_turnover_ratio AS matched_avg_inventory_turnover_ratio,\n    aqc_matched.avg_cash_to_total_assets_ratio AS matched_avg_cash_to_total_assets_ratio,\n    aqc_matched.avg_receivable_inventory_to_total_assets_ratio AS matched_avg_receivable_inventory_to_total_assets_ratio,\n    aqc_deviated.group_type AS deviated_group_type,\n    aqc_deviated.company_count AS deviated_group_company_count,\n    aqc_deviated.avg_asset_liability_ratio AS deviated_avg_asset_liability_ratio,\n    aqc_deviated.avg_accounts_receivable_ratio AS deviated_avg_accounts_receivable_ratio,\n    aqc_deviated.avg_inventory_turnover_ratio AS deviated_avg_inventory_turnover_ratio,\n    aqc_deviated.avg_cash_to_total_assets_ratio AS deviated_avg_cash_to_total_assets_ratio,\n    aqc_deviated.avg_receivable_inventory_to_total_assets_ratio AS deviated_avg_receivable_inventory_to_total_assets_ratio\nFROM matched_count mc\nCROSS JOIN asset_quality_comparison aqc_matched\nCROSS JOIN asset_quality_comparison aqc_deviated\nWHERE aqc_matched.group_type = 'matched'\n    AND aqc_deviated.group_type = 'deviated';"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 1,
+  "result_rows": [
+    {
+      "matched_company_count": 12,
+      "matched_group_type": "matched",
+      "matched_group_company_count": 12,
+      "matched_avg_asset_liability_ratio": 30.282421770007634,
+      "matched_avg_accounts_receivable_ratio": 21.273055086001335,
+      "matched_avg_inventory_turnover_ratio": 1.423840473588161,
+      "matched_avg_cash_to_total_assets_ratio": 0.19932163254425248,
+      "matched_avg_receivable_inventory_to_total_assets_ratio": 0.18945137587596203,
+      "deviated_group_type": "deviated",
+      "deviated_group_company_count": 46,
+      "deviated_avg_asset_liability_ratio": 31.165767157211263,
+      "deviated_avg_accounts_receivable_ratio": 36.42668145143824,
+      "deviated_avg_inventory_turnover_ratio": 1.3851118448076007,
+      "deviated_avg_cash_to_total_assets_ratio": 0.1527552265863759,
+      "deviated_avg_receivable_inventory_to_total_assets_ratio": 0.2503704022779847
+    }
+  ],
+  "retrieved_evidence": [],
+  "reranked_evidence": [],
+  "rerank_preview": "{\"strategy\": \"skipped_fast_path\", \"kept_count\": 0}",
+  "fused_context": {
+    "question": "围绕“现金流与利润匹配度”：①计算2025年第三季度各公司的经营性现金流净额/净利润比值；②找出比值在0.8-1.2之间的公司；③统计这些公司的数量；④对比这些公司与比值偏离区间公司的资产质量。",
+    "sql_row_count": 1,
+    "evidence_count": 0,
+    "sql_preview": [
+      {
+        "matched_company_count": 12,
+        "matched_group_type": "matched",
+        "matched_group_company_count": 12,
+        "matched_avg_asset_liability_ratio": 30.282421770007634,
+        "matched_avg_accounts_receivable_ratio": 21.273055086001335,
+        "matched_avg_inventory_turnover_ratio": 1.423840473588161,
+        "matched_avg_cash_to_total_assets_ratio": 0.19932163254425248,
+        "matched_avg_receivable_inventory_to_total_assets_ratio": 0.18945137587596203,
+        "deviated_group_type": "deviated",
+        "deviated_group_company_count": 46,
+        "deviated_avg_asset_liability_ratio": 31.165767157211263,
+        "deviated_avg_accounts_receivable_ratio": 36.42668145143824,
+        "deviated_avg_inventory_turnover_ratio": 1.3851118448076007,
+        "deviated_avg_cash_to_total_assets_ratio": 0.1527552265863759,
+        "deviated_avg_receivable_inventory_to_total_assets_ratio": 0.2503704022779847
+      }
+    ],
+    "evidence_preview": [],
+    "evidence_titles": [],
+    "source_breakdown": {}
+  },
+  "self_check": {
+    "pass": true,
+    "notes": [
+      "self_check_skipped_fast_path"
+    ]
+  },
+  "chart_plan": {},
+  "chart_spec": {},
+  "current_chart_paths": [],
+  "current_chart_specs": [],
+  "current_answer": "**直接结论**  \n根据2025年第三季度财务数据，经营性现金流净额/净利润比值在0.8‑1.2之间的公司共有12家。与比值偏离该区间的公司相比，匹配度较高的公司在资产质量上整体表现出更低的应收账款占比、更高的现金占比以及更低的应收与存货合计占比，但资产负债率与存货周转率差异不大。\n\n**财务数据支撑**  \n1. **匹配区间公司数量**：比值在0.8‑1.2之间的公司数量为12家（占全部有数据公司的约21%）。  \n2. **资产质量对比**（均为两组公司的平均值）：  \n   - **资产负债率**：匹配组为30.28%，偏离组为31.17%，两者相近。  \n   - **应收账款占总资产比率**：匹配组为21.27%，偏离组为36.43%，匹配组显著更低。  \n   - **存货周转率**：匹配组为1.42次，偏离组为1.39次，差异较小。  \n   - **现金及现金等价物占总资产比率**：匹配组为19.93%，偏离组为15.28%，匹配组更高。  \n   - **应收账款与存货合计占总资产比率**：匹配组为18.95%，偏离组为25.04%，匹配组更低。  \n\n**研报证据支撑**  \n未检索到直接研报证据。\n\n**综合判断**  \n从财务数据看，现金流与利润匹配度较高（比值在0.8‑1.2）的公司，其资产结构相对更健康：现金储备更充裕，应收账款和存货占资产的比重更低，这可能意味着这些公司盈利的现金回收能力更强、营运资金占用较少。而偏离区间的公司应收账款占比明显更高，提示其利润的现金实现可能存在一定压力。两组在整体负债水平和存货周转效率上差异不大。由于缺乏研报证据，以上分析仅基于财务比率对比。",
+  "current_references": [],
+  "answer_rewritten": false,
+  "turn_answers": [
+    {
+      "Q": "围绕“现金流与利润匹配度”：①计算2025年第三季度各公司的经营性现金流净额/净利润比值；②找出比值在0.8-1.2之间的公司；③统计这些公司的数量；④对比这些公司与比值偏离区间公司的资产质量。",
+      "A": {
+        "content": "**直接结论**  \n根据2025年第三季度财务数据，经营性现金流净额/净利润比值在0.8‑1.2之间的公司共有12家。与比值偏离该区间的公司相比，匹配度较高的公司在资产质量上整体表现出更低的应收账款占比、更高的现金占比以及更低的应收与存货合计占比，但资产负债率与存货周转率差异不大。\n\n**财务数据支撑**  \n1. **匹配区间公司数量**：比值在0.8‑1.2之间的公司数量为12家（占全部有数据公司的约21%）。  \n2. **资产质量对比**（均为两组公司的平均值）：  \n   - **资产负债率**：匹配组为30.28%，偏离组为31.17%，两者相近。  \n   - **应收账款占总资产比率**：匹配组为21.27%，偏离组为36.43%，匹配组显著更低。  \n   - **存货周转率**：匹配组为1.42次，偏离组为1.39次，差异较小。  \n   - **现金及现金等价物占总资产比率**：匹配组为19.93%，偏离组为15.28%，匹配组更高。  \n   - **应收账款与存货合计占总资产比率**：匹配组为18.95%，偏离组为25.04%，匹配组更低。  \n\n**研报证据支撑**  \n未检索到直接研报证据。\n\n**综合判断**  \n从财务数据看，现金流与利润匹配度较高（比值在0.8‑1.2）的公司，其资产结构相对更健康：现金储备更充裕，应收账款和存货占资产的比重更低，这可能意味着这些公司盈利的现金回收能力更强、营运资金占用较少。而偏离区间的公司应收账款占比明显更高，提示其利润的现金实现可能存在一定压力。两组在整体负债水平和存货周转效率上差异不大。由于缺乏研报证据，以上分析仅基于财务比率对比。",
+        "image": [],
+        "references": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"围绕“现金流与利润匹配度”：①计算2025年第三季度各公司的经营性现金流净额/净利润比值；②找出比值在0.8-1.2之间的公司；③统计这些公司的数量；④对比这些公司与比值偏离区间公司的资产质量。\", \"A\": {\"content\": \"**直接结论**  \\n根据2025年第三季度财务数据，经营性现金流净额/净利润比值在0.8‑1.2之间的公司共有12家。与比值偏离该区间的公司相比，匹配度较高的公司在资产质量上整体表现出更低的应收账款占比、更高的现金占比以及更低的应收与存货合计占比，但资产负债率与存货周转率差异不大。\\n\\n**财务数据支撑**  \\n1. **匹配区间公司数量**：比值在0.8‑1.2之间的公司数量为12家（占全部有数据公司的约21%）。  \\n2. **资产质量对比**（均为两组公司的平均值）：  \\n   - **资产负债率**：匹配组为30.28%，偏离组为31.17%，两者相近。  \\n   - **应收账款占总资产比率**：匹配组为21.27%，偏离组为36.43%，匹配组显著更低。  \\n   - **存货周转率**：匹配组为1.42次，偏离组为1.39次，差异较小。  \\n   - **现金及现金等价物占总资产比率**：匹配组为19.93%，偏离组为15.28%，匹配组更高。  \\n   - **应收账款与存货合计占总资产比率**：匹配组为18.95%，偏离组为25.04%，匹配组更低。  \\n\\n**研报证据支撑**  \\n未检索到直接研报证据。\\n\\n**综合判断**  \\n从财务数据看，现金流与利润匹配度较高（比值在0.8‑1.2）的公司，其资产结构相对更健康：现金储备更充裕，应收账款和存货占资产的比重更低，这可能意味着这些公司盈利的现金回收能力更强、营运资金占用较少。而偏离区间的公司应收账款占比明显更高，提示其利润的现金实现可能存在一定压力。两组在整体负债水平和存货周转效率上差异不大。由于缺乏研报证据，以上分析仅基于财务比率对比。\", \"image\": [], \"references\": []}}]",
+  "references_json": "[]",
+  "notes": [
+    "route=sql_only",
+    "1. 首先计算2025Q3各公司的经营性现金流净额/净利润比值，过滤掉净利润为0或负值的情况（避免除零或负比值）。\n2. 找出比值在0.8-1.2之间的公司（matched_companies）和比值偏离该区间的公司（deviated_companies）。\n3. 统计匹配公司的数量（matched_count）。\n4. 对比两组公司的资产质量指标：资产负债率、应收账款占比、存货周转率、现金占总资产比例、应收和存货占总资产比例。\n5. 使用CROSS JOIN将匹配公司数量和两组资产质量对比结果合并到一行输出，便于对比分析。\n6. 注意：query_plan中companies为空列表，因此不限制特定公司，而是分析所有公司。",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=0",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=0",
+    "self_check={\"pass\": true, \"notes\": [\"self_check_skipped_fast_path\"]}"
+  ],
+  "final_status": "ok"
+}

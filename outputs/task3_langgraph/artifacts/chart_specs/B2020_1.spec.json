@@ -1,0 +1,171 @@
+{
+  "schema_version": "task3.chart-spec.v1",
+  "question_id": "B2020",
+  "image_index": 1,
+  "chart_type": "table",
+  "title": "检索2025年研报中提及“海外市场拓展”的中药公... - 经营性现金流量净额",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 67,
+    "preview_rows": [
+      {
+        "公司简称": "江中药业",
+        "经营性现金流量净额": "97377.430208",
+        "业务类型": "国内为主",
+        "同类公司数量": 67,
+        "同类平均现金流量": 37301.183791507465,
+        "同类现金流量总额": 2499179.3140310002
+      },
+      {
+        "公司简称": "盘龙药业",
+        "经营性现金流量净额": "8915.594833",
+        "业务类型": "国内为主",
+        "同类公司数量": 67,
+        "同类平均现金流量": 37301.183791507465,
+        "同类现金流量总额": 2499179.3140310002
+      },
+      {
+        "公司简称": "天士力",
+        "经营性现金流量净额": "87261.729966",
+        "业务类型": "国内为主",
+        "同类公司数量": 67,
+        "同类平均现金流量": 37301.183791507465,
+        "同类现金流量总额": 2499179.3140310002
+      },
+      {
+        "公司简称": "仁和药业",
+        "经营性现金流量净额": "84048.426313",
+        "业务类型": "国内为主",
+        "同类公司数量": 67,
+        "同类平均现金流量": 37301.183791507465,
+        "同类现金流量总额": 2499179.3140310002
+      },
+      {
+        "公司简称": "步长制药",
+        "经营性现金流量净额": "81509.191271",
+        "业务类型": "国内为主",
+        "同类公司数量": 67,
+        "同类平均现金流量": 37301.183791507465,
+        "同类现金流量总额": 2499179.3140310002
+      },
+      {
+        "公司简称": "恩威医药",
+        "经营性现金流量净额": "7620.203501",
+        "业务类型": "国内为主",
+        "同类公司数量": 67,
+        "同类平均现金流量": 37301.183791507465,
+        "同类现金流量总额": 2499179.3140310002
+      },
+      {
+        "公司简称": "通化金马",
+        "经营性现金流量净额": "7081.302195",
+        "业务类型": "国内为主",
+        "同类公司数量": 67,
+        "同类平均现金流量": 37301.183791507465,
+        "同类现金流量总额": 2499179.3140310002
+      },
+      {
+        "公司简称": "济川药业",
+        "经营性现金流量净额": "70351.13694",
+        "业务类型": "国内为主",
+        "同类公司数量": 67,
+        "同类平均现金流量": 37301.183791507465,
+        "同类现金流量总额": 2499179.3140310002
+      },
+      {
+        "公司简称": "达仁堂",
+        "经营性现金流量净额": "59032.994727",
+        "业务类型": "国内为主",
+        "同类公司数量": 67,
+        "同类平均现金流量": 37301.183791507465,
+        "同类现金流量总额": 2499179.3140310002
+      },
+      {
+        "公司简称": "红日药业",
+        "经营性现金流量净额": "53683.663649",
+        "业务类型": "国内为主",
+        "同类公司数量": 67,
+        "同类平均现金流量": 37301.183791507465,
+        "同类现金流量总额": 2499179.3140310002
+      },
+      {
+        "公司简称": "贵州百灵",
+        "经营性现金流量净额": "53570.59279",
+        "业务类型": "国内为主",
+        "同类公司数量": 67,
+        "同类平均现金流量": 37301.183791507465,
+        "同类现金流量总额": 2499179.3140310002
+      },
+      {
+        "公司简称": "康恩贝",
+        "经营性现金流量净额": "53153.455939",
+        "业务类型": "国内为主",
+        "同类公司数量": 67,
+        "同类平均现金流量": 37301.183791507465,
+        "同类现金流量总额": 2499179.3140310002
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": null,
+    "sort_ascending": true,
+    "top_n": 12,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "经营性现金流量净额",
+      "data_type": "quantitative",
+      "label": "经营性现金流量净额",
+      "unit": "万元"
+    },
+    "category": {
+      "field": "公司简称",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": false
+  },
+  "output": {
+    "filename": "B2020_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B2020_1.jpg"
+  },
+  "meta": {
+    "source_sql": "WITH overseas_companies AS (\n    -- 注意：这里无法直接通过SQL查询哪些公司在研报中提及'海外市场拓展'\n    -- 根据query_plan，companies字段为空，因此不能手动枚举公司列表\n    -- 这里假设海外拓展公司信息需要从外部获取，SQL中暂时无法实现\n    SELECT \n        stock_code,\n        stock_abbr,\n        '海外拓展' AS business_type\n    FROM financials_view \n    WHERE 1=0  -- 占位符，实际需要外部输入\n),\ndomestic_peers AS (\n    -- 国内业务为主的同行（假设为所有中药公司中排除海外拓展公司）\n    -- 由于无法确定哪些是海外拓展公司，这里暂时查询所有中药公司\n    -- 实际应用中需要外部提供海外拓展公司列表\n    SELECT \n        stock_code,\n        stock_abbr,\n        '国内为主' AS business_type\n    FROM financials_view \n    WHERE report_period = '2025Q3'\n    GROUP BY stock_code, stock_abbr\n),\ncompany_cash_flow AS (\n    SELECT \n        f.stock_code,\n        f.stock_abbr,\n        f.operating_cf_net_amount AS 经营性现金流量净额,\n        COALESCE(o.business_type, d.business_type) AS business_type\n    FROM financials_view f\n    LEFT JOIN overseas_companies o ON f.stock_code = o.stock_code\n    LEFT JOIN domestic_peers d ON f.stock_code = d.stock_code\n    WHERE f.report_period = '2025Q3'\n        AND (o.stock_code IS NOT NULL OR d.stock_code IS NOT NULL)\n),\nstats AS (\n    SELECT \n        business_type,\n        COUNT(*) AS company_count,\n        AVG(经营性现金流量净额) AS avg_cash_flow,\n        MIN(经营性现金流量净额) AS min_cash_flow,\n        MAX(经营性现金流量净额) AS max_cash_flow,\n        SUM(经营性现金流量净额) AS total_cash_flow\n    FROM company_cash_flow\n    WHERE business_type IS NOT NULL\n    GROUP BY business_type\n)\nSELECT \n    c.stock_abbr AS 公司简称,\n    c.经营性现金流量净额,\n    c.business_type AS 业务类型,\n    s.company_count AS 同类公司数量,\n    s.avg_cash_flow AS 同类平均现金流量,\n    s.total_cash_flow AS 同类现金流量总额\nFROM company_cash_flow c\nLEFT JOIN stats s ON c.business_type = s.business_type\nORDER BY c.business_type, c.经营性现金流量净额 DESC;",
+    "value_fields": [
+      "经营性现金流量净额",
+      "同类公司数量",
+      "同类平均现金流量",
+      "同类现金流量总额"
+    ],
+    "value_labels": [
+      "经营性现金流量净额",
+      "同类公司数量",
+      "同类平均现金流量",
+      "同类现金流量总额"
+    ],
+    "original_chart_plan": {
+      "chart_type": "table",
+      "x_field": null,
+      "y_fields": [
+        "经营性现金流量净额",
+        "同类公司数量",
+        "同类平均现金流量",
+        "同类现金流量总额"
+      ],
+      "category_field": "公司简称",
+      "sort_by": null,
+      "sort_ascending": true,
+      "top_n": 12
+    }
+  }
+}

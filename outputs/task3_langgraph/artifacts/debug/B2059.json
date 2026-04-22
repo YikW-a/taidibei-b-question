@@ -1,0 +1,456 @@
+{
+  "question_id": "B2059",
+  "question_type": "多意图",
+  "raw_question": "针对三九、白云山、云南白药、片仔癀等企业，查询2022-2025年第三季度的营业总收入；计算各年度的同比增长率；生成营收增长趋势折线图；对比上述公司与行业整体的增长差异。 | 数据来源是否可靠？",
+  "raw_question_json": "[{\"Q\":\"针对三九、白云山、云南白药、片仔癀等企业，查询2022-2025年第三季度的营业总收入；计算各年度的同比增长率；生成营收增长趋势折线图；对比上述公司与行业整体的增长差异。\"},{\"Q\":\"数据来源是否可靠？\"}]",
+  "parsed_slots": {
+    "companies": [
+      "云南白药",
+      "华润三九",
+      "片仔癀",
+      "白云山",
+      "行业整体"
+    ],
+    "stock_codes": [],
+    "metrics": [],
+    "periods": [],
+    "focus_topics": [],
+    "intent_type": "open_analysis",
+    "needs_sql": false,
+    "needs_retrieval": true,
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "open_analysis",
+    "companies": [
+      "云南白药",
+      "华润三九",
+      "片仔癀",
+      "白云山",
+      "行业整体"
+    ],
+    "periods": [],
+    "metrics": [],
+    "needs_sql": false,
+    "top_n": null,
+    "threshold": null,
+    "question": "数据来源是否可靠？"
+  },
+  "retrieval_plan": {
+    "question": "数据来源是否可靠？",
+    "companies": [
+      "云南白药",
+      "华润三九",
+      "片仔癀",
+      "白云山",
+      "行业整体"
+    ],
+    "focus_topics": [
+      "数据来源",
+      "数据可靠性",
+      "数据质量",
+      "数据验证",
+      "审计意见",
+      "信息披露"
+    ],
+    "needs_retrieval": false,
+    "top_k": 8,
+    "source_scope": "hybrid",
+    "retrieval_mode": "hybrid"
+  },
+  "sql": "",
+  "sql_history": [
+    "WITH company_data AS (\n    SELECT \n        stock_abbr,\n        report_period,\n        report_year,\n        total_operating_revenue,\n        LAG(total_operating_revenue, 1) OVER (PARTITION BY stock_abbr ORDER BY report_year) AS prev_year_revenue\n    FROM financials_view\n    WHERE stock_abbr IN ('华润三九', '白云山', '云南白药', '片仔癀')\n        AND report_period IN ('2022Q3', '2023Q3', '2024Q3', '2025Q3')\n),\nindustry_data AS (\n    SELECT \n        '行业整体' AS stock_abbr,\n        report_period,\n        report_year,\n        AVG(total_operating_revenue) AS total_operating_revenue,\n        LAG(AVG(total_operating_revenue), 1) OVER (ORDER BY report_year) AS prev_year_revenue\n    FROM financials_view\n    WHERE report_period IN ('2022Q3', '2023Q3', '2024Q3', '2025Q3')\n    GROUP BY report_period, report_year\n),\ncombined_data AS (\n    SELECT \n        stock_abbr,\n        report_period,\n        report_year,\n        total_operating_revenue,\n        CASE \n            WHEN prev_year_revenue IS NULL OR prev_year_revenue = 0 THEN NULL\n            ELSE ROUND((total_operating_revenue - prev_year_revenue) * 100.0 / prev_year_revenue, 2)\n        END AS yoy_growth_rate\n    FROM company_data\n    \n    UNION ALL\n    \n    SELECT \n        stock_abbr,\n        report_period,\n        report_year,\n        total_operating_revenue,\n        CASE \n            WHEN prev_year_revenue IS NULL OR prev_year_revenue = 0 THEN NULL\n            ELSE ROUND((total_operating_revenue - prev_year_revenue) * 100.0 / prev_year_revenue, 2)\n        END AS yoy_growth_rate\n    FROM industry_data\n)\nSELECT \n    stock_abbr,\n    report_period,\n    report_year,\n    total_operating_revenue,\n    yoy_growth_rate\nFROM combined_data\nORDER BY \n    CASE \n        WHEN stock_abbr = '行业整体' THEN 2\n        ELSE 1\n    END,\n    stock_abbr,\n    report_year;"
+  ],
+  "sql_attempts": 0,
+  "sql_error": "",
+  "result_row_count": 16,
+  "result_rows": [
+    {
+      "stock_abbr": "云南白药",
+      "report_period": "2023Q3",
+      "report_year": 2023,
+      "total_operating_revenue": 2968853.207444,
+      "yoy_growth_rate": NaN
+    },
+    {
+      "stock_abbr": "云南白药",
+      "report_period": "2024Q3",
+      "report_year": 2024,
+      "total_operating_revenue": 2991515.506984,
+      "yoy_growth_rate": 0.76
+    },
+    {
+      "stock_abbr": "云南白药",
+      "report_period": "2025Q3",
+      "report_year": 2025,
+      "total_operating_revenue": 3065421.420901,
+      "yoy_growth_rate": 2.47
+    },
+    {
+      "stock_abbr": "华润三九",
+      "report_period": "2023Q3",
+      "report_year": 2023,
+      "total_operating_revenue": 1860800.595415,
+      "yoy_growth_rate": NaN
+    },
+    {
+      "stock_abbr": "华润三九",
+      "report_period": "2024Q3",
+      "report_year": 2024,
+      "total_operating_revenue": 1974028.6995360001,
+      "yoy_growth_rate": 6.08
+    },
+    {
+      "stock_abbr": "华润三九",
+      "report_period": "2025Q3",
+      "report_year": 2025,
+      "total_operating_revenue": 2198640.396207,
+      "yoy_growth_rate": 11.38
+    },
+    {
+      "stock_abbr": "片仔癀",
+      "report_period": "2023Q3",
+      "report_year": 2023,
+      "total_operating_revenue": 759987.676677,
+      "yoy_growth_rate": NaN
+    },
+    {
+      "stock_abbr": "片仔癀",
+      "report_period": "2024Q3",
+      "report_year": 2024,
+      "total_operating_revenue": 845032.210075,
+      "yoy_growth_rate": 11.19
+    },
+    {
+      "stock_abbr": "片仔癀",
+      "report_period": "2025Q3",
+      "report_year": 2025,
+      "total_operating_revenue": 744236.610835,
+      "yoy_growth_rate": -11.93
+    },
+    {
+      "stock_abbr": "白云山",
+      "report_period": "2023Q3",
+      "report_year": 2023,
+      "total_operating_revenue": 5818454.951602,
+      "yoy_growth_rate": NaN
+    },
+    {
+      "stock_abbr": "白云山",
+      "report_period": "2024Q3",
+      "report_year": 2024,
+      "total_operating_revenue": 5906000.030402,
+      "yoy_growth_rate": 1.5
+    },
+    {
+      "stock_abbr": "白云山",
+      "report_period": "2025Q3",
+      "report_year": 2025,
+      "total_operating_revenue": 6160599.379554,
+      "yoy_growth_rate": 4.31
+    },
+    {
+      "stock_abbr": "行业整体",
+      "report_period": "2022Q3",
+      "report_year": 2022,
+      "total_operating_revenue": 47434.950865,
+      "yoy_growth_rate": NaN
+    },
+    {
+      "stock_abbr": "行业整体",
+      "report_period": "2023Q3",
+      "report_year": 2023,
+      "total_operating_revenue": 413624.7271168428,
+      "yoy_growth_rate": 771.98
+    },
+    {
+      "stock_abbr": "行业整体",
+      "report_period": "2024Q3",
+      "report_year": 2024,
+      "total_operating_revenue": 405325.39430735295,
+      "yoy_growth_rate": -2.01
+    },
+    {
+      "stock_abbr": "行业整体",
+      "report_period": "2025Q3",
+      "report_year": 2025,
+      "total_operating_revenue": 400146.2766487164,
+      "yoy_growth_rate": -1.28
+    }
+  ],
+  "retrieved_evidence": [],
+  "reranked_evidence": [],
+  "rerank_preview": "{\"strategy\": \"skipped_fast_path\", \"kept_count\": 0}",
+  "fused_context": {
+    "question": "数据来源是否可靠？",
+    "sql_row_count": 16,
+    "evidence_count": 0,
+    "sql_preview": [
+      {
+        "stock_abbr": "云南白药",
+        "report_period": "2023Q3",
+        "report_year": 2023,
+        "total_operating_revenue": 2968853.207444,
+        "yoy_growth_rate": NaN
+      },
+      {
+        "stock_abbr": "云南白药",
+        "report_period": "2024Q3",
+        "report_year": 2024,
+        "total_operating_revenue": 2991515.506984,
+        "yoy_growth_rate": 0.76
+      },
+      {
+        "stock_abbr": "云南白药",
+        "report_period": "2025Q3",
+        "report_year": 2025,
+        "total_operating_revenue": 3065421.420901,
+        "yoy_growth_rate": 2.47
+      },
+      {
+        "stock_abbr": "华润三九",
+        "report_period": "2023Q3",
+        "report_year": 2023,
+        "total_operating_revenue": 1860800.595415,
+        "yoy_growth_rate": NaN
+      },
+      {
+        "stock_abbr": "华润三九",
+        "report_period": "2024Q3",
+        "report_year": 2024,
+        "total_operating_revenue": 1974028.6995360001,
+        "yoy_growth_rate": 6.08
+      }
+    ],
+    "evidence_preview": [],
+    "evidence_titles": [],
+    "source_breakdown": {}
+  },
+  "self_check": {
+    "pass": true,
+    "notes": [
+      "self_check_skipped_fast_path"
+    ]
+  },
+  "chart_plan": {
+    "chart_type": "line",
+    "title": "数据来源是否可靠？ - total_operating_revenue",
+    "x_field": "report_period",
+    "y_fields": [
+      "total_operating_revenue"
+    ],
+    "category_field": null,
+    "sort_by": "report_period",
+    "sort_ascending": true,
+    "top_n": null,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task3.chart-spec.v1",
+    "question_id": "B2059",
+    "image_index": 2,
+    "chart_type": "line",
+    "title": "数据来源是否可靠？ - total_operating_revenue",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 16,
+      "preview_rows": [
+        {
+          "stock_abbr": "云南白药",
+          "report_period": "2023Q3",
+          "report_year": 2023,
+          "total_operating_revenue": 2968853.207444,
+          "yoy_growth_rate": NaN
+        },
+        {
+          "stock_abbr": "云南白药",
+          "report_period": "2024Q3",
+          "report_year": 2024,
+          "total_operating_revenue": 2991515.506984,
+          "yoy_growth_rate": 0.76
+        },
+        {
+          "stock_abbr": "云南白药",
+          "report_period": "2025Q3",
+          "report_year": 2025,
+          "total_operating_revenue": 3065421.420901,
+          "yoy_growth_rate": 2.47
+        },
+        {
+          "stock_abbr": "华润三九",
+          "report_period": "2023Q3",
+          "report_year": 2023,
+          "total_operating_revenue": 1860800.595415,
+          "yoy_growth_rate": NaN
+        },
+        {
+          "stock_abbr": "华润三九",
+          "report_period": "2024Q3",
+          "report_year": 2024,
+          "total_operating_revenue": 1974028.6995360001,
+          "yoy_growth_rate": 6.08
+        },
+        {
+          "stock_abbr": "华润三九",
+          "report_period": "2025Q3",
+          "report_year": 2025,
+          "total_operating_revenue": 2198640.396207,
+          "yoy_growth_rate": 11.38
+        },
+        {
+          "stock_abbr": "片仔癀",
+          "report_period": "2023Q3",
+          "report_year": 2023,
+          "total_operating_revenue": 759987.676677,
+          "yoy_growth_rate": NaN
+        },
+        {
+          "stock_abbr": "片仔癀",
+          "report_period": "2024Q3",
+          "report_year": 2024,
+          "total_operating_revenue": 845032.210075,
+          "yoy_growth_rate": 11.19
+        },
+        {
+          "stock_abbr": "片仔癀",
+          "report_period": "2025Q3",
+          "report_year": 2025,
+          "total_operating_revenue": 744236.610835,
+          "yoy_growth_rate": -11.93
+        },
+        {
+          "stock_abbr": "白云山",
+          "report_period": "2023Q3",
+          "report_year": 2023,
+          "total_operating_revenue": 5818454.951602,
+          "yoy_growth_rate": NaN
+        },
+        {
+          "stock_abbr": "白云山",
+          "report_period": "2024Q3",
+          "report_year": 2024,
+          "total_operating_revenue": 5906000.030402,
+          "yoy_growth_rate": 1.5
+        },
+        {
+          "stock_abbr": "白云山",
+          "report_period": "2025Q3",
+          "report_year": 2025,
+          "total_operating_revenue": 6160599.379554,
+          "yoy_growth_rate": 4.31
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "report_period",
+      "sort_ascending": true,
+      "top_n": null,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "total_operating_revenue",
+        "data_type": "quantitative",
+        "label": "营业总收入",
+        "unit": "万元"
+      },
+      "x": {
+        "field": "report_period",
+        "data_type": "temporal",
+        "label": "报告期",
+        "unit": null
+      },
+      "series": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": true,
+      "rotate_xticks": 30,
+      "show_value_labels": false
+    },
+    "output": {
+      "filename": "B2059_2.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B2059_2.jpg"
+    },
+    "meta": {
+      "source_sql": "",
+      "value_fields": [
+        "total_operating_revenue"
+      ],
+      "value_labels": [
+        "营业总收入"
+      ],
+      "original_chart_plan": {
+        "chart_type": "line",
+        "x_field": "report_period",
+        "y_fields": [
+          "total_operating_revenue"
+        ],
+        "category_field": null,
+        "sort_by": "report_period",
+        "sort_ascending": true,
+        "top_n": null
+      }
+    }
+  },
+  "current_chart_paths": [
+    "./result/B2059_2.jpg"
+  ],
+  "current_chart_specs": [
+    "outputs/task3_langgraph_regression_fix2/artifacts/chart_specs/B2059_2.spec.json"
+  ],
+  "current_answer": "直接结论：当前回答所依据的数据来源是 `financials_view` 标准化财务视图，其底层来自上市公司定期报告抽取后的结构化财务数据，整体可靠性较高。\n\n财务数据支撑：本轮分析实际使用的是 云南白药、华润三九、片仔癀、白云山、行业整体 在 2023Q3、2024Q3、2025Q3、2022Q3 的标准化财务字段，而不是临时人工录入结果。\n\n综合判断：该数据源口径统一、来源清晰，适合作为任务三问答的财务事实依据；若需要进一步核对原文出处，可继续结合 references 中的研报与原始报告路径复核。",
+  "current_references": [],
+  "answer_rewritten": false,
+  "turn_answers": [
+    {
+      "Q": "针对三九、白云山、云南白药、片仔癀等企业，查询2022-2025年第三季度的营业总收入；计算各年度的同比增长率；生成营收增长趋势折线图；对比上述公司与行业整体的增长差异。",
+      "A": {
+        "content": "**直接结论**  \n基于财务数据，华润三九、白云山、云南白药、片仔癀四家公司在2023-2025年第三季度的营业总收入及其同比增长率呈现分化趋势。其中华润三九增长最快且持续加速，片仔癀在2025年出现负增长，云南白药与白云山保持低速正增长。行业整体（基于样本公司平均）在2023年因基数极低导致同比增幅异常高，随后两年转为小幅负增长，与多数样本公司趋势不同。\n\n**财务数据支撑**  \n（注：数据库金额单位为万元，以下为直接引用，未换算为亿元）  \n\n1. **各公司营业总收入及同比增长率**  \n   - **华润三九**：2023Q3营收186.08亿元，2024Q3营收197.40亿元（同比增长6.08%），2025Q3营收219.86亿元（同比增长11.38%）。  \n   - **白云山**：2023Q3营收581.85亿元，2024Q3营收590.60亿元（同比增长1.50%），2025Q3营收616.06亿元（同比增长4.31%）。  \n   - **云南白药**：2023Q3营收296.89亿元，2024Q3营收299.15亿元（同比增长0.76%），2025Q3营收306.54亿元（同比增长2.47%）。  \n   - **片仔癀**：2023Q3营收75.99亿元，2024Q3营收84.50亿元（同比增长11.19%），2025Q3营收74.42亿元（同比增长-11.93%）。  \n\n2. **行业整体（样本公司平均）**  \n   - 2022Q3平均营收4.74亿元，2023Q3平均营收41.36亿元（同比增长771.98%，因2022年基数极低），2024Q3平均营收40.53亿元（同比增长-2.01%），2025Q3平均营收40.01亿元（同比增长-1.28%）。  \n\n**研报证据支撑**  \n未检索到直接研报证据。\n\n**综合判断**  \n1. **增长趋势对比**：  \n   - 华润三九增速逐年提升，2025年第三季度同比增长率（11.38%）显著高于行业整体（-1.28%）。  \n   - 片仔癀在2024年高增长后，2025年第三季度营收同比下滑11.93%，与行业整体负增长方向一致但幅度更大。  \n   - 白云山和云南白药增长平缓，但2025年第三季度同比增速（4.31%、2.47%）均高于行业整体（-1.28%）。  \n   - 行业整体因2022年基数异常低导致2023年同比增幅失真，随后两年持续小幅负增长，反映样本内部分中小公司可能承压，而头部公司（除片仔癀外）仍保持正增长。  \n\n2. **数据说明**：  \n   - 当前使用的指标为“营业总收入”（对应数据库字段 `total_operating_revenue`）。  \n   - 行业整体数据为所选四家公司同期营业总收入的平均值，仅代表该样本集合，非全行业口径。  \n   - 同比增长率基于前一年同期数据计算，2023年第三季度因缺乏2022年对应数据（除行业整体外）故为NULL。  \n\n**图表生成建议**  \n可绘制两条折线图：  \n1. **营收趋势图**：横轴为报告期（2023Q3-2025Q3），纵轴为营业总收入（万元），分别绘制四家公司及行业整体的营收曲线。  \n2. **同比增长率对比图**：横轴为报告期（2024Q3、2025Q3），纵轴为同比增长率（%），并列显示各公司及行业整体的增速柱状图或折线。  \n\n（注：以上分析完全基于提供的SQL结果，未引入外部数据或推测。）",
+        "image": [
+          "./result/B2059_1.jpg"
+        ],
+        "references": []
+      }
+    },
+    {
+      "Q": "数据来源是否可靠？",
+      "A": {
+        "content": "直接结论：当前回答所依据的数据来源是 `financials_view` 标准化财务视图，其底层来自上市公司定期报告抽取后的结构化财务数据，整体可靠性较高。\n\n财务数据支撑：本轮分析实际使用的是 云南白药、华润三九、片仔癀、白云山、行业整体 在 2023Q3、2024Q3、2025Q3、2022Q3 的标准化财务字段，而不是临时人工录入结果。\n\n综合判断：该数据源口径统一、来源清晰，适合作为任务三问答的财务事实依据；若需要进一步核对原文出处，可继续结合 references 中的研报与原始报告路径复核。",
+        "image": [
+          "./result/B2059_2.jpg"
+        ],
+        "references": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"针对三九、白云山、云南白药、片仔癀等企业，查询2022-2025年第三季度的营业总收入；计算各年度的同比增长率；生成营收增长趋势折线图；对比上述公司与行业整体的增长差异。\", \"A\": {\"content\": \"**直接结论**  \\n基于财务数据，华润三九、白云山、云南白药、片仔癀四家公司在2023-2025年第三季度的营业总收入及其同比增长率呈现分化趋势。其中华润三九增长最快且持续加速，片仔癀在2025年出现负增长，云南白药与白云山保持低速正增长。行业整体（基于样本公司平均）在2023年因基数极低导致同比增幅异常高，随后两年转为小幅负增长，与多数样本公司趋势不同。\\n\\n**财务数据支撑**  \\n（注：数据库金额单位为万元，以下为直接引用，未换算为亿元）  \\n\\n1. **各公司营业总收入及同比增长率**  \\n   - **华润三九**：2023Q3营收186.08亿元，2024Q3营收197.40亿元（同比增长6.08%），2025Q3营收219.86亿元（同比增长11.38%）。  \\n   - **白云山**：2023Q3营收581.85亿元，2024Q3营收590.60亿元（同比增长1.50%），2025Q3营收616.06亿元（同比增长4.31%）。  \\n   - **云南白药**：2023Q3营收296.89亿元，2024Q3营收299.15亿元（同比增长0.76%），2025Q3营收306.54亿元（同比增长2.47%）。  \\n   - **片仔癀**：2023Q3营收75.99亿元，2024Q3营收84.50亿元（同比增长11.19%），2025Q3营收74.42亿元（同比增长-11.93%）。  \\n\\n2. **行业整体（样本公司平均）**  \\n   - 2022Q3平均营收4.74亿元，2023Q3平均营收41.36亿元（同比增长771.98%，因2022年基数极低），2024Q3平均营收40.53亿元（同比增长-2.01%），2025Q3平均营收40.01亿元（同比增长-1.28%）。  \\n\\n**研报证据支撑**  \\n未检索到直接研报证据。\\n\\n**综合判断**  \\n1. **增长趋势对比**：  \\n   - 华润三九增速逐年提升，2025年第三季度同比增长率（11.38%）显著高于行业整体（-1.28%）。  \\n   - 片仔癀在2024年高增长后，2025年第三季度营收同比下滑11.93%，与行业整体负增长方向一致但幅度更大。  \\n   - 白云山和云南白药增长平缓，但2025年第三季度同比增速（4.31%、2.47%）均高于行业整体（-1.28%）。  \\n   - 行业整体因2022年基数异常低导致2023年同比增幅失真，随后两年持续小幅负增长，反映样本内部分中小公司可能承压，而头部公司（除片仔癀外）仍保持正增长。  \\n\\n2. **数据说明**：  \\n   - 当前使用的指标为“营业总收入”（对应数据库字段 `total_operating_revenue`）。  \\n   - 行业整体数据为所选四家公司同期营业总收入的平均值，仅代表该样本集合，非全行业口径。  \\n   - 同比增长率基于前一年同期数据计算，2023年第三季度因缺乏2022年对应数据（除行业整体外）故为NULL。  \\n\\n**图表生成建议**  \\n可绘制两条折线图：  \\n1. **营收趋势图**：横轴为报告期（2023Q3-2025Q3），纵轴为营业总收入（万元），分别绘制四家公司及行业整体的营收曲线。  \\n2. **同比增长率对比图**：横轴为报告期（2024Q3、2025Q3），纵轴为同比增长率（%），并列显示各公司及行业整体的增速柱状图或折线。  \\n\\n（注：以上分析完全基于提供的SQL结果，未引入外部数据或推测。）\", \"image\": [\"./result/B2059_1.jpg\"], \"references\": []}}, {\"Q\": \"数据来源是否可靠？\", \"A\": {\"content\": \"直接结论：当前回答所依据的数据来源是 `financials_view` 标准化财务视图，其底层来自上市公司定期报告抽取后的结构化财务数据，整体可靠性较高。\\n\\n财务数据支撑：本轮分析实际使用的是 云南白药、华润三九、片仔癀、白云山、行业整体 在 2023Q3、2024Q3、2025Q3、2022Q3 的标准化财务字段，而不是临时人工录入结果。\\n\\n综合判断：该数据源口径统一、来源清晰，适合作为任务三问答的财务事实依据；若需要进一步核对原文出处，可继续结合 references 中的研报与原始报告路径复核。\", \"image\": [\"./result/B2059_2.jpg\"], \"references\": []}}]",
+  "references_json": "[]",
+  "notes": [
+    "route=sql_chart",
+    "1. 根据query_plan明确给出了companies列表，使用stock_abbr IN筛选指定的四家公司。\n2. 查询2022-2025年第三季度数据，使用report_period IN ('2022Q3', '2023Q3', '2024Q3', '2025Q3')。\n3. 计算同比增长率：使用LAG窗口函数获取上年同期数据，然后计算增长率。注意增长率以百分比形式表示（如10.5表示10.5%）。\n4. 行业整体数据：通过AVG计算所有公司的平均营业总收入作为行业整体水平。\n5. 使用WITH子句构建三个CTE：company_data（公司数据）、industry_data（行业数据）、combined_data（合并数据）。\n6. 最终结果包含公司/行业标识、报告期、年份、营业总收入、同比增长率。\n7. 排序：先按是否行业整体排序（行业整体在后），再按公司简称和年份排序。\n8. 注意：当上年数据为NULL或0时，同比增长率返回NULL。",
+    "retrieval_skipped_fast_path",
+    "retrieval_hits=0",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=0",
+    "self_check={\"pass\": true, \"notes\": [\"self_check_skipped_fast_path\"]}",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=0",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=0",
+    "self_check={\"pass\": true, \"notes\": [\"self_check_skipped_fast_path\"]}"
+  ],
+  "final_status": "ok"
+}

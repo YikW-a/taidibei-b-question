@@ -1,0 +1,104 @@
+{
+  "question_id": "B2028",
+  "question_type": "融合查询",
+  "raw_question": "国家关注养老问题，请查询2025年第三季度老年病相关药品收入占比前五的公司及其净资产收益率。",
+  "raw_question_json": "[{\"Q\":\"国家关注养老问题，请查询2025年第三季度老年病相关药品收入占比前五的公司及其净资产收益率。\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "metrics": [
+      "营业总收入",
+      "ROE"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "focus_topics": [],
+    "intent_type": "sql_only",
+    "needs_sql": true,
+    "needs_retrieval": false,
+    "top_n": 5,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "sql_only",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入",
+      "ROE"
+    ],
+    "needs_sql": true,
+    "top_n": 5,
+    "threshold": null,
+    "question": "查询2025年第三季度老年病相关药品收入占比前五的公司及其净资产收益率"
+  },
+  "retrieval_plan": {
+    "question": "国家关注养老问题，请查询2025年第三季度老年病相关药品收入占比前五的公司及其净资产收益率。",
+    "companies": [],
+    "focus_topics": [],
+    "needs_retrieval": false,
+    "top_k": 0,
+    "source_scope": "hybrid",
+    "retrieval_mode": "hybrid"
+  },
+  "sql": "SELECT * FROM financials_view WHERE 1=0 /* unsupported structured field: 老年病相关药品收入占比 */",
+  "sql_history": [
+    "SELECT * FROM financials_view WHERE 1=0 /* unsupported structured field: 老年病相关药品收入占比 */"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 0,
+  "result_rows": [],
+  "retrieved_evidence": [],
+  "reranked_evidence": [],
+  "rerank_preview": "{\"strategy\": \"skipped_fast_path\", \"kept_count\": 0}",
+  "fused_context": {
+    "question": "国家关注养老问题，请查询2025年第三季度老年病相关药品收入占比前五的公司及其净资产收益率。",
+    "sql_row_count": 0,
+    "evidence_count": 0,
+    "sql_preview": [],
+    "evidence_preview": [],
+    "evidence_titles": [],
+    "source_breakdown": {}
+  },
+  "self_check": {
+    "pass": true,
+    "notes": [
+      "self_check_skipped_fast_path"
+    ]
+  },
+  "chart_plan": {},
+  "chart_spec": {},
+  "current_chart_paths": [],
+  "current_chart_specs": [],
+  "current_answer": "直接结论：当前标准化财务视图中没有可直接用于计算“老年病相关药品收入占比”的结构化字段，因此无法据此给出严格的公司排序或占比结果。\n\n财务数据支撑：现有 `financials_view` 主要提供营业总收入、净利润、ROE、资产负债率等标准财务指标，并不包含特定业务条线或主题标签口径下的收入占比字段。\n\n研报证据支撑：未检索到直接研报证据。\n\n综合判断：这类问题需要额外的业务拆分字段或更细粒度的研报/年报文本标注后才能可靠回答；在当前数据结构下，直接用营业总收入或公司简称模糊替代，会造成口径偏差，因此不应强行给出排序结论。",
+  "current_references": [],
+  "answer_rewritten": false,
+  "turn_answers": [
+    {
+      "Q": "国家关注养老问题，请查询2025年第三季度老年病相关药品收入占比前五的公司及其净资产收益率。",
+      "A": {
+        "content": "直接结论：当前标准化财务视图中没有可直接用于计算“老年病相关药品收入占比”的结构化字段，因此无法据此给出严格的公司排序或占比结果。\n\n财务数据支撑：现有 `financials_view` 主要提供营业总收入、净利润、ROE、资产负债率等标准财务指标，并不包含特定业务条线或主题标签口径下的收入占比字段。\n\n研报证据支撑：未检索到直接研报证据。\n\n综合判断：这类问题需要额外的业务拆分字段或更细粒度的研报/年报文本标注后才能可靠回答；在当前数据结构下，直接用营业总收入或公司简称模糊替代，会造成口径偏差，因此不应强行给出排序结论。",
+        "image": [],
+        "references": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"国家关注养老问题，请查询2025年第三季度老年病相关药品收入占比前五的公司及其净资产收益率。\", \"A\": {\"content\": \"直接结论：当前标准化财务视图中没有可直接用于计算“老年病相关药品收入占比”的结构化字段，因此无法据此给出严格的公司排序或占比结果。\\n\\n财务数据支撑：现有 `financials_view` 主要提供营业总收入、净利润、ROE、资产负债率等标准财务指标，并不包含特定业务条线或主题标签口径下的收入占比字段。\\n\\n研报证据支撑：未检索到直接研报证据。\\n\\n综合判断：这类问题需要额外的业务拆分字段或更细粒度的研报/年报文本标注后才能可靠回答；在当前数据结构下，直接用营业总收入或公司简称模糊替代，会造成口径偏差，因此不应强行给出排序结论。\", \"image\": [], \"references\": []}}]",
+  "references_json": "[]",
+  "notes": [
+    "route=sql_only",
+    "当前结构化视图缺少“老年病相关药品收入占比”字段，SQL阶段不应伪造筛选条件。",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=0",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=0",
+    "self_check={\"pass\": true, \"notes\": [\"self_check_skipped_fast_path\"]}"
+  ],
+  "final_status": "ok"
+}

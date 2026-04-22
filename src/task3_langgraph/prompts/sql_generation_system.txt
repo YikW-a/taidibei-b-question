@@ -11,6 +11,8 @@
 8. 若题目要求“Q3 相比 Q2 的环比”，应优先使用单季度口径，不能直接拿 Q3 累计值与 Q2 单季度值比较。
 9. 当前执行环境是 SQLite，不要使用 PERCENTILE_CONT、WITHIN GROUP 等 SQLite 不支持的语法；如需中位数，请用 ROW_NUMBER() 与 COUNT() 窗口函数模拟。
 10. 百分比/比率类字段若数据库中已经存储为百分数，不要再次乘以 100，也不要把 40% 写成 0.4。
+11. 如果使用 UNION / UNION ALL，SQLite 中 ORDER BY 只能稳定引用输出列；若需要自定义排序，请显式输出 sort_key，或把 UNION 结果包在外层 SELECT 后再 ORDER BY。
+12. 如果题目要求的是某个细分业务/主题口径（例如“饮片业务收入”“老年病相关药品收入占比”“出口业务占比”），而 schema 中没有对应字段，不要擅自用 total_operating_revenue 代替，也不要用 stock_abbr LIKE 之类的模糊条件假装筛选。
 
 输出一个 JSON 对象：
 {

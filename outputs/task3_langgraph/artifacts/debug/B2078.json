@@ -1,0 +1,878 @@
+{
+  "question_id": "B2078",
+  "question_type": "开放性问题",
+  "raw_question": "中药上市企业的研发投入结构与新品上市周期存在怎样的关联？",
+  "raw_question_json": "[{\"Q\":\"中药上市企业的研发投入结构与新品上市周期存在怎样的关联？\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "metrics": [],
+    "periods": [],
+    "focus_topics": [
+      "新品上市周期",
+      "研发投入结构"
+    ],
+    "intent_type": "hybrid_sql_rag",
+    "needs_sql": true,
+    "needs_retrieval": true,
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "hybrid_sql_rag",
+    "companies": [],
+    "periods": [],
+    "metrics": [
+      "研发投入结构",
+      "新品上市周期"
+    ],
+    "needs_sql": true,
+    "top_n": 50,
+    "threshold": null,
+    "question": "中药上市企业的研发投入结构与新品上市周期存在怎样的关联？"
+  },
+  "retrieval_plan": {
+    "question": "中药上市企业的研发投入结构与新品上市周期存在怎样的关联？",
+    "companies": [
+      "江中药业"
+    ],
+    "focus_topics": [
+      "新品上市周期",
+      "研发投入结构",
+      "中药企业研发",
+      "新药上市",
+      "大健康",
+      "新品上市",
+      "研发投入",
+      "研发费用",
+      "研发强度",
+      "研发管线",
+      "创新管线",
+      "种植基地",
+      "订单农业",
+      "基地共建"
+    ],
+    "needs_retrieval": true,
+    "top_k": 15,
+    "source_scope": "industry",
+    "retrieval_mode": "hybrid"
+  },
+  "sql": "WITH rnd_structure AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        operating_expense_rnd_expenses AS rnd_expenses,\n        total_operating_revenue,\n        operating_expense_rnd_expenses * 1.0 / NULLIF(total_operating_revenue, 0) AS rnd_expense_ratio,\n        operating_expense_rnd_expenses * 1.0 / NULLIF(total_operating_expenses, 0) AS rnd_in_total_expenses_ratio\n    FROM financials_view\n    WHERE report_period IN ('2024FY', '2025Q3', '2025H1', '2025Q2', '2025Q4')\n        AND stock_abbr LIKE '%中药%'\n),\nnew_product_cycle AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        operating_revenue_yoy_growth,\n        operating_revenue_qoq_growth,\n        net_profit_yoy_growth,\n        net_profit_qoq_growth\n    FROM financials_view\n    WHERE report_period IN ('2024FY', '2025Q3', '2025H1', '2025Q2', '2025Q4')\n        AND stock_abbr LIKE '%中药%'\n)\nSELECT \n    r.stock_code,\n    r.stock_abbr,\n    r.report_period,\n    r.rnd_expenses,\n    r.rnd_expense_ratio,\n    r.rnd_in_total_expenses_ratio,\n    n.operating_revenue_yoy_growth,\n    n.operating_revenue_qoq_growth,\n    n.net_profit_yoy_growth,\n    n.net_profit_qoq_growth\nFROM rnd_structure r\nJOIN new_product_cycle n \n    ON r.stock_code = n.stock_code \n    AND r.report_period = n.report_period\nORDER BY r.rnd_expense_ratio DESC, r.rnd_in_total_expenses_ratio DESC\nLIMIT 50;",
+  "sql_history": [
+    "WITH rnd_structure AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        operating_expense_rnd_expenses AS rnd_expenses,\n        total_operating_revenue,\n        operating_expense_rnd_expenses * 1.0 / NULLIF(total_operating_revenue, 0) AS rnd_expense_ratio,\n        operating_expense_rnd_expenses * 1.0 / NULLIF(total_operating_expenses, 0) AS rnd_in_total_expenses_ratio\n    FROM financials_view\n    WHERE report_period IN ('2024FY', '2025Q3', '2025H1', '2025Q2', '2025Q4')\n        AND stock_abbr LIKE '%中药%'\n),\nnew_product_cycle AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        operating_revenue_yoy_growth,\n        operating_revenue_qoq_growth,\n        net_profit_yoy_growth,\n        net_profit_qoq_growth\n    FROM financials_view\n    WHERE report_period IN ('2024FY', '2025Q3', '2025H1', '2025Q2', '2025Q4')\n        AND stock_abbr LIKE '%中药%'\n)\nSELECT \n    r.stock_code,\n    r.stock_abbr,\n    r.report_period,\n    r.rnd_expenses,\n    r.rnd_expense_ratio,\n    r.rnd_in_total_expenses_ratio,\n    n.operating_revenue_yoy_growth,\n    n.operating_revenue_qoq_growth,\n    n.net_profit_yoy_growth,\n    n.net_profit_qoq_growth\nFROM rnd_structure r\nJOIN new_product_cycle n \n    ON r.stock_code = n.stock_code \n    AND r.report_period = n.report_period\nORDER BY r.rnd_expense_ratio DESC, r.rnd_in_total_expenses_ratio DESC\nLIMIT 50;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 4,
+  "result_rows": [
+    {
+      "stock_code": "600750",
+      "stock_abbr": "江中药业",
+      "report_period": "2025Q3",
+      "rnd_expenses": "9713.972032",
+      "rnd_expense_ratio": 0.03311763267283347,
+      "rnd_in_total_expenses_ratio": 0.04625321573458501,
+      "operating_revenue_yoy_growth": -6.279688528656716,
+      "operating_revenue_qoq_growth": -17.237365525311876,
+      "net_profit_yoy_growth": 6.0155139619969615,
+      "net_profit_qoq_growth": -32.14120907846906
+    },
+    {
+      "stock_code": "600750",
+      "stock_abbr": "江中药业",
+      "report_period": "2025H1",
+      "rnd_expenses": "4854.915217",
+      "rnd_expense_ratio": 0.022674672268708427,
+      "rnd_in_total_expenses_ratio": 0.0321715863071664,
+      "operating_revenue_yoy_growth": -5.786065891602467,
+      "operating_revenue_qoq_growth": -19.177470251582534,
+      "net_profit_yoy_growth": 4.970275185134179,
+      "net_profit_qoq_growth": -16.668531743524266
+    },
+    {
+      "stock_code": "600750",
+      "stock_abbr": "江中药业",
+      "report_period": "2025Q2",
+      "rnd_expenses": "2160.281853",
+      "rnd_expense_ratio": 0.022573031472444875,
+      "rnd_in_total_expenses_ratio": 0.033125017805201225,
+      "operating_revenue_yoy_growth": NaN,
+      "operating_revenue_qoq_growth": NaN,
+      "net_profit_yoy_growth": NaN,
+      "net_profit_qoq_growth": NaN
+    },
+    {
+      "stock_code": "600750",
+      "stock_abbr": "江中药业",
+      "report_period": "2024FY",
+      "rnd_expenses": "9652.397587",
+      "rnd_expense_ratio": 0.021761932388951216,
+      "rnd_in_total_expenses_ratio": 0.02788657298878688,
+      "operating_revenue_yoy_growth": -2.586334010446145,
+      "operating_revenue_qoq_growth": 83.09471186803268,
+      "net_profit_yoy_growth": 9.339228381101696,
+      "net_profit_qoq_growth": 5.676454095286411
+    }
+  ],
+  "retrieved_evidence": [
+    {
+      "source_type": "industry",
+      "title": "医药行业周报：人福医药：创新管线有哪些？",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药行业周报：人福医药：创新管线有哪些？.pdf",
+      "publish_date": "2025-09-02 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "华源证券",
+      "snippet": "医药行业周报：人福医药：创新管线有哪些？；中药；华源证券",
+      "score": 2.674615,
+      "metadata_ref": "industry::医药行业周报：人福医药：创新管线有哪些？::2025-09-02 00:00:00.000::华源证券::中药",
+      "score_components": {
+        "metadata": 2.0,
+        "vector": 0.674615
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "中药板块及医药流通板块投资策略：厚积薄发，静候繁花绽放",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/中药板块及医药流通板块投资策略：厚积薄发，静候繁花绽放.pdf",
+      "publish_date": "2024-12-27 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "华安证券",
+      "metadata_ref": "industry::中药板块及医药流通板块投资策略：厚积薄发，静候繁花绽放::2024-12-27 00:00:00.000::华安证券::中药",
+      "snippet": "中药：院内中药受基数等影响，创新中药发展可期\n代表性公司2024前三季度财务情况•2024年前三季度，标志性的院内中药企业逐步走出疫情影响，但由于宏观环境，院内产品为主的公司恢复相对较缓。\n\n以岭药业、康缘药业和天士力三家老牌中药公司的研发费用率均超过8%，显著高于整体中药板块水平，显示出企业在持续加大研发投入的决心。\n\n随着新产品线的逐步获批，这些公司的业绩增厚可期。\n\n此外，销售净利率的维持和销售毛利率的稳定表明，尽管挑战依旧存在，但中药行业正朝着稳健复苏的方向前进。\n\n最新市值（亿元）PE（TTM）PE（2024E,wind一致预期）营业收入（亿元）营业收入同比增长归母净利润（亿元）归母净利润同比增长扣非归母净利润（亿元）扣非归母净利润同比增长ROE销售毛利率销售费用率管理费用率财务费用率销售净利率研发费用率以岭药业288.7",
+      "score": 2.02503,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.648659
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：麻药龙头归核重整，创新管线接踵而至",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：麻药龙头归核重整，创新管线接踵而至.pdf",
+      "publish_date": "2025-07-27 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "开源证券",
+      "snippet": "医药生物行业周报：麻药龙头归核重整，创新管线接踵而至；中药；开源证券",
+      "score": 2.0,
+      "metadata_ref": "industry::医药生物行业周报：麻药龙头归核重整，创新管线接踵而至::2025-07-27 00:00:00.000::开源证券::中药",
+      "score_components": {
+        "metadata": 2.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "2026年医药行业投资策略：聚焦创新、出海与确定性",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/2026年医药行业投资策略：聚焦创新、出海与确定性.pdf",
+      "publish_date": "2025-12-24T00:00:00",
+      "company_or_industry": "中药",
+      "organization": "诚通证券",
+      "metadata_ref": "industry::2026年医药行业投资策略：聚焦创新、出海与确定性::2025-12-24T00:00:00::诚通证券::中药",
+      "snippet": "二是药企“真研发”：持续多年的高强度研发投入。国内医药上市公司整体研\n发投入从2020 年的859 亿元左右快速上升到2024 年1400 亿元左右，年复合增速达13%左右，远高于同期营收6%左右的年复合增速，研发强度（研发投入/营业收入）从2020 年的4.4%提升到5.7%。头部创新药企是研发主力军，2024 年百济神州年研发支出达141 亿元，恒瑞医药、复星医药、石药集团和中国生物制药突破50 亿元以上，信达生物、华东医药、科伦药业和君实生物等超20 亿元以上。",
+      "score": 1.287852,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.643233
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "中国智慧中医行业发展报告",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/中国智慧中医行业发展报告.pdf",
+      "publish_date": "2025-09-25 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "美年健康",
+      "metadata_ref": "industry::中国智慧中医行业发展报告::2025-09-25 00:00:00.000::美年健康::中药",
+      "snippet": "在研发投入方面，中药企业研发投入持续加大，中药创新药快速发展。\n\n以天士力为例，年报显示，公司2023 年全年研发投入13.15 亿元，同比增长29.49%，占医药板块收入比例达到17.73%。\n\n数据显示，近5 年公司累计研发投入45.03 亿元，占医药工业收入比例为13.32%。\n\n在高研发投入下，天士力中药创新药也不断实现突破，当前公司有9 款创新中药处于临床III 期研究阶段，包括安神滴丸、青术颗粒、脊痛宁片、安体威颗粒等多个品种，公司在中成药创新药研发、临床转化和商业化销售领域具有成熟经验，中药创新药将成为天士力未来的主要收入来源。",
+      "score": 0.686317,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.686317
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药行业周报：政策持续支持中药创新，关注健民集团",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药行业周报：政策持续支持中药创新，关注健民集团.pdf",
+      "publish_date": "2025-04-06 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "华源证券",
+      "metadata_ref": "industry::医药行业周报：政策持续支持中药创新，关注健民集团::2025-04-06 00:00:00.000::华源证券::中药",
+      "snippet": "1.政策持续支持中药创新研发，重点关注健民集团\n源引金融活水润泽中华大地中药新药医保准入快，有望快速实现销售放量。根据2024 年11 月医保局发布的新版医保目录，11 个通过国谈准入的中药新药中，有10 个为2023-2024 年间获批上市的创新品种,日均用药费用在22-39 元之间。中药新药临床疗效显著，从上市到纳入医保的周期已缩短到2 年以内，且享有较好的医保支付价格，上市后有望通过国谈身份加速入院，实现医院终端的快速覆盖与销售放量。\n\n产品名称企业名称注册分类上市时间日均用药金额（元）益气通窍丸扬子江药业\n\n中药头部企业持续加码创新研发投入。在国家推动中药现代化发展的政策红利下，行业头部企业正加速构建创新驱动发展格局，聚焦中药创新药与经典名方开发。根据米内网数据显示，康缘药业已累计获批6 个中药新药领跑行业，以岭药业（5 个）、华润三九（4 个）、健民药业（2 个）、方盛制药（2 个）、天士力（2 个）等企业紧随其后，其产品管线研发与商业化进展均处于行业领先水平。",
+      "score": 0.654583,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.654583
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业报告：创新药主题热度仍在升温，关注中药创新药研发企业的投资机会",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业报告：创新药主题热度仍在升温，关注中药创新药研发企业的投资机会.pdf",
+      "publish_date": "2025-06-17 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "中邮证券",
+      "metadata_ref": "industry::医药生物行业报告：创新药主题热度仍在升温，关注中药创新药研发企业的投资机会::2025-06-17 00:00:00.000::中邮证券::中药",
+      "snippet": "图表1：关注中药创新药研发企业的投资机会",
+      "score": 0.647698,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.647698
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：重视Pharma估值重塑的机会",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：重视Pharma估值重塑的机会.pdf",
+      "publish_date": "2025-06-02 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "开源证券",
+      "metadata_ref": "industry::医药生物行业周报：重视Pharma估值重塑的机会::2025-06-02 00:00:00.000::开源证券::中药",
+      "snippet": "数据来源：各公司公告、开源证券研究所\n1.3、 传统pharma 转型升级，创新+出海驱动个股成长\n传统pharma 转型升级，创新+出海驱动个股成长。\n\n在创新药浪潮中，多数传统Pharma 创新转型再出发，稳定的业绩贡献也使得研发投入具备可持续性。\n\n2024 年恒瑞医药、石药集团、中国生物制药等的研发费用均超过50 亿元，有望迎来产品兑现期；\n\n国内创新药企业正快速接轨全球，新药管线表现持续亮眼，“license-out”不断涌现，多数传统pharma 有望迎来国际化发展新起点。\n\n同时，部分制药公司为细分领域的领先企业，行业增速稳健，竞争格局优良，我们认为在具备稳健业绩的基础上储备优质创新药的制药公司有望持续受益。\n\n此外，部分制药公司出海逻辑清晰，出海产品贡献业绩增量。\n\n我们看好出海带来制药板块业绩的确定性向上的机会。",
+      "score": 0.646097,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.646097
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "2025年中国中药市场行业研究报告",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/2025年中国中药市场行业研究报告.pdf",
+      "publish_date": "2025-10-15 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "硕远咨询",
+      "metadata_ref": "industry::2025年中国中药市场行业研究报告::2025-10-15 00:00:00.000::硕远咨询::中药",
+      "snippet": "以下图表展示了中药配方颗粒产业链关键环节及其协同发展机制：\n数据，2023 年我国保健食品销售额约720 亿元，且老龄化加剧（65 岁以上人口达2.1 亿）与亚健康问题普遍化共同催生庞大需求。企业纷纷加大研发投入，如某企业累计获得15 项国内外授权专利，其灵芝破壁技术与孢子粉去壁技术相关产品已获10 项国外发明专利，体现了科技创新对消费升级的支撑作用。未来，随着数字健康工具与个性化服务的深度融合，中药大健康产业将加速迈向精准化、智能化的新阶段。\n\n随着Z 世代逐渐成为消费市场的主力，中药行业的消费群体正呈现出显著的年轻化趋势。\n\n这一群体在成长过程中深受互联网与社交媒体影响，其健康信息获取渠道高度依赖短视频平台、社交种草内容及专业KOL 推荐。\n\n例如，抖音电商2021 年GMV 已达8000 亿元，2022 年预计达到1.5 万亿元，凭借流量优势吸引了遥望网络、东方甄选等专业机构入驻直播生态，构建了以“兴趣电商”为核心的新型消费场景。\n\n在此背景下，年轻消费者更倾向于通过内容互动建立品牌认同，对具备文化调性、情感价值和社交属性的中药产品表现出更高接受度。\n\n便捷化与时尚化的中药产品形态正在有效降低新生代用户的使用门槛。\n\n即食膏方、草本饮品、便携冲剂等形式不仅契合快节奏生活需求，也通过现代包装设计提升了产品的美学吸引力。\n\n这类创新产品往往融合传统药食同源理念与现代口味偏好，如淘宝天猫平台上药食同源类产品的滚动年销售额持续增长，反映出市场对兼具功能性与体验感产品的强烈需求。\n\n企业正借此机会重构产品线，推动中药从“治病用药”向“日常养生”转变。\n\n值得注意的是，Z 世代对天然成分、绿色环保理念的关注正在倒逼企业在研发与包装上进行系统性创新。\n\n他们崇尚个性表达，愿意为兴趣买单，并重视产品背后的价值观传递。\n\n例如，《淘宝天猫宠物行业消费趋势洞察》显示，2024年中国城镇犬猫消费市场规模已突破3000 亿元，年轻养宠人群占比超六成，",
+      "score": 0.64115,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.64115
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "中药Ⅱ行业跟踪报告：中药Q3：业绩持续承压，上市公司表现分化",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/中药Ⅱ行业跟踪报告：中药Q3：业绩持续承压，上市公司表现分化.pdf",
+      "publish_date": "2025-11-12 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "万联证券",
+      "metadata_ref": "industry::中药Ⅱ行业跟踪报告：中药Q3：业绩持续承压，上市公司表现分化::2025-11-12 00:00:00.000::万联证券::中药",
+      "snippet": "图表17：中药板块上市公司不同时间区间股价涨跌幅",
+      "score": 0.63703,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.63703
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "2025年中期医药生物行业投资策略报告：BD催化创新药资产价值重估",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/2025年中期医药生物行业投资策略报告：BD催化创新药资产价值重估.pdf",
+      "publish_date": "2025-07-13 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "万联证券",
+      "metadata_ref": "industry::2025年中期医药生物行业投资策略报告：BD催化创新药资产价值重估::2025-07-13 00:00:00.000::万联证券::中药",
+      "snippet": "中药：政策扶持，行业稳健。近年来针对中药产业的利好政策不断发布，政府对\n8.2 创新药BD 进展不及预期风险\n创新药BD事件进展取决于创新药公司于目标合作公司的洽谈进展，其时间进度及最终合作具体方案具有不确定性。如最终BD进展低于预期，可能对创新药相关公司股价造成较大负面影响。\n\n当前国家对创新药医保支付有所倾斜，但是整体的控费原则并未改变。如创新药上市后定价较低，可能会降低市场对创新药销售金额的预期，进而对公司股价产生负面影响。",
+      "score": 0.63692,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.63692
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：CXO龙头中报业绩超预期，重点关注板块后续行情",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：CXO龙头中报业绩超预期，重点关注板块后续行情.pdf",
+      "publish_date": "2025-07-13 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "开源证券",
+      "metadata_ref": "industry::医药生物行业周报：CXO龙头中报业绩超预期，重点关注板块后续行情::2025-07-13 00:00:00.000::开源证券::中药",
+      "snippet": "图2：全球top30 药企年平均研发投入整体稳健增长",
+      "score": 0.634032,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.634032
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高.pdf",
+      "publish_date": "2025-12-28T00:00:00",
+      "company_or_industry": "中药",
+      "organization": "东吴证券",
+      "metadata_ref": "industry::医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高::2025-12-28T00:00:00::东吴证券::中药",
+      "snippet": "1. 本周及年初至今各医药股收益情况\n数据来源：wind（数据截至2025 年12 月26 日收盘价。本表使用的货币单位均为人民币，港股市值由当日汇率换算得到），公司公告，东吴证券研究所\n\n中国上市创新药数量持续增长，国产占据约半数份额；\n\n中国创新药研发能力同步增长，优质管线吸引全球目光；\n\n国产创新药BD 数量与金额再创新高，其中ADC、双抗、小核酸、CAR-T 为2026 年值得关注的四大研发方向。\n\n中国创新药上市数量从2017 年的41 款增加至2024 年的92 款，国产药品占比亦呈显著提升态势；\n\n在研发端，中国在研管线覆盖1300 个赛道，其中的716 个赛道（22%）中的研发进度排名第一，已成为仅次于美国（38%）的优质创新药管线策源地；\n\n2025 年Q1~3 中国企业的license-out 交易热度仍在持续，交易总金额攀升至 920.3 亿美元，较2024 年全年同比增长77%；",
+      "score": 0.632049,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.632049
+      }
+    }
+  ],
+  "reranked_evidence": [
+    {
+      "source_type": "industry",
+      "title": "中国智慧中医行业发展报告",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/中国智慧中医行业发展报告.pdf",
+      "publish_date": "2025-09-25 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "美年健康",
+      "metadata_ref": "industry::中国智慧中医行业发展报告::2025-09-25 00:00:00.000::美年健康::中药",
+      "snippet": "在研发投入方面，中药企业研发投入持续加大，中药创新药快速发展。\n\n以天士力为例，年报显示，公司2023 年全年研发投入13.15 亿元，同比增长29.49%，占医药板块收入比例达到17.73%。\n\n数据显示，近5 年公司累计研发投入45.03 亿元，占医药工业收入比例为13.32%。\n\n在高研发投入下，天士力中药创新药也不断实现突破，当前公司有9 款创新中药处于临床III 期研究阶段，包括安神滴丸、青术颗粒、脊痛宁片、安体威颗粒等多个品种，公司在中成药创新药研发、临床转化和商业化销售领域具有成熟经验，中药创新药将成为天士力未来的主要收入来源。",
+      "score": 0.686317,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.686317
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药行业周报：政策持续支持中药创新，关注健民集团",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药行业周报：政策持续支持中药创新，关注健民集团.pdf",
+      "publish_date": "2025-04-06 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "华源证券",
+      "metadata_ref": "industry::医药行业周报：政策持续支持中药创新，关注健民集团::2025-04-06 00:00:00.000::华源证券::中药",
+      "snippet": "1.政策持续支持中药创新研发，重点关注健民集团\n源引金融活水润泽中华大地中药新药医保准入快，有望快速实现销售放量。根据2024 年11 月医保局发布的新版医保目录，11 个通过国谈准入的中药新药中，有10 个为2023-2024 年间获批上市的创新品种,日均用药费用在22-39 元之间。中药新药临床疗效显著，从上市到纳入医保的周期已缩短到2 年以内，且享有较好的医保支付价格，上市后有望通过国谈身份加速入院，实现医院终端的快速覆盖与销售放量。\n\n产品名称企业名称注册分类上市时间日均用药金额（元）益气通窍丸扬子江药业\n\n中药头部企业持续加码创新研发投入。在国家推动中药现代化发展的政策红利下，行业头部企业正加速构建创新驱动发展格局，聚焦中药创新药与经典名方开发。根据米内网数据显示，康缘药业已累计获批6 个中药新药领跑行业，以岭药业（5 个）、华润三九（4 个）、健民药业（2 个）、方盛制药（2 个）、天士力（2 个）等企业紧随其后，其产品管线研发与商业化进展均处于行业领先水平。",
+      "score": 0.654583,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.654583
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "2026年医药行业投资策略：聚焦创新、出海与确定性",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/2026年医药行业投资策略：聚焦创新、出海与确定性.pdf",
+      "publish_date": "2025-12-24T00:00:00",
+      "company_or_industry": "中药",
+      "organization": "诚通证券",
+      "metadata_ref": "industry::2026年医药行业投资策略：聚焦创新、出海与确定性::2025-12-24T00:00:00::诚通证券::中药",
+      "snippet": "二是药企“真研发”：持续多年的高强度研发投入。国内医药上市公司整体研\n发投入从2020 年的859 亿元左右快速上升到2024 年1400 亿元左右，年复合增速达13%左右，远高于同期营收6%左右的年复合增速，研发强度（研发投入/营业收入）从2020 年的4.4%提升到5.7%。头部创新药企是研发主力军，2024 年百济神州年研发支出达141 亿元，恒瑞医药、复星医药、石药集团和中国生物制药突破50 亿元以上，信达生物、华东医药、科伦药业和君实生物等超20 亿元以上。",
+      "score": 1.287852,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.643233
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "2025年中国中药市场行业研究报告",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/2025年中国中药市场行业研究报告.pdf",
+      "publish_date": "2025-10-15 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "硕远咨询",
+      "metadata_ref": "industry::2025年中国中药市场行业研究报告::2025-10-15 00:00:00.000::硕远咨询::中药",
+      "snippet": "以下图表展示了中药配方颗粒产业链关键环节及其协同发展机制：\n数据，2023 年我国保健食品销售额约720 亿元，且老龄化加剧（65 岁以上人口达2.1 亿）与亚健康问题普遍化共同催生庞大需求。企业纷纷加大研发投入，如某企业累计获得15 项国内外授权专利，其灵芝破壁技术与孢子粉去壁技术相关产品已获10 项国外发明专利，体现了科技创新对消费升级的支撑作用。未来，随着数字健康工具与个性化服务的深度融合，中药大健康产业将加速迈向精准化、智能化的新阶段。\n\n随着Z 世代逐渐成为消费市场的主力，中药行业的消费群体正呈现出显著的年轻化趋势。\n\n这一群体在成长过程中深受互联网与社交媒体影响，其健康信息获取渠道高度依赖短视频平台、社交种草内容及专业KOL 推荐。\n\n例如，抖音电商2021 年GMV 已达8000 亿元，2022 年预计达到1.5 万亿元，凭借流量优势吸引了遥望网络、东方甄选等专业机构入驻直播生态，构建了以“兴趣电商”为核心的新型消费场景。\n\n在此背景下，年轻消费者更倾向于通过内容互动建立品牌认同，对具备文化调性、情感价值和社交属性的中药产品表现出更高接受度。\n\n便捷化与时尚化的中药产品形态正在有效降低新生代用户的使用门槛。\n\n即食膏方、草本饮品、便携冲剂等形式不仅契合快节奏生活需求，也通过现代包装设计提升了产品的美学吸引力。\n\n这类创新产品往往融合传统药食同源理念与现代口味偏好，如淘宝天猫平台上药食同源类产品的滚动年销售额持续增长，反映出市场对兼具功能性与体验感产品的强烈需求。\n\n企业正借此机会重构产品线，推动中药从“治病用药”向“日常养生”转变。\n\n值得注意的是，Z 世代对天然成分、绿色环保理念的关注正在倒逼企业在研发与包装上进行系统性创新。\n\n他们崇尚个性表达，愿意为兴趣买单，并重视产品背后的价值观传递。\n\n例如，《淘宝天猫宠物行业消费趋势洞察》显示，2024年中国城镇犬猫消费市场规模已突破3000 亿元，年轻养宠人群占比超六成，",
+      "score": 0.64115,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.64115
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "中药板块及医药流通板块投资策略：厚积薄发，静候繁花绽放",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/中药板块及医药流通板块投资策略：厚积薄发，静候繁花绽放.pdf",
+      "publish_date": "2024-12-27 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "华安证券",
+      "metadata_ref": "industry::中药板块及医药流通板块投资策略：厚积薄发，静候繁花绽放::2024-12-27 00:00:00.000::华安证券::中药",
+      "snippet": "中药：院内中药受基数等影响，创新中药发展可期\n代表性公司2024前三季度财务情况•2024年前三季度，标志性的院内中药企业逐步走出疫情影响，但由于宏观环境，院内产品为主的公司恢复相对较缓。\n\n以岭药业、康缘药业和天士力三家老牌中药公司的研发费用率均超过8%，显著高于整体中药板块水平，显示出企业在持续加大研发投入的决心。\n\n随着新产品线的逐步获批，这些公司的业绩增厚可期。\n\n此外，销售净利率的维持和销售毛利率的稳定表明，尽管挑战依旧存在，但中药行业正朝着稳健复苏的方向前进。\n\n最新市值（亿元）PE（TTM）PE（2024E,wind一致预期）营业收入（亿元）营业收入同比增长归母净利润（亿元）归母净利润同比增长扣非归母净利润（亿元）扣非归母净利润同比增长ROE销售毛利率销售费用率管理费用率财务费用率销售净利率研发费用率以岭药业288.7",
+      "score": 2.02503,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.648659
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：CXO龙头中报业绩超预期，重点关注板块后续行情",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：CXO龙头中报业绩超预期，重点关注板块后续行情.pdf",
+      "publish_date": "2025-07-13 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "开源证券",
+      "metadata_ref": "industry::医药生物行业周报：CXO龙头中报业绩超预期，重点关注板块后续行情::2025-07-13 00:00:00.000::开源证券::中药",
+      "snippet": "图2：全球top30 药企年平均研发投入整体稳健增长",
+      "score": 0.634032,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.634032
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：重视Pharma估值重塑的机会",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：重视Pharma估值重塑的机会.pdf",
+      "publish_date": "2025-06-02 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "开源证券",
+      "metadata_ref": "industry::医药生物行业周报：重视Pharma估值重塑的机会::2025-06-02 00:00:00.000::开源证券::中药",
+      "snippet": "数据来源：各公司公告、开源证券研究所\n1.3、 传统pharma 转型升级，创新+出海驱动个股成长\n传统pharma 转型升级，创新+出海驱动个股成长。\n\n在创新药浪潮中，多数传统Pharma 创新转型再出发，稳定的业绩贡献也使得研发投入具备可持续性。\n\n2024 年恒瑞医药、石药集团、中国生物制药等的研发费用均超过50 亿元，有望迎来产品兑现期；\n\n国内创新药企业正快速接轨全球，新药管线表现持续亮眼，“license-out”不断涌现，多数传统pharma 有望迎来国际化发展新起点。\n\n同时，部分制药公司为细分领域的领先企业，行业增速稳健，竞争格局优良，我们认为在具备稳健业绩的基础上储备优质创新药的制药公司有望持续受益。\n\n此外，部分制药公司出海逻辑清晰，出海产品贡献业绩增量。\n\n我们看好出海带来制药板块业绩的确定性向上的机会。",
+      "score": 0.646097,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.646097
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高.pdf",
+      "publish_date": "2025-12-28T00:00:00",
+      "company_or_industry": "中药",
+      "organization": "东吴证券",
+      "metadata_ref": "industry::医药生物行业跟踪周报：2026年战略性布局创新药，其性价比高::2025-12-28T00:00:00::东吴证券::中药",
+      "snippet": "1. 本周及年初至今各医药股收益情况\n数据来源：wind（数据截至2025 年12 月26 日收盘价。本表使用的货币单位均为人民币，港股市值由当日汇率换算得到），公司公告，东吴证券研究所\n\n中国上市创新药数量持续增长，国产占据约半数份额；\n\n中国创新药研发能力同步增长，优质管线吸引全球目光；\n\n国产创新药BD 数量与金额再创新高，其中ADC、双抗、小核酸、CAR-T 为2026 年值得关注的四大研发方向。\n\n中国创新药上市数量从2017 年的41 款增加至2024 年的92 款，国产药品占比亦呈显著提升态势；\n\n在研发端，中国在研管线覆盖1300 个赛道，其中的716 个赛道（22%）中的研发进度排名第一，已成为仅次于美国（38%）的优质创新药管线策源地；\n\n2025 年Q1~3 中国企业的license-out 交易热度仍在持续，交易总金额攀升至 920.3 亿美元，较2024 年全年同比增长77%；",
+      "score": 0.632049,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.632049
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业报告：创新药主题热度仍在升温，关注中药创新药研发企业的投资机会",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业报告：创新药主题热度仍在升温，关注中药创新药研发企业的投资机会.pdf",
+      "publish_date": "2025-06-17 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "中邮证券",
+      "metadata_ref": "industry::医药生物行业报告：创新药主题热度仍在升温，关注中药创新药研发企业的投资机会::2025-06-17 00:00:00.000::中邮证券::中药",
+      "snippet": "图表1：关注中药创新药研发企业的投资机会",
+      "score": 0.647698,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.647698
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "2025年中期医药生物行业投资策略报告：BD催化创新药资产价值重估",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/2025年中期医药生物行业投资策略报告：BD催化创新药资产价值重估.pdf",
+      "publish_date": "2025-07-13 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "万联证券",
+      "metadata_ref": "industry::2025年中期医药生物行业投资策略报告：BD催化创新药资产价值重估::2025-07-13 00:00:00.000::万联证券::中药",
+      "snippet": "中药：政策扶持，行业稳健。近年来针对中药产业的利好政策不断发布，政府对\n8.2 创新药BD 进展不及预期风险\n创新药BD事件进展取决于创新药公司于目标合作公司的洽谈进展，其时间进度及最终合作具体方案具有不确定性。如最终BD进展低于预期，可能对创新药相关公司股价造成较大负面影响。\n\n当前国家对创新药医保支付有所倾斜，但是整体的控费原则并未改变。如创新药上市后定价较低，可能会降低市场对创新药销售金额的预期，进而对公司股价产生负面影响。",
+      "score": 0.63692,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.63692
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "中药Ⅱ行业跟踪报告：中药Q3：业绩持续承压，上市公司表现分化",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/中药Ⅱ行业跟踪报告：中药Q3：业绩持续承压，上市公司表现分化.pdf",
+      "publish_date": "2025-11-12 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "万联证券",
+      "metadata_ref": "industry::中药Ⅱ行业跟踪报告：中药Q3：业绩持续承压，上市公司表现分化::2025-11-12 00:00:00.000::万联证券::中药",
+      "snippet": "图表17：中药板块上市公司不同时间区间股价涨跌幅",
+      "score": 0.63703,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.63703
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药生物行业周报：麻药龙头归核重整，创新管线接踵而至",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药生物行业周报：麻药龙头归核重整，创新管线接踵而至.pdf",
+      "publish_date": "2025-07-27 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "开源证券",
+      "snippet": "医药生物行业周报：麻药龙头归核重整，创新管线接踵而至；中药；开源证券",
+      "score": 2.0,
+      "metadata_ref": "industry::医药生物行业周报：麻药龙头归核重整，创新管线接踵而至::2025-07-27 00:00:00.000::开源证券::中药",
+      "score_components": {
+        "metadata": 2.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "医药行业周报：人福医药：创新管线有哪些？",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药行业周报：人福医药：创新管线有哪些？.pdf",
+      "publish_date": "2025-09-02 00:00:00.000",
+      "company_or_industry": "中药",
+      "organization": "华源证券",
+      "snippet": "医药行业周报：人福医药：创新管线有哪些？；中药；华源证券",
+      "score": 2.674615,
+      "metadata_ref": "industry::医药行业周报：人福医药：创新管线有哪些？::2025-09-02 00:00:00.000::华源证券::中药",
+      "score_components": {
+        "metadata": 2.0,
+        "vector": 0.674615
+      }
+    }
+  ],
+  "rerank_preview": "{\"strategy\": \"reranker_model\", \"kept_count\": 13, \"reason\": \"BAAI/bge-reranker-v2-m3\"}",
+  "fused_context": {
+    "question": "中药上市企业的研发投入结构与新品上市周期存在怎样的关联？",
+    "sql_row_count": 4,
+    "evidence_count": 13,
+    "sql_preview": [
+      {
+        "stock_code": "600750",
+        "stock_abbr": "江中药业",
+        "report_period": "2025Q3",
+        "rnd_expenses": "9713.972032",
+        "rnd_expense_ratio": 0.03311763267283347,
+        "rnd_in_total_expenses_ratio": 0.04625321573458501,
+        "operating_revenue_yoy_growth": -6.279688528656716,
+        "operating_revenue_qoq_growth": -17.237365525311876,
+        "net_profit_yoy_growth": 6.0155139619969615,
+        "net_profit_qoq_growth": -32.14120907846906
+      },
+      {
+        "stock_code": "600750",
+        "stock_abbr": "江中药业",
+        "report_period": "2025H1",
+        "rnd_expenses": "4854.915217",
+        "rnd_expense_ratio": 0.022674672268708427,
+        "rnd_in_total_expenses_ratio": 0.0321715863071664,
+        "operating_revenue_yoy_growth": -5.786065891602467,
+        "operating_revenue_qoq_growth": -19.177470251582534,
+        "net_profit_yoy_growth": 4.970275185134179,
+        "net_profit_qoq_growth": -16.668531743524266
+      },
+      {
+        "stock_code": "600750",
+        "stock_abbr": "江中药业",
+        "report_period": "2025Q2",
+        "rnd_expenses": "2160.281853",
+        "rnd_expense_ratio": 0.022573031472444875,
+        "rnd_in_total_expenses_ratio": 0.033125017805201225,
+        "operating_revenue_yoy_growth": NaN,
+        "operating_revenue_qoq_growth": NaN,
+        "net_profit_yoy_growth": NaN,
+        "net_profit_qoq_growth": NaN
+      },
+      {
+        "stock_code": "600750",
+        "stock_abbr": "江中药业",
+        "report_period": "2024FY",
+        "rnd_expenses": "9652.397587",
+        "rnd_expense_ratio": 0.021761932388951216,
+        "rnd_in_total_expenses_ratio": 0.02788657298878688,
+        "operating_revenue_yoy_growth": -2.586334010446145,
+        "operating_revenue_qoq_growth": 83.09471186803268,
+        "net_profit_yoy_growth": 9.339228381101696,
+        "net_profit_qoq_growth": 5.676454095286411
+      }
+    ],
+    "evidence_preview": [
+      {
+        "source_type": "industry",
+        "title": "中国智慧中医行业发展报告",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/中国智慧中医行业发展报告.pdf",
+        "publish_date": "2025-09-25 00:00:00.000",
+        "company_or_industry": "中药",
+        "organization": "美年健康",
+        "metadata_ref": "industry::中国智慧中医行业发展报告::2025-09-25 00:00:00.000::美年健康::中药",
+        "snippet": "在研发投入方面，中药企业研发投入持续加大，中药创新药快速发展。\n\n以天士力为例，年报显示，公司2023 年全年研发投入13.15 亿元，同比增长29.49%，占医药板块收入比例达到17.73%。\n\n数据显示，近5 年公司累计研发投入45.03 亿元，占医药工业收入比例为13.32%。\n\n在高研发投入下，天士力中药创新药也不断实现突破，当前公司有9 款创新中药处于临床III 期研究阶段，包括安神滴丸、青术颗粒、脊痛宁片、安体威颗粒等多个品种，公司在中成药创新药研发、临床转化和商业化销售领域具有成熟经验，中药创新药将成为天士力未来的主要收入来源。",
+        "score": 0.686317,
+        "score_components": {
+          "metadata": 0.0,
+          "vector": 0.686317
+        }
+      },
+      {
+        "source_type": "industry",
+        "title": "医药行业周报：政策持续支持中药创新，关注健民集团",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/医药行业周报：政策持续支持中药创新，关注健民集团.pdf",
+        "publish_date": "2025-04-06 00:00:00.000",
+        "company_or_industry": "中药",
+        "organization": "华源证券",
+        "metadata_ref": "industry::医药行业周报：政策持续支持中药创新，关注健民集团::2025-04-06 00:00:00.000::华源证券::中药",
+        "snippet": "1.政策持续支持中药创新研发，重点关注健民集团\n源引金融活水润泽中华大地中药新药医保准入快，有望快速实现销售放量。根据2024 年11 月医保局发布的新版医保目录，11 个通过国谈准入的中药新药中，有10 个为2023-2024 年间获批上市的创新品种,日均用药费用在22-39 元之间。中药新药临床疗效显著，从上市到纳入医保的周期已缩短到2 年以内，且享有较好的医保支付价格，上市后有望通过国谈身份加速入院，实现医院终端的快速覆盖与销售放量。\n\n产品名称企业名称注册分类上市时间日均用药金额（元）益气通窍丸扬子江药业\n\n中药头部企业持续加码创新研发投入。在国家推动中药现代化发展的政策红利下，行业头部企业正加速构建创新驱动发展格局，聚焦中药创新药与经典名方开发。根据米内网数据显示，康缘药业已累计获批6 个中药新药领跑行业，以岭药业（5 个）、华润三九（4 个）、健民药业（2 个）、方盛制药（2 个）、天士力（2 个）等企业紧随其后，其产品管线研发与商业化进展均处于行业领先水平。",
+        "score": 0.654583,
+        "score_components": {
+          "metadata": 0.0,
+          "vector": 0.654583
+        }
+      },
+      {
+        "source_type": "industry",
+        "title": "2026年医药行业投资策略：聚焦创新、出海与确定性",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/2026年医药行业投资策略：聚焦创新、出海与确定性.pdf",
+        "publish_date": "2025-12-24T00:00:00",
+        "company_or_industry": "中药",
+        "organization": "诚通证券",
+        "metadata_ref": "industry::2026年医药行业投资策略：聚焦创新、出海与确定性::2025-12-24T00:00:00::诚通证券::中药",
+        "snippet": "二是药企“真研发”：持续多年的高强度研发投入。国内医药上市公司整体研\n发投入从2020 年的859 亿元左右快速上升到2024 年1400 亿元左右，年复合增速达13%左右，远高于同期营收6%左右的年复合增速，研发强度（研发投入/营业收入）从2020 年的4.4%提升到5.7%。头部创新药企是研发主力军，2024 年百济神州年研发支出达141 亿元，恒瑞医药、复星医药、石药集团和中国生物制药突破50 亿元以上，信达生物、华东医药、科伦药业和君实生物等超20 亿元以上。",
+        "score": 1.287852,
+        "score_components": {
+          "metadata": 0.0,
+          "vector": 0.643233
+        }
+      },
+      {
+        "source_type": "industry",
+        "title": "2025年中国中药市场行业研究报告",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/2025年中国中药市场行业研究报告.pdf",
+        "publish_date": "2025-10-15 00:00:00.000",
+        "company_or_industry": "中药",
+        "organization": "硕远咨询",
+        "metadata_ref": "industry::2025年中国中药市场行业研究报告::2025-10-15 00:00:00.000::硕远咨询::中药",
+        "snippet": "以下图表展示了中药配方颗粒产业链关键环节及其协同发展机制：\n数据，2023 年我国保健食品销售额约720 亿元，且老龄化加剧（65 岁以上人口达2.1 亿）与亚健康问题普遍化共同催生庞大需求。企业纷纷加大研发投入，如某企业累计获得15 项国内外授权专利，其灵芝破壁技术与孢子粉去壁技术相关产品已获10 项国外发明专利，体现了科技创新对消费升级的支撑作用。未来，随着数字健康工具与个性化服务的深度融合，中药大健康产业将加速迈向精准化、智能化的新阶段。\n\n随着Z 世代逐渐成为消费市场的主力，中药行业的消费群体正呈现出显著的年轻化趋势。\n\n这一群体在成长过程中深受互联网与社交媒体影响，其健康信息获取渠道高度依赖短视频平台、社交种草内容及专业KOL 推荐。\n\n例如，抖音电商2021 年GMV 已达8000 亿元，2022 年预计达到1.5 万亿元，凭借流量优势吸引了遥望网络、东方甄选等专业机构入驻直播生态，构建了以“兴趣电商”为核心的新型消费场景。\n\n在此背景下，年轻消费者更倾向于通过内容互动建立品牌认同，对具备文化调性、情感价值和社交属性的中药产品表现出更高接受度。\n\n便捷化与时尚化的中药产品形态正在有效降低新生代用户的使用门槛。\n\n即食膏方、草本饮品、便携冲剂等形式不仅契合快节奏生活需求，也通过现代包装设计提升了产品的美学吸引力。\n\n这类创新产品往往融合传统药食同源理念与现代口味偏好，如淘宝天猫平台上药食同源类产品的滚动年销售额持续增长，反映出市场对兼具功能性与体验感产品的强烈需求。\n\n企业正借此机会重构产品线，推动中药从“治病用药”向“日常养生”转变。\n\n值得注意的是，Z 世代对天然成分、绿色环保理念的关注正在倒逼企业在研发与包装上进行系统性创新。\n\n他们崇尚个性表达，愿意为兴趣买单，并重视产品背后的价值观传递。\n\n例如，《淘宝天猫宠物行业消费趋势洞察》显示，2024年中国城镇犬猫消费市场规模已突破3000 亿元，年轻养宠人群占比超六成，",
+        "score": 0.64115,
+        "score_components": {
+          "metadata": 0.0,
+          "vector": 0.64115
+        }
+      },
+      {
+        "source_type": "industry",
+        "title": "中药板块及医药流通板块投资策略：厚积薄发，静候繁花绽放",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件5：研报数据/行业研报/中药板块及医药流通板块投资策略：厚积薄发，静候繁花绽放.pdf",
+        "publish_date": "2024-12-27 00:00:00.000",
+        "company_or_industry": "中药",
+        "organization": "华安证券",
+        "metadata_ref": "industry::中药板块及医药流通板块投资策略：厚积薄发，静候繁花绽放::2024-12-27 00:00:00.000::华安证券::中药",
+        "snippet": "中药：院内中药受基数等影响，创新中药发展可期\n代表性公司2024前三季度财务情况•2024年前三季度，标志性的院内中药企业逐步走出疫情影响，但由于宏观环境，院内产品为主的公司恢复相对较缓。\n\n以岭药业、康缘药业和天士力三家老牌中药公司的研发费用率均超过8%，显著高于整体中药板块水平，显示出企业在持续加大研发投入的决心。\n\n随着新产品线的逐步获批，这些公司的业绩增厚可期。\n\n此外，销售净利率的维持和销售毛利率的稳定表明，尽管挑战依旧存在，但中药行业正朝着稳健复苏的方向前进。\n\n最新市值（亿元）PE（TTM）PE（2024E,wind一致预期）营业收入（亿元）营业收入同比增长归母净利润（亿元）归母净利润同比增长扣非归母净利润（亿元）扣非归母净利润同比增长ROE销售毛利率销售费用率管理费用率财务费用率销售净利率研发费用率以岭药业288.7",
+        "score": 2.02503,
+        "score_components": {
+          "metadata": 0.0,
+          "vector": 0.648659
+        }
+      }
+    ],
+    "evidence_titles": [
+      "中国智慧中医行业发展报告",
+      "医药行业周报：政策持续支持中药创新，关注健民集团",
+      "2026年医药行业投资策略：聚焦创新、出海与确定性",
+      "2025年中国中药市场行业研究报告",
+      "中药板块及医药流通板块投资策略：厚积薄发，静候繁花绽放"
+    ],
+    "source_breakdown": {
+      "industry": 13
+    }
+  },
+  "self_check": {
+    "pass": true,
+    "notes": [
+      "1. 回答中的数字与 SQL rows 一致：正确引用了江中药业各报告期的研发费用、研发费用率等具体数值，并注明了单位换算。",
+      "2. 回答正确引用了 Evidences 中真实存在的内容：例如，引用了天士力研发投入、以岭药业等公司研发费用率超过8%、康缘药业等企业新药获批数量领先、以及中药新药医保准入周期缩短至2年以内等具体证据。",
+      "3. 回答未遗漏问题要求的关键点：明确指出了数据局限性（仅江中药业一家，且无直接“新品上市周期”数据），并利用行业研报证据构建了“高研发投入 → 丰富管线 → 新品获批 → 政策加速商业化”的关联链条。",
+      "4. 回答未混淆指标名称：正确区分了“研发费用”、“研发费用率”、“营业总收入同比增长率”、“净利润同比增长率”等指标，没有出现混淆。",
+      "5. 回答正确处理了聚合统计与具体公司的对应关系：在引用行业证据时，明确指出了天士力、以岭药业、康缘药业等具体公司的高研发投入案例，没有将行业整体趋势错误地归因于江中药业。"
+    ]
+  },
+  "chart_plan": {
+    "chart_type": "line",
+    "title": "中药上市企业的研发投入结构与新品上市周期存在怎样... - 研发投入结构",
+    "x_field": "report_period",
+    "y_fields": [
+      "rnd_expense_ratio"
+    ],
+    "category_field": null,
+    "sort_by": "report_period",
+    "sort_ascending": true,
+    "top_n": null,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task3.chart-spec.v1",
+    "question_id": "B2078",
+    "image_index": 1,
+    "chart_type": "line",
+    "title": "中药上市企业的研发投入结构与新品上市周期存在怎样... - 研发投入结构",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 4,
+      "preview_rows": [
+        {
+          "stock_code": "600750",
+          "stock_abbr": "江中药业",
+          "report_period": "2025Q3",
+          "rnd_expenses": "9713.972032",
+          "rnd_expense_ratio": 0.03311763267283347,
+          "rnd_in_total_expenses_ratio": 0.04625321573458501,
+          "operating_revenue_yoy_growth": -6.279688528656716,
+          "operating_revenue_qoq_growth": -17.237365525311876,
+          "net_profit_yoy_growth": 6.0155139619969615,
+          "net_profit_qoq_growth": -32.14120907846906
+        },
+        {
+          "stock_code": "600750",
+          "stock_abbr": "江中药业",
+          "report_period": "2025H1",
+          "rnd_expenses": "4854.915217",
+          "rnd_expense_ratio": 0.022674672268708427,
+          "rnd_in_total_expenses_ratio": 0.0321715863071664,
+          "operating_revenue_yoy_growth": -5.786065891602467,
+          "operating_revenue_qoq_growth": -19.177470251582534,
+          "net_profit_yoy_growth": 4.970275185134179,
+          "net_profit_qoq_growth": -16.668531743524266
+        },
+        {
+          "stock_code": "600750",
+          "stock_abbr": "江中药业",
+          "report_period": "2025Q2",
+          "rnd_expenses": "2160.281853",
+          "rnd_expense_ratio": 0.022573031472444875,
+          "rnd_in_total_expenses_ratio": 0.033125017805201225,
+          "operating_revenue_yoy_growth": NaN,
+          "operating_revenue_qoq_growth": NaN,
+          "net_profit_yoy_growth": NaN,
+          "net_profit_qoq_growth": NaN
+        },
+        {
+          "stock_code": "600750",
+          "stock_abbr": "江中药业",
+          "report_period": "2024FY",
+          "rnd_expenses": "9652.397587",
+          "rnd_expense_ratio": 0.021761932388951216,
+          "rnd_in_total_expenses_ratio": 0.02788657298878688,
+          "operating_revenue_yoy_growth": -2.586334010446145,
+          "operating_revenue_qoq_growth": 83.09471186803268,
+          "net_profit_yoy_growth": 9.339228381101696,
+          "net_profit_qoq_growth": 5.676454095286411
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "report_period",
+      "sort_ascending": true,
+      "top_n": null,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "rnd_expense_ratio",
+        "data_type": "quantitative",
+        "label": "研发费用占比",
+        "unit": "%"
+      },
+      "x": {
+        "field": "report_period",
+        "data_type": "temporal",
+        "label": "报告期",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": false
+    },
+    "output": {
+      "filename": "B2078_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B2078_1.jpg"
+    },
+    "meta": {
+      "source_sql": "WITH rnd_structure AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        operating_expense_rnd_expenses AS rnd_expenses,\n        total_operating_revenue,\n        operating_expense_rnd_expenses * 1.0 / NULLIF(total_operating_revenue, 0) AS rnd_expense_ratio,\n        operating_expense_rnd_expenses * 1.0 / NULLIF(total_operating_expenses, 0) AS rnd_in_total_expenses_ratio\n    FROM financials_view\n    WHERE report_period IN ('2024FY', '2025Q3', '2025H1', '2025Q2', '2025Q4')\n        AND stock_abbr LIKE '%中药%'\n),\nnew_product_cycle AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        operating_revenue_yoy_growth,\n        operating_revenue_qoq_growth,\n        net_profit_yoy_growth,\n        net_profit_qoq_growth\n    FROM financials_view\n    WHERE report_period IN ('2024FY', '2025Q3', '2025H1', '2025Q2', '2025Q4')\n        AND stock_abbr LIKE '%中药%'\n)\nSELECT \n    r.stock_code,\n    r.stock_abbr,\n    r.report_period,\n    r.rnd_expenses,\n    r.rnd_expense_ratio,\n    r.rnd_in_total_expenses_ratio,\n    n.operating_revenue_yoy_growth,\n    n.operating_revenue_qoq_growth,\n    n.net_profit_yoy_growth,\n    n.net_profit_qoq_growth\nFROM rnd_structure r\nJOIN new_product_cycle n \n    ON r.stock_code = n.stock_code \n    AND r.report_period = n.report_period\nORDER BY r.rnd_expense_ratio DESC, r.rnd_in_total_expenses_ratio DESC\nLIMIT 50;",
+      "value_fields": [
+        "rnd_expense_ratio"
+      ],
+      "value_labels": [
+        "研发费用占比"
+      ],
+      "original_chart_plan": {
+        "chart_type": "line",
+        "x_field": "report_period",
+        "y_fields": [
+          "rnd_expense_ratio"
+        ],
+        "category_field": null,
+        "sort_by": "report_period",
+        "sort_ascending": true,
+        "top_n": null
+      }
+    }
+  },
+  "current_chart_paths": [
+    "./result/B2078_1.jpg"
+  ],
+  "current_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task3_langgraph/artifacts/chart_specs/B2078_1.spec.json"
+  ],
+  "current_answer": "**直接结论**  \n基于当前有限的财务数据和研报证据，中药上市企业的研发投入结构与新品上市周期存在**正相关关联**：持续、高强度的研发投入（特别是研发费用率较高的企业）有助于构建丰富的创新药产品管线，从而推动新药获批上市，并可能通过医保准入加速等政策支持，缩短新品上市后的商业化放量周期。\n\n**财务数据支撑**  \n1.  **研发投入结构**：SQL结果仅提供了江中药业一家公司的数据。该公司在2024FY至2025Q3期间：\n    *   **研发费用**：在2160.28万元至9713.97万元之间波动（注：数据库金额单位为万元，约合0.22亿至0.97亿元），其中2025Q3最高（9713.97万元）。\n    *   **研发费用率**（研发费用/营业总收入）：在2.18%至3.31%之间，2025Q3达到最高（3.31%）。\n    *   **研发费用占营业总费用比例**：在2.79%至4.63%之间。\n2.  **新品上市周期代理指标**：SQL中未直接提供“新品上市周期”数据，而是用营收和净利润的同比增长率作为可能的间接反映。江中药业在此期间：\n    *   **营业总收入同比增长率**：持续为负（-2.59%至-6.28%），**季度环比增长率**波动较大且多数为负。\n    *   **净利润同比增长率**：在-16.67%至9.34%之间波动，趋势不一致。\n    *   **注意**：这些增长数据可能受多种因素影响，不能直接等同于新品上市带来的增长。仅凭江中药业一家的数据，无法直接验证研发投入与新品上市周期的关联。\n\n**研报证据支撑**  \n已检索到直接相关的研报证据，从行业层面提供了关联性解释：\n1.  **高研发投入驱动创新药管线丰富**：证据指出，“中药企业研发投入持续加大，中药创新药快速发展”。并以天士力为例，其2023年研发投入达13.15亿元，同比增长29.49%，高研发投入下公司有9款创新中药处于临床III期阶段（来源：《中国智慧中医行业发展报告》）。\n2.  **研发投入高的企业注重创新，部分企业新品获批数量领先**：证据显示，以岭药业、康缘药业和天士力等老牌中药公司的研发费用率均超过8%，显著高于整体中药板块水平（来源：《中药板块及医药流通板块投资策略：厚积薄发，静候繁花绽放》）。同时，行业数据显示，康缘药业、以岭药业、天士力等企业在中药新药获批数量上处于行业前列（来源：《医药行业周报：政策持续支持中药创新，关注健民集团》）。\n3.  **政策缩短新品上市后商业化周期**：证据表明，中药新药从上市到纳入医保的周期已缩短到2年以内，有望通过国谈加速入院，实现销售快速放量（来源：《医药行业周报：政策持续支持中药创新，关注健民集团》）。这间接说明，前期高研发投入形成的创新药，其上市后的回报周期可能因政策支持而缩短。\n\n**综合判断**  \n1.  **数据局限性**：SQL结果仅包含江中药业一家公司，且其财务数据（营收增长疲软、利润增长波动）未能直接体现高研发投入带来新品上市并驱动增长的正面案例。因此，**无法从现有财务数据行中归纳出普适的关联规律**。\n2.  **行业证据补强**：研报证据从行业标杆企业案例和政策环境角度，明确指出了“高研发投入 → 丰富创新药管线 → 新品获批上市 → 借助政策加速商业化”的传导链条。这为回答关联性问题提供了核心依据。\n3.  **关联性总结**：综合来看，中药上市企业的研发投入结构（如研发费用率）是影响其新品上市周期的**重要前置因素**。更高的、持续的研发投入有助于企业积累更多临近上市的创新药品种，而当前友好的政策环境（如医保快速准入）则进一步缩短了新品上市后的市场导入期，从而可能使前期研发投入更快地转化为业绩增长。但具体关联强度因企业而异，需要更多公司的详细数据验证。",
+  "current_references": [
+    {
+      "paper_path": "./附件5：研报数据/行业研报/中国智慧中医行业发展报告.pdf",
+      "text": "问诊：问诊是中医临床诊断过程中收集信息最广、最直接的途径，通过问\n患者在家中进行中医筛查，尤其对老年人十分友好，并可通过采用线上线下结合方式，由医生针对不同人群给出不同的调养方案；配合智能可穿戴设备和其他外接设备，则能对患者实现全方位的健康管理，在指导用户日常生活保健和精神调养，帮助居民进行自助体检及健康监测与管理。不仅可以提高老年心血管慢性疾病患者接受治疗的依从性，防止疾病的急性加重，又可提升生活质量。\n\n（1）药物治疗目前，中药在理论探索、处方配伍、方剂用量、器械装备，还是在监督监管等各个方面仍面临前所未有的机遇和挑战，创新发展都已经迫在眉睫。\n\n通过使用云计算、大数据、人工智能、区块链、物联网等新一代信息通信技术的强大赋能，可以在理论研究、治疗方法、治疗装备等各个方面促进中药守正创新。\n\n工业互联网技术保障中药材全周期追溯。\n\n利用工业互联网标识技术建立药品追溯系统，对中医药材生长环境、采收、存储、加工、销售等各环节进行信息管理，实现中药材、中药饮片、中成药等全过程追溯，及时发现和解决质量问题，既可以保证药品的安全性和有效性，也可以保证在类似新冠疫情的烈性传染性爆发期间的中医药调配和供应。\n\n比如，可以智能辅助中药材质量识别，并利用制造执行系统对中药生产过程进行实时监控和记录，对生产过程中涉及的原辅料、包装材料、环境监测等关键参数进行监测和记录，确保生产工艺和操作符合相关标准",
+      "paper_image": "表5：获得药监局批准的综合诊断仪产品"
+    },
+    {
+      "paper_path": "./附件5：研报数据/行业研报/医药行业周报：政策持续支持中药创新，关注健民集团.pdf",
+      "text": "1.政策持续支持中药创新研发，重点关注健民集团\n2019 年10 月26 日，中共中央、国务院发布《关于促进中医药传承创新发展的意见》，标志着中医药行业发展进入新的阶段。\n\n此后中医药政策迎来密集出台，2021 年起国家对中医药的支持政策由顶层设计逐步向执行层面深化推进。\n\n2025 年3 月20 日，国务院办公厅发布《关于提升中药质量促进中医药产业高质量发展的意见》，明确提出推进中药科技创新，加大国家科技计划对中药的支持力度，文件强调推出一批临床疗效突出、竞争优势显著的中药创新药，并鼓励儿童药品研发申报。\n\n国务院办公厅《关于提升中药质量促进中医药产业高质量发展的意见》\n\n国务院办公厅《深化医药卫生体制改革2024 年重点工作任务》\n\n国务院办公厅《中医药振兴发展重大工程实施方案》\n\n国家中医药管理局、推进“一带一路”建设工作领导小组办公室《推进中医药高质量融入共建“一带一路”发展规划（2021-2025 年）》\n\n医保局、中医药管理局《关于医保支持中医药传承创新发展的指导意见》\n\n卫健委、国家中医药局、中央军委后勤保障部卫生局《关于进一步加强综合医院中医药工作推动中西医协同发展的意见》\n\n国务院《关于加快中医药特色发展的若干政策措施》\n\n国家药监局《关于促进中药传承创新发展的实施意见》\n\n国务院《关于促进中医药传承创新发展的意见》\n\n国家药监局持续深化药品审评审批制度改革，构建",
+      "paper_image": "图表4：部分上市公司中药创新药获批情况"
+    },
+    {
+      "paper_path": "./附件5：研报数据/行业研报/2026年医药行业投资策略：聚焦创新、出海与确定性.pdf",
+      "text": " 医疗设备：国内招标回暖与出海复苏有望共振\n据众成数科统计，2025 年上半年，我国医疗器械招投标整体市场规模超800 亿元，同比增长62.75%。\n\n从细分设备品类来看，影像设备恢复最快，25H1 同比增长94.4%，生命支持类设备同比增长57.1%，体外诊断设备恢复最慢，25H1 同比增长24.5%。\n\n从2024H1 开始我国医疗器械扭转出口下滑趋势，2024 年全年出口总金额3553 亿元，同比增长9.8%；\n\n2025 年上半年我国医疗器械出口总额推荐（维持评级）李志新（\n\n相关报告《创新突围、器械复苏与中药筑底》\n\n《二十八省体外诊断试剂联盟集采需求量落地，关注集采驱动下的国产替代》",
+      "paper_image": "图16：2020-2025 前三季度两款BTK 抑制剂销售额对比及同比 ................................................................................................. 13"
+    },
+    {
+      "paper_path": "./附件5：研报数据/行业研报/2025年中国中药市场行业研究报告.pdf",
+      "text": "以下图表展示了中药配方颗粒产业链关键环节及其协同发展机制：\n39.22%，体现了稳定且旺盛的终端需求。这一增长背后，既是患者对疗效确切\n国65 岁以上老龄人口占比持续提升（图表14），慢性病患病率随年龄显著上升（图表17），高血压、糖尿病、阿尔茨海默病等长期管理需求激增，推动了针对慢病调理、功能恢复类制剂的需求扩张。同时，亚健康状态年轻化也促使部分具有调理气血、安神助眠功能的院内制剂进入更广泛人群视野。此类制剂因配方灵活、适应症聚焦、不良反应相对可控，在基层医疗机构和康复场景中应用日益增多。中国中药市场占比\n\n医疗机构与制药企业合作开发院内制剂的新模式正在形成，旨在强化临床需求与生产供应之间的对接机制。\n\n过去，院内制剂多由医院药剂科自行配制，规模有限。\n\n如今，一些大型中医院开始联合具备GMP 资质的中药企业进行委托生产或技术转化，实现标准化、批量化供应。\n\n这种“医研企”协同模式不仅提升了制剂质量稳定性，也有助于加速科研成果向临床产品的转化进程。\n\n例如，部分国家层面政策鼓励中药老字号加强文化传承与品牌建设，支持中药大品种创新改良，为院内制剂升级提供了制度支持。\n\n医保支付范围调整对院内制剂推广应用起到重要促进作用。",
+      "paper_image": "图表14；图表17"
+    },
+    {
+      "paper_path": "./附件5：研报数据/行业研报/中药板块及医药流通板块投资策略：厚积薄发，静候繁花绽放.pdf",
+      "text": "中药：主线清晰，三条赛道可布局，三个主题需关注\n•中药板块三季度各方面因素下业绩有所承压，但长期趋势并没有改变，投资需要把握季度波动带来的投资分化。我们认为后续中药投资策略紧握3条赛道，抓住3个主题•\n\nOTC产品品牌相对重要，选择特色领域有品牌、后续有催化的公司。\n\n相关标的佐力药业、贵州三力、羚锐制药、寿仙谷、特一药业、桂林三金等。\n\n老字号作为中药板块稀缺资源，其品牌力逐步彰显，并且老字号名贵中药品种具有提价效应，在后续中药材价格稳定回落后，利润增厚有望进一步兑现。\n\n相关标的：云南白药、片仔癀、同仁堂、广誉远、东阿阿胶等。\n\n由于24年上半年基数影响以及行业的各项调整，导致业绩承压，但中药创新热度较高，预计未来迎来获批或者临床推进期，关注中药创新药机会，相关标的康缘药业、以岭药业、天士力、方盛制药、新天药业等。\n\n中药板块为典型的中特估概念，并且国企比例较高，国企改革下国企中药公司也纷纷提出新的要求，未来业绩体现值得预期。\n\n代表性标的天士力、云南白药、同仁堂、东阿阿胶、华润三九、昆药集团、太极集团、达仁堂、康恩贝、广誉远、江中药业、九芝堂等。\n\n基药目录：22年推迟到今年，推进进度一直被推后压制，《深化医药卫生体制改革2024年重点工作任务》推进迎来曙光，预计24年会有推进，届时独家中药获批基药可能带来放量，相关标的康缘药业、济川药业、天士力、贵州三力、方盛制药、盘龙药业"
+    }
+  ],
+  "answer_rewritten": true,
+  "turn_answers": [
+    {
+      "Q": "中药上市企业的研发投入结构与新品上市周期存在怎样的关联？",
+      "A": {
+        "content": "**直接结论**  \n基于当前有限的财务数据和研报证据，中药上市企业的研发投入结构与新品上市周期存在**正相关关联**：持续、高强度的研发投入（特别是研发费用率较高的企业）有助于构建丰富的创新药产品管线，从而推动新药获批上市，并可能通过医保准入加速等政策支持，缩短新品上市后的商业化放量周期。\n\n**财务数据支撑**  \n1.  **研发投入结构**：SQL结果仅提供了江中药业一家公司的数据。该公司在2024FY至2025Q3期间：\n    *   **研发费用**：在2160.28万元至9713.97万元之间波动（注：数据库金额单位为万元，约合0.22亿至0.97亿元），其中2025Q3最高（9713.97万元）。\n    *   **研发费用率**（研发费用/营业总收入）：在2.18%至3.31%之间，2025Q3达到最高（3.31%）。\n    *   **研发费用占营业总费用比例**：在2.79%至4.63%之间。\n2.  **新品上市周期代理指标**：SQL中未直接提供“新品上市周期”数据，而是用营收和净利润的同比增长率作为可能的间接反映。江中药业在此期间：\n    *   **营业总收入同比增长率**：持续为负（-2.59%至-6.28%），**季度环比增长率**波动较大且多数为负。\n    *   **净利润同比增长率**：在-16.67%至9.34%之间波动，趋势不一致。\n    *   **注意**：这些增长数据可能受多种因素影响，不能直接等同于新品上市带来的增长。仅凭江中药业一家的数据，无法直接验证研发投入与新品上市周期的关联。\n\n**研报证据支撑**  \n已检索到直接相关的研报证据，从行业层面提供了关联性解释：\n1.  **高研发投入驱动创新药管线丰富**：证据指出，“中药企业研发投入持续加大，中药创新药快速发展”。并以天士力为例，其2023年研发投入达13.15亿元，同比增长29.49%，高研发投入下公司有9款创新中药处于临床III期阶段（来源：《中国智慧中医行业发展报告》）。\n2.  **研发投入高的企业注重创新，部分企业新品获批数量领先**：证据显示，以岭药业、康缘药业和天士力等老牌中药公司的研发费用率均超过8%，显著高于整体中药板块水平（来源：《中药板块及医药流通板块投资策略：厚积薄发，静候繁花绽放》）。同时，行业数据显示，康缘药业、以岭药业、天士力等企业在中药新药获批数量上处于行业前列（来源：《医药行业周报：政策持续支持中药创新，关注健民集团》）。\n3.  **政策缩短新品上市后商业化周期**：证据表明，中药新药从上市到纳入医保的周期已缩短到2年以内，有望通过国谈加速入院，实现销售快速放量（来源：《医药行业周报：政策持续支持中药创新，关注健民集团》）。这间接说明，前期高研发投入形成的创新药，其上市后的回报周期可能因政策支持而缩短。\n\n**综合判断**  \n1.  **数据局限性**：SQL结果仅包含江中药业一家公司，且其财务数据（营收增长疲软、利润增长波动）未能直接体现高研发投入带来新品上市并驱动增长的正面案例。因此，**无法从现有财务数据行中归纳出普适的关联规律**。\n2.  **行业证据补强**：研报证据从行业标杆企业案例和政策环境角度，明确指出了“高研发投入 → 丰富创新药管线 → 新品获批上市 → 借助政策加速商业化”的传导链条。这为回答关联性问题提供了核心依据。\n3.  **关联性总结**：综合来看，中药上市企业的研发投入结构（如研发费用率）是影响其新品上市周期的**重要前置因素**。更高的、持续的研发投入有助于企业积累更多临近上市的创新药品种，而当前友好的政策环境（如医保快速准入）则进一步缩短了新品上市后的市场导入期，从而可能使前期研发投入更快地转化为业绩增长。但具体关联强度因企业而异，需要更多公司的详细数据验证。",
+        "image": [
+          "./result/B2078_1.jpg"
+        ],
+        "references": [
+          {
+            "paper_path": "./附件5：研报数据/行业研报/中国智慧中医行业发展报告.pdf",
+            "text": "问诊：问诊是中医临床诊断过程中收集信息最广、最直接的途径，通过问\n患者在家中进行中医筛查，尤其对老年人十分友好，并可通过采用线上线下结合方式，由医生针对不同人群给出不同的调养方案；配合智能可穿戴设备和其他外接设备，则能对患者实现全方位的健康管理，在指导用户日常生活保健和精神调养，帮助居民进行自助体检及健康监测与管理。不仅可以提高老年心血管慢性疾病患者接受治疗的依从性，防止疾病的急性加重，又可提升生活质量。\n\n（1）药物治疗目前，中药在理论探索、处方配伍、方剂用量、器械装备，还是在监督监管等各个方面仍面临前所未有的机遇和挑战，创新发展都已经迫在眉睫。\n\n通过使用云计算、大数据、人工智能、区块链、物联网等新一代信息通信技术的强大赋能，可以在理论研究、治疗方法、治疗装备等各个方面促进中药守正创新。\n\n工业互联网技术保障中药材全周期追溯。\n\n利用工业互联网标识技术建立药品追溯系统，对中医药材生长环境、采收、存储、加工、销售等各环节进行信息管理，实现中药材、中药饮片、中成药等全过程追溯，及时发现和解决质量问题，既可以保证药品的安全性和有效性，也可以保证在类似新冠疫情的烈性传染性爆发期间的中医药调配和供应。\n\n比如，可以智能辅助中药材质量识别，并利用制造执行系统对中药生产过程进行实时监控和记录，对生产过程中涉及的原辅料、包装材料、环境监测等关键参数进行监测和记录，确保生产工艺和操作符合相关标准",
+            "paper_image": "表5：获得药监局批准的综合诊断仪产品"
+          },
+          {
+            "paper_path": "./附件5：研报数据/行业研报/医药行业周报：政策持续支持中药创新，关注健民集团.pdf",
+            "text": "1.政策持续支持中药创新研发，重点关注健民集团\n2019 年10 月26 日，中共中央、国务院发布《关于促进中医药传承创新发展的意见》，标志着中医药行业发展进入新的阶段。\n\n此后中医药政策迎来密集出台，2021 年起国家对中医药的支持政策由顶层设计逐步向执行层面深化推进。\n\n2025 年3 月20 日，国务院办公厅发布《关于提升中药质量促进中医药产业高质量发展的意见》，明确提出推进中药科技创新，加大国家科技计划对中药的支持力度，文件强调推出一批临床疗效突出、竞争优势显著的中药创新药，并鼓励儿童药品研发申报。\n\n国务院办公厅《关于提升中药质量促进中医药产业高质量发展的意见》\n\n国务院办公厅《深化医药卫生体制改革2024 年重点工作任务》\n\n国务院办公厅《中医药振兴发展重大工程实施方案》\n\n国家中医药管理局、推进“一带一路”建设工作领导小组办公室《推进中医药高质量融入共建“一带一路”发展规划（2021-2025 年）》\n\n医保局、中医药管理局《关于医保支持中医药传承创新发展的指导意见》\n\n卫健委、国家中医药局、中央军委后勤保障部卫生局《关于进一步加强综合医院中医药工作推动中西医协同发展的意见》\n\n国务院《关于加快中医药特色发展的若干政策措施》\n\n国家药监局《关于促进中药传承创新发展的实施意见》\n\n国务院《关于促进中医药传承创新发展的意见》\n\n国家药监局持续深化药品审评审批制度改革，构建",
+            "paper_image": "图表4：部分上市公司中药创新药获批情况"
+          },
+          {
+            "paper_path": "./附件5：研报数据/行业研报/2026年医药行业投资策略：聚焦创新、出海与确定性.pdf",
+            "text": " 医疗设备：国内招标回暖与出海复苏有望共振\n据众成数科统计，2025 年上半年，我国医疗器械招投标整体市场规模超800 亿元，同比增长62.75%。\n\n从细分设备品类来看，影像设备恢复最快，25H1 同比增长94.4%，生命支持类设备同比增长57.1%，体外诊断设备恢复最慢，25H1 同比增长24.5%。\n\n从2024H1 开始我国医疗器械扭转出口下滑趋势，2024 年全年出口总金额3553 亿元，同比增长9.8%；\n\n2025 年上半年我国医疗器械出口总额推荐（维持评级）李志新（\n\n相关报告《创新突围、器械复苏与中药筑底》\n\n《二十八省体外诊断试剂联盟集采需求量落地，关注集采驱动下的国产替代》",
+            "paper_image": "图16：2020-2025 前三季度两款BTK 抑制剂销售额对比及同比 ................................................................................................. 13"
+          },
+          {
+            "paper_path": "./附件5：研报数据/行业研报/2025年中国中药市场行业研究报告.pdf",
+            "text": "以下图表展示了中药配方颗粒产业链关键环节及其协同发展机制：\n39.22%，体现了稳定且旺盛的终端需求。这一增长背后，既是患者对疗效确切\n国65 岁以上老龄人口占比持续提升（图表14），慢性病患病率随年龄显著上升（图表17），高血压、糖尿病、阿尔茨海默病等长期管理需求激增，推动了针对慢病调理、功能恢复类制剂的需求扩张。同时，亚健康状态年轻化也促使部分具有调理气血、安神助眠功能的院内制剂进入更广泛人群视野。此类制剂因配方灵活、适应症聚焦、不良反应相对可控，在基层医疗机构和康复场景中应用日益增多。中国中药市场占比\n\n医疗机构与制药企业合作开发院内制剂的新模式正在形成，旨在强化临床需求与生产供应之间的对接机制。\n\n过去，院内制剂多由医院药剂科自行配制，规模有限。\n\n如今，一些大型中医院开始联合具备GMP 资质的中药企业进行委托生产或技术转化，实现标准化、批量化供应。\n\n这种“医研企”协同模式不仅提升了制剂质量稳定性，也有助于加速科研成果向临床产品的转化进程。\n\n例如，部分国家层面政策鼓励中药老字号加强文化传承与品牌建设，支持中药大品种创新改良，为院内制剂升级提供了制度支持。\n\n医保支付范围调整对院内制剂推广应用起到重要促进作用。",
+            "paper_image": "图表14；图表17"
+          },
+          {
+            "paper_path": "./附件5：研报数据/行业研报/中药板块及医药流通板块投资策略：厚积薄发，静候繁花绽放.pdf",
+            "text": "中药：主线清晰，三条赛道可布局，三个主题需关注\n•中药板块三季度各方面因素下业绩有所承压，但长期趋势并没有改变，投资需要把握季度波动带来的投资分化。我们认为后续中药投资策略紧握3条赛道，抓住3个主题•\n\nOTC产品品牌相对重要，选择特色领域有品牌、后续有催化的公司。\n\n相关标的佐力药业、贵州三力、羚锐制药、寿仙谷、特一药业、桂林三金等。\n\n老字号作为中药板块稀缺资源，其品牌力逐步彰显，并且老字号名贵中药品种具有提价效应，在后续中药材价格稳定回落后，利润增厚有望进一步兑现。\n\n相关标的：云南白药、片仔癀、同仁堂、广誉远、东阿阿胶等。\n\n由于24年上半年基数影响以及行业的各项调整，导致业绩承压，但中药创新热度较高，预计未来迎来获批或者临床推进期，关注中药创新药机会，相关标的康缘药业、以岭药业、天士力、方盛制药、新天药业等。\n\n中药板块为典型的中特估概念，并且国企比例较高，国企改革下国企中药公司也纷纷提出新的要求，未来业绩体现值得预期。\n\n代表性标的天士力、云南白药、同仁堂、东阿阿胶、华润三九、昆药集团、太极集团、达仁堂、康恩贝、广誉远、江中药业、九芝堂等。\n\n基药目录：22年推迟到今年，推进进度一直被推后压制，《深化医药卫生体制改革2024年重点工作任务》推进迎来曙光，预计24年会有推进，届时独家中药获批基药可能带来放量，相关标的康缘药业、济川药业、天士力、贵州三力、方盛制药、盘龙药业"
+          }
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"中药上市企业的研发投入结构与新品上市周期存在怎样的关联？\", \"A\": {\"content\": \"**直接结论**  \\n基于当前有限的财务数据和研报证据，中药上市企业的研发投入结构与新品上市周期存在**正相关关联**：持续、高强度的研发投入（特别是研发费用率较高的企业）有助于构建丰富的创新药产品管线，从而推动新药获批上市，并可能通过医保准入加速等政策支持，缩短新品上市后的商业化放量周期。\\n\\n**财务数据支撑**  \\n1.  **研发投入结构**：SQL结果仅提供了江中药业一家公司的数据。该公司在2024FY至2025Q3期间：\\n    *   **研发费用**：在2160.28万元至9713.97万元之间波动（注：数据库金额单位为万元，约合0.22亿至0.97亿元），其中2025Q3最高（9713.97万元）。\\n    *   **研发费用率**（研发费用/营业总收入）：在2.18%至3.31%之间，2025Q3达到最高（3.31%）。\\n    *   **研发费用占营业总费用比例**：在2.79%至4.63%之间。\\n2.  **新品上市周期代理指标**：SQL中未直接提供“新品上市周期”数据，而是用营收和净利润的同比增长率作为可能的间接反映。江中药业在此期间：\\n    *   **营业总收入同比增长率**：持续为负（-2.59%至-6.28%），**季度环比增长率**波动较大且多数为负。\\n    *   **净利润同比增长率**：在-16.67%至9.34%之间波动，趋势不一致。\\n    *   **注意**：这些增长数据可能受多种因素影响，不能直接等同于新品上市带来的增长。仅凭江中药业一家的数据，无法直接验证研发投入与新品上市周期的关联。\\n\\n**研报证据支撑**  \\n已检索到直接相关的研报证据，从行业层面提供了关联性解释：\\n1.  **高研发投入驱动创新药管线丰富**：证据指出，“中药企业研发投入持续加大，中药创新药快速发展”。并以天士力为例，其2023年研发投入达13.15亿元，同比增长29.49%，高研发投入下公司有9款创新中药处于临床III期阶段（来源：《中国智慧中医行业发展报告》）。\\n2.  **研发投入高的企业注重创新，部分企业新品获批数量领先**：证据显示，以岭药业、康缘药业和天士力等老牌中药公司的研发费用率均超过8%，显著高于整体中药板块水平（来源：《中药板块及医药流通板块投资策略：厚积薄发，静候繁花绽放》）。同时，行业数据显示，康缘药业、以岭药业、天士力等企业在中药新药获批数量上处于行业前列（来源：《医药行业周报：政策持续支持中药创新，关注健民集团》）。\\n3.  **政策缩短新品上市后商业化周期**：证据表明，中药新药从上市到纳入医保的周期已缩短到2年以内，有望通过国谈加速入院，实现销售快速放量（来源：《医药行业周报：政策持续支持中药创新，关注健民集团》）。这间接说明，前期高研发投入形成的创新药，其上市后的回报周期可能因政策支持而缩短。\\n\\n**综合判断**  \\n1.  **数据局限性**：SQL结果仅包含江中药业一家公司，且其财务数据（营收增长疲软、利润增长波动）未能直接体现高研发投入带来新品上市并驱动增长的正面案例。因此，**无法从现有财务数据行中归纳出普适的关联规律**。\\n2.  **行业证据补强**：研报证据从行业标杆企业案例和政策环境角度，明确指出了“高研发投入 → 丰富创新药管线 → 新品获批上市 → 借助政策加速商业化”的传导链条。这为回答关联性问题提供了核心依据。\\n3.  **关联性总结**：综合来看，中药上市企业的研发投入结构（如研发费用率）是影响其新品上市周期的**重要前置因素**。更高的、持续的研发投入有助于企业积累更多临近上市的创新药品种，而当前友好的政策环境（如医保快速准入）则进一步缩短了新品上市后的市场导入期，从而可能使前期研发投入更快地转化为业绩增长。但具体关联强度因企业而异，需要更多公司的详细数据验证。\", \"image\": [\"./result/B2078_1.jpg\"], \"references\": [{\"paper_path\": \"./附件5：研报数据/行业研报/中国智慧中医行业发展报告.pdf\", \"text\": \"问诊：问诊是中医临床诊断过程中收集信息最广、最直接的途径，通过问\\n患者在家中进行中医筛查，尤其对老年人十分友好，并可通过采用线上线下结合方式，由医生针对不同人群给出不同的调养方案；配合智能可穿戴设备和其他外接设备，则能对患者实现全方位的健康管理，在指导用户日常生活保健和精神调养，帮助居民进行自助体检及健康监测与管理。不仅可以提高老年心血管慢性疾病患者接受治疗的依从性，防止疾病的急性加重，又可提升生活质量。\\n\\n（1）药物治疗目前，中药在理论探索、处方配伍、方剂用量、器械装备，还是在监督监管等各个方面仍面临前所未有的机遇和挑战，创新发展都已经迫在眉睫。\\n\\n通过使用云计算、大数据、人工智能、区块链、物联网等新一代信息通信技术的强大赋能，可以在理论研究、治疗方法、治疗装备等各个方面促进中药守正创新。\\n\\n工业互联网技术保障中药材全周期追溯。\\n\\n利用工业互联网标识技术建立药品追溯系统，对中医药材生长环境、采收、存储、加工、销售等各环节进行信息管理，实现中药材、中药饮片、中成药等全过程追溯，及时发现和解决质量问题，既可以保证药品的安全性和有效性，也可以保证在类似新冠疫情的烈性传染性爆发期间的中医药调配和供应。\\n\\n比如，可以智能辅助中药材质量识别，并利用制造执行系统对中药生产过程进行实时监控和记录，对生产过程中涉及的原辅料、包装材料、环境监测等关键参数进行监测和记录，确保生产工艺和操作符合相关标准\", \"paper_image\": \"表5：获得药监局批准的综合诊断仪产品\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/医药行业周报：政策持续支持中药创新，关注健民集团.pdf\", \"text\": \"1.政策持续支持中药创新研发，重点关注健民集团\\n2019 年10 月26 日，中共中央、国务院发布《关于促进中医药传承创新发展的意见》，标志着中医药行业发展进入新的阶段。\\n\\n此后中医药政策迎来密集出台，2021 年起国家对中医药的支持政策由顶层设计逐步向执行层面深化推进。\\n\\n2025 年3 月20 日，国务院办公厅发布《关于提升中药质量促进中医药产业高质量发展的意见》，明确提出推进中药科技创新，加大国家科技计划对中药的支持力度，文件强调推出一批临床疗效突出、竞争优势显著的中药创新药，并鼓励儿童药品研发申报。\\n\\n国务院办公厅《关于提升中药质量促进中医药产业高质量发展的意见》\\n\\n国务院办公厅《深化医药卫生体制改革2024 年重点工作任务》\\n\\n国务院办公厅《中医药振兴发展重大工程实施方案》\\n\\n国家中医药管理局、推进“一带一路”建设工作领导小组办公室《推进中医药高质量融入共建“一带一路”发展规划（2021-2025 年）》\\n\\n医保局、中医药管理局《关于医保支持中医药传承创新发展的指导意见》\\n\\n卫健委、国家中医药局、中央军委后勤保障部卫生局《关于进一步加强综合医院中医药工作推动中西医协同发展的意见》\\n\\n国务院《关于加快中医药特色发展的若干政策措施》\\n\\n国家药监局《关于促进中药传承创新发展的实施意见》\\n\\n国务院《关于促进中医药传承创新发展的意见》\\n\\n国家药监局持续深化药品审评审批制度改革，构建\", \"paper_image\": \"图表4：部分上市公司中药创新药获批情况\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/2026年医药行业投资策略：聚焦创新、出海与确定性.pdf\", \"text\": \" 医疗设备：国内招标回暖与出海复苏有望共振\\n据众成数科统计，2025 年上半年，我国医疗器械招投标整体市场规模超800 亿元，同比增长62.75%。\\n\\n从细分设备品类来看，影像设备恢复最快，25H1 同比增长94.4%，生命支持类设备同比增长57.1%，体外诊断设备恢复最慢，25H1 同比增长24.5%。\\n\\n从2024H1 开始我国医疗器械扭转出口下滑趋势，2024 年全年出口总金额3553 亿元，同比增长9.8%；\\n\\n2025 年上半年我国医疗器械出口总额推荐（维持评级）李志新（\\n\\n相关报告《创新突围、器械复苏与中药筑底》\\n\\n《二十八省体外诊断试剂联盟集采需求量落地，关注集采驱动下的国产替代》\", \"paper_image\": \"图16：2020-2025 前三季度两款BTK 抑制剂销售额对比及同比 ................................................................................................. 13\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/2025年中国中药市场行业研究报告.pdf\", \"text\": \"以下图表展示了中药配方颗粒产业链关键环节及其协同发展机制：\\n39.22%，体现了稳定且旺盛的终端需求。这一增长背后，既是患者对疗效确切\\n国65 岁以上老龄人口占比持续提升（图表14），慢性病患病率随年龄显著上升（图表17），高血压、糖尿病、阿尔茨海默病等长期管理需求激增，推动了针对慢病调理、功能恢复类制剂的需求扩张。同时，亚健康状态年轻化也促使部分具有调理气血、安神助眠功能的院内制剂进入更广泛人群视野。此类制剂因配方灵活、适应症聚焦、不良反应相对可控，在基层医疗机构和康复场景中应用日益增多。中国中药市场占比\\n\\n医疗机构与制药企业合作开发院内制剂的新模式正在形成，旨在强化临床需求与生产供应之间的对接机制。\\n\\n过去，院内制剂多由医院药剂科自行配制，规模有限。\\n\\n如今，一些大型中医院开始联合具备GMP 资质的中药企业进行委托生产或技术转化，实现标准化、批量化供应。\\n\\n这种“医研企”协同模式不仅提升了制剂质量稳定性，也有助于加速科研成果向临床产品的转化进程。\\n\\n例如，部分国家层面政策鼓励中药老字号加强文化传承与品牌建设，支持中药大品种创新改良，为院内制剂升级提供了制度支持。\\n\\n医保支付范围调整对院内制剂推广应用起到重要促进作用。\", \"paper_image\": \"图表14；图表17\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/中药板块及医药流通板块投资策略：厚积薄发，静候繁花绽放.pdf\", \"text\": \"中药：主线清晰，三条赛道可布局，三个主题需关注\\n•中药板块三季度各方面因素下业绩有所承压，但长期趋势并没有改变，投资需要把握季度波动带来的投资分化。我们认为后续中药投资策略紧握3条赛道，抓住3个主题•\\n\\nOTC产品品牌相对重要，选择特色领域有品牌、后续有催化的公司。\\n\\n相关标的佐力药业、贵州三力、羚锐制药、寿仙谷、特一药业、桂林三金等。\\n\\n老字号作为中药板块稀缺资源，其品牌力逐步彰显，并且老字号名贵中药品种具有提价效应，在后续中药材价格稳定回落后，利润增厚有望进一步兑现。\\n\\n相关标的：云南白药、片仔癀、同仁堂、广誉远、东阿阿胶等。\\n\\n由于24年上半年基数影响以及行业的各项调整，导致业绩承压，但中药创新热度较高，预计未来迎来获批或者临床推进期，关注中药创新药机会，相关标的康缘药业、以岭药业、天士力、方盛制药、新天药业等。\\n\\n中药板块为典型的中特估概念，并且国企比例较高，国企改革下国企中药公司也纷纷提出新的要求，未来业绩体现值得预期。\\n\\n代表性标的天士力、云南白药、同仁堂、东阿阿胶、华润三九、昆药集团、太极集团、达仁堂、康恩贝、广誉远、江中药业、九芝堂等。\\n\\n基药目录：22年推迟到今年，推进进度一直被推后压制，《深化医药卫生体制改革2024年重点工作任务》推进迎来曙光，预计24年会有推进，届时独家中药获批基药可能带来放量，相关标的康缘药业、济川药业、天士力、贵州三力、方盛制药、盘龙药业\"}]}}]",
+  "references_json": "[{\"paper_path\": \"./附件5：研报数据/行业研报/中国智慧中医行业发展报告.pdf\", \"text\": \"问诊：问诊是中医临床诊断过程中收集信息最广、最直接的途径，通过问\\n患者在家中进行中医筛查，尤其对老年人十分友好，并可通过采用线上线下结合方式，由医生针对不同人群给出不同的调养方案；配合智能可穿戴设备和其他外接设备，则能对患者实现全方位的健康管理，在指导用户日常生活保健和精神调养，帮助居民进行自助体检及健康监测与管理。不仅可以提高老年心血管慢性疾病患者接受治疗的依从性，防止疾病的急性加重，又可提升生活质量。\\n\\n（1）药物治疗目前，中药在理论探索、处方配伍、方剂用量、器械装备，还是在监督监管等各个方面仍面临前所未有的机遇和挑战，创新发展都已经迫在眉睫。\\n\\n通过使用云计算、大数据、人工智能、区块链、物联网等新一代信息通信技术的强大赋能，可以在理论研究、治疗方法、治疗装备等各个方面促进中药守正创新。\\n\\n工业互联网技术保障中药材全周期追溯。\\n\\n利用工业互联网标识技术建立药品追溯系统，对中医药材生长环境、采收、存储、加工、销售等各环节进行信息管理，实现中药材、中药饮片、中成药等全过程追溯，及时发现和解决质量问题，既可以保证药品的安全性和有效性，也可以保证在类似新冠疫情的烈性传染性爆发期间的中医药调配和供应。\\n\\n比如，可以智能辅助中药材质量识别，并利用制造执行系统对中药生产过程进行实时监控和记录，对生产过程中涉及的原辅料、包装材料、环境监测等关键参数进行监测和记录，确保生产工艺和操作符合相关标准\", \"paper_image\": \"表5：获得药监局批准的综合诊断仪产品\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/医药行业周报：政策持续支持中药创新，关注健民集团.pdf\", \"text\": \"1.政策持续支持中药创新研发，重点关注健民集团\\n2019 年10 月26 日，中共中央、国务院发布《关于促进中医药传承创新发展的意见》，标志着中医药行业发展进入新的阶段。\\n\\n此后中医药政策迎来密集出台，2021 年起国家对中医药的支持政策由顶层设计逐步向执行层面深化推进。\\n\\n2025 年3 月20 日，国务院办公厅发布《关于提升中药质量促进中医药产业高质量发展的意见》，明确提出推进中药科技创新，加大国家科技计划对中药的支持力度，文件强调推出一批临床疗效突出、竞争优势显著的中药创新药，并鼓励儿童药品研发申报。\\n\\n国务院办公厅《关于提升中药质量促进中医药产业高质量发展的意见》\\n\\n国务院办公厅《深化医药卫生体制改革2024 年重点工作任务》\\n\\n国务院办公厅《中医药振兴发展重大工程实施方案》\\n\\n国家中医药管理局、推进“一带一路”建设工作领导小组办公室《推进中医药高质量融入共建“一带一路”发展规划（2021-2025 年）》\\n\\n医保局、中医药管理局《关于医保支持中医药传承创新发展的指导意见》\\n\\n卫健委、国家中医药局、中央军委后勤保障部卫生局《关于进一步加强综合医院中医药工作推动中西医协同发展的意见》\\n\\n国务院《关于加快中医药特色发展的若干政策措施》\\n\\n国家药监局《关于促进中药传承创新发展的实施意见》\\n\\n国务院《关于促进中医药传承创新发展的意见》\\n\\n国家药监局持续深化药品审评审批制度改革，构建\", \"paper_image\": \"图表4：部分上市公司中药创新药获批情况\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/2026年医药行业投资策略：聚焦创新、出海与确定性.pdf\", \"text\": \" 医疗设备：国内招标回暖与出海复苏有望共振\\n据众成数科统计，2025 年上半年，我国医疗器械招投标整体市场规模超800 亿元，同比增长62.75%。\\n\\n从细分设备品类来看，影像设备恢复最快，25H1 同比增长94.4%，生命支持类设备同比增长57.1%，体外诊断设备恢复最慢，25H1 同比增长24.5%。\\n\\n从2024H1 开始我国医疗器械扭转出口下滑趋势，2024 年全年出口总金额3553 亿元，同比增长9.8%；\\n\\n2025 年上半年我国医疗器械出口总额推荐（维持评级）李志新（\\n\\n相关报告《创新突围、器械复苏与中药筑底》\\n\\n《二十八省体外诊断试剂联盟集采需求量落地，关注集采驱动下的国产替代》\", \"paper_image\": \"图16：2020-2025 前三季度两款BTK 抑制剂销售额对比及同比 ................................................................................................. 13\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/2025年中国中药市场行业研究报告.pdf\", \"text\": \"以下图表展示了中药配方颗粒产业链关键环节及其协同发展机制：\\n39.22%，体现了稳定且旺盛的终端需求。这一增长背后，既是患者对疗效确切\\n国65 岁以上老龄人口占比持续提升（图表14），慢性病患病率随年龄显著上升（图表17），高血压、糖尿病、阿尔茨海默病等长期管理需求激增，推动了针对慢病调理、功能恢复类制剂的需求扩张。同时，亚健康状态年轻化也促使部分具有调理气血、安神助眠功能的院内制剂进入更广泛人群视野。此类制剂因配方灵活、适应症聚焦、不良反应相对可控，在基层医疗机构和康复场景中应用日益增多。中国中药市场占比\\n\\n医疗机构与制药企业合作开发院内制剂的新模式正在形成，旨在强化临床需求与生产供应之间的对接机制。\\n\\n过去，院内制剂多由医院药剂科自行配制，规模有限。\\n\\n如今，一些大型中医院开始联合具备GMP 资质的中药企业进行委托生产或技术转化，实现标准化、批量化供应。\\n\\n这种“医研企”协同模式不仅提升了制剂质量稳定性，也有助于加速科研成果向临床产品的转化进程。\\n\\n例如，部分国家层面政策鼓励中药老字号加强文化传承与品牌建设，支持中药大品种创新改良，为院内制剂升级提供了制度支持。\\n\\n医保支付范围调整对院内制剂推广应用起到重要促进作用。\", \"paper_image\": \"图表14；图表17\"}, {\"paper_path\": \"./附件5：研报数据/行业研报/中药板块及医药流通板块投资策略：厚积薄发，静候繁花绽放.pdf\", \"text\": \"中药：主线清晰，三条赛道可布局，三个主题需关注\\n•中药板块三季度各方面因素下业绩有所承压，但长期趋势并没有改变，投资需要把握季度波动带来的投资分化。我们认为后续中药投资策略紧握3条赛道，抓住3个主题•\\n\\nOTC产品品牌相对重要，选择特色领域有品牌、后续有催化的公司。\\n\\n相关标的佐力药业、贵州三力、羚锐制药、寿仙谷、特一药业、桂林三金等。\\n\\n老字号作为中药板块稀缺资源，其品牌力逐步彰显，并且老字号名贵中药品种具有提价效应，在后续中药材价格稳定回落后，利润增厚有望进一步兑现。\\n\\n相关标的：云南白药、片仔癀、同仁堂、广誉远、东阿阿胶等。\\n\\n由于24年上半年基数影响以及行业的各项调整，导致业绩承压，但中药创新热度较高，预计未来迎来获批或者临床推进期，关注中药创新药机会，相关标的康缘药业、以岭药业、天士力、方盛制药、新天药业等。\\n\\n中药板块为典型的中特估概念，并且国企比例较高，国企改革下国企中药公司也纷纷提出新的要求，未来业绩体现值得预期。\\n\\n代表性标的天士力、云南白药、同仁堂、东阿阿胶、华润三九、昆药集团、太极集团、达仁堂、康恩贝、广誉远、江中药业、九芝堂等。\\n\\n基药目录：22年推迟到今年，推进进度一直被推后压制，《深化医药卫生体制改革2024年重点工作任务》推进迎来曙光，预计24年会有推进，届时独家中药获批基药可能带来放量，相关标的康缘药业、济川药业、天士力、贵州三力、方盛制药、盘龙药业\"}]",
+  "notes": [
+    "route=hybrid_sql_rag",
+    "1. 问题要求分析中药上市企业的研发投入结构与新品上市周期的关联，query_plan中未指定具体公司，因此不能枚举公司列表。\n2. 使用LIKE '%中药%'筛选中药企业，这是基于stock_abbr字段的合理假设。\n3. 研发投入结构用operating_expense_rnd_expenses（研发费用）、rnd_expense_ratio（研发费用占营收比例）和rnd_in_total_expenses_ratio（研发费用占总费用比例）来表征。\n4. 新品上市周期难以直接量化，但通常反映在营收和净利润的同比增长率（yoy_growth）和环比增长率（qoq_growth）上，因此用这些指标作为代理变量。\n5. 选取多个报告期（2024FY、2025Q3等）以观察时间趋势。\n6. 使用CTE分别计算研发结构和增长指标，然后通过JOIN关联。\n7. 按研发投入比例降序排列，以突出研发投入较高的企业，并限制返回50条记录。\n8. 所有操作均符合SQLite语法，未使用不支持的功能。",
+    "retrieval_companies_seeded_from_sql=江中药业",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=13",
+    "rerank_strategy=reranker_model",
+    "rerank_kept=13",
+    "answer_rewritten_after_self_check",
+    "self_check={\"pass\": true, \"notes\": [\"1. 回答中的数字与 SQL rows 一致：正确引用了江中药业各报告期的研发费用、研发费用率等具体数值，并注明了单位换算。\", \"2. 回答正确引用了 Evidences 中真实存在的内容：例如，引用了天士力研发投入、以岭药业等公司研发费用率超过8%、康缘药业等企业新药获批数量领先、以及中药新药医保准入周期缩短至2年以内等具体证据。\", \"3. 回答未遗漏问题要求的关键点：明确指出了数据局限性（仅江中药业一家，且无直接“新品上市周期”数据），并利用行业研报证据构建了“高研发投入 → 丰富管线 → 新品获批 → 政策加速商业化”的关联链条。\", \"4. 回答未混淆指标名称：正确区分了“研发费用”、“研发费用率”、“营业总收入同比增长率”、“净利润同比增长率”等指标，没有出现混淆。\", \"5. 回答正确处理了聚合统计与具体公司的对应关系：在引用行业证据时，明确指出了天士力、以岭药业、康缘药业等具体公司的高研发投入案例，没有将行业整体趋势错误地归因于江中药业。\"]}"
+  ],
+  "final_status": "ok"
+}

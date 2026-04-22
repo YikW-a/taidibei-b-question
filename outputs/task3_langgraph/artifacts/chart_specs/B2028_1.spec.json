@@ -1,0 +1,101 @@
+{
+  "schema_version": "task3.chart-spec.v1",
+  "question_id": "B2028",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "国家关注养老问题，请查询2025年第三季度老年病... - 营业总收入",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 5,
+    "preview_rows": [
+      {
+        "stock_code": "600332",
+        "stock_abbr": "白云山",
+        "report_period": "2025Q3",
+        "营业总收入": 6160599.379554,
+        "ROE": "2.09"
+      },
+      {
+        "stock_code": "000538",
+        "stock_abbr": "云南白药",
+        "report_period": "2025Q3",
+        "营业总收入": 3065421.420901,
+        "ROE": "2.8"
+      },
+      {
+        "stock_code": "000999",
+        "stock_abbr": "华润三九",
+        "report_period": "2025Q3",
+        "营业总收入": 2198640.396207,
+        "ROE": "2.62"
+      },
+      {
+        "stock_code": "600085",
+        "stock_abbr": "同仁堂",
+        "report_period": "2025Q3",
+        "营业总收入": 1330791.480027,
+        "ROE": "5.48867290768968"
+      },
+      {
+        "stock_code": "603858",
+        "stock_abbr": "步长制药",
+        "report_period": "2025Q3",
+        "营业总收入": 846858.131922,
+        "ROE": "2.24"
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": null,
+    "sort_ascending": false,
+    "top_n": 5,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "ROE",
+      "data_type": "quantitative",
+      "label": "ROE",
+      "unit": "%"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B2028_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B2028_1.jpg"
+  },
+  "meta": {
+    "source_sql": "WITH company_metrics AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        total_operating_revenue AS 营业总收入,\n        roe AS ROE\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n)\nSELECT \n    stock_code,\n    stock_abbr,\n    report_period,\n    营业总收入,\n    ROE\nFROM company_metrics\nORDER BY 营业总收入 DESC\nLIMIT 5;",
+    "value_fields": [
+      "ROE"
+    ],
+    "value_labels": [
+      "ROE"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "ROE"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": null,
+      "sort_ascending": false,
+      "top_n": 5
+    }
+  }
+}

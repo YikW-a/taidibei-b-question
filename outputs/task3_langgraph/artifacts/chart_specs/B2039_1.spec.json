@@ -1,0 +1,171 @@
+{
+  "schema_version": "task3.chart-spec.v1",
+  "question_id": "B2039",
+  "image_index": 1,
+  "chart_type": "table",
+  "title": "查询2025年第三季度满足“营收超10亿、负债率... - 营业总收入",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 44,
+    "preview_rows": [
+      {
+        "stock_code": "000538",
+        "stock_abbr": "云南白药",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 3065421.420901,
+        "asset_liability_ratio": 25.355694667162265,
+        "operating_cf_net_amount": "445596.951154"
+      },
+      {
+        "stock_code": "000999",
+        "stock_abbr": "华润三九",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 2198640.396207,
+        "asset_liability_ratio": 33.916604355194785,
+        "operating_cf_net_amount": "292535.980357"
+      },
+      {
+        "stock_code": "600085",
+        "stock_abbr": "同仁堂",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 1330791.480027,
+        "asset_liability_ratio": 32.57406808899157,
+        "operating_cf_net_amount": "198786.343281"
+      },
+      {
+        "stock_code": "600436",
+        "stock_abbr": "片仔癀",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 744236.610835,
+        "asset_liability_ratio": 13.948834413947441,
+        "operating_cf_net_amount": "48673.738218"
+      },
+      {
+        "stock_code": "600535",
+        "stock_abbr": "天士力",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 631067.2857390001,
+        "asset_liability_ratio": 16.428294664359598,
+        "operating_cf_net_amount": "87261.729966"
+      },
+      {
+        "stock_code": "002603",
+        "stock_abbr": "以岭药业",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 586760.307361,
+        "asset_liability_ratio": 24.772016830885,
+        "operating_cf_net_amount": "127823.896904"
+      },
+      {
+        "stock_code": "600572",
+        "stock_abbr": "康恩贝",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 497558.02158100007,
+        "asset_liability_ratio": 29.32868635721981,
+        "operating_cf_net_amount": "53153.455939"
+      },
+      {
+        "stock_code": "000423",
+        "stock_abbr": "东阿阿胶",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 476637.0643520001,
+        "asset_liability_ratio": 21.77099258118006,
+        "operating_cf_net_amount": "130973.86756"
+      },
+      {
+        "stock_code": "002390",
+        "stock_abbr": "信邦制药",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 426628.528811,
+        "asset_liability_ratio": 18.831576602937062,
+        "operating_cf_net_amount": "46158.230236"
+      },
+      {
+        "stock_code": "300026",
+        "stock_abbr": "红日药业",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 414856.29250700003,
+        "asset_liability_ratio": 18.244297921464334,
+        "operating_cf_net_amount": "53683.663649"
+      },
+      {
+        "stock_code": "600566",
+        "stock_abbr": "济川药业",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 393205.724553,
+        "asset_liability_ratio": 16.183880058555673,
+        "operating_cf_net_amount": "70351.13694"
+      },
+      {
+        "stock_code": "600329",
+        "stock_abbr": "达仁堂",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 366986.1317,
+        "asset_liability_ratio": 22.106386583355615,
+        "operating_cf_net_amount": "59032.994727"
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": null,
+    "sort_ascending": true,
+    "top_n": 12,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "stock_code",
+      "data_type": "quantitative",
+      "label": "股票代码",
+      "unit": "万元"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": false
+  },
+  "output": {
+    "filename": "B2039_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B2039_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT stock_code, stock_abbr, report_period, total_operating_revenue, asset_liability_ratio, operating_cf_net_amount FROM financials_view WHERE report_period = '2025Q3' AND total_operating_revenue > 40 AND asset_liability_ratio < 40 AND operating_cf_net_amount > 0 ORDER BY total_operating_revenue DESC;",
+    "value_fields": [
+      "stock_code",
+      "total_operating_revenue",
+      "asset_liability_ratio",
+      "operating_cf_net_amount"
+    ],
+    "value_labels": [
+      "股票代码",
+      "营业总收入",
+      "asset_liability_ratio",
+      "operating_cf_net_amount"
+    ],
+    "original_chart_plan": {
+      "chart_type": "table",
+      "x_field": null,
+      "y_fields": [
+        "stock_code",
+        "total_operating_revenue",
+        "asset_liability_ratio",
+        "operating_cf_net_amount"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": null,
+      "sort_ascending": true,
+      "top_n": 12
+    }
+  }
+}
