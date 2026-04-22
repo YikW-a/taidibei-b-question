@@ -83,6 +83,14 @@ cp configs/task3_llm.env.example configs/task3_llm.env
 - [任务一建模与求解（论文版）.md](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/docs/任务一建模与求解（论文版）.md)
 - [任务二建模与求解（论文版）.md](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/docs/任务二建模与求解（论文版）.md)
 
+其中任务二论文已补充：
+
+- `LangGraph` 状态图流程
+- 提示词分层设计
+- SQLite 兼容 SQL 约束
+- 季度口径派生公式
+- 从 `61 ok / 9 warning` 到 `69 ok / 1 warning` 的优化收口
+
 ### `outputs/`
 
 运行产物统一放在这里。当前目录下已经存在：
@@ -119,6 +127,8 @@ cp configs/task3_llm.env.example configs/task3_llm.env
 - 当前正式结果：
   - `70` 题
   - `69 ok / 1 warning / 0 error`
+- 当前方法关键词：
+  - `LangGraph + 分层提示词 + 确定性 SQL 模板 + chart_spec`
 - 详细说明：
   - [README_task2_langgraph.md](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/README_task2_langgraph.md)
 
@@ -126,6 +136,12 @@ cp configs/task3_llm.env.example configs/task3_llm.env
 
 - 主代码目录：
   - [src/task3_langgraph](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/src/task3_langgraph)
+- 已同步任务二的部分通用优化：
+  - 指标映射补全
+  - `metric` 缺失识别增强
+  - `Q2 / Q4` 派生单季度逻辑
+  - SQL 提示词中的 SQLite / 季度口径约束
+  - 澄清回退模板
 - 详细说明：
   - [README_task3_langgraph.md](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/README_task3_langgraph.md)
 
