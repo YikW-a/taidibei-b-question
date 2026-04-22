@@ -23,6 +23,7 @@
 ├── run_task2_langgraph.py
 ├── run_task3_index.py
 ├── run_task3_langgraph.py
+├── run_web_assistant.py
 ├── run_test_question_sets.py
 ├── configs/
 ├── docs/
@@ -48,6 +49,7 @@
 - [run_task2_langgraph.py](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/run_task2_langgraph.py)：任务二主入口
 - [run_task3_index.py](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/run_task3_index.py)：任务三知识库构建入口
 - [run_task3_langgraph.py](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/run_task3_langgraph.py)：任务三回答入口
+- [run_web_assistant.py](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/run_web_assistant.py)：上市公司财报“智能问数”助手网页入口
 - [run_test_question_sets.py](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/run_test_question_sets.py)：任务二、任务三统一测试入口
 
 ### `src/`
@@ -55,6 +57,7 @@
 - [src/task1_pipeline](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/src/task1_pipeline)：任务一主线代码
 - [src/task2_langgraph](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/src/task2_langgraph)：任务二主线代码
 - [src/task3_langgraph](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/src/task3_langgraph)：任务三主线代码
+- [src/web_assistant](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/src/web_assistant)：独立网页问答界面，复用任务三后端逻辑，不改动三项任务主线代码
 
 ### `scripts/`
 
@@ -195,6 +198,26 @@ python3 run_task3_index.py
 
 ```bash
 python3 run_task3_langgraph.py
+```
+
+### 网页问答助手
+
+```bash
+python3 run_web_assistant.py
+```
+
+启动后会自动打开浏览器，也可以手动访问：
+
+```text
+http://127.0.0.1:8765
+```
+
+网页名称为“上市公司财报“智能问数”助手”，包含问题输入框、回答框和图片框。后端复用任务三的 `RAG + SQL + LangGraph` 逻辑，支持连续追问；若生成图表，图片会展示在图片框；若存在研报引用，会跟随每轮回答展示在回答框下方，并以“研报标题”和“引用图表”的形式呈现。页面提供“新会话”和“结束服务”按钮，并通过前端心跳检测在网页关闭后自动释放本地端口；回答框会展示本轮回答时间。
+
+如只希望启动服务而不自动打开浏览器：
+
+```bash
+python3 run_web_assistant.py --no-open
 ```
 
 ### 统一测试入口

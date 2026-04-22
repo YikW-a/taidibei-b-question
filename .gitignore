@@ -9,6 +9,7 @@ __pycache__/
 .runtime_cache/
 .venv/
 venv/
+outputs/web_assistant/
 
 # Local model config
 configs/task2_llm.env

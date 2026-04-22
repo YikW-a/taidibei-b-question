@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>上市公司财报“智能问数”助手</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">RAG + SQL + LangGraph</p>
+          <h1>上市公司财报“智能问数”助手</h1>
+          <p class="subtitle">输入财务、研报、趋势或追问型问题，系统会返回回答、生成图表和研报引用。</p>
+        </div>
+        <div class="hero-actions">
+          <button id="resetBtn" class="ghost-button" type="button">新会话</button>
+          <button id="closeBtn" class="icon-button" type="button" title="结束服务" aria-label="结束服务">×</button>
+        </div>
+      </section>
+
+      <section class="workspace">
+        <section class="panel question-panel" aria-label="问题输入框">
+          <div class="panel-heading">
+            <h2>问题输入框</h2>
+            <span id="sessionBadge" class="badge">新会话</span>
+          </div>
+          <textarea id="questionInput" rows="7" placeholder="例如：云南白药 2025Q3 的营业总收入是多少？请画图展示。"></textarea>
+          <div class="actions">
+            <button id="askBtn" type="button">发送问题</button>
+          </div>
+          <div id="statusText" class="status">准备就绪</div>
+        </section>
+
+        <section class="panel answer-panel" aria-label="回答框">
+          <div class="panel-heading">
+            <h2>回答框</h2>
+          </div>
+          <div id="answerBox" class="answer-box empty">回答会显示在这里。</div>
+        </section>
+
+        <section class="panel image-panel" aria-label="图片框">
+          <div class="panel-heading">
+            <h2>图片框</h2>
+          </div>
+          <div id="imageBox" class="image-box empty">如果本轮生成图片，会在这里展示。</div>
+        </section>
+      </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
