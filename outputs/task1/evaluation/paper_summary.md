@@ -1,0 +1,15 @@
+# 任务一实验结果文字稿
+
+在30份正式样本财务报告上进行测试后，四张目标表均实现了较高覆盖率。其中，核心业绩指标表、资产负债表、现金流量表和利润表的平均字段覆盖率分别为0.9558、0.9978、0.9952和0.9983。
+
+从缺失原因看，当前系统剩余短板已由“大面积抽取失败”转为“少量长尾字段缺失”。核心业绩指标表中，季度环比指标的缺失主因被判定为 likely_not_disclosed_in_source，说明多数年报样本本身未提供季度环比。
+
+其余缺失字段主要分为三类：一是 likely_extraction_gap，说明仍有少量版式差异未完全覆盖；二是 derivation_inputs_incomplete 或 upstream_cash_flow_missing，说明字段本身可以推导，但上游输入仍有缺口；三是 prior_period_value_unavailable，主要出现在同比计算依赖上期值而源文档未稳定给出的情形。
+
+## 各表主要结论
+- 核心业绩指标表：net_profit_qoq_growth 主要为 likely_not_disclosed_in_source；net_profit_excl_non_recurring_yoy 主要为 likely_extraction_gap；operating_revenue_qoq_growth 主要为 likely_extraction_gap。
+- 资产负债表：liability_advance_from_customers 主要为 likely_extraction_gap；asset_trading_financial_assets 主要为 likely_extraction_gap；asset_construction_in_progress 主要为 likely_extraction_gap。
+- 现金流量表：net_cash_flow_yoy_growth 主要为 prior_period_value_unavailable；investing_cf_cash_from_investment_recovery 主要为 likely_extraction_gap；operating_cf_cash_from_sales 主要为 likely_extraction_gap。
+- 利润表：net_profit_yoy_growth 主要为 likely_extraction_gap；total_operating_expenses 主要为 likely_extraction_gap；asset_impairment_loss 主要为 likely_extraction_gap。
+
+这说明任务一当前版本已经具备较强的批量抽取与入库能力，后续优化应优先聚焦少量长尾字段，而不是整体流程重构。

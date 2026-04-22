@@ -1,0 +1,61 @@
+﻿table_name,field_name,missing_count,sample_missing_sources
+balance_sheet,liability_advance_from_customers,21,600080_20250822_ODWZ.pdf | 600085_20250430_4MZB.pdf | 600332_20230428_LE89.pdf | 600332_20231031_LRQX.pdf | 600332_20240427_P99O.pdf | 600613_20240430_94AW.pdf | 600613_20250426_Q0JZ.pdf | 600613_20251031_X9UT.pdf | 600771_20250425_NL2W.pdf | 603858_20230428_6PPA.pdf
+balance_sheet,asset_trading_financial_assets,7,600332_20250430_KI0E.pdf | 600332_20251029_H1GP.pdf | 600436_20230415_LMRV.pdf | 600436_20231017_JSSV.pdf | 600436_20250430_IZHX.pdf | 600771_20240430_FUIZ.pdf | 603998_20250429_6OJY.pdf
+balance_sheet,asset_construction_in_progress,1,600771_20240430_FUIZ.pdf
+balance_sheet,asset_accounts_receivable,0,
+balance_sheet,asset_cash_and_cash_equivalents,0,
+balance_sheet,asset_inventory,0,
+balance_sheet,asset_liability_ratio,0,
+balance_sheet,asset_total_assets,0,
+balance_sheet,asset_total_assets_yoy_growth,0,
+balance_sheet,equity_total_equity,0,
+balance_sheet,equity_unappropriated_profit,0,
+balance_sheet,liability_accounts_payable,0,
+balance_sheet,liability_contract_liabilities,0,
+balance_sheet,liability_short_term_loans,0,
+balance_sheet,liability_total_liabilities,0,
+balance_sheet,liability_total_liabilities_yoy_growth,0,
+cash_flow_sheet,net_cash_flow_yoy_growth,41,600080_20241030_XN72.pdf | 600285_20241030_MLWU.pdf | 600285_20250426_Y3H9.pdf | 600422_20250816_X5KJ.pdf | 600436_20240420_1K89.pdf | 600436_20240817_V2BR.pdf | 600436_20241019_UGHL.pdf | 600572_20240824_YYR1.pdf | 600613_20230429_7MPS.pdf | 600771_20250425_NL2W.pdf
+cash_flow_sheet,investing_cf_cash_from_investment_recovery,9,600085_20250430_4MZB.pdf | 600085_20250830_E6JX.pdf | 600976_20230418_IGTA.pdf | 600976_20230816_ITZH.pdf | 600976_20240420_N11X.pdf | 603858_20230428_6PPA.pdf | 603858_20230428_JFSE.pdf | 603858_20240426_VREN.pdf | 603858_20250426_3KDM.pdf
+cash_flow_sheet,operating_cf_cash_from_sales,1,瑞康医药：2025年一季度报告.pdf
+cash_flow_sheet,financing_cf_cash_for_debt_repayment,0,
+cash_flow_sheet,financing_cf_cash_from_borrowing,0,
+cash_flow_sheet,financing_cf_net_amount,0,
+cash_flow_sheet,financing_cf_ratio_of_net_cf,0,
+cash_flow_sheet,investing_cf_cash_for_investments,0,
+cash_flow_sheet,investing_cf_net_amount,0,
+cash_flow_sheet,investing_cf_ratio_of_net_cf,0,
+cash_flow_sheet,net_cash_flow,0,
+cash_flow_sheet,operating_cf_net_amount,0,
+cash_flow_sheet,operating_cf_ratio_of_net_cf,0,
+core_performance_indicators_sheet,net_profit_qoq_growth,178,600080_20230428_MMWM.pdf;600080_20230428_FQ2V.pdf | 600080_20230428_PCK7.pdf | 600080_20240427_0WKP.pdf;600080_20240427_W39O.pdf | 600085_20230328_GGS9.pdf;600085_20230328_KEHR.pdf | 600085_20230429_VQ9H.pdf | 600129_20230331_BTSP.pdf;600129_20230331_LJR3.pdf | 600129_20230428_CBJZ.pdf | 600129_20250329_NDLU.pdf;600129_20250329_6WBA.pdf | 600222_20230407_6IHZ.pdf;600222_20230407_OACL.pdf | 600222_20230429_B5XY.pdf
+core_performance_indicators_sheet,net_profit_excl_non_recurring_yoy,174,600080_20230428_PCK7.pdf | 600129_20230331_BTSP.pdf;600129_20230331_LJR3.pdf | 600222_20230429_B5XY.pdf | 600222_20230819_T4D5.pdf;600222_20230819_G5RZ.pdf | 600252_20230428_VZDI.pdf | 600252_20240430_W3NK.pdf | 600252_20250329_1620.pdf;600252_20250329_7P2G.pdf | 600285_20230426_0A88.pdf | 600329_20230429_9H31.pdf | 600332_20230428_LE89.pdf
+core_performance_indicators_sheet,operating_revenue_qoq_growth,145,600080_20230428_MMWM.pdf;600080_20230428_FQ2V.pdf | 600080_20230428_PCK7.pdf | 600085_20230328_GGS9.pdf;600085_20230328_KEHR.pdf | 600085_20230429_VQ9H.pdf | 600129_20230331_BTSP.pdf;600129_20230331_LJR3.pdf | 600129_20230428_CBJZ.pdf | 600222_20230407_6IHZ.pdf;600222_20230407_OACL.pdf | 600222_20230429_B5XY.pdf | 600252_20230329_84OV.pdf;600252_20230329_OFKW.pdf | 600252_20230428_VZDI.pdf
+core_performance_indicators_sheet,roe_weighted_excl_non_recurring,16,600332_20241026_RDSX.pdf | 600332_20251029_H1GP.pdf | 600479_20230825_6O9Z.pdf;600479_20230825_07RX.pdf | 600479_20231028_3US7.pdf | 600535_20231028_JXWI.pdf | 600566_20240410_9Y58.pdf | 600594_20231027_TXD6.pdf | 康弘药业：2024年一季度报告.pdf | 康弘药业：2024年三季度报告.pdf | 康弘药业：2025年一季度报告.pdf
+core_performance_indicators_sheet,net_profit_excl_non_recurring,15,600332_20241026_RDSX.pdf | 600332_20251029_H1GP.pdf | 600479_20230825_6O9Z.pdf;600479_20230825_07RX.pdf | 600479_20231028_3US7.pdf | 600535_20231028_JXWI.pdf | 600594_20231027_TXD6.pdf | 康弘药业：2024年一季度报告.pdf | 康弘药业：2024年三季度报告.pdf | 康弘药业：2025年一季度报告.pdf | 康弘药业：2025年三季度报告.pdf
+core_performance_indicators_sheet,net_profit_yoy_growth,8,600222_20230407_6IHZ.pdf;600222_20230407_OACL.pdf | 603139_20250429_3IM9.pdf | 嘉应制药：2022年年度报告摘要.pdf;嘉应制药：2022年年度报告.pdf | 振东制药：2024年一季度报告.pdf | 振东制药：2024年年度报告.pdf;振东制药：2024年年度报告摘要.pdf | 特一药业：2025年半年度报告.pdf;特一药业：2025年半年度报告摘要.pdf | 维康药业：2024年年度报告.pdf;维康药业：2024年年度报告摘要.pdf | 长药控股：2023年年度报告.pdf;长药控股：2023年年度报告摘要.pdf
+core_performance_indicators_sheet,net_asset_per_share,4,600518_20251031_ZQ6L.pdf | 600566_20240410_9Y58.pdf | 600671_20251029_AR92.pdf | 603439_20251028_T6J6.pdf
+core_performance_indicators_sheet,operating_cf_per_share,4,600518_20251031_ZQ6L.pdf | 600566_20240410_9Y58.pdf | 600671_20251029_AR92.pdf | 603439_20251028_T6J6.pdf
+core_performance_indicators_sheet,eps,1,600671_20251029_AR92.pdf
+core_performance_indicators_sheet,gross_profit_margin,1,600566_20240410_9Y58.pdf
+core_performance_indicators_sheet,net_profit_10k_yuan,0,
+core_performance_indicators_sheet,net_profit_margin,0,
+core_performance_indicators_sheet,operating_revenue_yoy_growth,0,
+core_performance_indicators_sheet,roe,0,
+core_performance_indicators_sheet,total_operating_revenue,0,
+income_sheet,net_profit_yoy_growth,8,600222_20230407_OACL.pdf | 603139_20250429_3IM9.pdf | 嘉应制药：2022年年度报告.pdf | 振东制药：2024年一季度报告.pdf | 振东制药：2024年年度报告.pdf | 特一药业：2025年半年度报告.pdf | 维康药业：2024年年度报告.pdf;维康药业：2024年年度报告摘要.pdf | 长药控股：2023年年度报告.pdf
+income_sheet,total_operating_expenses,6,600332_20230318_TJ63.pdf;600332_20230318_QRLF.pdf | 600332_20230819_VOZO.pdf | 600332_20240316_M2MS.pdf;600332_20240316_ISIW.pdf | 600332_20240831_Q3YL.pdf | 600332_20250314_KG61.pdf;600332_20250314_191V.pdf | 600332_20250816_9P7A.pdf
+income_sheet,asset_impairment_loss,4,600085_20250430_4MZB.pdf | 600771_20250425_T30S.pdf | 600976_20250419_J7YP.pdf | 600976_20251022_GO8W.pdf
+income_sheet,credit_impairment_loss,4,600976_20240420_N11X.pdf | 600976_20241019_74CB.pdf | 600976_20250419_J7YP.pdf | 600976_20251022_GO8W.pdf
+income_sheet,net_profit,0,
+income_sheet,operating_expense_administrative_expenses,0,
+income_sheet,operating_expense_cost_of_sales,0,
+income_sheet,operating_expense_financial_expenses,0,
+income_sheet,operating_expense_rnd_expenses,0,
+income_sheet,operating_expense_selling_expenses,0,
+income_sheet,operating_expense_taxes_and_surcharges,0,
+income_sheet,operating_profit,0,
+income_sheet,operating_revenue_yoy_growth,0,
+income_sheet,other_income,0,
+income_sheet,total_operating_revenue,0,
+income_sheet,total_profit,0,

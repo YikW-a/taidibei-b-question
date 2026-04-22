@@ -1,0 +1,17 @@
+﻿rule_name,description,formula,table_scope,applicable_count,passed_count,failed_count,skipped_count,pass_rate,failure_rate
+cash_flow_equation,校验现金及现金等价物净增加额与三类活动净现金流的勾稽关系。,NCF=OCF+ICF+FCF,cash_flow_sheet,823,636,187,0,0.7728,0.2272
+net_profit_excl_non_recurring_yoy_consistency,按同报告期跨年对齐，校验扣非净利润同比字段。,YoY_t=\frac{x_t-x_{t-1}}{|x_{t-1}|}\times 100\%,core_performance_indicators_sheet,512,475,37,0,0.9277,0.0723
+net_profit_qoq_consistency,依据累计值还原单季度值后，校验净利润环比字段。,QoQ_t=\frac{x_t-x_{t-1}}{|x_{t-1}|}\times 100\%,core_performance_indicators_sheet+income_sheet,644,637,7,0,0.9891,0.0109
+gross_profit_margin_consistency,以择优收入口径校验毛利率，避免因收入选取错误造成假异常。,GPM=\frac{R^*-C}{R^*}\times 100\%,core_performance_indicators_sheet+income_sheet,823,818,5,0,0.9939,0.0061
+roe_consistency,在年报、正权益且符号一致条件下，以保守口径校验 ROE。,ROE=\frac{NP}{E}\times 100\%,core_performance_indicators_sheet+income_sheet+balance_sheet,202,201,1,0,0.995,0.005
+eps_net_profit_sign_consistency,在股本为正的前提下，每股收益与净利润应保持同号。,\operatorname{sign}(EPS)=\operatorname{sign}(NP),core_performance_indicators_sheet+income_sheet,820,816,4,0,0.9951,0.0049
+asset_liability_ratio_consistency,校验资产负债率字段与资产负债表金额之间的一致性。,\rho_{AL}=\frac{L}{A}\times 100\%,balance_sheet,823,823,0,0,1.0,0.0
+balance_equation,校验资产总计是否与负债合计和所有者权益合计闭合。,A=L+E,balance_sheet,823,823,0,0,1.0,0.0
+financing_cf_ratio_consistency,校验 `financing_cf_ratio_of_net_cf` 与净现金流占比公式的一致性。,Ratio=\frac{financing_cf_net_amount}{NCF}\times 100\%,cash_flow_sheet,823,823,0,0,1.0,0.0
+investing_cf_ratio_consistency,校验 `investing_cf_ratio_of_net_cf` 与净现金流占比公式的一致性。,Ratio=\frac{investing_cf_net_amount}{NCF}\times 100\%,cash_flow_sheet,823,823,0,0,1.0,0.0
+margin_order_consistency,净利率通常不应显著高于毛利率，用于捕捉收入口径或成本口径错配。,"NPM \le GPM + \delta,\ \delta=20",core_performance_indicators_sheet,823,823,0,0,1.0,0.0
+net_asset_per_share_consistency,以权益和推断股本校验每股净资产。,"NAVPS=\frac{E\times 10000}{Shares},\ Shares=\frac{NP\times 10000}{EPS}",core_performance_indicators_sheet+balance_sheet+income_sheet,816,816,0,0,1.0,0.0
+net_profit_margin_consistency,以择优收入口径校验净利率。,NPM=\frac{NP}{R^*}\times 100\%,core_performance_indicators_sheet+income_sheet,823,823,0,0,1.0,0.0
+operating_cf_per_share_consistency,以经营活动现金流量净额和推断股本校验每股经营现金流。,OCFPS=\frac{OCF\times 10000}{Shares},core_performance_indicators_sheet+cash_flow_sheet+income_sheet,816,816,0,0,1.0,0.0
+operating_cf_ratio_consistency,校验 `operating_cf_ratio_of_net_cf` 与净现金流占比公式的一致性。,Ratio=\frac{operating_cf_net_amount}{NCF}\times 100\%,cash_flow_sheet,823,823,0,0,1.0,0.0
+operating_revenue_qoq_consistency,依据累计值还原单季度值后，校验营业收入环比字段。,QoQ_t=\frac{x_t-x_{t-1}}{|x_{t-1}|}\times 100\%,core_performance_indicators_sheet+income_sheet,677,677,0,0,1.0,0.0

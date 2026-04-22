@@ -1,40 +1,18 @@
-# macOS / editor
+# Caches / local runtime artifacts
 .DS_Store
-.vscode/
-
-# Python
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
 .pytest_cache/
-
-# Local environments / caches
 .conda/
 .runtime_cache/
-.env
 .venv/
 venv/
 
-# Secrets / local model config
+# Local model config
 configs/task2_llm.env
 configs/task3_llm.env
 
-# Build / runtime outputs
-outputs/
-
 # Competition raw data
 正式数据/
-
-# Local databases / temporary artifacts
-*.db
-*.sqlite
-*.sqlite3
-
-# Archive / legacy local notes
-*.bak
-*.tmp
-
-# Office / temporary files
-~$*.xlsx
-~$*.docx

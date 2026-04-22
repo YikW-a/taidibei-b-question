@@ -1,0 +1,132 @@
+{
+  "database_url": "sqlite:////Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task1/task1_financials.db",
+  "input_manifest_sse": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件2：财务报告/reports-上交所_处理后/sse_reports_manifest.csv",
+  "input_manifest_szse": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/正式数据/附件2：财务报告/reports-深交所_处理后/szse_reports_manifest.csv",
+  "sample_limit": null,
+  "summary": {
+    "total_records": 3293,
+    "table_record_counts": {
+      "balance_sheet": 823,
+      "cash_flow_sheet": 823,
+      "core_performance_indicators_sheet": 824,
+      "income_sheet": 823
+    },
+    "avg_mapped_fields": {
+      "balance_sheet": 20.96,
+      "cash_flow_sheet": 17.94,
+      "core_performance_indicators_sheet": 19.34,
+      "income_sheet": 20.97
+    },
+    "validation_issue_counts": {
+      "cash_flow_sheet|warning": 163,
+      "core_performance_indicators_sheet|warning": 5
+    },
+    "table_avg_field_coverage": {
+      "balance_sheet": 0.9978,
+      "cash_flow_sheet": 0.9952,
+      "core_performance_indicators_sheet": 0.9558,
+      "income_sheet": 0.9983
+    },
+    "high_missing_fields": {},
+    "dominant_missing_reasons": {
+      "balance_sheet": [
+        {
+          "field_name": "liability_advance_from_customers",
+          "missing_count": 21,
+          "dominant_reason": "likely_extraction_gap"
+        },
+        {
+          "field_name": "asset_trading_financial_assets",
+          "missing_count": 7,
+          "dominant_reason": "likely_extraction_gap"
+        },
+        {
+          "field_name": "asset_construction_in_progress",
+          "missing_count": 1,
+          "dominant_reason": "likely_extraction_gap"
+        }
+      ],
+      "cash_flow_sheet": [
+        {
+          "field_name": "net_cash_flow_yoy_growth",
+          "missing_count": 41,
+          "dominant_reason": "prior_period_value_unavailable"
+        },
+        {
+          "field_name": "investing_cf_cash_from_investment_recovery",
+          "missing_count": 9,
+          "dominant_reason": "likely_extraction_gap"
+        },
+        {
+          "field_name": "operating_cf_cash_from_sales",
+          "missing_count": 1,
+          "dominant_reason": "likely_extraction_gap"
+        }
+      ],
+      "core_performance_indicators_sheet": [
+        {
+          "field_name": "net_profit_qoq_growth",
+          "missing_count": 178,
+          "dominant_reason": "likely_not_disclosed_in_source"
+        },
+        {
+          "field_name": "net_profit_excl_non_recurring_yoy",
+          "missing_count": 174,
+          "dominant_reason": "likely_extraction_gap"
+        },
+        {
+          "field_name": "operating_revenue_qoq_growth",
+          "missing_count": 145,
+          "dominant_reason": "likely_extraction_gap"
+        },
+        {
+          "field_name": "roe_weighted_excl_non_recurring",
+          "missing_count": 16,
+          "dominant_reason": "derivable_but_inputs_missing"
+        },
+        {
+          "field_name": "net_profit_excl_non_recurring",
+          "missing_count": 15,
+          "dominant_reason": "likely_extraction_gap"
+        },
+        {
+          "field_name": "net_profit_yoy_growth",
+          "missing_count": 8,
+          "dominant_reason": "likely_extraction_gap"
+        },
+        {
+          "field_name": "net_asset_per_share",
+          "missing_count": 4,
+          "dominant_reason": "derivation_inputs_incomplete"
+        },
+        {
+          "field_name": "operating_cf_per_share",
+          "missing_count": 4,
+          "dominant_reason": "upstream_cash_flow_missing"
+        }
+      ],
+      "income_sheet": [
+        {
+          "field_name": "net_profit_yoy_growth",
+          "missing_count": 8,
+          "dominant_reason": "likely_extraction_gap"
+        },
+        {
+          "field_name": "total_operating_expenses",
+          "missing_count": 6,
+          "dominant_reason": "likely_extraction_gap"
+        },
+        {
+          "field_name": "asset_impairment_loss",
+          "missing_count": 4,
+          "dominant_reason": "likely_extraction_gap"
+        },
+        {
+          "field_name": "credit_impairment_loss",
+          "missing_count": 4,
+          "dominant_reason": "likely_extraction_gap"
+        }
+      ]
+    }
+  }
+}

@@ -14,6 +14,8 @@
 
 它不仅服务任务二，也直接服务任务三的 SQL 查询层，因此任务一的数据质量会同时影响后两项任务。
 
+当前 `outputs/task1` 下的最新全量结果，已作为任务一正式版结果使用。
+
 ---
 
 ## 2. 当前已完成能力
@@ -51,6 +53,16 @@
   - `core_performance_indicators_sheet|warning = 5`
 - 入库后会计勾稽脚本总体通过率：`97.97%`
 
+当前正式版结果文件主要位于：
+
+- [outputs/task1/evaluation/summary.json](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task1/evaluation/summary.json)
+- [outputs/task1/evaluation/quality_report.md](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task1/evaluation/quality_report.md)
+- [outputs/task1/evaluation/database_quality_review.md](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task1/evaluation/database_quality_review.md)
+- [outputs/task1/accounting_checks/accounting_check_report.md](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task1/accounting_checks/accounting_check_report.md)
+- [outputs/task1/final_tables](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task1/final_tables)
+
+综合覆盖率、异常值复核、按行空缺分布与勾稽脚本结果判断，这一版未再发现系统性错页、错列或单位放大问题，因此可以作为任务一最终版本。
+
 ---
 
 ## 3. 当前重点
@@ -65,6 +77,8 @@
 3. 继续补充长尾公司别名与旧版披露写法
 4. 保持主线结果与论文、校验脚本、导出结构同步
 5. 任务二 / 任务三一旦出现离谱结果，优先回查任务一数据层
+
+如果后续不再继续调任务一本身，那么这里的“重点”更适合理解为后续维护方向，而不是阻止当前版本定稿的问题。
 
 ---
 
@@ -138,6 +152,14 @@ python3 scripts/check_task1_accounting_consistency.py
 - 失败样本明细
 - Markdown 版勾稽报告
 
+当前脚本共包含 `16` 条规则，覆盖：
+
+- 资产负债表恒等式与资产负债率
+- 现金流勾稽与三类现金流占比
+- 毛利率、净利率、ROE、每股类字段一致性
+- 营收环比、净利环比、扣非同比一致性
+- `EPS` 与净利润符号一致性
+
 ---
 
 ## 6. 关键文件
@@ -181,4 +203,4 @@ python3 scripts/check_task1_accounting_consistency.py
 
 整体判断：
 
-**任务一主线已经可作为任务二、任务三的数据底座使用，当前工作重点是质量收口，而不是重构框架。**
+**任务一主线已经可作为任务二、任务三的数据底座使用；当前 `outputs/task1` 这版结果可视为任务一最终版本。**
