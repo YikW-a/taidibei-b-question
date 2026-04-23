@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import shutil
 import threading
 import time
 from dataclasses import dataclass, field
@@ -56,6 +57,8 @@ class InteractiveTask3Service:
         )
         self.ctx = Task3NodeContext(self.config)
         self._lock = threading.RLock()
+        self._cancel_lock = threading.RLock()
+        self._cancelled_sessions: set[str] = set()
         self._sessions: dict[str, WebConversation] = {}
 
     @property
@@ -67,6 +70,7 @@ class InteractiveTask3Service:
         if not question:
             raise ValueError("问题不能为空。")
         with self._lock:
+            self._clear_cancel(session_id)
             started_at = time.perf_counter()
             conversation = self._sessions.setdefault(session_id, WebConversation(session_id=session_id))
             conversation.questions.append(question)
@@ -87,11 +91,54 @@ class InteractiveTask3Service:
     def reset(self, *, session_id: str) -> dict[str, Any]:
         with self._lock:
             self._sessions.pop(session_id, None)
+            self._drop_web_questions(session_id)
+        self._clear_cancel(session_id)
         return {"session_id": session_id, "status": "reset"}
+
+    def cancel(self, *, session_id: str) -> dict[str, Any]:
+        if not session_id:
+            return {"session_id": session_id, "status": "ignored"}
+        with self._cancel_lock:
+            self._cancelled_sessions.add(session_id)
+        return {"session_id": session_id, "status": "cancelled"}
+
+    def cleanup_outputs(self) -> dict[str, Any]:
+        output_dir = self.config.output_dir.resolve()
+        outputs_root = (self.base_dir / "outputs").resolve()
+        if output_dir == outputs_root or outputs_root not in output_dir.parents:
+            return {"status": "skipped", "reason": "output_dir_not_in_project_outputs", "path": str(output_dir)}
+        if self.config.knowledge_base_root.resolve() == output_dir:
+            return {"status": "skipped", "reason": "output_dir_is_knowledge_base", "path": str(output_dir)}
+        shutil.rmtree(output_dir, ignore_errors=True)
+        return {"status": "cleaned", "path": str(output_dir)}
+
+    def question_bank(self) -> list[dict[str, Any]]:
+        def sort_key(item: tuple[str, QuestionRecord]) -> tuple[int, str]:
+            question_id = item[0]
+            suffix = "".join(ch for ch in question_id if ch.isdigit())
+            return (int(suffix) if suffix else 10**9, question_id)
+
+        with self._lock:
+            items: list[dict[str, Any]] = []
+            for question_id, record in sorted(self.ctx.runtime.questions.items(), key=sort_key):
+                if question_id.startswith("WEB_"):
+                    continue
+                questions = [str(item).strip() for item in record.sub_questions if str(item).strip()]
+                items.append(
+                    {
+                        "id": question_id,
+                        "type": record.question_type,
+                        "questions": questions,
+                        "display": " / ".join(questions),
+                    }
+                )
+            return items
 
     def _run_conversation(self, conversation: WebConversation) -> Task3GraphState:
         question_id = f"WEB_{conversation.session_id}_{len(conversation.questions):03d}"
         original_question_json = json.dumps([{"Q": item} for item in conversation.questions], ensure_ascii=False)
+        self._raise_if_cancelled(conversation.session_id)
+        self._drop_web_questions(conversation.session_id)
         self.ctx.runtime.questions[question_id] = QuestionRecord(
             question_id=question_id,
             question_type="web_interactive",
@@ -116,32 +163,46 @@ class InteractiveTask3Service:
             "reuse_prior_context": False,
         }
         for turn_index in range(len(conversation.questions)):
+            self._raise_if_cancelled(conversation.session_id)
             state["current_turn_index"] = turn_index
-            state = self._run_one_turn(state)
+            state = self._run_one_turn(state, conversation.session_id)
         return state
 
-    def _run_one_turn(self, state: Task3GraphState) -> Task3GraphState:
+    def _run_one_turn(self, state: Task3GraphState, session_id: str) -> Task3GraphState:
+        self._raise_if_cancelled(session_id)
         state = parse_question_node(state, self.ctx)
+        self._raise_if_cancelled(session_id)
         state = clarify_or_continue_node(state, self.ctx)
         if state.get("needs_clarification"):
+            self._raise_if_cancelled(session_id)
             state = generate_answer_node(state, self.ctx)
+            self._raise_if_cancelled(session_id)
             state = self_check_node(state, self.ctx)
             state = append_turn_result_node(state, self.ctx)
             return export_result_node(state, self.ctx)
 
+        self._raise_if_cancelled(session_id)
         state = build_query_plan_node(state, self.ctx)
         if state.get("query_plan", {}).get("needs_sql"):
             while True:
+                self._raise_if_cancelled(session_id)
                 state = generate_sql_node(state, self.ctx)
+                self._raise_if_cancelled(session_id)
                 state = execute_sql_node(state, self.ctx)
                 if not state.get("sql_error") or int(state.get("sql_attempts", 0) or 0) >= 3:
                     break
 
+        self._raise_if_cancelled(session_id)
         state = retrieve_reports_node(state, self.ctx)
+        self._raise_if_cancelled(session_id)
         state = rerank_evidence_node(state, self.ctx)
+        self._raise_if_cancelled(session_id)
         state = fuse_sql_and_evidence_node(state, self.ctx)
+        self._raise_if_cancelled(session_id)
         state = render_chart_node(state, self.ctx)
+        self._raise_if_cancelled(session_id)
         state = generate_answer_node(state, self.ctx)
+        self._raise_if_cancelled(session_id)
         state = self_check_node(state, self.ctx)
         state = append_turn_result_node(state, self.ctx)
         return export_result_node(state, self.ctx)
@@ -173,3 +234,18 @@ class InteractiveTask3Service:
     def _image_url(path: str) -> str:
         name = Path(path).name
         return f"/generated/{name}"
+
+    def _drop_web_questions(self, session_id: str) -> None:
+        prefix = f"WEB_{session_id}_"
+        for question_id in [key for key in self.ctx.runtime.questions if key.startswith(prefix)]:
+            self.ctx.runtime.questions.pop(question_id, None)
+
+    def _clear_cancel(self, session_id: str) -> None:
+        with self._cancel_lock:
+            self._cancelled_sessions.discard(session_id)
+
+    def _raise_if_cancelled(self, session_id: str) -> None:
+        with self._cancel_lock:
+            cancelled = session_id in self._cancelled_sessions
+        if cancelled:
+            raise RuntimeError("当前生成已取消。")

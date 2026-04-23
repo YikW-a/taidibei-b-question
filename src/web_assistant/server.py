@@ -35,6 +35,9 @@ class WebAssistantHandler(BaseHTTPRequestHandler):
             name = Path(unquote(path.removeprefix("/generated/"))).name
             self._send_file(self.service.result_dir / name, root=self.service.result_dir)
             return
+        if path == "/api/question-bank":
+            self._send_json({"items": self.service.question_bank()})
+            return
         self._send_json({"error": "not_found"}, status=HTTPStatus.NOT_FOUND)
 
     def do_POST(self) -> None:  # noqa: N802
@@ -44,6 +47,9 @@ class WebAssistantHandler(BaseHTTPRequestHandler):
             return
         if parsed.path == "/api/reset":
             self._handle_reset()
+            return
+        if parsed.path == "/api/cancel":
+            self._handle_cancel()
             return
         if parsed.path == "/api/heartbeat":
             self._handle_heartbeat()
@@ -74,6 +80,14 @@ class WebAssistantHandler(BaseHTTPRequestHandler):
         except Exception as exc:
             self._send_json({"error": str(exc)}, status=HTTPStatus.INTERNAL_SERVER_ERROR)
 
+    def _handle_cancel(self) -> None:
+        try:
+            payload = self._read_json()
+            session_id = str(payload.get("session_id") or "")
+            self._send_json(self.service.cancel(session_id=session_id))
+        except Exception as exc:
+            self._send_json({"error": str(exc)}, status=HTTPStatus.INTERNAL_SERVER_ERROR)
+
     def _handle_heartbeat(self) -> None:
         if hasattr(self.server, "touch_heartbeat"):
             self.server.touch_heartbeat()  # type: ignore[attr-defined]
@@ -81,7 +95,11 @@ class WebAssistantHandler(BaseHTTPRequestHandler):
 
     def _handle_shutdown(self) -> None:
         self._send_json({"status": "shutdown"})
-        threading.Thread(target=self.server.shutdown, daemon=True).start()
+        threading.Thread(target=self._cleanup_and_shutdown, daemon=True).start()
+
+    def _cleanup_and_shutdown(self) -> None:
+        cleanup_server_outputs(self.server)
+        self.server.shutdown()
 
     def _read_json(self) -> dict[str, object]:
         length = int(self.headers.get("Content-Length", "0") or 0)
@@ -122,7 +140,21 @@ def build_server(host: str, port: int, service: InteractiveTask3Service) -> Thre
 
     Handler.service = service
     server = ThreadingHTTPServer((host, port), Handler)
+    server.cleanup_web_outputs = service.cleanup_outputs  # type: ignore[attr-defined]
+    server.web_outputs_cleaned = False  # type: ignore[attr-defined]
     return server
+
+
+def cleanup_server_outputs(server: ThreadingHTTPServer) -> None:
+    if getattr(server, "web_outputs_cleaned", False):
+        return
+    server.web_outputs_cleaned = True  # type: ignore[attr-defined]
+    if hasattr(server, "cleanup_web_outputs"):
+        try:
+            result = server.cleanup_web_outputs()  # type: ignore[attr-defined]
+            print(f"网页输出清理结果: {result}", flush=True)
+        except Exception as exc:
+            print(f"网页输出清理失败: {exc}", flush=True)
 
 
 def start_heartbeat_monitor(server: ThreadingHTTPServer, timeout_seconds: float = 18.0) -> None:
@@ -139,6 +171,7 @@ def start_heartbeat_monitor(server: ThreadingHTTPServer, timeout_seconds: float 
             last_seen = float(getattr(server, "last_heartbeat_monotonic", time.monotonic()))
             if time.monotonic() - last_seen > timeout_seconds:
                 print("网页心跳已停止，正在关闭本地服务。", flush=True)
+                cleanup_server_outputs(server)
                 server.shutdown()
                 break
 
@@ -175,6 +208,7 @@ def main() -> None:
     except KeyboardInterrupt:
         print("\n服务已停止。", flush=True)
     finally:
+        cleanup_server_outputs(server)
         server.server_close()
 
 

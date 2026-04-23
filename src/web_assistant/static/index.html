@@ -12,9 +12,15 @@
         <div class="hero-copy">
           <p class="eyebrow">RAG + SQL + LangGraph</p>
           <h1>上市公司财报“智能问数”助手</h1>
-          <p class="subtitle">输入财务、研报、趋势或追问型问题，系统会返回回答、生成图表和研报引用。</p>
+          <p class="subtitle">面向上市公司财报、研报证据和趋势分析的交互式问答界面，支持连续追问、图表生成与引用溯源。</p>
         </div>
         <div class="hero-actions">
+          <nav class="question-bank" aria-label="第三问题库">
+            <button id="bankToggle" class="ghost-button bank-toggle" type="button" aria-haspopup="true" aria-expanded="false">第三问题库</button>
+            <div id="questionBankMenu" class="question-bank-menu" role="menu">
+              <div class="bank-loading">正在加载题库...</div>
+            </div>
+          </nav>
           <button id="resetBtn" class="ghost-button" type="button">新会话</button>
           <button id="closeBtn" class="icon-button" type="button" title="结束服务" aria-label="结束服务">×</button>
         </div>
@@ -26,16 +32,31 @@
             <h2>问题输入框</h2>
             <span id="sessionBadge" class="badge">新会话</span>
           </div>
+          <div class="prompt-row" aria-label="样例问题">
+            <button class="prompt-chip" type="button" data-question="云南白药近三年的主营业务收入情况做可视化绘图">收入趋势</button>
+            <button class="prompt-chip" type="button" data-question="2024年利润最高的top10企业是哪些？这些企业的利润、销售额年同比是多少？">利润排行</button>
+            <button class="prompt-chip" type="button" data-question="从研报看医药行业创新药政策趋势是什么？">研报趋势</button>
+          </div>
+          <div id="selectedBankBox" class="selected-bank" hidden></div>
           <textarea id="questionInput" rows="7" placeholder="例如：云南白药 2025Q3 的营业总收入是多少？请画图展示。"></textarea>
           <div class="actions">
             <button id="askBtn" type="button">发送问题</button>
+            <button id="cancelBtn" class="cancel-button" type="button" disabled>取消生成</button>
           </div>
-          <div id="statusText" class="status">准备就绪</div>
+          <div class="progress-strip" aria-live="polite">
+            <span class="progress-dot"></span>
+            <span id="statusText" class="status">准备就绪</span>
+          </div>
         </section>
 
         <section class="panel answer-panel" aria-label="回答框">
           <div class="panel-heading">
             <h2>回答框</h2>
+            <div class="answer-tools" aria-label="回答工具">
+              <button id="copyBtn" class="tool-button" type="button" title="复制最新回答" aria-label="复制最新回答" disabled>⧉</button>
+              <button id="exportMdBtn" class="tool-button" type="button" title="导出 Markdown" aria-label="导出 Markdown" disabled>MD</button>
+              <button id="exportJsonBtn" class="tool-button" type="button" title="导出 JSON" aria-label="导出 JSON" disabled>JSON</button>
+            </div>
           </div>
           <div id="answerBox" class="answer-box empty">回答会显示在这里。</div>
         </section>
@@ -48,6 +69,11 @@
         </section>
       </section>
     </main>
+
+    <div id="imageModal" class="image-modal" hidden>
+      <button id="modalClose" class="modal-close" type="button" title="关闭大图" aria-label="关闭大图">×</button>
+      <img id="modalImage" alt="生成图表大图" />
+    </div>
 
     <script src="/static/app.js"></script>
   </body>
