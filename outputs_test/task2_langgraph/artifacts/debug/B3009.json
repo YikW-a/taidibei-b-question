@@ -1,0 +1,653 @@
+{
+  "question_id": "B3009",
+  "question_type": "数据统计分析查询",
+  "raw_question": "2025年第三季度，销售净利率（净利润/营业总收入*100）超过20%的公司有哪些？请列出简称和销售净利率",
+  "raw_question_json": "[{\"Q\":\"2025年第三季度，销售净利率（净利润/营业总收入*100）超过20%的公司有哪些？请列出简称和销售净利率\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入",
+      "净利润",
+      "销售净利率"
+    ],
+    "chart_type": null,
+    "intent_type": "filter",
+    "top_n": null,
+    "threshold": 20.0
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "filter",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "销售净利率"
+    ],
+    "chart_type": "table",
+    "top_n": null,
+    "threshold": 20.0,
+    "question": "2025年第三季度，销售净利率（净利润/营业总收入*100）超过20%的公司有哪些？请列出简称和销售净利率",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT stock_abbr, net_profit_margin FROM financials_view WHERE report_period = '2025Q3' AND net_profit_margin > 20.0 ORDER BY net_profit_margin DESC",
+  "sql_history": [
+    "SELECT stock_abbr, net_profit_margin FROM financials_view WHERE report_period = '2025Q3' AND net_profit_margin > 20.0 ORDER BY net_profit_margin DESC"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 80,
+  "result_rows": [
+    {
+      "stock_abbr": "药明康德",
+      "net_profit_margin": 36.75203806096622
+    },
+    {
+      "stock_abbr": "药明康德",
+      "net_profit_margin": 36.75203806096622
+    },
+    {
+      "stock_abbr": "药明康德",
+      "net_profit_margin": 36.75203806096622
+    },
+    {
+      "stock_abbr": "药明康德",
+      "net_profit_margin": 36.75203806096622
+    },
+    {
+      "stock_abbr": "药明康德",
+      "net_profit_margin": 36.75203806096622
+    },
+    {
+      "stock_abbr": "药明康德",
+      "net_profit_margin": 36.75203806096622
+    },
+    {
+      "stock_abbr": "药明康德",
+      "net_profit_margin": 36.75203806096622
+    },
+    {
+      "stock_abbr": "药明康德",
+      "net_profit_margin": 36.75203806096622
+    },
+    {
+      "stock_abbr": "药明康德",
+      "net_profit_margin": 36.75203806096622
+    },
+    {
+      "stock_abbr": "药明康德",
+      "net_profit_margin": 36.75203806096622
+    },
+    {
+      "stock_abbr": "药明康德",
+      "net_profit_margin": 36.75203806096622
+    },
+    {
+      "stock_abbr": "药明康德",
+      "net_profit_margin": 36.75203806096622
+    },
+    {
+      "stock_abbr": "药明康德",
+      "net_profit_margin": 36.75203806096622
+    },
+    {
+      "stock_abbr": "药明康德",
+      "net_profit_margin": 36.75203806096622
+    },
+    {
+      "stock_abbr": "药明康德",
+      "net_profit_margin": 36.75203806096622
+    },
+    {
+      "stock_abbr": "药明康德",
+      "net_profit_margin": 36.75203806096622
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "net_profit_margin": 30.435571131258936
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "net_profit_margin": 30.435571131258936
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "net_profit_margin": 30.435571131258936
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "net_profit_margin": 30.435571131258936
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "net_profit_margin": 30.435571131258936
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "net_profit_margin": 30.435571131258936
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "net_profit_margin": 30.435571131258936
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "net_profit_margin": 30.435571131258936
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "net_profit_margin": 30.435571131258936
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "net_profit_margin": 30.435571131258936
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "net_profit_margin": 30.435571131258936
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "net_profit_margin": 30.435571131258936
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "net_profit_margin": 30.435571131258936
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "net_profit_margin": 30.435571131258936
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "net_profit_margin": 30.435571131258936
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "net_profit_margin": 30.435571131258936
+    },
+    {
+      "stock_abbr": "成都先导",
+      "net_profit_margin": 25.114585588586895
+    },
+    {
+      "stock_abbr": "成都先导",
+      "net_profit_margin": 25.114585588586895
+    },
+    {
+      "stock_abbr": "成都先导",
+      "net_profit_margin": 25.114585588586895
+    },
+    {
+      "stock_abbr": "成都先导",
+      "net_profit_margin": 25.114585588586895
+    },
+    {
+      "stock_abbr": "成都先导",
+      "net_profit_margin": 25.114585588586895
+    },
+    {
+      "stock_abbr": "成都先导",
+      "net_profit_margin": 25.114585588586895
+    },
+    {
+      "stock_abbr": "成都先导",
+      "net_profit_margin": 25.114585588586895
+    },
+    {
+      "stock_abbr": "成都先导",
+      "net_profit_margin": 25.114585588586895
+    },
+    {
+      "stock_abbr": "成都先导",
+      "net_profit_margin": 25.114585588586895
+    },
+    {
+      "stock_abbr": "成都先导",
+      "net_profit_margin": 25.114585588586895
+    },
+    {
+      "stock_abbr": "成都先导",
+      "net_profit_margin": 25.114585588586895
+    },
+    {
+      "stock_abbr": "成都先导",
+      "net_profit_margin": 25.114585588586895
+    },
+    {
+      "stock_abbr": "成都先导",
+      "net_profit_margin": 25.114585588586895
+    },
+    {
+      "stock_abbr": "成都先导",
+      "net_profit_margin": 25.114585588586895
+    },
+    {
+      "stock_abbr": "成都先导",
+      "net_profit_margin": 25.114585588586895
+    },
+    {
+      "stock_abbr": "成都先导",
+      "net_profit_margin": 25.114585588586895
+    },
+    {
+      "stock_abbr": "百普赛斯",
+      "net_profit_margin": 21.60351236076169
+    },
+    {
+      "stock_abbr": "百普赛斯",
+      "net_profit_margin": 21.60351236076169
+    },
+    {
+      "stock_abbr": "百普赛斯",
+      "net_profit_margin": 21.60351236076169
+    },
+    {
+      "stock_abbr": "百普赛斯",
+      "net_profit_margin": 21.60351236076169
+    },
+    {
+      "stock_abbr": "百普赛斯",
+      "net_profit_margin": 21.60351236076169
+    },
+    {
+      "stock_abbr": "百普赛斯",
+      "net_profit_margin": 21.60351236076169
+    },
+    {
+      "stock_abbr": "百普赛斯",
+      "net_profit_margin": 21.60351236076169
+    },
+    {
+      "stock_abbr": "百普赛斯",
+      "net_profit_margin": 21.60351236076169
+    },
+    {
+      "stock_abbr": "百普赛斯",
+      "net_profit_margin": 21.60351236076169
+    },
+    {
+      "stock_abbr": "百普赛斯",
+      "net_profit_margin": 21.60351236076169
+    },
+    {
+      "stock_abbr": "百普赛斯",
+      "net_profit_margin": 21.60351236076169
+    },
+    {
+      "stock_abbr": "百普赛斯",
+      "net_profit_margin": 21.60351236076169
+    },
+    {
+      "stock_abbr": "百普赛斯",
+      "net_profit_margin": 21.60351236076169
+    },
+    {
+      "stock_abbr": "百普赛斯",
+      "net_profit_margin": 21.60351236076169
+    },
+    {
+      "stock_abbr": "百普赛斯",
+      "net_profit_margin": 21.60351236076169
+    },
+    {
+      "stock_abbr": "百普赛斯",
+      "net_profit_margin": 21.60351236076169
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "net_profit_margin": 20.303639189653623
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "net_profit_margin": 20.303639189653623
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "net_profit_margin": 20.303639189653623
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "net_profit_margin": 20.303639189653623
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "net_profit_margin": 20.303639189653623
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "net_profit_margin": 20.303639189653623
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "net_profit_margin": 20.303639189653623
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "net_profit_margin": 20.303639189653623
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "net_profit_margin": 20.303639189653623
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "net_profit_margin": 20.303639189653623
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "net_profit_margin": 20.303639189653623
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "net_profit_margin": 20.303639189653623
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "net_profit_margin": 20.303639189653623
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "net_profit_margin": 20.303639189653623
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "net_profit_margin": 20.303639189653623
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "net_profit_margin": 20.303639189653623
+    }
+  ],
+  "context_companies": [
+    "药明康德",
+    "迈普医学",
+    "成都先导",
+    "百普赛斯",
+    "泰格医药"
+  ],
+  "context_rows": [
+    {
+      "stock_abbr": "药明康德",
+      "net_profit_margin": 36.75203806096622
+    },
+    {
+      "stock_abbr": "药明康德",
+      "net_profit_margin": 36.75203806096622
+    },
+    {
+      "stock_abbr": "药明康德",
+      "net_profit_margin": 36.75203806096622
+    },
+    {
+      "stock_abbr": "药明康德",
+      "net_profit_margin": 36.75203806096622
+    },
+    {
+      "stock_abbr": "药明康德",
+      "net_profit_margin": 36.75203806096622
+    },
+    {
+      "stock_abbr": "药明康德",
+      "net_profit_margin": 36.75203806096622
+    },
+    {
+      "stock_abbr": "药明康德",
+      "net_profit_margin": 36.75203806096622
+    },
+    {
+      "stock_abbr": "药明康德",
+      "net_profit_margin": 36.75203806096622
+    },
+    {
+      "stock_abbr": "药明康德",
+      "net_profit_margin": 36.75203806096622
+    },
+    {
+      "stock_abbr": "药明康德",
+      "net_profit_margin": 36.75203806096622
+    },
+    {
+      "stock_abbr": "药明康德",
+      "net_profit_margin": 36.75203806096622
+    },
+    {
+      "stock_abbr": "药明康德",
+      "net_profit_margin": 36.75203806096622
+    },
+    {
+      "stock_abbr": "药明康德",
+      "net_profit_margin": 36.75203806096622
+    },
+    {
+      "stock_abbr": "药明康德",
+      "net_profit_margin": 36.75203806096622
+    },
+    {
+      "stock_abbr": "药明康德",
+      "net_profit_margin": 36.75203806096622
+    },
+    {
+      "stock_abbr": "药明康德",
+      "net_profit_margin": 36.75203806096622
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "net_profit_margin": 30.435571131258936
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "net_profit_margin": 30.435571131258936
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "net_profit_margin": 30.435571131258936
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "net_profit_margin": 30.435571131258936
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "net_profit_margin": 30.435571131258936
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "net_profit_margin": 30.435571131258936
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "net_profit_margin": 30.435571131258936
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "net_profit_margin": 30.435571131258936
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "net_profit_margin": 30.435571131258936
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "net_profit_margin": 30.435571131258936
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "net_profit_margin": 30.435571131258936
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "net_profit_margin": 30.435571131258936
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "net_profit_margin": 30.435571131258936
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "net_profit_margin": 30.435571131258936
+    }
+  ],
+  "result_preview": "[{\"stock_abbr\":\"药明康德\",\"net_profit_margin\":36.752038061},{\"stock_abbr\":\"药明康德\",\"net_profit_margin\":36.752038061},{\"stock_abbr\":\"药明康德\",\"net_profit_margin\":36.752038061},{\"stock_abbr\":\"药明康德\",\"net_profit_margin\":36.752038061},{\"stock_abbr\":\"药明康德\",\"net_profit_margin\":36.752038061},{\"stock_abbr\":\"药明康德\",\"net_profit_margin\":36.752038061},{\"stock_abbr\":\"药明康德\",\"net_profit_margin\":36.752038061},{\"stock_abbr\":\"药明康德\",\"net_profit_margin\":36.752038061},{\"stock_abbr\":\"药明康德\",\"net_profit_margin\":36.752038061},{\"stock_abbr\":\"药明康德\",\"net_profit_margin\":36.752038061},{\"stock_abbr\":\"药明康德\",\"net_profit_margin\":36.752038061},{\"stock_abbr\":\"药明康德\",\"net_profit_margin\":36.752038061},{\"stock_abbr\":\"药明康德\",\"net_profit_margin\":36.752038061},{\"stock_abbr\":\"药明康德\",\"net_profit_margin\":36.752038061},{\"stock_abbr\":\"药明康德\",\"net_profit_margin\":36.752038061},{\"stock_abbr\":\"药明康德\",\"net_profit_margin\":36.752038061},{\"stock_abbr\":\"迈普医学\",\"net_profit_margin\":30.4355711313},{\"stock_abbr\":\"迈普医学\",\"net_profit_margin\":30.4355711313},{\"stock_abbr\":\"迈普医学\",\"net_profit_margin\":30.4355711313},{\"stock_abbr\":\"迈普医学\",\"net_profit_margin\":30.4355711313}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2025年第三季度销售净利率超过20%的公司",
+    "x_field": null,
+    "y_fields": [
+      "net_profit_margin"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": "net_profit_margin",
+    "sort_ascending": false,
+    "top_n": 15,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B3009",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "2025年第三季度销售净利率超过20%的公司",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 50,
+      "preview_rows": [
+        {
+          "stock_abbr": "药明康德",
+          "net_profit_margin": 36.75203806096622
+        },
+        {
+          "stock_abbr": "药明康德",
+          "net_profit_margin": 36.75203806096622
+        },
+        {
+          "stock_abbr": "药明康德",
+          "net_profit_margin": 36.75203806096622
+        },
+        {
+          "stock_abbr": "药明康德",
+          "net_profit_margin": 36.75203806096622
+        },
+        {
+          "stock_abbr": "药明康德",
+          "net_profit_margin": 36.75203806096622
+        },
+        {
+          "stock_abbr": "药明康德",
+          "net_profit_margin": 36.75203806096622
+        },
+        {
+          "stock_abbr": "药明康德",
+          "net_profit_margin": 36.75203806096622
+        },
+        {
+          "stock_abbr": "药明康德",
+          "net_profit_margin": 36.75203806096622
+        },
+        {
+          "stock_abbr": "药明康德",
+          "net_profit_margin": 36.75203806096622
+        },
+        {
+          "stock_abbr": "药明康德",
+          "net_profit_margin": 36.75203806096622
+        },
+        {
+          "stock_abbr": "药明康德",
+          "net_profit_margin": 36.75203806096622
+        },
+        {
+          "stock_abbr": "药明康德",
+          "net_profit_margin": 36.75203806096622
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "net_profit_margin",
+      "sort_ascending": false,
+      "top_n": 15,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "net_profit_margin",
+        "data_type": "quantitative",
+        "label": "销售净利率",
+        "unit": "%"
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B3009_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B3009_1.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT stock_abbr, net_profit_margin FROM financials_view WHERE report_period = '2025Q3' AND net_profit_margin > 20.0 ORDER BY net_profit_margin DESC",
+      "value_fields": [
+        "net_profit_margin"
+      ],
+      "value_labels": [
+        "销售净利率"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "net_profit_margin"
+        ],
+        "category_field": "stock_abbr",
+        "sort_by": "net_profit_margin",
+        "sort_ascending": false,
+        "top_n": 15
+      },
+      "category_aggregate": "max"
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs_test/task2_langgraph/artifacts/chart_specs/B3009_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B3009_1.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "2025年第三季度，销售净利率（净利润/营业总收入*100）超过20%的公司有哪些？请列出简称和销售净利率",
+      "A": {
+        "content": "根据查询结果，2025年第三季度销售净利率超过20%的公司有药明康德和迈普医学。具体如下：\n*   药明康德：销售净利率为36.75%\n*   迈普医学：销售净利率为30.44%\n\n（注：查询结果中存在大量重复行，以上为去重后的公司名单。）",
+        "image": [
+          "./result/B3009_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"2025年第三季度，销售净利率（净利润/营业总收入*100）超过20%的公司有哪些？请列出简称和销售净利率\", \"A\": {\"content\": \"根据查询结果，2025年第三季度销售净利率超过20%的公司有药明康德和迈普医学。具体如下：\\n*   药明康德：销售净利率为36.75%\\n*   迈普医学：销售净利率为30.44%\\n\\n（注：查询结果中存在大量重复行，以上为去重后的公司名单。）\", \"image\": [\"./result/B3009_1.jpg\"]}}]",
+  "notes": [
+    "查询计划要求筛选2025Q3报告期，销售净利率超过20%的公司。字段net_profit_margin直接对应销售净利率（百分比值），因此直接比较>20.0。按降序排列以突出高利润率公司。"
+  ],
+  "final_status": "ok"
+}

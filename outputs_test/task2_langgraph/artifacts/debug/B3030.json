@@ -1,0 +1,303 @@
+{
+  "question_id": "B3030",
+  "question_type": "数据基本查询",
+  "raw_question": "百克生物2025年第三季度短期借款和货币资金金额各是多少",
+  "raw_question_json": "[{\"Q\":\"百克生物2025年第三季度短期借款和货币资金金额各是多少\"}]",
+  "parsed_slots": {
+    "companies": [
+      "百克生物"
+    ],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "货币资金",
+      "短期借款"
+    ],
+    "chart_type": null,
+    "intent_type": "single_company_metric",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "single_company_metric",
+    "companies": [
+      "百克生物"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "短期借款",
+      "货币资金"
+    ],
+    "chart_type": null,
+    "top_n": null,
+    "threshold": null,
+    "question": "百克生物2025年第三季度短期借款和货币资金金额各是多少",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT stock_code, stock_abbr, report_period, liability_short_term_loans AS 短期借款, asset_cash_and_cash_equivalents AS 货币资金 FROM financials_view WHERE stock_abbr = '百克生物' AND report_period = '2025Q3'",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, report_period, liability_short_term_loans AS 短期借款, asset_cash_and_cash_equivalents AS 货币资金 FROM financials_view WHERE stock_abbr = '百克生物' AND report_period = '2025Q3'"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 16,
+  "result_rows": [
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "短期借款": 20418.641091,
+      "货币资金": 15743.978829
+    },
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "短期借款": 20418.641091,
+      "货币资金": 15743.978829
+    },
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "短期借款": 20418.641091,
+      "货币资金": 15743.978829
+    },
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "短期借款": 20418.641091,
+      "货币资金": 15743.978829
+    },
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "短期借款": 20418.641091,
+      "货币资金": 15743.978829
+    },
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "短期借款": 20418.641091,
+      "货币资金": 15743.978829
+    },
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "短期借款": 20418.641091,
+      "货币资金": 15743.978829
+    },
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "短期借款": 20418.641091,
+      "货币资金": 15743.978829
+    },
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "短期借款": 20418.641091,
+      "货币资金": 15743.978829
+    },
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "短期借款": 20418.641091,
+      "货币资金": 15743.978829
+    },
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "短期借款": 20418.641091,
+      "货币资金": 15743.978829
+    },
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "短期借款": 20418.641091,
+      "货币资金": 15743.978829
+    },
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "短期借款": 20418.641091,
+      "货币资金": 15743.978829
+    },
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "短期借款": 20418.641091,
+      "货币资金": 15743.978829
+    },
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "短期借款": 20418.641091,
+      "货币资金": 15743.978829
+    },
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "短期借款": 20418.641091,
+      "货币资金": 15743.978829
+    }
+  ],
+  "context_companies": [
+    "百克生物"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "短期借款": 20418.641091,
+      "货币资金": 15743.978829
+    },
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "短期借款": 20418.641091,
+      "货币资金": 15743.978829
+    },
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "短期借款": 20418.641091,
+      "货币资金": 15743.978829
+    },
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "短期借款": 20418.641091,
+      "货币资金": 15743.978829
+    },
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "短期借款": 20418.641091,
+      "货币资金": 15743.978829
+    },
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "短期借款": 20418.641091,
+      "货币资金": 15743.978829
+    },
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "短期借款": 20418.641091,
+      "货币资金": 15743.978829
+    },
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "短期借款": 20418.641091,
+      "货币资金": 15743.978829
+    },
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "短期借款": 20418.641091,
+      "货币资金": 15743.978829
+    },
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "短期借款": 20418.641091,
+      "货币资金": 15743.978829
+    },
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "短期借款": 20418.641091,
+      "货币资金": 15743.978829
+    },
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "短期借款": 20418.641091,
+      "货币资金": 15743.978829
+    },
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "短期借款": 20418.641091,
+      "货币资金": 15743.978829
+    },
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "短期借款": 20418.641091,
+      "货币资金": 15743.978829
+    },
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "短期借款": 20418.641091,
+      "货币资金": 15743.978829
+    },
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "短期借款": 20418.641091,
+      "货币资金": 15743.978829
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"688276\",\"stock_abbr\":\"百克生物\",\"report_period\":\"2025Q3\",\"短期借款\":20418.641091,\"货币资金\":15743.978829},{\"stock_code\":\"688276\",\"stock_abbr\":\"百克生物\",\"report_period\":\"2025Q3\",\"短期借款\":20418.641091,\"货币资金\":15743.978829},{\"stock_code\":\"688276\",\"stock_abbr\":\"百克生物\",\"report_period\":\"2025Q3\",\"短期借款\":20418.641091,\"货币资金\":15743.978829},{\"stock_code\":\"688276\",\"stock_abbr\":\"百克生物\",\"report_period\":\"2025Q3\",\"短期借款\":20418.641091,\"货币资金\":15743.978829},{\"stock_code\":\"688276\",\"stock_abbr\":\"百克生物\",\"report_period\":\"2025Q3\",\"短期借款\":20418.641091,\"货币资金\":15743.978829},{\"stock_code\":\"688276\",\"stock_abbr\":\"百克生物\",\"report_period\":\"2025Q3\",\"短期借款\":20418.641091,\"货币资金\":15743.978829},{\"stock_code\":\"688276\",\"stock_abbr\":\"百克生物\",\"report_period\":\"2025Q3\",\"短期借款\":20418.641091,\"货币资金\":15743.978829},{\"stock_code\":\"688276\",\"stock_abbr\":\"百克生物\",\"report_period\":\"2025Q3\",\"短期借款\":20418.641091,\"货币资金\":15743.978829},{\"stock_code\":\"688276\",\"stock_abbr\":\"百克生物\",\"report_period\":\"2025Q3\",\"短期借款\":20418.641091,\"货币资金\":15743.978829},{\"stock_code\":\"688276\",\"stock_abbr\":\"百克生物\",\"report_period\":\"2025Q3\",\"短期借款\":20418.641091,\"货币资金\":15743.978829},{\"stock_code\":\"688276\",\"stock_abbr\":\"百克生物\",\"report_period\":\"2025Q3\",\"短期借款\":20418.641091,\"货币资金\":15743.978829},{\"stock_code\":\"688276\",\"stock_abbr\":\"百克生物\",\"report_period\":\"2025Q3\",\"短期借款\":20418.641091,\"货币资金\":15743.978829},{\"stock_code\":\"688276\",\"stock_abbr\":\"百克生物\",\"report_period\":\"2025Q3\",\"短期借款\":20418.641091,\"货币资金\":15743.978829},{\"stock_code\":\"688276\",\"stock_abbr\":\"百克生物\",\"report_period\":\"2025Q3\",\"短期借款\":20418.641091,\"货币资金\":15743.978829},{\"stock_code\":\"688276\",\"stock_abbr\":\"百克生物\",\"report_period\":\"2025Q3\",\"短期借款\":20418.641091,\"货币资金\":15743.978829},{\"stock_code\":\"688276\",\"stock_abbr\":\"百克生物\",\"report_period\":\"2025Q3\",\"短期借款\":20418.641091,\"货币资金\":15743.978829}]",
+  "chart_plan": {},
+  "chart_spec": {},
+  "all_chart_specs": [],
+  "all_chart_paths": [],
+  "graph_formats": [],
+  "turn_answers": [
+    {
+      "Q": "百克生物2025年第三季度短期借款和货币资金金额各是多少",
+      "A": {
+        "content": "百克生物（股票代码 688276）在 2025 年第三季度报告期，短期借款金额为 20,418.64 万元，货币资金金额为 15,743.98 万元。",
+        "image": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"百克生物2025年第三季度短期借款和货币资金金额各是多少\", \"A\": {\"content\": \"百克生物（股票代码 688276）在 2025 年第三季度报告期，短期借款金额为 20,418.64 万元，货币资金金额为 15,743.98 万元。\", \"image\": []}}]",
+  "notes": [
+    "根据 query_plan，公司为百克生物，报告期为2025Q3，指标为短期借款和货币资金。对应字段为 liability_short_term_loans 和 asset_cash_and_cash_equivalents。使用等值条件筛选。"
+  ],
+  "final_status": "ok"
+}

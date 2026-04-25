@@ -1,0 +1,145 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B3018",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "百诚医药2025Q3与2024Q3营业成本对比",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 32,
+    "preview_rows": [
+      {
+        "stock_code": "301096",
+        "stock_abbr": "百诚医药",
+        "report_period": "2025Q3",
+        "营业成本": 26015.433201
+      },
+      {
+        "stock_code": "301096",
+        "stock_abbr": "百诚医药",
+        "report_period": "2025Q3",
+        "营业成本": 26015.433201
+      },
+      {
+        "stock_code": "301096",
+        "stock_abbr": "百诚医药",
+        "report_period": "2025Q3",
+        "营业成本": 26015.433201
+      },
+      {
+        "stock_code": "301096",
+        "stock_abbr": "百诚医药",
+        "report_period": "2025Q3",
+        "营业成本": 26015.433201
+      },
+      {
+        "stock_code": "301096",
+        "stock_abbr": "百诚医药",
+        "report_period": "2025Q3",
+        "营业成本": 26015.433201
+      },
+      {
+        "stock_code": "301096",
+        "stock_abbr": "百诚医药",
+        "report_period": "2025Q3",
+        "营业成本": 26015.433201
+      },
+      {
+        "stock_code": "301096",
+        "stock_abbr": "百诚医药",
+        "report_period": "2025Q3",
+        "营业成本": 26015.433201
+      },
+      {
+        "stock_code": "301096",
+        "stock_abbr": "百诚医药",
+        "report_period": "2025Q3",
+        "营业成本": 26015.433201
+      },
+      {
+        "stock_code": "301096",
+        "stock_abbr": "百诚医药",
+        "report_period": "2025Q3",
+        "营业成本": 26015.433201
+      },
+      {
+        "stock_code": "301096",
+        "stock_abbr": "百诚医药",
+        "report_period": "2025Q3",
+        "营业成本": 26015.433201
+      },
+      {
+        "stock_code": "301096",
+        "stock_abbr": "百诚医药",
+        "report_period": "2025Q3",
+        "营业成本": 26015.433201
+      },
+      {
+        "stock_code": "301096",
+        "stock_abbr": "百诚医药",
+        "report_period": "2025Q3",
+        "营业成本": 26015.433201
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "stock_code",
+    "sort_ascending": true,
+    "top_n": 10,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "营业成本",
+      "data_type": "quantitative",
+      "label": "营业成本",
+      "unit": null
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    },
+    "series": {
+      "field": "report_period",
+      "data_type": "nominal",
+      "label": "报告期",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": true,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B3018_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B3018_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT stock_code, stock_abbr, report_period, operating_expense_cost_of_sales AS 营业成本 FROM financials_view WHERE stock_abbr = '百诚医药' AND report_period IN ('2025Q3', '2024Q3') ORDER BY report_period DESC",
+    "value_fields": [
+      "营业成本"
+    ],
+    "value_labels": [
+      "营业成本"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "营业成本"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": "stock_code",
+      "sort_ascending": true,
+      "top_n": 10
+    },
+    "category_aggregate": "max"
+  }
+}

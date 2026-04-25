@@ -1,0 +1,1123 @@
+{
+  "question_id": "B3033",
+  "question_type": "数据统计分析查询",
+  "raw_question": "计算2025年第三季度10家公司的净利润中位数，找出净利润高于中位数的公司",
+  "raw_question_json": "[{\"Q\":\"计算2025年第三季度10家公司的净利润中位数，找出净利润高于中位数的公司\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "净利润"
+    ],
+    "chart_type": null,
+    "intent_type": "period_stat",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "period_stat",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "净利润"
+    ],
+    "chart_type": null,
+    "top_n": null,
+    "threshold": null,
+    "question": "计算2025年第三季度10家公司的净利润中位数，找出净利润高于中位数的公司",
+    "should_draw": false,
+    "needs_clarification": true,
+    "missing_slots": [
+      "company"
+    ]
+  },
+  "sql": "WITH company_net_profit AS (\n    SELECT stock_code, stock_abbr, net_profit\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n    AND net_profit IS NOT NULL\n    ORDER BY net_profit\n),\nmedian_calc AS (\n    SELECT net_profit AS median_net_profit\n    FROM (\n        SELECT net_profit,\n               ROW_NUMBER() OVER (ORDER BY net_profit) AS rn,\n               COUNT(*) OVER () AS total\n        FROM company_net_profit\n    )\n    WHERE rn IN ((total + 1) / 2, (total + 2) / 2)\n)\nSELECT cnp.stock_code, cnp.stock_abbr, cnp.net_profit, mc.median_net_profit\nFROM company_net_profit cnp\nCROSS JOIN median_calc mc\nWHERE cnp.net_profit > mc.median_net_profit\nORDER BY cnp.net_profit DESC;",
+  "sql_history": [
+    "WITH company_net_profit AS (\n    SELECT stock_code, stock_abbr, net_profit\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n    AND net_profit IS NOT NULL\n    ORDER BY net_profit\n),\nmedian_calc AS (\n    SELECT net_profit AS median_net_profit\n    FROM (\n        SELECT net_profit,\n               ROW_NUMBER() OVER (ORDER BY net_profit) AS rn,\n               COUNT(*) OVER () AS total\n        FROM company_net_profit\n    )\n    WHERE rn IN ((total + 1) / 2, (total + 2) / 2)\n)\nSELECT cnp.stock_code, cnp.stock_abbr, cnp.net_profit, mc.median_net_profit\nFROM company_net_profit cnp\nCROSS JOIN median_calc mc\nWHERE cnp.net_profit > mc.median_net_profit\nORDER BY cnp.net_profit DESC;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 144,
+  "result_rows": [
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "net_profit": 102043.41578099999,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "net_profit": 102043.41578099999,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "net_profit": 102043.41578099999,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "net_profit": 102043.41578099999,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "net_profit": 102043.41578099999,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "net_profit": 102043.41578099999,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "net_profit": 102043.41578099999,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "net_profit": 102043.41578099999,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "net_profit": 102043.41578099999,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "net_profit": 102043.41578099999,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "net_profit": 102043.41578099999,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "net_profit": 102043.41578099999,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "net_profit": 102043.41578099999,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "net_profit": 102043.41578099999,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "net_profit": 102043.41578099999,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "net_profit": 102043.41578099999,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "net_profit": 102043.41578099999,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "net_profit": 102043.41578099999,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "net_profit": 102043.41578099999,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "net_profit": 102043.41578099999,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "net_profit": 102043.41578099999,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "net_profit": 102043.41578099999,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "net_profit": 102043.41578099999,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "net_profit": 102043.41578099999,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "net_profit": 102043.41578099999,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "net_profit": 102043.41578099999,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "net_profit": 102043.41578099999,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "net_profit": 102043.41578099999,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "net_profit": 102043.41578099999,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "net_profit": 102043.41578099999,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "net_profit": 102043.41578099999,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "net_profit": 102043.41578099999,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "net_profit": 80024.521512,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "net_profit": 80024.521512,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "net_profit": 80024.521512,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "net_profit": 80024.521512,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "net_profit": 80024.521512,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "net_profit": 80024.521512,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "net_profit": 80024.521512,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "net_profit": 80024.521512,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "net_profit": 80024.521512,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "net_profit": 80024.521512,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "net_profit": 80024.521512,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "net_profit": 80024.521512,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "net_profit": 80024.521512,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "net_profit": 80024.521512,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "net_profit": 80024.521512,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "net_profit": 80024.521512,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "net_profit": 80024.521512,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "net_profit": 80024.521512,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "net_profit": 80024.521512,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "net_profit": 80024.521512,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "net_profit": 80024.521512,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "net_profit": 80024.521512,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "net_profit": 80024.521512,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "net_profit": 80024.521512,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "net_profit": 80024.521512,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "net_profit": 80024.521512,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "net_profit": 80024.521512,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "net_profit": 80024.521512,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "net_profit": 80024.521512,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "net_profit": 80024.521512,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "net_profit": 80024.521512,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "net_profit": 80024.521512,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "net_profit": 13242.6377,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "net_profit": 13242.6377,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "net_profit": 13242.6377,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "net_profit": 13242.6377,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "net_profit": 13242.6377,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "net_profit": 13242.6377,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "net_profit": 13242.6377,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "net_profit": 13242.6377,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "net_profit": 13242.6377,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "net_profit": 13242.6377,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "net_profit": 13242.6377,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "net_profit": 13242.6377,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "net_profit": 13242.6377,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "net_profit": 13242.6377,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "net_profit": 13242.6377,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "net_profit": 13242.6377,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "net_profit": 13242.6377,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "net_profit": 13242.6377,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "net_profit": 13242.6377,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "net_profit": 13242.6377,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "net_profit": 13242.6377,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "net_profit": 13242.6377,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "net_profit": 13242.6377,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "net_profit": 13242.6377,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "net_profit": 13242.6377,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "net_profit": 13242.6377,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "net_profit": 13242.6377,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "net_profit": 13242.6377,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "net_profit": 13242.6377,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "net_profit": 13242.6377,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "net_profit": 13242.6377,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "net_profit": 13242.6377,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "net_profit": 9287.218812000001,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "net_profit": 9287.218812000001,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "net_profit": 9287.218812000001,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "net_profit": 9287.218812000001,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "net_profit": 9287.218812000001,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "net_profit": 9287.218812000001,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "net_profit": 9287.218812000001,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "net_profit": 9287.218812000001,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "net_profit": 9287.218812000001,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "net_profit": 9287.218812000001,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "net_profit": 9287.218812000001,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "net_profit": 9287.218812000001,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "net_profit": 9287.218812000001,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "net_profit": 9287.218812000001,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "net_profit": 9287.218812000001,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "net_profit": 9287.218812000001,
+      "median_net_profit": 8070.6068
+    }
+  ],
+  "context_companies": [
+    "药明康德",
+    "泰格医药",
+    "凯莱英",
+    "百普赛斯",
+    "成都先导"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 9287.218812000001
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 8070.6068
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "net_profit": 1207551.295692,
+      "median_net_profit": 9287.218812000001
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"603259\",\"stock_abbr\":\"药明康德\",\"net_profit\":1207551.2956920001,\"median_net_profit\":8070.6068},{\"stock_code\":\"603259\",\"stock_abbr\":\"药明康德\",\"net_profit\":1207551.2956920001,\"median_net_profit\":9287.218812},{\"stock_code\":\"603259\",\"stock_abbr\":\"药明康德\",\"net_profit\":1207551.2956920001,\"median_net_profit\":8070.6068},{\"stock_code\":\"603259\",\"stock_abbr\":\"药明康德\",\"net_profit\":1207551.2956920001,\"median_net_profit\":9287.218812},{\"stock_code\":\"603259\",\"stock_abbr\":\"药明康德\",\"net_profit\":1207551.2956920001,\"median_net_profit\":8070.6068},{\"stock_code\":\"603259\",\"stock_abbr\":\"药明康德\",\"net_profit\":1207551.2956920001,\"median_net_profit\":9287.218812},{\"stock_code\":\"603259\",\"stock_abbr\":\"药明康德\",\"net_profit\":1207551.2956920001,\"median_net_profit\":8070.6068},{\"stock_code\":\"603259\",\"stock_abbr\":\"药明康德\",\"net_profit\":1207551.2956920001,\"median_net_profit\":9287.218812},{\"stock_code\":\"603259\",\"stock_abbr\":\"药明康德\",\"net_profit\":1207551.2956920001,\"median_net_profit\":8070.6068},{\"stock_code\":\"603259\",\"stock_abbr\":\"药明康德\",\"net_profit\":1207551.2956920001,\"median_net_profit\":9287.218812},{\"stock_code\":\"603259\",\"stock_abbr\":\"药明康德\",\"net_profit\":1207551.2956920001,\"median_net_profit\":8070.6068},{\"stock_code\":\"603259\",\"stock_abbr\":\"药明康德\",\"net_profit\":1207551.2956920001,\"median_net_profit\":9287.218812},{\"stock_code\":\"603259\",\"stock_abbr\":\"药明康德\",\"net_profit\":1207551.2956920001,\"median_net_profit\":8070.6068},{\"stock_code\":\"603259\",\"stock_abbr\":\"药明康德\",\"net_profit\":1207551.2956920001,\"median_net_profit\":9287.218812},{\"stock_code\":\"603259\",\"stock_abbr\":\"药明康德\",\"net_profit\":1207551.2956920001,\"median_net_profit\":8070.6068},{\"stock_code\":\"603259\",\"stock_abbr\":\"药明康德\",\"net_profit\":1207551.2956920001,\"median_net_profit\":9287.218812},{\"stock_code\":\"603259\",\"stock_abbr\":\"药明康德\",\"net_profit\":1207551.2956920001,\"median_net_profit\":8070.6068},{\"stock_code\":\"603259\",\"stock_abbr\":\"药明康德\",\"net_profit\":1207551.2956920001,\"median_net_profit\":9287.218812},{\"stock_code\":\"603259\",\"stock_abbr\":\"药明康德\",\"net_profit\":1207551.2956920001,\"median_net_profit\":8070.6068},{\"stock_code\":\"603259\",\"stock_abbr\":\"药明康德\",\"net_profit\":1207551.2956920001,\"median_net_profit\":9287.218812}]",
+  "chart_plan": {},
+  "chart_spec": {},
+  "all_chart_specs": [],
+  "all_chart_paths": [],
+  "graph_formats": [],
+  "turn_answers": [
+    {
+      "Q": "计算2025年第三季度10家公司的净利润中位数，找出净利润高于中位数的公司",
+      "A": {
+        "content": "根据查询结果，2025年第三季度10家公司的净利润中位数有两个值：8070.6068万元和9287.218812万元。净利润高于中位数的公司只有一家：药明康德（股票代码603259），其净利润为1,207,551.295692万元。",
+        "image": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"计算2025年第三季度10家公司的净利润中位数，找出净利润高于中位数的公司\", \"A\": {\"content\": \"根据查询结果，2025年第三季度10家公司的净利润中位数有两个值：8070.6068万元和9287.218812万元。净利润高于中位数的公司只有一家：药明康德（股票代码603259），其净利润为1,207,551.295692万元。\", \"image\": []}}]",
+  "notes": [
+    "Query plan indicates missing company list, but question explicitly mentions '10家公司'. Since no specific companies are provided, we assume the user wants to consider all companies in the dataset for 2025Q3. We calculate the median net profit across all companies with non-null net profit in 2025Q3 using window functions (ROW_NUMBER and COUNT) to emulate median in SQLite. Then we find companies whose net profit is above that median. The result includes stock_code, stock_abbr, net_profit, and the median value for reference."
+  ],
+  "final_status": "ok"
+}

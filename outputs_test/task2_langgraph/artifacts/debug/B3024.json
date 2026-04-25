@@ -1,0 +1,524 @@
+{
+  "question_id": "B3024",
+  "question_type": "数据基本查询",
+  "raw_question": "泰格医药2022-2025年各报告期扣非净利润（万元），请按时间顺序列出",
+  "raw_question_json": "[{\"Q\":\"泰格医药2022-2025年各报告期扣非净利润（万元），请按时间顺序列出\"}]",
+  "parsed_slots": {
+    "companies": [
+      "泰格医药"
+    ],
+    "stock_codes": [],
+    "periods": [
+      "2025FY"
+    ],
+    "metrics": [
+      "净利润",
+      "扣非净利润"
+    ],
+    "chart_type": null,
+    "intent_type": "single_company_metric",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "single_company_metric",
+    "companies": [
+      "泰格医药"
+    ],
+    "periods": [
+      "2022FY",
+      "2023FY",
+      "2024FY",
+      "2025FY"
+    ],
+    "metrics": [
+      "扣非净利润"
+    ],
+    "chart_type": "table",
+    "top_n": null,
+    "threshold": null,
+    "question": "泰格医药2022-2025年各报告期扣非净利润（万元），请按时间顺序列出",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT report_period, net_profit_excl_non_recurring FROM financials_view WHERE stock_abbr = '泰格医药' AND report_period IN ('2022FY', '2023FY', '2024FY', '2025FY') ORDER BY report_period",
+  "sql_history": [
+    "SELECT report_period, net_profit_excl_non_recurring FROM financials_view WHERE stock_abbr = '泰格医药' AND report_period IN ('2022FY', '2023FY', '2024FY', '2025FY') ORDER BY report_period"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 48,
+  "result_rows": [
+    {
+      "report_period": "2022FY",
+      "net_profit_excl_non_recurring": 153951.978835
+    },
+    {
+      "report_period": "2022FY",
+      "net_profit_excl_non_recurring": 153951.978835
+    },
+    {
+      "report_period": "2022FY",
+      "net_profit_excl_non_recurring": 153951.978835
+    },
+    {
+      "report_period": "2022FY",
+      "net_profit_excl_non_recurring": 153951.978835
+    },
+    {
+      "report_period": "2022FY",
+      "net_profit_excl_non_recurring": 153951.978835
+    },
+    {
+      "report_period": "2022FY",
+      "net_profit_excl_non_recurring": 153951.978835
+    },
+    {
+      "report_period": "2022FY",
+      "net_profit_excl_non_recurring": 153951.978835
+    },
+    {
+      "report_period": "2022FY",
+      "net_profit_excl_non_recurring": 153951.978835
+    },
+    {
+      "report_period": "2022FY",
+      "net_profit_excl_non_recurring": 153951.978835
+    },
+    {
+      "report_period": "2022FY",
+      "net_profit_excl_non_recurring": 153951.978835
+    },
+    {
+      "report_period": "2022FY",
+      "net_profit_excl_non_recurring": 153951.978835
+    },
+    {
+      "report_period": "2022FY",
+      "net_profit_excl_non_recurring": 153951.978835
+    },
+    {
+      "report_period": "2022FY",
+      "net_profit_excl_non_recurring": 153951.978835
+    },
+    {
+      "report_period": "2022FY",
+      "net_profit_excl_non_recurring": 153951.978835
+    },
+    {
+      "report_period": "2022FY",
+      "net_profit_excl_non_recurring": 153951.978835
+    },
+    {
+      "report_period": "2022FY",
+      "net_profit_excl_non_recurring": 153951.978835
+    },
+    {
+      "report_period": "2023FY",
+      "net_profit_excl_non_recurring": 147724.20533199998
+    },
+    {
+      "report_period": "2023FY",
+      "net_profit_excl_non_recurring": 147724.20533199998
+    },
+    {
+      "report_period": "2023FY",
+      "net_profit_excl_non_recurring": 147724.20533199998
+    },
+    {
+      "report_period": "2023FY",
+      "net_profit_excl_non_recurring": 147724.20533199998
+    },
+    {
+      "report_period": "2023FY",
+      "net_profit_excl_non_recurring": 147724.20533199998
+    },
+    {
+      "report_period": "2023FY",
+      "net_profit_excl_non_recurring": 147724.20533199998
+    },
+    {
+      "report_period": "2023FY",
+      "net_profit_excl_non_recurring": 147724.20533199998
+    },
+    {
+      "report_period": "2023FY",
+      "net_profit_excl_non_recurring": 147724.20533199998
+    },
+    {
+      "report_period": "2023FY",
+      "net_profit_excl_non_recurring": 147724.20533199998
+    },
+    {
+      "report_period": "2023FY",
+      "net_profit_excl_non_recurring": 147724.20533199998
+    },
+    {
+      "report_period": "2023FY",
+      "net_profit_excl_non_recurring": 147724.20533199998
+    },
+    {
+      "report_period": "2023FY",
+      "net_profit_excl_non_recurring": 147724.20533199998
+    },
+    {
+      "report_period": "2023FY",
+      "net_profit_excl_non_recurring": 147724.20533199998
+    },
+    {
+      "report_period": "2023FY",
+      "net_profit_excl_non_recurring": 147724.20533199998
+    },
+    {
+      "report_period": "2023FY",
+      "net_profit_excl_non_recurring": 147724.20533199998
+    },
+    {
+      "report_period": "2023FY",
+      "net_profit_excl_non_recurring": 147724.20533199998
+    },
+    {
+      "report_period": "2024FY",
+      "net_profit_excl_non_recurring": 85489.542522
+    },
+    {
+      "report_period": "2024FY",
+      "net_profit_excl_non_recurring": 85489.542522
+    },
+    {
+      "report_period": "2024FY",
+      "net_profit_excl_non_recurring": 85489.542522
+    },
+    {
+      "report_period": "2024FY",
+      "net_profit_excl_non_recurring": 85489.542522
+    },
+    {
+      "report_period": "2024FY",
+      "net_profit_excl_non_recurring": 85489.542522
+    },
+    {
+      "report_period": "2024FY",
+      "net_profit_excl_non_recurring": 85489.542522
+    },
+    {
+      "report_period": "2024FY",
+      "net_profit_excl_non_recurring": 85489.542522
+    },
+    {
+      "report_period": "2024FY",
+      "net_profit_excl_non_recurring": 85489.542522
+    },
+    {
+      "report_period": "2024FY",
+      "net_profit_excl_non_recurring": 85489.542522
+    },
+    {
+      "report_period": "2024FY",
+      "net_profit_excl_non_recurring": 85489.542522
+    },
+    {
+      "report_period": "2024FY",
+      "net_profit_excl_non_recurring": 85489.542522
+    },
+    {
+      "report_period": "2024FY",
+      "net_profit_excl_non_recurring": 85489.542522
+    },
+    {
+      "report_period": "2024FY",
+      "net_profit_excl_non_recurring": 85489.542522
+    },
+    {
+      "report_period": "2024FY",
+      "net_profit_excl_non_recurring": 85489.542522
+    },
+    {
+      "report_period": "2024FY",
+      "net_profit_excl_non_recurring": 85489.542522
+    },
+    {
+      "report_period": "2024FY",
+      "net_profit_excl_non_recurring": 85489.542522
+    }
+  ],
+  "context_companies": [],
+  "context_rows": [
+    {
+      "report_period": "2022FY",
+      "net_profit_excl_non_recurring": 153951.978835
+    },
+    {
+      "report_period": "2022FY",
+      "net_profit_excl_non_recurring": 153951.978835
+    },
+    {
+      "report_period": "2022FY",
+      "net_profit_excl_non_recurring": 153951.978835
+    },
+    {
+      "report_period": "2022FY",
+      "net_profit_excl_non_recurring": 153951.978835
+    },
+    {
+      "report_period": "2022FY",
+      "net_profit_excl_non_recurring": 153951.978835
+    },
+    {
+      "report_period": "2022FY",
+      "net_profit_excl_non_recurring": 153951.978835
+    },
+    {
+      "report_period": "2022FY",
+      "net_profit_excl_non_recurring": 153951.978835
+    },
+    {
+      "report_period": "2022FY",
+      "net_profit_excl_non_recurring": 153951.978835
+    },
+    {
+      "report_period": "2022FY",
+      "net_profit_excl_non_recurring": 153951.978835
+    },
+    {
+      "report_period": "2022FY",
+      "net_profit_excl_non_recurring": 153951.978835
+    },
+    {
+      "report_period": "2022FY",
+      "net_profit_excl_non_recurring": 153951.978835
+    },
+    {
+      "report_period": "2022FY",
+      "net_profit_excl_non_recurring": 153951.978835
+    },
+    {
+      "report_period": "2022FY",
+      "net_profit_excl_non_recurring": 153951.978835
+    },
+    {
+      "report_period": "2022FY",
+      "net_profit_excl_non_recurring": 153951.978835
+    },
+    {
+      "report_period": "2022FY",
+      "net_profit_excl_non_recurring": 153951.978835
+    },
+    {
+      "report_period": "2022FY",
+      "net_profit_excl_non_recurring": 153951.978835
+    },
+    {
+      "report_period": "2023FY",
+      "net_profit_excl_non_recurring": 147724.20533199998
+    },
+    {
+      "report_period": "2023FY",
+      "net_profit_excl_non_recurring": 147724.20533199998
+    },
+    {
+      "report_period": "2023FY",
+      "net_profit_excl_non_recurring": 147724.20533199998
+    },
+    {
+      "report_period": "2023FY",
+      "net_profit_excl_non_recurring": 147724.20533199998
+    },
+    {
+      "report_period": "2023FY",
+      "net_profit_excl_non_recurring": 147724.20533199998
+    },
+    {
+      "report_period": "2023FY",
+      "net_profit_excl_non_recurring": 147724.20533199998
+    },
+    {
+      "report_period": "2023FY",
+      "net_profit_excl_non_recurring": 147724.20533199998
+    },
+    {
+      "report_period": "2023FY",
+      "net_profit_excl_non_recurring": 147724.20533199998
+    },
+    {
+      "report_period": "2023FY",
+      "net_profit_excl_non_recurring": 147724.20533199998
+    },
+    {
+      "report_period": "2023FY",
+      "net_profit_excl_non_recurring": 147724.20533199998
+    },
+    {
+      "report_period": "2023FY",
+      "net_profit_excl_non_recurring": 147724.20533199998
+    },
+    {
+      "report_period": "2023FY",
+      "net_profit_excl_non_recurring": 147724.20533199998
+    },
+    {
+      "report_period": "2023FY",
+      "net_profit_excl_non_recurring": 147724.20533199998
+    },
+    {
+      "report_period": "2023FY",
+      "net_profit_excl_non_recurring": 147724.20533199998
+    }
+  ],
+  "result_preview": "[{\"report_period\":\"2022FY\",\"net_profit_excl_non_recurring\":153951.978835},{\"report_period\":\"2022FY\",\"net_profit_excl_non_recurring\":153951.978835},{\"report_period\":\"2022FY\",\"net_profit_excl_non_recurring\":153951.978835},{\"report_period\":\"2022FY\",\"net_profit_excl_non_recurring\":153951.978835},{\"report_period\":\"2022FY\",\"net_profit_excl_non_recurring\":153951.978835},{\"report_period\":\"2022FY\",\"net_profit_excl_non_recurring\":153951.978835},{\"report_period\":\"2022FY\",\"net_profit_excl_non_recurring\":153951.978835},{\"report_period\":\"2022FY\",\"net_profit_excl_non_recurring\":153951.978835},{\"report_period\":\"2022FY\",\"net_profit_excl_non_recurring\":153951.978835},{\"report_period\":\"2022FY\",\"net_profit_excl_non_recurring\":153951.978835},{\"report_period\":\"2022FY\",\"net_profit_excl_non_recurring\":153951.978835},{\"report_period\":\"2022FY\",\"net_profit_excl_non_recurring\":153951.978835},{\"report_period\":\"2022FY\",\"net_profit_excl_non_recurring\":153951.978835},{\"report_period\":\"2022FY\",\"net_profit_excl_non_recurring\":153951.978835},{\"report_period\":\"2022FY\",\"net_profit_excl_non_recurring\":153951.978835},{\"report_period\":\"2022FY\",\"net_profit_excl_non_recurring\":153951.978835},{\"report_period\":\"2023FY\",\"net_profit_excl_non_recurring\":147724.205332},{\"report_period\":\"2023FY\",\"net_profit_excl_non_recurring\":147724.205332},{\"report_period\":\"2023FY\",\"net_profit_excl_non_recurring\":147724.205332},{\"report_period\":\"2023FY\",\"net_profit_excl_non_recurring\":147724.205332}]",
+  "chart_plan": {
+    "chart_type": "line",
+    "title": "泰格医药2022-2025年扣非净利润",
+    "x_field": "report_period",
+    "y_fields": [
+      "net_profit_excl_non_recurring"
+    ],
+    "category_field": null,
+    "sort_by": "report_period",
+    "sort_ascending": true,
+    "top_n": null,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B3024",
+    "image_index": 1,
+    "chart_type": "line",
+    "title": "泰格医药2022-2025年扣非净利润",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 48,
+      "preview_rows": [
+        {
+          "report_period": "2022FY",
+          "net_profit_excl_non_recurring": 153951.978835
+        },
+        {
+          "report_period": "2022FY",
+          "net_profit_excl_non_recurring": 153951.978835
+        },
+        {
+          "report_period": "2022FY",
+          "net_profit_excl_non_recurring": 153951.978835
+        },
+        {
+          "report_period": "2022FY",
+          "net_profit_excl_non_recurring": 153951.978835
+        },
+        {
+          "report_period": "2022FY",
+          "net_profit_excl_non_recurring": 153951.978835
+        },
+        {
+          "report_period": "2022FY",
+          "net_profit_excl_non_recurring": 153951.978835
+        },
+        {
+          "report_period": "2022FY",
+          "net_profit_excl_non_recurring": 153951.978835
+        },
+        {
+          "report_period": "2022FY",
+          "net_profit_excl_non_recurring": 153951.978835
+        },
+        {
+          "report_period": "2022FY",
+          "net_profit_excl_non_recurring": 153951.978835
+        },
+        {
+          "report_period": "2022FY",
+          "net_profit_excl_non_recurring": 153951.978835
+        },
+        {
+          "report_period": "2022FY",
+          "net_profit_excl_non_recurring": 153951.978835
+        },
+        {
+          "report_period": "2022FY",
+          "net_profit_excl_non_recurring": 153951.978835
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "report_period",
+      "sort_ascending": true,
+      "top_n": null,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "net_profit_excl_non_recurring",
+        "data_type": "quantitative",
+        "label": "net_profit_excl_non_recurring",
+        "unit": "万元"
+      },
+      "x": {
+        "field": "report_period",
+        "data_type": "temporal",
+        "label": "报告期",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": false
+    },
+    "output": {
+      "filename": "B3024_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B3024_1.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT report_period, net_profit_excl_non_recurring FROM financials_view WHERE stock_abbr = '泰格医药' AND report_period IN ('2022FY', '2023FY', '2024FY', '2025FY') ORDER BY report_period",
+      "value_fields": [
+        "net_profit_excl_non_recurring"
+      ],
+      "value_labels": [
+        "net_profit_excl_non_recurring"
+      ],
+      "original_chart_plan": {
+        "chart_type": "line",
+        "x_field": "report_period",
+        "y_fields": [
+          "net_profit_excl_non_recurring"
+        ],
+        "category_field": null,
+        "sort_by": "report_period",
+        "sort_ascending": true,
+        "top_n": null
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs_test/task2_langgraph/artifacts/chart_specs/B3024_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B3024_1.jpg"
+  ],
+  "graph_formats": [
+    "折线图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "泰格医药2022-2025年各报告期扣非净利润（万元），请按时间顺序列出",
+      "A": {
+        "content": "泰格医药2022-2025年各报告期扣非净利润（万元）如下：  \n- 2022FY：153,951.98  \n- 2023FY：147,724.21  \n\n注：查询结果中仅包含2022年和2023年的数据，未返回2024年及2025年的扣非净利润。",
+        "image": [
+          "./result/B3024_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"泰格医药2022-2025年各报告期扣非净利润（万元），请按时间顺序列出\", \"A\": {\"content\": \"泰格医药2022-2025年各报告期扣非净利润（万元）如下：  \\n- 2022FY：153,951.98  \\n- 2023FY：147,724.21  \\n\\n注：查询结果中仅包含2022年和2023年的数据，未返回2024年及2025年的扣非净利润。\", \"image\": [\"./result/B3024_1.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，需要查询泰格医药在2022-2025年各报告期的扣非净利润。字段 net_profit_excl_non_recurring 对应扣非净利润，单位为万元。使用 stock_abbr 过滤公司，report_period 过滤报告期，并按时间顺序排序。"
+  ],
+  "final_status": "ok"
+}

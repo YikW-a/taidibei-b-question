@@ -1,0 +1,122 @@
+[
+  {
+    "source_type": "stock",
+    "title": "2025上半年营收同比增长29%，国内需求端持续改善",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/2025上半年营收同比增长29%，国内需求端持续改善.pdf",
+    "publish_date": "2025-08-22 00:00:00.000",
+    "company_or_industry": "百普赛斯",
+    "organization": "国信证券",
+    "snippet": "2025上半年营收同比增长29%，国内需求端持续改善；百普赛斯；国信证券",
+    "score": 7.607598,
+    "metadata_ref": "stock::2025上半年营收同比增长29%，国内需求端持续改善::2025-08-22 00:00:00.000::国信证券::百普赛斯",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.62999
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "2025年前三季度营收同比增长32%，需求端改善驱动",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/2025年前三季度营收同比增长32%，需求端改善驱动.pdf",
+    "publish_date": "2025-11-05 00:00:00.000",
+    "company_or_industry": "百普赛斯",
+    "organization": "国信证券",
+    "snippet": "2025年前三季度营收同比增长32%，需求端改善驱动；百普赛斯；国信证券",
+    "score": 7.0911550000000005,
+    "metadata_ref": "stock::2025年前三季度营收同比增长32%，需求端改善驱动::2025-11-05 00:00:00.000::国信证券::百普赛斯",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.653493
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "全年营收同比增长18.6%，单四季度营收及净利润同比大幅改善",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/全年营收同比增长18.6%，单四季度营收及净利润同比大幅改善.pdf",
+    "publish_date": "2025-04-22 00:00:00.000",
+    "company_or_industry": "百普赛斯",
+    "organization": "国信证券",
+    "snippet": "全年营收同比增长18.6%，单四季度营收及净利润同比大幅改善；百普赛斯；国信证券",
+    "score": 6.967505,
+    "metadata_ref": "stock::全年营收同比增长18.6%，单四季度营收及净利润同比大幅改善::2025-04-22 00:00:00.000::国信证券::百普赛斯",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.62999
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "百普赛斯2025三季报点评：业绩持续高增长，启动赴港上市",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/百普赛斯2025三季报点评：业绩持续高增长，启动赴港上市.pdf",
+    "publish_date": "2025-11-02 00:00:00.000",
+    "company_or_industry": "百普赛斯",
+    "organization": "中国银河",
+    "snippet": "百普赛斯2025三季报点评：业绩持续高增长，启动赴港上市；百普赛斯；中国银河",
+    "score": 5.0,
+    "metadata_ref": "stock::百普赛斯2025三季报点评：业绩持续高增长，启动赴港上市::2025-11-02 00:00:00.000::中国银河::百普赛斯",
+    "score_components": {
+      "metadata": 5.0,
+      "vector": 0.0
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "百普赛斯年报点评：Q4业绩大幅改善，核心业务稳步推进",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/百普赛斯年报点评：Q4业绩大幅改善，核心业务稳步推进.pdf",
+    "publish_date": "2025-04-25 00:00:00.000",
+    "company_or_industry": "百普赛斯",
+    "organization": "太平洋",
+    "snippet": "百普赛斯年报点评：Q4业绩大幅改善，核心业务稳步推进；百普赛斯；太平洋",
+    "score": 4.9499390000000005,
+    "metadata_ref": "stock::百普赛斯年报点评：Q4业绩大幅改善，核心业务稳步推进::2025-04-25 00:00:00.000::太平洋::百普赛斯",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.636127
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "百普赛斯2024年报点评：境外收入维持高增，境内收入逐步恢复",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/百普赛斯2024年报点评：境外收入维持高增，境内收入逐步恢复.pdf",
+    "publish_date": "2025-05-18 00:00:00.000",
+    "company_or_industry": "百普赛斯",
+    "organization": "海通国际",
+    "snippet": "百普赛斯2024年报点评：境外收入维持高增，境内收入逐步恢复；百普赛斯；海通国际",
+    "score": 3.707115,
+    "metadata_ref": "stock::百普赛斯2024年报点评：境外收入维持高增，境内收入逐步恢复::2025-05-18 00:00:00.000::海通国际::百普赛斯",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.707115
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "公司信息更新报告：激励考核目标积极，常态化激励机制加强团队建设",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/公司信息更新报告：激励考核目标积极，常态化激励机制加强团队建设.pdf",
+    "publish_date": "2025-05-29 00:00:00.000",
+    "company_or_industry": "百普赛斯",
+    "organization": "开源证券",
+    "snippet": "公司信息更新报告：激励考核目标积极，常态化激励机制加强团队建设；百普赛斯；开源证券",
+    "score": 3.636899,
+    "metadata_ref": "stock::公司信息更新报告：激励考核目标积极，常态化激励机制加强团队建设::2025-05-29 00:00:00.000::开源证券::百普赛斯",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.636899
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "重组蛋白专家，科研试剂新星",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/重组蛋白专家，科研试剂新星.pdf",
+    "publish_date": "2025-12-31 00:00:00.000",
+    "company_or_industry": "百普赛斯",
+    "organization": "太平洋",
+    "snippet": "重组蛋白专家，科研试剂新星；百普赛斯；太平洋",
+    "score": 3.0,
+    "metadata_ref": "stock::重组蛋白专家，科研试剂新星::2025-12-31 00:00:00.000::太平洋::百普赛斯",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.0
+    }
+  }
+]

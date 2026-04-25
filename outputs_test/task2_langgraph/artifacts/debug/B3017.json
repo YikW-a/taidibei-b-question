@@ -1,0 +1,529 @@
+{
+  "question_id": "B3017",
+  "question_type": "数据统计分析查询",
+  "raw_question": "比较凯莱英、药明康德、泰格医药2025年第三季度的销售毛利率，用条形图展示",
+  "raw_question_json": "[{\"Q\":\"比较凯莱英、药明康德、泰格医药2025年第三季度的销售毛利率，用条形图展示\"}]",
+  "parsed_slots": {
+    "companies": [
+      "药明康德",
+      "泰格医药",
+      "凯莱英"
+    ],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "销售毛利率"
+    ],
+    "chart_type": "bar",
+    "intent_type": "trend_or_chart",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "comparison",
+    "companies": [
+      "凯莱英",
+      "药明康德",
+      "泰格医药"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "销售毛利率"
+    ],
+    "chart_type": "bar",
+    "top_n": null,
+    "threshold": null,
+    "question": "比较凯莱英、药明康德、泰格医药2025年第三季度的销售毛利率，用条形图展示",
+    "should_draw": true,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT stock_abbr, gross_profit_margin FROM financials_view WHERE stock_abbr IN ('凯莱英', '药明康德', '泰格医药') AND report_period = '2025Q3' ORDER BY stock_abbr;",
+  "sql_history": [
+    "SELECT stock_abbr, gross_profit_margin FROM financials_view WHERE stock_abbr IN ('凯莱英', '药明康德', '泰格医药') AND report_period = '2025Q3' ORDER BY stock_abbr;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 48,
+  "result_rows": [
+    {
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749
+    },
+    {
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749
+    },
+    {
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749
+    },
+    {
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749
+    },
+    {
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749
+    },
+    {
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749
+    },
+    {
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749
+    },
+    {
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749
+    },
+    {
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749
+    },
+    {
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749
+    },
+    {
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749
+    },
+    {
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749
+    },
+    {
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749
+    },
+    {
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749
+    },
+    {
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749
+    },
+    {
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "gross_profit_margin": 29.161453501594348
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "gross_profit_margin": 29.161453501594348
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "gross_profit_margin": 29.161453501594348
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "gross_profit_margin": 29.161453501594348
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "gross_profit_margin": 29.161453501594348
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "gross_profit_margin": 29.161453501594348
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "gross_profit_margin": 29.161453501594348
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "gross_profit_margin": 29.161453501594348
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "gross_profit_margin": 29.161453501594348
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "gross_profit_margin": 29.161453501594348
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "gross_profit_margin": 29.161453501594348
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "gross_profit_margin": 29.161453501594348
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "gross_profit_margin": 29.161453501594348
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "gross_profit_margin": 29.161453501594348
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "gross_profit_margin": 29.161453501594348
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "gross_profit_margin": 29.161453501594348
+    },
+    {
+      "stock_abbr": "药明康德",
+      "gross_profit_margin": 46.622485442022935
+    },
+    {
+      "stock_abbr": "药明康德",
+      "gross_profit_margin": 46.622485442022935
+    },
+    {
+      "stock_abbr": "药明康德",
+      "gross_profit_margin": 46.622485442022935
+    },
+    {
+      "stock_abbr": "药明康德",
+      "gross_profit_margin": 46.622485442022935
+    },
+    {
+      "stock_abbr": "药明康德",
+      "gross_profit_margin": 46.622485442022935
+    },
+    {
+      "stock_abbr": "药明康德",
+      "gross_profit_margin": 46.622485442022935
+    },
+    {
+      "stock_abbr": "药明康德",
+      "gross_profit_margin": 46.622485442022935
+    },
+    {
+      "stock_abbr": "药明康德",
+      "gross_profit_margin": 46.622485442022935
+    },
+    {
+      "stock_abbr": "药明康德",
+      "gross_profit_margin": 46.622485442022935
+    },
+    {
+      "stock_abbr": "药明康德",
+      "gross_profit_margin": 46.622485442022935
+    },
+    {
+      "stock_abbr": "药明康德",
+      "gross_profit_margin": 46.622485442022935
+    },
+    {
+      "stock_abbr": "药明康德",
+      "gross_profit_margin": 46.622485442022935
+    },
+    {
+      "stock_abbr": "药明康德",
+      "gross_profit_margin": 46.622485442022935
+    },
+    {
+      "stock_abbr": "药明康德",
+      "gross_profit_margin": 46.622485442022935
+    },
+    {
+      "stock_abbr": "药明康德",
+      "gross_profit_margin": 46.622485442022935
+    },
+    {
+      "stock_abbr": "药明康德",
+      "gross_profit_margin": 46.622485442022935
+    }
+  ],
+  "context_companies": [
+    "凯莱英",
+    "泰格医药",
+    "药明康德"
+  ],
+  "context_rows": [
+    {
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749
+    },
+    {
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749
+    },
+    {
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749
+    },
+    {
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749
+    },
+    {
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749
+    },
+    {
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749
+    },
+    {
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749
+    },
+    {
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749
+    },
+    {
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749
+    },
+    {
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749
+    },
+    {
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749
+    },
+    {
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749
+    },
+    {
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749
+    },
+    {
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749
+    },
+    {
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749
+    },
+    {
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "gross_profit_margin": 29.161453501594348
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "gross_profit_margin": 29.161453501594348
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "gross_profit_margin": 29.161453501594348
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "gross_profit_margin": 29.161453501594348
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "gross_profit_margin": 29.161453501594348
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "gross_profit_margin": 29.161453501594348
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "gross_profit_margin": 29.161453501594348
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "gross_profit_margin": 29.161453501594348
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "gross_profit_margin": 29.161453501594348
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "gross_profit_margin": 29.161453501594348
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "gross_profit_margin": 29.161453501594348
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "gross_profit_margin": 29.161453501594348
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "gross_profit_margin": 29.161453501594348
+    },
+    {
+      "stock_abbr": "泰格医药",
+      "gross_profit_margin": 29.161453501594348
+    }
+  ],
+  "result_preview": "[{\"stock_abbr\":\"凯莱英\",\"gross_profit_margin\":42.4394313461},{\"stock_abbr\":\"凯莱英\",\"gross_profit_margin\":42.4394313461},{\"stock_abbr\":\"凯莱英\",\"gross_profit_margin\":42.4394313461},{\"stock_abbr\":\"凯莱英\",\"gross_profit_margin\":42.4394313461},{\"stock_abbr\":\"凯莱英\",\"gross_profit_margin\":42.4394313461},{\"stock_abbr\":\"凯莱英\",\"gross_profit_margin\":42.4394313461},{\"stock_abbr\":\"凯莱英\",\"gross_profit_margin\":42.4394313461},{\"stock_abbr\":\"凯莱英\",\"gross_profit_margin\":42.4394313461},{\"stock_abbr\":\"凯莱英\",\"gross_profit_margin\":42.4394313461},{\"stock_abbr\":\"凯莱英\",\"gross_profit_margin\":42.4394313461},{\"stock_abbr\":\"凯莱英\",\"gross_profit_margin\":42.4394313461},{\"stock_abbr\":\"凯莱英\",\"gross_profit_margin\":42.4394313461},{\"stock_abbr\":\"凯莱英\",\"gross_profit_margin\":42.4394313461},{\"stock_abbr\":\"凯莱英\",\"gross_profit_margin\":42.4394313461},{\"stock_abbr\":\"凯莱英\",\"gross_profit_margin\":42.4394313461},{\"stock_abbr\":\"凯莱英\",\"gross_profit_margin\":42.4394313461},{\"stock_abbr\":\"泰格医药\",\"gross_profit_margin\":29.1614535016},{\"stock_abbr\":\"泰格医药\",\"gross_profit_margin\":29.1614535016},{\"stock_abbr\":\"泰格医药\",\"gross_profit_margin\":29.1614535016},{\"stock_abbr\":\"泰格医药\",\"gross_profit_margin\":29.1614535016}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "凯莱英、药明康德、泰格医药2025年第三季度销售毛利率",
+    "x_field": null,
+    "y_fields": [
+      "gross_profit_margin"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": "gross_profit_margin",
+    "sort_ascending": false,
+    "top_n": 15,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B3017",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "凯莱英、药明康德、泰格医药2025年第三季度销售毛利率",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 48,
+      "preview_rows": [
+        {
+          "stock_abbr": "凯莱英",
+          "gross_profit_margin": 42.43943134607749
+        },
+        {
+          "stock_abbr": "凯莱英",
+          "gross_profit_margin": 42.43943134607749
+        },
+        {
+          "stock_abbr": "凯莱英",
+          "gross_profit_margin": 42.43943134607749
+        },
+        {
+          "stock_abbr": "凯莱英",
+          "gross_profit_margin": 42.43943134607749
+        },
+        {
+          "stock_abbr": "凯莱英",
+          "gross_profit_margin": 42.43943134607749
+        },
+        {
+          "stock_abbr": "凯莱英",
+          "gross_profit_margin": 42.43943134607749
+        },
+        {
+          "stock_abbr": "凯莱英",
+          "gross_profit_margin": 42.43943134607749
+        },
+        {
+          "stock_abbr": "凯莱英",
+          "gross_profit_margin": 42.43943134607749
+        },
+        {
+          "stock_abbr": "凯莱英",
+          "gross_profit_margin": 42.43943134607749
+        },
+        {
+          "stock_abbr": "凯莱英",
+          "gross_profit_margin": 42.43943134607749
+        },
+        {
+          "stock_abbr": "凯莱英",
+          "gross_profit_margin": 42.43943134607749
+        },
+        {
+          "stock_abbr": "凯莱英",
+          "gross_profit_margin": 42.43943134607749
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "gross_profit_margin",
+      "sort_ascending": false,
+      "top_n": 15,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "gross_profit_margin",
+        "data_type": "quantitative",
+        "label": "销售毛利率",
+        "unit": "%"
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B3017_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B3017_1.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT stock_abbr, gross_profit_margin FROM financials_view WHERE stock_abbr IN ('凯莱英', '药明康德', '泰格医药') AND report_period = '2025Q3' ORDER BY stock_abbr;",
+      "value_fields": [
+        "gross_profit_margin"
+      ],
+      "value_labels": [
+        "销售毛利率"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "gross_profit_margin"
+        ],
+        "category_field": "stock_abbr",
+        "sort_by": "gross_profit_margin",
+        "sort_ascending": false,
+        "top_n": 15
+      },
+      "category_aggregate": "max"
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs_test/task2_langgraph/artifacts/chart_specs/B3017_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B3017_1.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "比较凯莱英、药明康德、泰格医药2025年第三季度的销售毛利率，用条形图展示",
+      "A": {
+        "content": "根据查询结果，2025年第三季度，凯莱英的销售毛利率为42.44%，泰格医药的销售毛利率为29.16%。结果中未包含药明康德的数据。",
+        "image": [
+          "./result/B3017_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"比较凯莱英、药明康德、泰格医药2025年第三季度的销售毛利率，用条形图展示\", \"A\": {\"content\": \"根据查询结果，2025年第三季度，凯莱英的销售毛利率为42.44%，泰格医药的销售毛利率为29.16%。结果中未包含药明康德的数据。\", \"image\": [\"./result/B3017_1.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，需要比较凯莱英、药明康德、泰格医药在2025Q3的销售毛利率（gross_profit_margin）。使用IN筛选指定公司，用等值条件筛选报告期。条形图需要公司简称和毛利率值，按公司简称排序。"
+  ],
+  "final_status": "ok"
+}

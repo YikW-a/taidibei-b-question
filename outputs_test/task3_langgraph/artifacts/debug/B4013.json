@@ -1,0 +1,64 @@
+{
+  "question_id": "B4013",
+  "question_type": "融合查询",
+  "raw_question": "研报《昭衍新药：订单呈现边际加速趋势，重点开拓海外市场》提及海外实验室，查询其2025年第三季度的投资性现金流净额",
+  "raw_question_json": "[{\"Q\":\"研报《昭衍新药：订单呈现边际加速趋势，重点开拓海外市场》提及海外实验室，查询其2025年第三季度的投资性现金流净额\"}]",
+  "parsed_slots": {
+    "companies": [
+      "昭衍新药"
+    ],
+    "stock_codes": [],
+    "metrics": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "focus_topics": [
+      "趋势"
+    ],
+    "intent_type": "hybrid_sql_rag",
+    "needs_sql": true,
+    "needs_retrieval": true,
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [
+    "metric"
+  ],
+  "needs_clarification": true,
+  "query_plan": {},
+  "retrieval_plan": {},
+  "sql": "",
+  "sql_history": [],
+  "sql_attempts": 0,
+  "sql_error": "",
+  "result_row_count": 0,
+  "result_rows": [],
+  "retrieved_evidence": [],
+  "reranked_evidence": [],
+  "rerank_preview": "",
+  "fused_context": {},
+  "self_check": {},
+  "chart_plan": {},
+  "chart_spec": {},
+  "current_chart_paths": [],
+  "current_chart_specs": [],
+  "current_answer": "请问您想查询的具体财务指标是什么？例如营业总收入、净利润或资产负债率？",
+  "current_references": [],
+  "answer_rewritten": false,
+  "turn_answers": [
+    {
+      "Q": "研报《昭衍新药：订单呈现边际加速趋势，重点开拓海外市场》提及海外实验室，查询其2025年第三季度的投资性现金流净额",
+      "A": {
+        "content": "请问您想查询的具体财务指标是什么？例如营业总收入、净利润或资产负债率？",
+        "image": [],
+        "references": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"研报《昭衍新药：订单呈现边际加速趋势，重点开拓海外市场》提及海外实验室，查询其2025年第三季度的投资性现金流净额\", \"A\": {\"content\": \"请问您想查询的具体财务指标是什么？例如营业总收入、净利润或资产负债率？\", \"image\": [], \"references\": []}}]",
+  "references_json": "[]",
+  "notes": [
+    "route=hybrid_sql_rag"
+  ],
+  "final_status": "ok"
+}

@@ -1,0 +1,804 @@
+{
+  "question_id": "B3047",
+  "question_type": "数据统计分析查询",
+  "raw_question": "比较2024年和2025年第三季度各公司净利润，找出净利润同比增长超过100%的公司",
+  "raw_question_json": "[{\"Q\":\"比较2024年和2025年第三季度各公司净利润，找出净利润同比增长超过100%的公司\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3",
+      "2024FY"
+    ],
+    "metrics": [
+      "净利润",
+      "同比增长率"
+    ],
+    "chart_type": null,
+    "intent_type": "filter",
+    "top_n": null,
+    "threshold": 100.0
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "filter",
+    "companies": [],
+    "periods": [
+      "2025Q3",
+      "2024Q3"
+    ],
+    "metrics": [
+      "净利润",
+      "净利润同比增长率"
+    ],
+    "chart_type": "table",
+    "top_n": null,
+    "threshold": 100.0,
+    "question": "比较2024年和2025年第三季度各公司净利润，找出净利润同比增长超过100%的公司",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": [],
+    "unsupported_metrics": [
+      "净利润同比增长率"
+    ]
+  },
+  "sql": "SELECT stock_code, stock_abbr, report_period, net_profit, net_profit_yoy_growth FROM financials_view WHERE report_period IN ('2025Q3', '2024Q3') AND net_profit_yoy_growth > 100.0 ORDER BY stock_code, report_period",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, report_period, net_profit, net_profit_yoy_growth FROM financials_view WHERE report_period IN ('2025Q3', '2024Q3') AND net_profit_yoy_growth > 100.0 ORDER BY stock_code, report_period"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 48,
+  "result_rows": [
+    {
+      "stock_code": "301033",
+      "stock_abbr": "迈普医学",
+      "report_period": "2024Q3",
+      "net_profit": 5280.2976340000005,
+      "net_profit_yoy_growth": 107.68330111079109
+    },
+    {
+      "stock_code": "301033",
+      "stock_abbr": "迈普医学",
+      "report_period": "2024Q3",
+      "net_profit": 5280.2976340000005,
+      "net_profit_yoy_growth": 107.68330111079109
+    },
+    {
+      "stock_code": "301033",
+      "stock_abbr": "迈普医学",
+      "report_period": "2024Q3",
+      "net_profit": 5280.2976340000005,
+      "net_profit_yoy_growth": 107.68330111079109
+    },
+    {
+      "stock_code": "301033",
+      "stock_abbr": "迈普医学",
+      "report_period": "2024Q3",
+      "net_profit": 5280.2976340000005,
+      "net_profit_yoy_growth": 107.68330111079109
+    },
+    {
+      "stock_code": "301033",
+      "stock_abbr": "迈普医学",
+      "report_period": "2024Q3",
+      "net_profit": 5280.2976340000005,
+      "net_profit_yoy_growth": 107.68330111079109
+    },
+    {
+      "stock_code": "301033",
+      "stock_abbr": "迈普医学",
+      "report_period": "2024Q3",
+      "net_profit": 5280.2976340000005,
+      "net_profit_yoy_growth": 107.68330111079109
+    },
+    {
+      "stock_code": "301033",
+      "stock_abbr": "迈普医学",
+      "report_period": "2024Q3",
+      "net_profit": 5280.2976340000005,
+      "net_profit_yoy_growth": 107.68330111079109
+    },
+    {
+      "stock_code": "301033",
+      "stock_abbr": "迈普医学",
+      "report_period": "2024Q3",
+      "net_profit": 5280.2976340000005,
+      "net_profit_yoy_growth": 107.68330111079109
+    },
+    {
+      "stock_code": "301033",
+      "stock_abbr": "迈普医学",
+      "report_period": "2024Q3",
+      "net_profit": 5280.2976340000005,
+      "net_profit_yoy_growth": 107.68330111079109
+    },
+    {
+      "stock_code": "301033",
+      "stock_abbr": "迈普医学",
+      "report_period": "2024Q3",
+      "net_profit": 5280.2976340000005,
+      "net_profit_yoy_growth": 107.68330111079109
+    },
+    {
+      "stock_code": "301033",
+      "stock_abbr": "迈普医学",
+      "report_period": "2024Q3",
+      "net_profit": 5280.2976340000005,
+      "net_profit_yoy_growth": 107.68330111079109
+    },
+    {
+      "stock_code": "301033",
+      "stock_abbr": "迈普医学",
+      "report_period": "2024Q3",
+      "net_profit": 5280.2976340000005,
+      "net_profit_yoy_growth": 107.68330111079109
+    },
+    {
+      "stock_code": "301033",
+      "stock_abbr": "迈普医学",
+      "report_period": "2024Q3",
+      "net_profit": 5280.2976340000005,
+      "net_profit_yoy_growth": 107.68330111079109
+    },
+    {
+      "stock_code": "301033",
+      "stock_abbr": "迈普医学",
+      "report_period": "2024Q3",
+      "net_profit": 5280.2976340000005,
+      "net_profit_yoy_growth": 107.68330111079109
+    },
+    {
+      "stock_code": "301033",
+      "stock_abbr": "迈普医学",
+      "report_period": "2024Q3",
+      "net_profit": 5280.2976340000005,
+      "net_profit_yoy_growth": 107.68330111079109
+    },
+    {
+      "stock_code": "301033",
+      "stock_abbr": "迈普医学",
+      "report_period": "2024Q3",
+      "net_profit": 5280.2976340000005,
+      "net_profit_yoy_growth": 107.68330111079109
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "net_profit": 8070.6068,
+      "net_profit_yoy_growth": 208.7037828172566
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "net_profit": 8070.6068,
+      "net_profit_yoy_growth": 208.7037828172566
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "net_profit": 8070.6068,
+      "net_profit_yoy_growth": 208.7037828172566
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "net_profit": 8070.6068,
+      "net_profit_yoy_growth": 208.7037828172566
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "net_profit": 8070.6068,
+      "net_profit_yoy_growth": 208.7037828172566
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "net_profit": 8070.6068,
+      "net_profit_yoy_growth": 208.7037828172566
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "net_profit": 8070.6068,
+      "net_profit_yoy_growth": 208.7037828172566
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "net_profit": 8070.6068,
+      "net_profit_yoy_growth": 208.7037828172566
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "net_profit": 8070.6068,
+      "net_profit_yoy_growth": 208.7037828172566
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "net_profit": 8070.6068,
+      "net_profit_yoy_growth": 208.7037828172566
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "net_profit": 8070.6068,
+      "net_profit_yoy_growth": 208.7037828172566
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "net_profit": 8070.6068,
+      "net_profit_yoy_growth": 208.7037828172566
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "net_profit": 8070.6068,
+      "net_profit_yoy_growth": 208.7037828172566
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "net_profit": 8070.6068,
+      "net_profit_yoy_growth": 208.7037828172566
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "net_profit": 8070.6068,
+      "net_profit_yoy_growth": 208.7037828172566
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "net_profit": 8070.6068,
+      "net_profit_yoy_growth": 208.7037828172566
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "net_profit": 9287.218812000001,
+      "net_profit_yoy_growth": 220.09739282618895
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "net_profit": 9287.218812000001,
+      "net_profit_yoy_growth": 220.09739282618895
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "net_profit": 9287.218812000001,
+      "net_profit_yoy_growth": 220.09739282618895
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "net_profit": 9287.218812000001,
+      "net_profit_yoy_growth": 220.09739282618895
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "net_profit": 9287.218812000001,
+      "net_profit_yoy_growth": 220.09739282618895
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "net_profit": 9287.218812000001,
+      "net_profit_yoy_growth": 220.09739282618895
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "net_profit": 9287.218812000001,
+      "net_profit_yoy_growth": 220.09739282618895
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "net_profit": 9287.218812000001,
+      "net_profit_yoy_growth": 220.09739282618895
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "net_profit": 9287.218812000001,
+      "net_profit_yoy_growth": 220.09739282618895
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "net_profit": 9287.218812000001,
+      "net_profit_yoy_growth": 220.09739282618895
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "net_profit": 9287.218812000001,
+      "net_profit_yoy_growth": 220.09739282618895
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "net_profit": 9287.218812000001,
+      "net_profit_yoy_growth": 220.09739282618895
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "net_profit": 9287.218812000001,
+      "net_profit_yoy_growth": 220.09739282618895
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "net_profit": 9287.218812000001,
+      "net_profit_yoy_growth": 220.09739282618895
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "net_profit": 9287.218812000001,
+      "net_profit_yoy_growth": 220.09739282618895
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "net_profit": 9287.218812000001,
+      "net_profit_yoy_growth": 220.09739282618895
+    }
+  ],
+  "context_companies": [
+    "迈普医学",
+    "昭衍新药",
+    "成都先导"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "301033",
+      "stock_abbr": "迈普医学",
+      "report_period": "2024Q3",
+      "net_profit": 5280.2976340000005,
+      "net_profit_yoy_growth": 107.68330111079109
+    },
+    {
+      "stock_code": "301033",
+      "stock_abbr": "迈普医学",
+      "report_period": "2024Q3",
+      "net_profit": 5280.2976340000005,
+      "net_profit_yoy_growth": 107.68330111079109
+    },
+    {
+      "stock_code": "301033",
+      "stock_abbr": "迈普医学",
+      "report_period": "2024Q3",
+      "net_profit": 5280.2976340000005,
+      "net_profit_yoy_growth": 107.68330111079109
+    },
+    {
+      "stock_code": "301033",
+      "stock_abbr": "迈普医学",
+      "report_period": "2024Q3",
+      "net_profit": 5280.2976340000005,
+      "net_profit_yoy_growth": 107.68330111079109
+    },
+    {
+      "stock_code": "301033",
+      "stock_abbr": "迈普医学",
+      "report_period": "2024Q3",
+      "net_profit": 5280.2976340000005,
+      "net_profit_yoy_growth": 107.68330111079109
+    },
+    {
+      "stock_code": "301033",
+      "stock_abbr": "迈普医学",
+      "report_period": "2024Q3",
+      "net_profit": 5280.2976340000005,
+      "net_profit_yoy_growth": 107.68330111079109
+    },
+    {
+      "stock_code": "301033",
+      "stock_abbr": "迈普医学",
+      "report_period": "2024Q3",
+      "net_profit": 5280.2976340000005,
+      "net_profit_yoy_growth": 107.68330111079109
+    },
+    {
+      "stock_code": "301033",
+      "stock_abbr": "迈普医学",
+      "report_period": "2024Q3",
+      "net_profit": 5280.2976340000005,
+      "net_profit_yoy_growth": 107.68330111079109
+    },
+    {
+      "stock_code": "301033",
+      "stock_abbr": "迈普医学",
+      "report_period": "2024Q3",
+      "net_profit": 5280.2976340000005,
+      "net_profit_yoy_growth": 107.68330111079109
+    },
+    {
+      "stock_code": "301033",
+      "stock_abbr": "迈普医学",
+      "report_period": "2024Q3",
+      "net_profit": 5280.2976340000005,
+      "net_profit_yoy_growth": 107.68330111079109
+    },
+    {
+      "stock_code": "301033",
+      "stock_abbr": "迈普医学",
+      "report_period": "2024Q3",
+      "net_profit": 5280.2976340000005,
+      "net_profit_yoy_growth": 107.68330111079109
+    },
+    {
+      "stock_code": "301033",
+      "stock_abbr": "迈普医学",
+      "report_period": "2024Q3",
+      "net_profit": 5280.2976340000005,
+      "net_profit_yoy_growth": 107.68330111079109
+    },
+    {
+      "stock_code": "301033",
+      "stock_abbr": "迈普医学",
+      "report_period": "2024Q3",
+      "net_profit": 5280.2976340000005,
+      "net_profit_yoy_growth": 107.68330111079109
+    },
+    {
+      "stock_code": "301033",
+      "stock_abbr": "迈普医学",
+      "report_period": "2024Q3",
+      "net_profit": 5280.2976340000005,
+      "net_profit_yoy_growth": 107.68330111079109
+    },
+    {
+      "stock_code": "301033",
+      "stock_abbr": "迈普医学",
+      "report_period": "2024Q3",
+      "net_profit": 5280.2976340000005,
+      "net_profit_yoy_growth": 107.68330111079109
+    },
+    {
+      "stock_code": "301033",
+      "stock_abbr": "迈普医学",
+      "report_period": "2024Q3",
+      "net_profit": 5280.2976340000005,
+      "net_profit_yoy_growth": 107.68330111079109
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "net_profit": 8070.6068,
+      "net_profit_yoy_growth": 208.7037828172566
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "net_profit": 8070.6068,
+      "net_profit_yoy_growth": 208.7037828172566
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "net_profit": 8070.6068,
+      "net_profit_yoy_growth": 208.7037828172566
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "net_profit": 8070.6068,
+      "net_profit_yoy_growth": 208.7037828172566
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "net_profit": 8070.6068,
+      "net_profit_yoy_growth": 208.7037828172566
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "net_profit": 8070.6068,
+      "net_profit_yoy_growth": 208.7037828172566
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "net_profit": 8070.6068,
+      "net_profit_yoy_growth": 208.7037828172566
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "net_profit": 8070.6068,
+      "net_profit_yoy_growth": 208.7037828172566
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "net_profit": 8070.6068,
+      "net_profit_yoy_growth": 208.7037828172566
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "net_profit": 8070.6068,
+      "net_profit_yoy_growth": 208.7037828172566
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "net_profit": 8070.6068,
+      "net_profit_yoy_growth": 208.7037828172566
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "net_profit": 8070.6068,
+      "net_profit_yoy_growth": 208.7037828172566
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "net_profit": 8070.6068,
+      "net_profit_yoy_growth": 208.7037828172566
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "net_profit": 8070.6068,
+      "net_profit_yoy_growth": 208.7037828172566
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"301033\",\"stock_abbr\":\"迈普医学\",\"report_period\":\"2024Q3\",\"net_profit\":5280.297634,\"net_profit_yoy_growth\":107.6833011108},{\"stock_code\":\"301033\",\"stock_abbr\":\"迈普医学\",\"report_period\":\"2024Q3\",\"net_profit\":5280.297634,\"net_profit_yoy_growth\":107.6833011108},{\"stock_code\":\"301033\",\"stock_abbr\":\"迈普医学\",\"report_period\":\"2024Q3\",\"net_profit\":5280.297634,\"net_profit_yoy_growth\":107.6833011108},{\"stock_code\":\"301033\",\"stock_abbr\":\"迈普医学\",\"report_period\":\"2024Q3\",\"net_profit\":5280.297634,\"net_profit_yoy_growth\":107.6833011108},{\"stock_code\":\"301033\",\"stock_abbr\":\"迈普医学\",\"report_period\":\"2024Q3\",\"net_profit\":5280.297634,\"net_profit_yoy_growth\":107.6833011108},{\"stock_code\":\"301033\",\"stock_abbr\":\"迈普医学\",\"report_period\":\"2024Q3\",\"net_profit\":5280.297634,\"net_profit_yoy_growth\":107.6833011108},{\"stock_code\":\"301033\",\"stock_abbr\":\"迈普医学\",\"report_period\":\"2024Q3\",\"net_profit\":5280.297634,\"net_profit_yoy_growth\":107.6833011108},{\"stock_code\":\"301033\",\"stock_abbr\":\"迈普医学\",\"report_period\":\"2024Q3\",\"net_profit\":5280.297634,\"net_profit_yoy_growth\":107.6833011108},{\"stock_code\":\"301033\",\"stock_abbr\":\"迈普医学\",\"report_period\":\"2024Q3\",\"net_profit\":5280.297634,\"net_profit_yoy_growth\":107.6833011108},{\"stock_code\":\"301033\",\"stock_abbr\":\"迈普医学\",\"report_period\":\"2024Q3\",\"net_profit\":5280.297634,\"net_profit_yoy_growth\":107.6833011108},{\"stock_code\":\"301033\",\"stock_abbr\":\"迈普医学\",\"report_period\":\"2024Q3\",\"net_profit\":5280.297634,\"net_profit_yoy_growth\":107.6833011108},{\"stock_code\":\"301033\",\"stock_abbr\":\"迈普医学\",\"report_period\":\"2024Q3\",\"net_profit\":5280.297634,\"net_profit_yoy_growth\":107.6833011108},{\"stock_code\":\"301033\",\"stock_abbr\":\"迈普医学\",\"report_period\":\"2024Q3\",\"net_profit\":5280.297634,\"net_profit_yoy_growth\":107.6833011108},{\"stock_code\":\"301033\",\"stock_abbr\":\"迈普医学\",\"report_period\":\"2024Q3\",\"net_profit\":5280.297634,\"net_profit_yoy_growth\":107.6833011108},{\"stock_code\":\"301033\",\"stock_abbr\":\"迈普医学\",\"report_period\":\"2024Q3\",\"net_profit\":5280.297634,\"net_profit_yoy_growth\":107.6833011108},{\"stock_code\":\"301033\",\"stock_abbr\":\"迈普医学\",\"report_period\":\"2024Q3\",\"net_profit\":5280.297634,\"net_profit_yoy_growth\":107.6833011108},{\"stock_code\":\"603127\",\"stock_abbr\":\"昭衍新药\",\"report_period\":\"2025Q3\",\"net_profit\":8070.6068,\"net_profit_yoy_growth\":208.7037828173},{\"stock_code\":\"603127\",\"stock_abbr\":\"昭衍新药\",\"report_period\":\"2025Q3\",\"net_profit\":8070.6068,\"net_profit_yoy_growth\":208.7037828173},{\"stock_code\":\"603127\",\"stock_abbr\":\"昭衍新药\",\"report_period\":\"2025Q3\",\"net_profit\":8070.6068,\"net_profit_yoy_growth\":208.7037828173},{\"stock_code\":\"603127\",\"stock_abbr\":\"昭衍新药\",\"report_period\":\"2025Q3\",\"net_profit\":8070.6068,\"net_profit_yoy_growth\":208.7037828173}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2024Q3与2025Q3净利润同比增长超100%的公司",
+    "x_field": null,
+    "y_fields": [
+      "net_profit"
+    ],
+    "category_field": "report_period",
+    "sort_by": null,
+    "sort_ascending": true,
+    "top_n": 12,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B3047",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "2024Q3与2025Q3净利润同比增长超100%的公司",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 48,
+      "preview_rows": [
+        {
+          "stock_code": "301033",
+          "stock_abbr": "迈普医学",
+          "report_period": "2024Q3",
+          "net_profit": 5280.2976340000005,
+          "net_profit_yoy_growth": 107.68330111079109
+        },
+        {
+          "stock_code": "301033",
+          "stock_abbr": "迈普医学",
+          "report_period": "2024Q3",
+          "net_profit": 5280.2976340000005,
+          "net_profit_yoy_growth": 107.68330111079109
+        },
+        {
+          "stock_code": "301033",
+          "stock_abbr": "迈普医学",
+          "report_period": "2024Q3",
+          "net_profit": 5280.2976340000005,
+          "net_profit_yoy_growth": 107.68330111079109
+        },
+        {
+          "stock_code": "301033",
+          "stock_abbr": "迈普医学",
+          "report_period": "2024Q3",
+          "net_profit": 5280.2976340000005,
+          "net_profit_yoy_growth": 107.68330111079109
+        },
+        {
+          "stock_code": "301033",
+          "stock_abbr": "迈普医学",
+          "report_period": "2024Q3",
+          "net_profit": 5280.2976340000005,
+          "net_profit_yoy_growth": 107.68330111079109
+        },
+        {
+          "stock_code": "301033",
+          "stock_abbr": "迈普医学",
+          "report_period": "2024Q3",
+          "net_profit": 5280.2976340000005,
+          "net_profit_yoy_growth": 107.68330111079109
+        },
+        {
+          "stock_code": "301033",
+          "stock_abbr": "迈普医学",
+          "report_period": "2024Q3",
+          "net_profit": 5280.2976340000005,
+          "net_profit_yoy_growth": 107.68330111079109
+        },
+        {
+          "stock_code": "301033",
+          "stock_abbr": "迈普医学",
+          "report_period": "2024Q3",
+          "net_profit": 5280.2976340000005,
+          "net_profit_yoy_growth": 107.68330111079109
+        },
+        {
+          "stock_code": "301033",
+          "stock_abbr": "迈普医学",
+          "report_period": "2024Q3",
+          "net_profit": 5280.2976340000005,
+          "net_profit_yoy_growth": 107.68330111079109
+        },
+        {
+          "stock_code": "301033",
+          "stock_abbr": "迈普医学",
+          "report_period": "2024Q3",
+          "net_profit": 5280.2976340000005,
+          "net_profit_yoy_growth": 107.68330111079109
+        },
+        {
+          "stock_code": "301033",
+          "stock_abbr": "迈普医学",
+          "report_period": "2024Q3",
+          "net_profit": 5280.2976340000005,
+          "net_profit_yoy_growth": 107.68330111079109
+        },
+        {
+          "stock_code": "301033",
+          "stock_abbr": "迈普医学",
+          "report_period": "2024Q3",
+          "net_profit": 5280.2976340000005,
+          "net_profit_yoy_growth": 107.68330111079109
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": null,
+      "sort_ascending": true,
+      "top_n": 12,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "net_profit",
+        "data_type": "quantitative",
+        "label": "净利润",
+        "unit": null
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      },
+      "series": {
+        "field": "report_period",
+        "data_type": "nominal",
+        "label": "报告期",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": true,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B3047_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B3047_1.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT stock_code, stock_abbr, report_period, net_profit, net_profit_yoy_growth FROM financials_view WHERE report_period IN ('2025Q3', '2024Q3') AND net_profit_yoy_growth > 100.0 ORDER BY stock_code, report_period",
+      "value_fields": [
+        "net_profit"
+      ],
+      "value_labels": [
+        "净利润"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "net_profit"
+        ],
+        "category_field": "report_period",
+        "sort_by": null,
+        "sort_ascending": true,
+        "top_n": 12
+      },
+      "category_aggregate": "max"
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs_test/task2_langgraph/artifacts/chart_specs/B3047_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B3047_1.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "比较2024年和2025年第三季度各公司净利润，找出净利润同比增长超过100%的公司",
+      "A": {
+        "content": "根据查询结果，在2024年和2025年第三季度，净利润同比增长超过100%的公司共有2家，具体如下：\n\n1.  **迈普医学（股票代码：301033）**：在2024年第三季度，净利润为5280.30万元，同比增长率为107.68%。\n2.  **昭衍新药（股票代码：603127）**：在2025年第三季度，净利润为8070.61万元，同比增长率为208.70%。\n\n需要注意的是，结果中存在重复数据行，但公司主体为上述两家。",
+        "image": [
+          "./result/B3047_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"比较2024年和2025年第三季度各公司净利润，找出净利润同比增长超过100%的公司\", \"A\": {\"content\": \"根据查询结果，在2024年和2025年第三季度，净利润同比增长超过100%的公司共有2家，具体如下：\\n\\n1.  **迈普医学（股票代码：301033）**：在2024年第三季度，净利润为5280.30万元，同比增长率为107.68%。\\n2.  **昭衍新药（股票代码：603127）**：在2025年第三季度，净利润为8070.61万元，同比增长率为208.70%。\\n\\n需要注意的是，结果中存在重复数据行，但公司主体为上述两家。\", \"image\": [\"./result/B3047_1.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，需要比较2024年和2025年第三季度各公司净利润，并筛选出净利润同比增长率超过100%的公司。查询计划中periods为['2025Q3', '2024Q3']，metrics包含净利润和净利润同比增长率，threshold为100.0。因此，SQL查询应选择相关字段，按报告期过滤，并应用增长率阈值。由于查询计划未指定具体公司列表，不应添加stock_abbr IN (...)条件。"
+  ],
+  "final_status": "ok"
+}

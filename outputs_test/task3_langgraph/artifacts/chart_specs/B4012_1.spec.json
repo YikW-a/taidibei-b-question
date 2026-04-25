@@ -1,0 +1,195 @@
+{
+  "schema_version": "task3.chart-spec.v1",
+  "question_id": "B4012",
+  "image_index": 1,
+  "chart_type": "table",
+  "title": "分析百诚医药2025年第三季度研发费用占比变化及... - 净利润",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 33,
+    "preview_rows": [
+      {
+        "period": "2025Q2",
+        "stock_abbr": "百诚医药",
+        "rnd_expenses": 4650.031260000002,
+        "total_operating_revenue": 20362.563228999992,
+        "rnd_expense_ratio_percent": 22.84,
+        "net_profit": 2929.5778349999996,
+        "rnd_expense_ratio_change": NaN,
+        "net_profit_change": NaN
+      },
+      {
+        "period": "2025Q3",
+        "stock_abbr": "百诚医药",
+        "rnd_expenses": 13928.893828999999,
+        "total_operating_revenue": 50988.368159,
+        "rnd_expense_ratio_percent": 27.32,
+        "net_profit": 612.420996,
+        "rnd_expense_ratio_change": NaN,
+        "net_profit_change": NaN
+      },
+      {
+        "period": "2025Q3",
+        "stock_abbr": "百诚医药",
+        "rnd_expenses": 13928.893828999999,
+        "total_operating_revenue": 50988.368159,
+        "rnd_expense_ratio_percent": 27.32,
+        "net_profit": 612.420996,
+        "rnd_expense_ratio_change": NaN,
+        "net_profit_change": NaN
+      },
+      {
+        "period": "2025Q3",
+        "stock_abbr": "百诚医药",
+        "rnd_expenses": 13928.893828999999,
+        "total_operating_revenue": 50988.368159,
+        "rnd_expense_ratio_percent": 27.32,
+        "net_profit": 612.420996,
+        "rnd_expense_ratio_change": NaN,
+        "net_profit_change": NaN
+      },
+      {
+        "period": "2025Q3",
+        "stock_abbr": "百诚医药",
+        "rnd_expenses": 13928.893828999999,
+        "total_operating_revenue": 50988.368159,
+        "rnd_expense_ratio_percent": 27.32,
+        "net_profit": 612.420996,
+        "rnd_expense_ratio_change": NaN,
+        "net_profit_change": NaN
+      },
+      {
+        "period": "2025Q3",
+        "stock_abbr": "百诚医药",
+        "rnd_expenses": 13928.893828999999,
+        "total_operating_revenue": 50988.368159,
+        "rnd_expense_ratio_percent": 27.32,
+        "net_profit": 612.420996,
+        "rnd_expense_ratio_change": NaN,
+        "net_profit_change": NaN
+      },
+      {
+        "period": "2025Q3",
+        "stock_abbr": "百诚医药",
+        "rnd_expenses": 13928.893828999999,
+        "total_operating_revenue": 50988.368159,
+        "rnd_expense_ratio_percent": 27.32,
+        "net_profit": 612.420996,
+        "rnd_expense_ratio_change": NaN,
+        "net_profit_change": NaN
+      },
+      {
+        "period": "2025Q3",
+        "stock_abbr": "百诚医药",
+        "rnd_expenses": 13928.893828999999,
+        "total_operating_revenue": 50988.368159,
+        "rnd_expense_ratio_percent": 27.32,
+        "net_profit": 612.420996,
+        "rnd_expense_ratio_change": NaN,
+        "net_profit_change": NaN
+      },
+      {
+        "period": "2025Q3",
+        "stock_abbr": "百诚医药",
+        "rnd_expenses": 13928.893828999999,
+        "total_operating_revenue": 50988.368159,
+        "rnd_expense_ratio_percent": 27.32,
+        "net_profit": 612.420996,
+        "rnd_expense_ratio_change": NaN,
+        "net_profit_change": NaN
+      },
+      {
+        "period": "2025Q3",
+        "stock_abbr": "百诚医药",
+        "rnd_expenses": 13928.893828999999,
+        "total_operating_revenue": 50988.368159,
+        "rnd_expense_ratio_percent": 27.32,
+        "net_profit": 612.420996,
+        "rnd_expense_ratio_change": NaN,
+        "net_profit_change": NaN
+      },
+      {
+        "period": "2025Q3",
+        "stock_abbr": "百诚医药",
+        "rnd_expenses": 13928.893828999999,
+        "total_operating_revenue": 50988.368159,
+        "rnd_expense_ratio_percent": 27.32,
+        "net_profit": 612.420996,
+        "rnd_expense_ratio_change": NaN,
+        "net_profit_change": NaN
+      },
+      {
+        "period": "2025Q3",
+        "stock_abbr": "百诚医药",
+        "rnd_expenses": 13928.893828999999,
+        "total_operating_revenue": 50988.368159,
+        "rnd_expense_ratio_percent": 27.32,
+        "net_profit": 612.420996,
+        "rnd_expense_ratio_change": NaN,
+        "net_profit_change": NaN
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": null,
+    "sort_ascending": true,
+    "top_n": 12,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "rnd_expenses",
+      "data_type": "quantitative",
+      "label": "rnd_expenses",
+      "unit": null
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": false
+  },
+  "output": {
+    "filename": "B4012_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B4012_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT * FROM (\nWITH current_q3 AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        operating_expense_rnd_expenses AS rnd_expenses,\n        total_operating_revenue,\n        net_profit,\n        ROUND(CAST(operating_expense_rnd_expenses AS REAL) / NULLIF(total_operating_revenue, 0) * 100, 2) AS rnd_expense_ratio_percent\n    FROM financials_view\n    WHERE stock_abbr = '百诚医药' \n        AND report_period = '2025Q3'\n),\nprevious_q2 AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        operating_expense_rnd_expenses AS rnd_expenses,\n        total_operating_revenue,\n        net_profit,\n        ROUND(CAST(operating_expense_rnd_expenses AS REAL) / NULLIF(total_operating_revenue, 0) * 100, 2) AS rnd_expense_ratio_percent\n    FROM financials_view\n    WHERE stock_abbr = '百诚医药' \n        AND report_period = '2025Q2'\n)\nSELECT \n    '2025Q3' AS period,\n    stock_abbr,\n    rnd_expenses,\n    total_operating_revenue,\n    rnd_expense_ratio_percent,\n    net_profit,\n    NULL AS rnd_expense_ratio_change,\n    NULL AS net_profit_change\nFROM current_q3\nUNION ALL\nSELECT \n    '2025Q2' AS period,\n    stock_abbr,\n    rnd_expenses,\n    total_operating_revenue,\n    rnd_expense_ratio_percent,\n    net_profit,\n    NULL AS rnd_expense_ratio_change,\n    NULL AS net_profit_change\nFROM previous_q2\nUNION ALL\nSELECT \n    '环比变化' AS period,\n    c.stock_abbr,\n    c.rnd_expenses - p.rnd_expenses AS rnd_expenses,\n    c.total_operating_revenue - p.total_operating_revenue AS total_operating_revenue,\n    c.rnd_expense_ratio_percent - p.rnd_expense_ratio_percent AS rnd_expense_ratio_percent,\n    c.net_profit - p.net_profit AS net_profit,\n    ROUND((c.rnd_expense_ratio_percent - p.rnd_expense_ratio_percent) / NULLIF(p.rnd_expense_ratio_percent, 0) * 100, 2) AS rnd_expense_ratio_change,\n    ROUND((c.net_profit - p.net_profit) / NULLIF(p.net_profit, 0) * 100, 2) AS net_profit_change\nFROM current_q3 c\nCROSS JOIN previous_q2 p\n) AS compound_result\nORDER BY \n    CASE period \n        WHEN '2025Q2' THEN 1 \n        WHEN '2025Q3' THEN 2 \n        WHEN '环比变化' THEN 3 \n    END;",
+    "value_fields": [
+      "rnd_expenses",
+      "total_operating_revenue",
+      "rnd_expense_ratio_percent",
+      "net_profit"
+    ],
+    "value_labels": [
+      "rnd_expenses",
+      "营业总收入",
+      "rnd_expense_ratio_percent",
+      "净利润"
+    ],
+    "original_chart_plan": {
+      "chart_type": "table",
+      "x_field": null,
+      "y_fields": [
+        "rnd_expenses",
+        "total_operating_revenue",
+        "rnd_expense_ratio_percent",
+        "net_profit"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": null,
+      "sort_ascending": true,
+      "top_n": 12
+    }
+  }
+}

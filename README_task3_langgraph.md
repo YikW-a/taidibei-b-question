@@ -288,11 +288,6 @@ conda run -n taidibei python run_task3_langgraph.py \
   --output-dir outputs/task3_langgraph_regression
 ```
 
-### 9.4 统一测试入口
-
-```bash
-python3 run_test_question_sets.py --skip-task2
-```
 
 ---
 

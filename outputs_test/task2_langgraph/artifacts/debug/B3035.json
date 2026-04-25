@@ -1,0 +1,199 @@
+{
+  "question_id": "B3035",
+  "question_type": "数据统计分析查询",
+  "raw_question": "2025年第三季度，资产-应收账款占营业总收入比例最小的3家公司是哪些？列出简称和占比",
+  "raw_question_json": "[{\"Q\":\"2025年第三季度，资产-应收账款占营业总收入比例最小的3家公司是哪些？列出简称和占比\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入"
+    ],
+    "chart_type": null,
+    "intent_type": "filter",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "ranking",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "资产-应收账款",
+      "营业总收入"
+    ],
+    "chart_type": "table",
+    "top_n": 3,
+    "threshold": null,
+    "question": "2025年第三季度，资产-应收账款占营业总收入比例最小的3家公司是哪些？列出简称和占比",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": [],
+    "unsupported_metrics": [
+      "资产-应收账款"
+    ]
+  },
+  "sql": "WITH ratio_data AS (\n  SELECT \n    stock_abbr,\n    asset_accounts_receivable,\n    total_operating_revenue,\n    CASE \n      WHEN total_operating_revenue > 0 THEN asset_accounts_receivable * 1.0 / total_operating_revenue\n      ELSE NULL\n    END AS accounts_receivable_ratio\n  FROM financials_view\n  WHERE report_period = '2025Q3'\n    AND total_operating_revenue IS NOT NULL\n    AND asset_accounts_receivable IS NOT NULL\n    AND total_operating_revenue > 0\n)\nSELECT \n  stock_abbr,\n  accounts_receivable_ratio\nFROM ratio_data\nWHERE accounts_receivable_ratio IS NOT NULL\nORDER BY accounts_receivable_ratio ASC\nLIMIT 3",
+  "sql_history": [
+    "WITH ratio_data AS (\n  SELECT \n    stock_abbr,\n    asset_accounts_receivable,\n    total_operating_revenue,\n    CASE \n      WHEN total_operating_revenue > 0 THEN asset_accounts_receivable * 1.0 / total_operating_revenue\n      ELSE NULL\n    END AS accounts_receivable_ratio\n  FROM financials_view\n  WHERE report_period = '2025Q3'\n    AND total_operating_revenue IS NOT NULL\n    AND asset_accounts_receivable IS NOT NULL\n    AND total_operating_revenue > 0\n)\nSELECT \n  stock_abbr,\n  accounts_receivable_ratio\nFROM ratio_data\nWHERE accounts_receivable_ratio IS NOT NULL\nORDER BY accounts_receivable_ratio ASC\nLIMIT 3"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 3,
+  "result_rows": [
+    {
+      "stock_abbr": "迈普医学",
+      "accounts_receivable_ratio": 0.06566825042510195
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "accounts_receivable_ratio": 0.06566825042510195
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "accounts_receivable_ratio": 0.06566825042510195
+    }
+  ],
+  "context_companies": [
+    "迈普医学"
+  ],
+  "context_rows": [
+    {
+      "stock_abbr": "迈普医学",
+      "accounts_receivable_ratio": 0.06566825042510195
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "accounts_receivable_ratio": 0.06566825042510195
+    },
+    {
+      "stock_abbr": "迈普医学",
+      "accounts_receivable_ratio": 0.06566825042510195
+    }
+  ],
+  "result_preview": "[{\"stock_abbr\":\"迈普医学\",\"accounts_receivable_ratio\":0.0656682504},{\"stock_abbr\":\"迈普医学\",\"accounts_receivable_ratio\":0.0656682504},{\"stock_abbr\":\"迈普医学\",\"accounts_receivable_ratio\":0.0656682504}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2025年第三季度应收账款占营收比例最小的3家公司",
+    "x_field": null,
+    "y_fields": [
+      "accounts_receivable_ratio"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": "accounts_receivable_ratio",
+    "sort_ascending": false,
+    "top_n": 3,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B3035",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "2025年第三季度应收账款占营收比例最小的3家公司",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 3,
+      "preview_rows": [
+        {
+          "stock_abbr": "迈普医学",
+          "accounts_receivable_ratio": 0.06566825042510195
+        },
+        {
+          "stock_abbr": "迈普医学",
+          "accounts_receivable_ratio": 0.06566825042510195
+        },
+        {
+          "stock_abbr": "迈普医学",
+          "accounts_receivable_ratio": 0.06566825042510195
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "accounts_receivable_ratio",
+      "sort_ascending": false,
+      "top_n": 3,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "accounts_receivable_ratio",
+        "data_type": "quantitative",
+        "label": "accounts_receivable_ratio",
+        "unit": "%"
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B3035_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B3035_1.jpg"
+    },
+    "meta": {
+      "source_sql": "WITH ratio_data AS (\n  SELECT \n    stock_abbr,\n    asset_accounts_receivable,\n    total_operating_revenue,\n    CASE \n      WHEN total_operating_revenue > 0 THEN asset_accounts_receivable * 1.0 / total_operating_revenue\n      ELSE NULL\n    END AS accounts_receivable_ratio\n  FROM financials_view\n  WHERE report_period = '2025Q3'\n    AND total_operating_revenue IS NOT NULL\n    AND asset_accounts_receivable IS NOT NULL\n    AND total_operating_revenue > 0\n)\nSELECT \n  stock_abbr,\n  accounts_receivable_ratio\nFROM ratio_data\nWHERE accounts_receivable_ratio IS NOT NULL\nORDER BY accounts_receivable_ratio ASC\nLIMIT 3",
+      "value_fields": [
+        "accounts_receivable_ratio"
+      ],
+      "value_labels": [
+        "accounts_receivable_ratio"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "accounts_receivable_ratio"
+        ],
+        "category_field": "stock_abbr",
+        "sort_by": "accounts_receivable_ratio",
+        "sort_ascending": false,
+        "top_n": 3
+      },
+      "category_aggregate": "max"
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs_test/task2_langgraph/artifacts/chart_specs/B3035_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B3035_1.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "2025年第三季度，资产-应收账款占营业总收入比例最小的3家公司是哪些？列出简称和占比",
+      "A": {
+        "content": "根据2025年第三季度财报数据，资产-应收账款占营业总收入比例最小的3家公司均为迈普医学，其占比为6.57%。",
+        "image": [
+          "./result/B3035_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"2025年第三季度，资产-应收账款占营业总收入比例最小的3家公司是哪些？列出简称和占比\", \"A\": {\"content\": \"根据2025年第三季度财报数据，资产-应收账款占营业总收入比例最小的3家公司均为迈普医学，其占比为6.57%。\", \"image\": [\"./result/B3035_1.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，需要计算2025Q3每家公司的应收账款占营业总收入比例，并找出最小的3家。使用asset_accounts_receivable和total_operating_revenue计算比例，并确保分母大于0。按比例升序排序并限制3条记录。"
+  ],
+  "final_status": "ok"
+}

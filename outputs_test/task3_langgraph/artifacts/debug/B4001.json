@@ -1,0 +1,161 @@
+{
+  "question_id": "B4001",
+  "question_type": "多意图",
+  "raw_question": "2025年第三季度营业总收入最高的3家企业是哪些？这些企业的研发费用占营业总收入的比例分别是多少？哪家企业的研发效率（营业总收入/研发费用）最高？",
+  "raw_question_json": "[{\"Q\":\"2025年第三季度营业总收入最高的3家企业是哪些？这些企业的研发费用占营业总收入的比例分别是多少？哪家企业的研发效率（营业总收入/研发费用）最高？\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "metrics": [
+      "营业总收入",
+      "研发费用"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "focus_topics": [],
+    "intent_type": "sql_only",
+    "needs_sql": true,
+    "needs_retrieval": false,
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "sql_only",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入",
+      "研发费用"
+    ],
+    "needs_sql": true,
+    "top_n": 3,
+    "threshold": null,
+    "question": "2025年第三季度营业总收入最高的3家企业是哪些？这些企业的研发费用占营业总收入的比例分别是多少？哪家企业的研发效率（营业总收入/研发费用）最高？"
+  },
+  "retrieval_plan": {
+    "question": "2025年第三季度营业总收入最高的3家企业是哪些？这些企业的研发费用占营业总收入的比例分别是多少？哪家企业的研发效率（营业总收入/研发费用）最高？",
+    "companies": [],
+    "focus_topics": [
+      "主营业务收入",
+      "营业总收入",
+      "收入增长",
+      "主营业务",
+      "主营业务类型",
+      "业务类型",
+      "成本控制",
+      "成本结构",
+      "销售费用",
+      "研发费用",
+      "中药",
+      "创新药"
+    ],
+    "needs_retrieval": false,
+    "top_k": 0,
+    "source_scope": "hybrid",
+    "retrieval_mode": "hybrid"
+  },
+  "sql": "WITH top3_revenue AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        total_operating_revenue,\n        rnd_expense_ratio\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n    ORDER BY total_operating_revenue DESC\n    LIMIT 3\n)\nSELECT \n    stock_code,\n    stock_abbr,\n    total_operating_revenue,\n    rnd_expense_ratio,\n    CASE \n        WHEN rnd_expense_ratio > 0 THEN 100.0 / rnd_expense_ratio\n        ELSE NULL\n    END AS revenue_per_rnd_expense\nFROM top3_revenue\nORDER BY revenue_per_rnd_expense DESC;",
+  "sql_history": [
+    "WITH top3_revenue AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        total_operating_revenue,\n        rnd_expense_ratio\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n    ORDER BY total_operating_revenue DESC\n    LIMIT 3\n)\nSELECT \n    stock_code,\n    stock_abbr,\n    total_operating_revenue,\n    rnd_expense_ratio,\n    CASE \n        WHEN rnd_expense_ratio > 0 THEN 100.0 / rnd_expense_ratio\n        ELSE NULL\n    END AS revenue_per_rnd_expense\nFROM top3_revenue\nORDER BY revenue_per_rnd_expense DESC;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 3,
+  "result_rows": [
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "total_operating_revenue": 3285671.650886,
+      "rnd_expense_ratio": 2.512882024828496,
+      "revenue_per_rnd_expense": 39.7949442162232
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "total_operating_revenue": 3285671.650886,
+      "rnd_expense_ratio": 2.512882024828496,
+      "revenue_per_rnd_expense": 39.7949442162232
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "total_operating_revenue": 3285671.650886,
+      "rnd_expense_ratio": 2.512882024828496,
+      "revenue_per_rnd_expense": 39.7949442162232
+    }
+  ],
+  "retrieved_evidence": [],
+  "reranked_evidence": [],
+  "rerank_preview": "{\"strategy\": \"skipped_fast_path\", \"kept_count\": 0}",
+  "fused_context": {
+    "question": "2025年第三季度营业总收入最高的3家企业是哪些？这些企业的研发费用占营业总收入的比例分别是多少？哪家企业的研发效率（营业总收入/研发费用）最高？",
+    "sql_row_count": 3,
+    "evidence_count": 0,
+    "sql_preview": [
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "total_operating_revenue": 3285671.650886,
+        "rnd_expense_ratio": 2.512882024828496,
+        "revenue_per_rnd_expense": 39.7949442162232
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "total_operating_revenue": 3285671.650886,
+        "rnd_expense_ratio": 2.512882024828496,
+        "revenue_per_rnd_expense": 39.7949442162232
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "total_operating_revenue": 3285671.650886,
+        "rnd_expense_ratio": 2.512882024828496,
+        "revenue_per_rnd_expense": 39.7949442162232
+      }
+    ],
+    "evidence_preview": [],
+    "evidence_titles": [],
+    "source_breakdown": {}
+  },
+  "self_check": {
+    "pass": true,
+    "notes": [
+      "self_check_skipped_fast_path"
+    ]
+  },
+  "chart_plan": {},
+  "chart_spec": {},
+  "current_chart_paths": [],
+  "current_chart_specs": [],
+  "current_answer": "根据SQL查询结果，满足条件的公司如下：\n1. **药明康德 (603259)**：营业总收入为328.57亿元，研发费用为328.57亿元。\n2. **药明康德 (603259)**：营业总收入为328.57亿元，研发费用为328.57亿元。\n3. **药明康德 (603259)**：营业总收入为328.57亿元，研发费用为328.57亿元。",
+  "current_references": [],
+  "answer_rewritten": false,
+  "turn_answers": [
+    {
+      "Q": "2025年第三季度营业总收入最高的3家企业是哪些？这些企业的研发费用占营业总收入的比例分别是多少？哪家企业的研发效率（营业总收入/研发费用）最高？",
+      "A": {
+        "content": "根据SQL查询结果，满足条件的公司如下：\n1. **药明康德 (603259)**：营业总收入为328.57亿元，研发费用为328.57亿元。\n2. **药明康德 (603259)**：营业总收入为328.57亿元，研发费用为328.57亿元。\n3. **药明康德 (603259)**：营业总收入为328.57亿元，研发费用为328.57亿元。",
+        "image": [],
+        "references": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"2025年第三季度营业总收入最高的3家企业是哪些？这些企业的研发费用占营业总收入的比例分别是多少？哪家企业的研发效率（营业总收入/研发费用）最高？\", \"A\": {\"content\": \"根据SQL查询结果，满足条件的公司如下：\\n1. **药明康德 (603259)**：营业总收入为328.57亿元，研发费用为328.57亿元。\\n2. **药明康德 (603259)**：营业总收入为328.57亿元，研发费用为328.57亿元。\\n3. **药明康德 (603259)**：营业总收入为328.57亿元，研发费用为328.57亿元。\", \"image\": [], \"references\": []}}]",
+  "references_json": "[]",
+  "notes": [
+    "route=sql_only",
+    "1. 首先查询2025Q3营业总收入最高的3家企业：使用WHERE report_period='2025Q3'，按total_operating_revenue降序排序，LIMIT 3。\n2. 这些企业的研发费用占营业总收入的比例：视图已有rnd_expense_ratio字段（研发费用占营业总收入比例），直接使用。\n3. 研发效率（营业总收入/研发费用）：由于rnd_expense_ratio是研发费用/营业总收入，所以营业总收入/研发费用 = 1/rnd_expense_ratio。注意rnd_expense_ratio是百分比形式（如5表示5%），需要转换为小数计算：100/rnd_expense_ratio。\n4. 最后按研发效率降序排序，最高的排在最前面。\n5. 查询计划中companies为空，所以不指定具体公司，而是通过排序和LIMIT获取Top3。",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=0",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=0",
+    "self_check={\"pass\": true, \"notes\": [\"self_check_skipped_fast_path\"]}"
+  ],
+  "final_status": "ok"
+}

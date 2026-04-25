@@ -1,0 +1,115 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B3019",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "2025年第三季度应收账款占营收比超40%的公司",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 48,
+    "preview_rows": [
+      {
+        "stock_abbr": "百克生物",
+        "accounts_receivable_ratio": 249.35781160163612
+      },
+      {
+        "stock_abbr": "百克生物",
+        "accounts_receivable_ratio": 249.35781160163612
+      },
+      {
+        "stock_abbr": "百克生物",
+        "accounts_receivable_ratio": 249.35781160163612
+      },
+      {
+        "stock_abbr": "百克生物",
+        "accounts_receivable_ratio": 249.35781160163612
+      },
+      {
+        "stock_abbr": "百克生物",
+        "accounts_receivable_ratio": 249.35781160163612
+      },
+      {
+        "stock_abbr": "百克生物",
+        "accounts_receivable_ratio": 249.35781160163612
+      },
+      {
+        "stock_abbr": "百克生物",
+        "accounts_receivable_ratio": 249.35781160163612
+      },
+      {
+        "stock_abbr": "百克生物",
+        "accounts_receivable_ratio": 249.35781160163612
+      },
+      {
+        "stock_abbr": "百克生物",
+        "accounts_receivable_ratio": 249.35781160163612
+      },
+      {
+        "stock_abbr": "百克生物",
+        "accounts_receivable_ratio": 249.35781160163612
+      },
+      {
+        "stock_abbr": "百克生物",
+        "accounts_receivable_ratio": 249.35781160163612
+      },
+      {
+        "stock_abbr": "百克生物",
+        "accounts_receivable_ratio": 249.35781160163612
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "accounts_receivable_ratio",
+    "sort_ascending": false,
+    "top_n": 15,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "accounts_receivable_ratio",
+      "data_type": "quantitative",
+      "label": "accounts_receivable_ratio",
+      "unit": "%"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B3019_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B3019_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT stock_abbr, (asset_accounts_receivable / total_operating_revenue) * 100 AS accounts_receivable_ratio FROM financials_view WHERE report_period = '2025Q3' AND total_operating_revenue > 0 AND (asset_accounts_receivable / total_operating_revenue) * 100 > 40.0 ORDER BY accounts_receivable_ratio DESC",
+    "value_fields": [
+      "accounts_receivable_ratio"
+    ],
+    "value_labels": [
+      "accounts_receivable_ratio"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "accounts_receivable_ratio"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": "accounts_receivable_ratio",
+      "sort_ascending": false,
+      "top_n": 15
+    },
+    "category_aggregate": "max"
+  }
+}

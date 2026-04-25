@@ -1,0 +1,93 @@
+{
+  "question_id": "B3005",
+  "question_type": "数据统计分析查询",
+  "raw_question": "计算2025年第三季度各公司的资产负债率，找出资产负债率最高的公司，列出简称和资产负债率（%）",
+  "raw_question_json": "[{\"Q\":\"计算2025年第三季度各公司的资产负债率，找出资产负债率最高的公司，列出简称和资产负债率（%）\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "资产负债率"
+    ],
+    "chart_type": null,
+    "intent_type": "ranking",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "ranking",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "资产负债率"
+    ],
+    "chart_type": "barh",
+    "top_n": 1,
+    "threshold": null,
+    "question": "计算2025年第三季度各公司的资产负债率，找出资产负债率最高的公司，列出简称和资产负债率（%）",
+    "should_draw": true,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT stock_abbr, asset_liability_ratio FROM financials_view WHERE report_period = '2025Q3' AND asset_liability_ratio IS NOT NULL ORDER BY asset_liability_ratio DESC LIMIT 1",
+  "sql_history": [
+    "SELECT stock_abbr, asset_liability_ratio FROM financials_view WHERE report_period = '2025Q3' AND asset_liability_ratio IS NOT NULL ORDER BY asset_liability_ratio DESC LIMIT 1"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 1,
+  "result_rows": [
+    {
+      "stock_abbr": "迪安诊断",
+      "asset_liability_ratio": 41.2515454801628
+    }
+  ],
+  "context_companies": [
+    "迪安诊断"
+  ],
+  "context_rows": [
+    {
+      "stock_abbr": "迪安诊断",
+      "asset_liability_ratio": 41.2515454801628
+    }
+  ],
+  "result_preview": "[{\"stock_abbr\":\"迪安诊断\",\"asset_liability_ratio\":41.2515454802}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2025Q3资产负债率最高的公司",
+    "x_field": null,
+    "y_fields": [
+      "asset_liability_ratio"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": "asset_liability_ratio",
+    "sort_ascending": false,
+    "top_n": 1,
+    "should_draw": true
+  },
+  "chart_spec": {},
+  "all_chart_specs": [],
+  "all_chart_paths": [],
+  "graph_formats": [],
+  "turn_answers": [
+    {
+      "Q": "计算2025年第三季度各公司的资产负债率，找出资产负债率最高的公司，列出简称和资产负债率（%）",
+      "A": {
+        "content": "2025年第三季度，资产负债率最高的公司是迪安诊断，其资产负债率为41.25%。",
+        "image": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"计算2025年第三季度各公司的资产负债率，找出资产负债率最高的公司，列出简称和资产负债率（%）\", \"A\": {\"content\": \"2025年第三季度，资产负债率最高的公司是迪安诊断，其资产负债率为41.25%。\", \"image\": []}}]",
+  "notes": [
+    "根据查询计划，需要计算2025年第三季度各公司的资产负债率，并找出最高的公司。资产负债率字段为asset_liability_ratio，报告期筛选为2025Q3。由于是排名题且top_n为1，使用ORDER BY asset_liability_ratio DESC和LIMIT 1来获取最高值。查询计划中companies为空，表示全行业，因此不添加公司筛选。"
+  ],
+  "final_status": "ok"
+}

@@ -1,0 +1,10 @@
+﻿table_name,field_name,missing_count,dominant_reason,dominant_reason_count,reason_breakdown,sample_missing_keys
+balance_sheet,liability_advance_from_customers,14,likely_extraction_gap,14,"{""likely_extraction_gap"": 14}",603127|2023Q1 | 603259|2022FY | 603259|2023Q1 | 603259|2023H1 | 603259|2023Q3 | 603259|2023FY | 603259|2024Q1 | 603259|2024H1 | 603259|2024Q3 | 603259|2024FY
+cash_flow_sheet,net_cash_flow_yoy_growth,15,prior_period_value_unavailable,15,"{""prior_period_value_unavailable"": 15}",603127|2024Q3 | 603127|2025Q1 | 603259|2023FY | 603259|2025H1 | 603259|2025Q3 | 002821|2023Q3 | 002821|2025Q1 | 300347|2024Q3 | 300347|2024H1 | 300347|2024FY
+core_performance_indicators_sheet,net_profit_excl_non_recurring_yoy,26,likely_extraction_gap,26,"{""likely_extraction_gap"": 26}",603127|2023Q1 | 603259|2023Q1 | 688222|2023Q1 | 688222|2023H1 | 688222|2024Q3 | 688222|2024FY | 688222|2025H1 | 688276|2023Q1 | 002821|2022FY | 002821|2023Q3
+core_performance_indicators_sheet,net_profit_qoq_growth,22,likely_not_disclosed_in_source,12,"{""likely_not_disclosed_in_source"": 12, ""likely_extraction_gap"": 10}",603127|2022FY | 603127|2023Q1 | 603259|2022FY | 603259|2023Q1 | 688222|2022FY | 688222|2023Q1 | 688276|2022FY | 688276|2023Q1 | 688276|2025H1 | 002821|2022FY
+core_performance_indicators_sheet,operating_revenue_qoq_growth,20,likely_not_disclosed_in_source,10,"{""likely_not_disclosed_in_source"": 10, ""likely_extraction_gap"": 10}",603127|2022FY | 603127|2023Q1 | 603259|2022FY | 603259|2023Q1 | 688222|2022FY | 688222|2023Q1 | 688276|2022FY | 688276|2023Q1 | 002821|2022FY | 002821|2023Q1
+core_performance_indicators_sheet,net_asset_per_share,2,missing_share_basis,1,"{""missing_share_basis"": 1, ""derivation_inputs_incomplete"": 1}",603127|2025Q3 | 688276|2025Q1
+core_performance_indicators_sheet,operating_cf_per_share,2,upstream_cash_flow_missing,2,"{""upstream_cash_flow_missing"": 2}",603127|2025Q3 | 688276|2025Q1
+core_performance_indicators_sheet,eps,1,likely_extraction_gap,1,"{""likely_extraction_gap"": 1}",603127|2025Q3
+income_sheet,asset_impairment_loss,1,likely_extraction_gap,1,"{""likely_extraction_gap"": 1}",688222|2025Q3

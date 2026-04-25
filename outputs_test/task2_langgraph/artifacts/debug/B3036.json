@@ -1,0 +1,269 @@
+{
+  "question_id": "B3036",
+  "question_type": "数据基本查询",
+  "raw_question": "成都先导2025年第三季度投资性现金流量净额",
+  "raw_question_json": "[{\"Q\":\"成都先导2025年第三季度投资性现金流量净额\"}]",
+  "parsed_slots": {
+    "companies": [
+      "成都先导"
+    ],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "投资性现金流量净额"
+    ],
+    "chart_type": null,
+    "intent_type": "single_company_metric",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "single_company_metric",
+    "companies": [
+      "成都先导"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "投资性现金流量净额"
+    ],
+    "chart_type": null,
+    "top_n": null,
+    "threshold": null,
+    "question": "成都先导2025年第三季度投资性现金流量净额",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT stock_code, stock_abbr, report_period, investing_cf_net_amount FROM financials_view WHERE stock_abbr = '成都先导' AND report_period = '2025Q3'",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, report_period, investing_cf_net_amount FROM financials_view WHERE stock_abbr = '成都先导' AND report_period = '2025Q3'"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 16,
+  "result_rows": [
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "investing_cf_net_amount": -4124.886662
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "investing_cf_net_amount": -4124.886662
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "investing_cf_net_amount": -4124.886662
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "investing_cf_net_amount": -4124.886662
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "investing_cf_net_amount": -4124.886662
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "investing_cf_net_amount": -4124.886662
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "investing_cf_net_amount": -4124.886662
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "investing_cf_net_amount": -4124.886662
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "investing_cf_net_amount": -4124.886662
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "investing_cf_net_amount": -4124.886662
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "investing_cf_net_amount": -4124.886662
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "investing_cf_net_amount": -4124.886662
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "investing_cf_net_amount": -4124.886662
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "investing_cf_net_amount": -4124.886662
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "investing_cf_net_amount": -4124.886662
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "investing_cf_net_amount": -4124.886662
+    }
+  ],
+  "context_companies": [
+    "成都先导"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "investing_cf_net_amount": -4124.886662
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "investing_cf_net_amount": -4124.886662
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "investing_cf_net_amount": -4124.886662
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "investing_cf_net_amount": -4124.886662
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "investing_cf_net_amount": -4124.886662
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "investing_cf_net_amount": -4124.886662
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "investing_cf_net_amount": -4124.886662
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "investing_cf_net_amount": -4124.886662
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "investing_cf_net_amount": -4124.886662
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "investing_cf_net_amount": -4124.886662
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "investing_cf_net_amount": -4124.886662
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "investing_cf_net_amount": -4124.886662
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "investing_cf_net_amount": -4124.886662
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "investing_cf_net_amount": -4124.886662
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "investing_cf_net_amount": -4124.886662
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "investing_cf_net_amount": -4124.886662
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"688222\",\"stock_abbr\":\"成都先导\",\"report_period\":\"2025Q3\",\"investing_cf_net_amount\":-4124.886662},{\"stock_code\":\"688222\",\"stock_abbr\":\"成都先导\",\"report_period\":\"2025Q3\",\"investing_cf_net_amount\":-4124.886662},{\"stock_code\":\"688222\",\"stock_abbr\":\"成都先导\",\"report_period\":\"2025Q3\",\"investing_cf_net_amount\":-4124.886662},{\"stock_code\":\"688222\",\"stock_abbr\":\"成都先导\",\"report_period\":\"2025Q3\",\"investing_cf_net_amount\":-4124.886662},{\"stock_code\":\"688222\",\"stock_abbr\":\"成都先导\",\"report_period\":\"2025Q3\",\"investing_cf_net_amount\":-4124.886662},{\"stock_code\":\"688222\",\"stock_abbr\":\"成都先导\",\"report_period\":\"2025Q3\",\"investing_cf_net_amount\":-4124.886662},{\"stock_code\":\"688222\",\"stock_abbr\":\"成都先导\",\"report_period\":\"2025Q3\",\"investing_cf_net_amount\":-4124.886662},{\"stock_code\":\"688222\",\"stock_abbr\":\"成都先导\",\"report_period\":\"2025Q3\",\"investing_cf_net_amount\":-4124.886662},{\"stock_code\":\"688222\",\"stock_abbr\":\"成都先导\",\"report_period\":\"2025Q3\",\"investing_cf_net_amount\":-4124.886662},{\"stock_code\":\"688222\",\"stock_abbr\":\"成都先导\",\"report_period\":\"2025Q3\",\"investing_cf_net_amount\":-4124.886662},{\"stock_code\":\"688222\",\"stock_abbr\":\"成都先导\",\"report_period\":\"2025Q3\",\"investing_cf_net_amount\":-4124.886662},{\"stock_code\":\"688222\",\"stock_abbr\":\"成都先导\",\"report_period\":\"2025Q3\",\"investing_cf_net_amount\":-4124.886662},{\"stock_code\":\"688222\",\"stock_abbr\":\"成都先导\",\"report_period\":\"2025Q3\",\"investing_cf_net_amount\":-4124.886662},{\"stock_code\":\"688222\",\"stock_abbr\":\"成都先导\",\"report_period\":\"2025Q3\",\"investing_cf_net_amount\":-4124.886662},{\"stock_code\":\"688222\",\"stock_abbr\":\"成都先导\",\"report_period\":\"2025Q3\",\"investing_cf_net_amount\":-4124.886662},{\"stock_code\":\"688222\",\"stock_abbr\":\"成都先导\",\"report_period\":\"2025Q3\",\"investing_cf_net_amount\":-4124.886662}]",
+  "chart_plan": {},
+  "chart_spec": {},
+  "all_chart_specs": [],
+  "all_chart_paths": [],
+  "graph_formats": [],
+  "turn_answers": [
+    {
+      "Q": "成都先导2025年第三季度投资性现金流量净额",
+      "A": {
+        "content": "成都先导（股票代码 688222）在 2025 年第三季度的投资性现金流量净额为 -4124.89 万元。",
+        "image": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"成都先导2025年第三季度投资性现金流量净额\", \"A\": {\"content\": \"成都先导（股票代码 688222）在 2025 年第三季度的投资性现金流量净额为 -4124.89 万元。\", \"image\": []}}]",
+  "notes": [
+    "根据查询计划，需要查询成都先导在2025年第三季度的投资性现金流量净额。该指标对应字段为investing_cf_net_amount。使用stock_abbr和report_period进行精确筛选。"
+  ],
+  "final_status": "ok"
+}

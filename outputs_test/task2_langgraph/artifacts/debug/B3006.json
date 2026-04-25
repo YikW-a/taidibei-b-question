@@ -1,0 +1,269 @@
+{
+  "question_id": "B3006",
+  "question_type": "数据基本查询",
+  "raw_question": "泰格医药2024年研发费用是多少",
+  "raw_question_json": "[{\"Q\":\"泰格医药2024年研发费用是多少\"}]",
+  "parsed_slots": {
+    "companies": [
+      "泰格医药"
+    ],
+    "stock_codes": [],
+    "periods": [
+      "2024FY"
+    ],
+    "metrics": [
+      "研发费用"
+    ],
+    "chart_type": null,
+    "intent_type": "single_company_metric",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "single_company_metric",
+    "companies": [
+      "泰格医药"
+    ],
+    "periods": [
+      "2024FY"
+    ],
+    "metrics": [
+      "研发费用"
+    ],
+    "chart_type": null,
+    "top_n": null,
+    "threshold": null,
+    "question": "泰格医药2024年研发费用是多少",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT stock_code, stock_abbr, report_period, operating_expense_rnd_expenses AS 研发费用 FROM financials_view WHERE stock_abbr = '泰格医药' AND report_period = '2024FY'",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, report_period, operating_expense_rnd_expenses AS 研发费用 FROM financials_view WHERE stock_abbr = '泰格医药' AND report_period = '2024FY'"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 16,
+  "result_rows": [
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2024FY",
+      "研发费用": 23838.554575
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2024FY",
+      "研发费用": 23838.554575
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2024FY",
+      "研发费用": 23838.554575
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2024FY",
+      "研发费用": 23838.554575
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2024FY",
+      "研发费用": 23838.554575
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2024FY",
+      "研发费用": 23838.554575
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2024FY",
+      "研发费用": 23838.554575
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2024FY",
+      "研发费用": 23838.554575
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2024FY",
+      "研发费用": 23838.554575
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2024FY",
+      "研发费用": 23838.554575
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2024FY",
+      "研发费用": 23838.554575
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2024FY",
+      "研发费用": 23838.554575
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2024FY",
+      "研发费用": 23838.554575
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2024FY",
+      "研发费用": 23838.554575
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2024FY",
+      "研发费用": 23838.554575
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2024FY",
+      "研发费用": 23838.554575
+    }
+  ],
+  "context_companies": [
+    "泰格医药"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2024FY",
+      "研发费用": 23838.554575
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2024FY",
+      "研发费用": 23838.554575
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2024FY",
+      "研发费用": 23838.554575
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2024FY",
+      "研发费用": 23838.554575
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2024FY",
+      "研发费用": 23838.554575
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2024FY",
+      "研发费用": 23838.554575
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2024FY",
+      "研发费用": 23838.554575
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2024FY",
+      "研发费用": 23838.554575
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2024FY",
+      "研发费用": 23838.554575
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2024FY",
+      "研发费用": 23838.554575
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2024FY",
+      "研发费用": 23838.554575
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2024FY",
+      "研发费用": 23838.554575
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2024FY",
+      "研发费用": 23838.554575
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2024FY",
+      "研发费用": 23838.554575
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2024FY",
+      "研发费用": 23838.554575
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2024FY",
+      "研发费用": 23838.554575
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"report_period\":\"2024FY\",\"研发费用\":23838.554575},{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"report_period\":\"2024FY\",\"研发费用\":23838.554575},{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"report_period\":\"2024FY\",\"研发费用\":23838.554575},{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"report_period\":\"2024FY\",\"研发费用\":23838.554575},{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"report_period\":\"2024FY\",\"研发费用\":23838.554575},{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"report_period\":\"2024FY\",\"研发费用\":23838.554575},{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"report_period\":\"2024FY\",\"研发费用\":23838.554575},{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"report_period\":\"2024FY\",\"研发费用\":23838.554575},{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"report_period\":\"2024FY\",\"研发费用\":23838.554575},{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"report_period\":\"2024FY\",\"研发费用\":23838.554575},{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"report_period\":\"2024FY\",\"研发费用\":23838.554575},{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"report_period\":\"2024FY\",\"研发费用\":23838.554575},{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"report_period\":\"2024FY\",\"研发费用\":23838.554575},{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"report_period\":\"2024FY\",\"研发费用\":23838.554575},{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"report_period\":\"2024FY\",\"研发费用\":23838.554575},{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"report_period\":\"2024FY\",\"研发费用\":23838.554575}]",
+  "chart_plan": {},
+  "chart_spec": {},
+  "all_chart_specs": [],
+  "all_chart_paths": [],
+  "graph_formats": [],
+  "turn_answers": [
+    {
+      "Q": "泰格医药2024年研发费用是多少",
+      "A": {
+        "content": "泰格医药（股票代码 300347）在 2024 财年的研发费用为 23838.55 万元。",
+        "image": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"泰格医药2024年研发费用是多少\", \"A\": {\"content\": \"泰格医药（股票代码 300347）在 2024 财年的研发费用为 23838.55 万元。\", \"image\": []}}]",
+  "notes": [
+    "Used deterministic SQL template for a known query pattern."
+  ],
+  "final_status": "ok"
+}

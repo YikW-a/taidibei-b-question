@@ -1,0 +1,89 @@
+{
+  "question_id": "B3022",
+  "question_type": "数据基本查询",
+  "raw_question": "昭衍新药2024年全年经营性现金流量净额",
+  "raw_question_json": "[{\"Q\":\"昭衍新药2024年全年经营性现金流量净额\"}]",
+  "parsed_slots": {
+    "companies": [
+      "昭衍新药"
+    ],
+    "stock_codes": [],
+    "periods": [
+      "2024FY"
+    ],
+    "metrics": [
+      "经营性现金流量净额"
+    ],
+    "chart_type": null,
+    "intent_type": "single_company_metric",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "single_company_metric",
+    "companies": [
+      "昭衍新药"
+    ],
+    "periods": [
+      "2024FY"
+    ],
+    "metrics": [
+      "经营性现金流量净额"
+    ],
+    "chart_type": null,
+    "top_n": null,
+    "threshold": null,
+    "question": "昭衍新药2024年全年经营性现金流量净额",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT stock_code, stock_abbr, report_period, operating_cf_net_amount FROM financials_view WHERE stock_abbr = '昭衍新药' AND report_period = '2024FY'",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, report_period, operating_cf_net_amount FROM financials_view WHERE stock_abbr = '昭衍新药' AND report_period = '2024FY'"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 1,
+  "result_rows": [
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2024FY",
+      "operating_cf_net_amount": 0.0
+    }
+  ],
+  "context_companies": [
+    "昭衍新药"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2024FY",
+      "operating_cf_net_amount": 0.0
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"603127\",\"stock_abbr\":\"昭衍新药\",\"report_period\":\"2024FY\",\"operating_cf_net_amount\":0.0}]",
+  "chart_plan": {},
+  "chart_spec": {},
+  "all_chart_specs": [],
+  "all_chart_paths": [],
+  "graph_formats": [],
+  "turn_answers": [
+    {
+      "Q": "昭衍新药2024年全年经营性现金流量净额",
+      "A": {
+        "content": "昭衍新药（股票代码 603127）2024年全年的经营性现金流量净额为 0.00万元。",
+        "image": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"昭衍新药2024年全年经营性现金流量净额\", \"A\": {\"content\": \"昭衍新药（股票代码 603127）2024年全年的经营性现金流量净额为 0.00万元。\", \"image\": []}}]",
+  "notes": [
+    "Used deterministic SQL template for a known query pattern."
+  ],
+  "final_status": "ok"
+}

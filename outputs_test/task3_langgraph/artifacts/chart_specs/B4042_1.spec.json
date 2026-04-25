@@ -1,0 +1,183 @@
+{
+  "schema_version": "task3.chart-spec.v1",
+  "question_id": "B4042",
+  "image_index": 1,
+  "chart_type": "table",
+  "title": "检索研报中提及“产能利用率”或“在手订单”的公司... - 固定资产周转率",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 32,
+    "preview_rows": [
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 462987.713098,
+        "total_assets": 1980717.584391,
+        "total_liabilities": 244713.45169000025,
+        "fixed_asset_turnover_ratio": 1.891958573999874
+      },
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 462987.713098,
+        "total_assets": 1980717.584391,
+        "total_liabilities": 244713.45169000025,
+        "fixed_asset_turnover_ratio": 1.891958573999874
+      },
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 462987.713098,
+        "total_assets": 1980717.584391,
+        "total_liabilities": 244713.45169000025,
+        "fixed_asset_turnover_ratio": 1.891958573999874
+      },
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 462987.713098,
+        "total_assets": 1980717.584391,
+        "total_liabilities": 244713.45169000025,
+        "fixed_asset_turnover_ratio": 1.891958573999874
+      },
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 462987.713098,
+        "total_assets": 1980717.584391,
+        "total_liabilities": 244713.45169000025,
+        "fixed_asset_turnover_ratio": 1.891958573999874
+      },
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 462987.713098,
+        "total_assets": 1980717.584391,
+        "total_liabilities": 244713.45169000025,
+        "fixed_asset_turnover_ratio": 1.891958573999874
+      },
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 462987.713098,
+        "total_assets": 1980717.584391,
+        "total_liabilities": 244713.45169000025,
+        "fixed_asset_turnover_ratio": 1.891958573999874
+      },
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 462987.713098,
+        "total_assets": 1980717.584391,
+        "total_liabilities": 244713.45169000025,
+        "fixed_asset_turnover_ratio": 1.891958573999874
+      },
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 462987.713098,
+        "total_assets": 1980717.584391,
+        "total_liabilities": 244713.45169000025,
+        "fixed_asset_turnover_ratio": 1.891958573999874
+      },
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 462987.713098,
+        "total_assets": 1980717.584391,
+        "total_liabilities": 244713.45169000025,
+        "fixed_asset_turnover_ratio": 1.891958573999874
+      },
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 462987.713098,
+        "total_assets": 1980717.584391,
+        "total_liabilities": 244713.45169000025,
+        "fixed_asset_turnover_ratio": 1.891958573999874
+      },
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 462987.713098,
+        "total_assets": 1980717.584391,
+        "total_liabilities": 244713.45169000025,
+        "fixed_asset_turnover_ratio": 1.891958573999874
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": null,
+    "sort_ascending": true,
+    "top_n": 12,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "stock_code",
+      "data_type": "quantitative",
+      "label": "股票代码",
+      "unit": "万元"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": false
+  },
+  "output": {
+    "filename": "B4042_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B4042_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT stock_code, stock_abbr, report_period, total_operating_revenue, total_assets, total_assets - total_equity AS total_liabilities, total_operating_revenue / (total_assets - total_equity) AS fixed_asset_turnover_ratio FROM financials_view WHERE stock_abbr IN ('药明康德', '凯莱英') AND report_period = '2025Q3' ORDER BY fixed_asset_turnover_ratio DESC;",
+    "value_fields": [
+      "stock_code",
+      "total_operating_revenue",
+      "total_assets",
+      "total_liabilities"
+    ],
+    "value_labels": [
+      "股票代码",
+      "营业总收入",
+      "total_assets",
+      "total_liabilities"
+    ],
+    "original_chart_plan": {
+      "chart_type": "table",
+      "x_field": null,
+      "y_fields": [
+        "stock_code",
+        "total_operating_revenue",
+        "total_assets",
+        "total_liabilities"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": null,
+      "sort_ascending": true,
+      "top_n": 12
+    }
+  }
+}

@@ -207,11 +207,6 @@ python3 run_task2_langgraph.py \
   --output-dir "outputs/testsets/task2_langgraph"
 ```
 
-### 使用统一测试入口
-
-```bash
-python3 run_test_question_sets.py --skip-task3
-```
 
 ---
 

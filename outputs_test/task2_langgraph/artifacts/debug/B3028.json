@@ -1,0 +1,97 @@
+{
+  "question_id": "B3028",
+  "question_type": "数据基本查询",
+  "raw_question": "凯莱英2025年第三季度营业总收入环比增长率（与2025年Q2比较）",
+  "raw_question_json": "[{\"Q\":\"凯莱英2025年第三季度营业总收入环比增长率（与2025年Q2比较）\"}]",
+  "parsed_slots": {
+    "companies": [
+      "凯莱英"
+    ],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3",
+      "2025FY"
+    ],
+    "metrics": [
+      "营业总收入"
+    ],
+    "chart_type": null,
+    "intent_type": "single_company_metric",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "single_company_metric",
+    "companies": [
+      "凯莱英"
+    ],
+    "periods": [
+      "2025Q3",
+      "2025Q2"
+    ],
+    "metrics": [
+      "营业总收入"
+    ],
+    "chart_type": null,
+    "top_n": null,
+    "threshold": null,
+    "question": "凯莱英2025年第三季度营业总收入环比增长率（与2025年Q2比较）",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "WITH base AS ( SELECT stock_code, stock_abbr, report_period, total_operating_revenue FROM financials_view WHERE stock_abbr = '凯莱英' AND report_period IN ('2025Q2', '2025H1', '2025Q3')), agg AS ( SELECT stock_code, stock_abbr, MAX(CASE WHEN report_period = '2025Q2' THEN total_operating_revenue END) AS total_operating_revenue_q2, MAX(CASE WHEN report_period = '2025H1' THEN total_operating_revenue END) AS total_operating_revenue_h1, MAX(CASE WHEN report_period = '2025Q3' THEN total_operating_revenue END) AS total_operating_revenue_q3_cumulative FROM base GROUP BY stock_code, stock_abbr) SELECT stock_code, stock_abbr, '2025Q2' AS report_period_prev, total_operating_revenue_q2 AS total_operating_revenue_prev, '2025Q3' AS report_period_curr, (total_operating_revenue_q3_cumulative - total_operating_revenue_h1) AS total_operating_revenue_curr, ROUND((((total_operating_revenue_q3_cumulative - total_operating_revenue_h1) - total_operating_revenue_q2) / ABS(total_operating_revenue_q2)) * 100, 2) AS qoq_growth FROM agg WHERE total_operating_revenue_q2 IS NOT NULL AND total_operating_revenue_q2 != 0 AND total_operating_revenue_h1 IS NOT NULL AND total_operating_revenue_q3_cumulative IS NOT NULL",
+  "sql_history": [
+    "WITH base AS ( SELECT stock_code, stock_abbr, report_period, total_operating_revenue FROM financials_view WHERE stock_abbr = '凯莱英' AND report_period IN ('2025Q2', '2025H1', '2025Q3')), agg AS ( SELECT stock_code, stock_abbr, MAX(CASE WHEN report_period = '2025Q2' THEN total_operating_revenue END) AS total_operating_revenue_q2, MAX(CASE WHEN report_period = '2025H1' THEN total_operating_revenue END) AS total_operating_revenue_h1, MAX(CASE WHEN report_period = '2025Q3' THEN total_operating_revenue END) AS total_operating_revenue_q3_cumulative FROM base GROUP BY stock_code, stock_abbr) SELECT stock_code, stock_abbr, '2025Q2' AS report_period_prev, total_operating_revenue_q2 AS total_operating_revenue_prev, '2025Q3' AS report_period_curr, (total_operating_revenue_q3_cumulative - total_operating_revenue_h1) AS total_operating_revenue_curr, ROUND((((total_operating_revenue_q3_cumulative - total_operating_revenue_h1) - total_operating_revenue_q2) / ABS(total_operating_revenue_q2)) * 100, 2) AS qoq_growth FROM agg WHERE total_operating_revenue_q2 IS NOT NULL AND total_operating_revenue_q2 != 0 AND total_operating_revenue_h1 IS NOT NULL AND total_operating_revenue_q3_cumulative IS NOT NULL"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 1,
+  "result_rows": [
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period_prev": "2025Q2",
+      "total_operating_revenue_prev": 164709.10160700002,
+      "report_period_curr": "2025Q3",
+      "total_operating_revenue_curr": 144157.06065499998,
+      "qoq_growth": -12.48
+    }
+  ],
+  "context_companies": [
+    "凯莱英"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period_prev": "2025Q2",
+      "total_operating_revenue_prev": 164709.10160700002,
+      "report_period_curr": "2025Q3",
+      "total_operating_revenue_curr": 144157.06065499998,
+      "qoq_growth": -12.48
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"002821\",\"stock_abbr\":\"凯莱英\",\"report_period_prev\":\"2025Q2\",\"total_operating_revenue_prev\":164709.101607,\"report_period_curr\":\"2025Q3\",\"total_operating_revenue_curr\":144157.060655,\"qoq_growth\":-12.48}]",
+  "chart_plan": {},
+  "chart_spec": {},
+  "all_chart_specs": [],
+  "all_chart_paths": [],
+  "graph_formats": [],
+  "turn_answers": [
+    {
+      "Q": "凯莱英2025年第三季度营业总收入环比增长率（与2025年Q2比较）",
+      "A": {
+        "content": "凯莱英（股票代码：002821）2025年第三季度营业总收入为144,157.06万元，与2025年第二季度的164,709.10万元相比，环比增长率为-12.48%。",
+        "image": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"凯莱英2025年第三季度营业总收入环比增长率（与2025年Q2比较）\", \"A\": {\"content\": \"凯莱英（股票代码：002821）2025年第三季度营业总收入为144,157.06万元，与2025年第二季度的164,709.10万元相比，环比增长率为-12.48%。\", \"image\": []}}]",
+  "notes": [
+    "Used deterministic SQL template for a known query pattern."
+  ],
+  "final_status": "ok"
+}

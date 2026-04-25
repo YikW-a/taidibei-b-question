@@ -1,0 +1,77 @@
+{
+  "question_id": "B3011",
+  "question_type": "数据统计分析查询",
+  "raw_question": "2022-2025年第三季度，哪家公司的营业总收入复合增长率最高？请展示增长率（%）",
+  "raw_question_json": "[{\"Q\":\"2022-2025年第三季度，哪家公司的营业总收入复合增长率最高？请展示增长率（%）\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3",
+      "2022Q3",
+      "2023Q3",
+      "2024Q3"
+    ],
+    "metrics": [
+      "营业总收入",
+      "复合增长率"
+    ],
+    "chart_type": null,
+    "intent_type": "ranking",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "ranking",
+    "companies": [],
+    "periods": [
+      "2025Q3",
+      "2022Q3",
+      "2023Q3",
+      "2024Q3"
+    ],
+    "metrics": [
+      "营业总收入",
+      "复合增长率"
+    ],
+    "chart_type": null,
+    "top_n": null,
+    "threshold": null,
+    "question": "2022-2025年第三季度，哪家公司的营业总收入复合增长率最高？请展示增长率（%）",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "WITH growth AS ( SELECT stock_code, stock_abbr, MAX(CASE WHEN report_period = '2022Q3' THEN total_operating_revenue END) AS revenue_start, MAX(CASE WHEN report_period = '2025Q3' THEN total_operating_revenue END) AS revenue_end FROM financials_view WHERE report_period IN ('2022Q3', '2025Q3') GROUP BY stock_code, stock_abbr HAVING revenue_start IS NOT NULL AND revenue_end IS NOT NULL AND revenue_start > 0), cagr AS ( SELECT stock_code, stock_abbr, (POWER(revenue_end / revenue_start, 1.0 / 3) - 1) * 100 AS cagr_percentage FROM growth) SELECT stock_code, stock_abbr, cagr_percentage FROM cagr ORDER BY cagr_percentage DESC LIMIT 1",
+  "sql_history": [
+    "WITH growth AS ( SELECT stock_code, stock_abbr, MAX(CASE WHEN report_period = '2022Q3' THEN total_operating_revenue END) AS revenue_start, MAX(CASE WHEN report_period = '2025Q3' THEN total_operating_revenue END) AS revenue_end FROM financials_view WHERE report_period IN ('2022Q3', '2025Q3') GROUP BY stock_code, stock_abbr HAVING revenue_start IS NOT NULL AND revenue_end IS NOT NULL AND revenue_start > 0), cagr AS ( SELECT stock_code, stock_abbr, (POWER(revenue_end / revenue_start, 1.0 / 3) - 1) * 100 AS cagr_percentage FROM growth) SELECT stock_code, stock_abbr, cagr_percentage FROM cagr ORDER BY cagr_percentage DESC LIMIT 1"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 0,
+  "result_rows": [],
+  "context_companies": [],
+  "context_rows": [],
+  "result_preview": "[]",
+  "chart_plan": {},
+  "chart_spec": {},
+  "all_chart_specs": [],
+  "all_chart_paths": [],
+  "graph_formats": [],
+  "turn_answers": [
+    {
+      "Q": "2022-2025年第三季度，哪家公司的营业总收入复合增长率最高？请展示增长率（%）",
+      "A": {
+        "content": "当前数据库缺少计算营业总收入复合增长率所需的完整可比期数据，各期可用公司覆盖为 2022Q3:0家，2023Q3:10家，2024Q3:10家，2025Q3:10家，因此无法直接比较。",
+        "image": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"2022-2025年第三季度，哪家公司的营业总收入复合增长率最高？请展示增长率（%）\", \"A\": {\"content\": \"当前数据库缺少计算营业总收入复合增长率所需的完整可比期数据，各期可用公司覆盖为 2022Q3:0家，2023Q3:10家，2024Q3:10家，2025Q3:10家，因此无法直接比较。\", \"image\": []}}]",
+  "notes": [
+    "Used deterministic SQL template for a known query pattern."
+  ],
+  "final_status": "ok"
+}

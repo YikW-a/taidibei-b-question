@@ -1,0 +1,271 @@
+{
+  "question_id": "B4010",
+  "question_type": "融合查询",
+  "raw_question": "查询凯莱英2025年第三季度化学大分子业务（含多肽）的收入贡献及研发费用金额",
+  "raw_question_json": "[{\"Q\":\"查询凯莱英2025年第三季度化学大分子业务（含多肽）的收入贡献及研发费用金额\"}]",
+  "parsed_slots": {
+    "companies": [
+      "凯莱英"
+    ],
+    "stock_codes": [],
+    "metrics": [
+      "营业总收入",
+      "研发费用"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "focus_topics": [],
+    "intent_type": "sql_only",
+    "needs_sql": true,
+    "needs_retrieval": false,
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "sql_only",
+    "companies": [
+      "凯莱英"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入",
+      "研发费用"
+    ],
+    "needs_sql": true,
+    "top_n": null,
+    "threshold": null,
+    "question": "查询凯莱英2025年第三季度化学大分子业务（含多肽）的收入贡献及研发费用金额"
+  },
+  "retrieval_plan": {
+    "question": "查询凯莱英2025年第三季度化学大分子业务（含多肽）的收入贡献及研发费用金额",
+    "companies": [
+      "凯莱英"
+    ],
+    "focus_topics": [
+      "化学大分子业务",
+      "多肽",
+      "主营业务",
+      "主营业务类型",
+      "业务类型",
+      "成本控制",
+      "成本结构",
+      "销售费用",
+      "研发费用",
+      "中药",
+      "创新药"
+    ],
+    "needs_retrieval": false,
+    "top_k": 0,
+    "source_scope": "stock",
+    "retrieval_mode": "hybrid"
+  },
+  "sql": "SELECT stock_code, stock_abbr, report_period, total_operating_revenue, operating_expense_rnd_expenses FROM financials_view WHERE stock_abbr = '凯莱英' AND report_period = '2025Q3'",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, report_period, total_operating_revenue, operating_expense_rnd_expenses FROM financials_view WHERE stock_abbr = '凯莱英' AND report_period = '2025Q3'"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 16,
+  "result_rows": [
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 462987.713098,
+      "operating_expense_rnd_expenses": 43307.140531
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 462987.713098,
+      "operating_expense_rnd_expenses": 43307.140531
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 462987.713098,
+      "operating_expense_rnd_expenses": 43307.140531
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 462987.713098,
+      "operating_expense_rnd_expenses": 43307.140531
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 462987.713098,
+      "operating_expense_rnd_expenses": 43307.140531
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 462987.713098,
+      "operating_expense_rnd_expenses": 43307.140531
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 462987.713098,
+      "operating_expense_rnd_expenses": 43307.140531
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 462987.713098,
+      "operating_expense_rnd_expenses": 43307.140531
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 462987.713098,
+      "operating_expense_rnd_expenses": 43307.140531
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 462987.713098,
+      "operating_expense_rnd_expenses": 43307.140531
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 462987.713098,
+      "operating_expense_rnd_expenses": 43307.140531
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 462987.713098,
+      "operating_expense_rnd_expenses": 43307.140531
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 462987.713098,
+      "operating_expense_rnd_expenses": 43307.140531
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 462987.713098,
+      "operating_expense_rnd_expenses": 43307.140531
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 462987.713098,
+      "operating_expense_rnd_expenses": 43307.140531
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 462987.713098,
+      "operating_expense_rnd_expenses": 43307.140531
+    }
+  ],
+  "retrieved_evidence": [],
+  "reranked_evidence": [],
+  "rerank_preview": "{\"strategy\": \"skipped_fast_path\", \"kept_count\": 0}",
+  "fused_context": {
+    "question": "查询凯莱英2025年第三季度化学大分子业务（含多肽）的收入贡献及研发费用金额",
+    "sql_row_count": 16,
+    "evidence_count": 0,
+    "sql_preview": [
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 462987.713098,
+        "operating_expense_rnd_expenses": 43307.140531
+      },
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 462987.713098,
+        "operating_expense_rnd_expenses": 43307.140531
+      },
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 462987.713098,
+        "operating_expense_rnd_expenses": 43307.140531
+      },
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 462987.713098,
+        "operating_expense_rnd_expenses": 43307.140531
+      },
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 462987.713098,
+        "operating_expense_rnd_expenses": 43307.140531
+      }
+    ],
+    "evidence_preview": [],
+    "evidence_titles": [],
+    "source_breakdown": {}
+  },
+  "self_check": {
+    "pass": true,
+    "notes": [
+      "self_check_skipped_fast_path"
+    ]
+  },
+  "chart_plan": {},
+  "chart_spec": {},
+  "current_chart_paths": [],
+  "current_chart_specs": [],
+  "current_answer": "根据提供的 SQL 查询结果，**当前结构化数据无法直接支持“化学大分子业务（含多肽）”这一细分业务口径的查询**。\n\n**直接结论：**\n无法从现有数据中获取凯莱英2025年第三季度化学大分子业务（含多肽）的具体收入贡献金额。查询返回的是公司整体的营业总收入和研发费用。\n\n**财务数据支撑：**\n- **公司整体营业总收入**：凯莱英在2025年第三季度的营业总收入为 **462,987.71 万元**（约合 **46.30 亿元**，按1亿元=10,000万元换算）。\n- **公司整体研发费用**：同期研发费用为 **43,307.14 万元**（约合 **4.33 亿元**）。\n\n**研报证据支撑：**\n未检索到直接研报证据。\n\n**综合判断：**\n1. 数据库中的财务视图（`financials_view`）提供了公司层级的合并财务数据，但未包含按业务线（如化学大分子）细分的收入信息。\n2. 因此，无法回答关于“化学大分子业务（含多肽）的收入贡献”这一问题。\n3. 关于研发费用，当前数据也仅为公司整体口径，无法区分其中有多少投入于化学大分子业务。\n4. 如需获取细分业务数据，可能需要查阅公司定期报告中的“主营业务分行业/分产品情况”章节或相关专项说明。",
+  "current_references": [],
+  "answer_rewritten": false,
+  "turn_answers": [
+    {
+      "Q": "查询凯莱英2025年第三季度化学大分子业务（含多肽）的收入贡献及研发费用金额",
+      "A": {
+        "content": "根据提供的 SQL 查询结果，**当前结构化数据无法直接支持“化学大分子业务（含多肽）”这一细分业务口径的查询**。\n\n**直接结论：**\n无法从现有数据中获取凯莱英2025年第三季度化学大分子业务（含多肽）的具体收入贡献金额。查询返回的是公司整体的营业总收入和研发费用。\n\n**财务数据支撑：**\n- **公司整体营业总收入**：凯莱英在2025年第三季度的营业总收入为 **462,987.71 万元**（约合 **46.30 亿元**，按1亿元=10,000万元换算）。\n- **公司整体研发费用**：同期研发费用为 **43,307.14 万元**（约合 **4.33 亿元**）。\n\n**研报证据支撑：**\n未检索到直接研报证据。\n\n**综合判断：**\n1. 数据库中的财务视图（`financials_view`）提供了公司层级的合并财务数据，但未包含按业务线（如化学大分子）细分的收入信息。\n2. 因此，无法回答关于“化学大分子业务（含多肽）的收入贡献”这一问题。\n3. 关于研发费用，当前数据也仅为公司整体口径，无法区分其中有多少投入于化学大分子业务。\n4. 如需获取细分业务数据，可能需要查阅公司定期报告中的“主营业务分行业/分产品情况”章节或相关专项说明。",
+        "image": [],
+        "references": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"查询凯莱英2025年第三季度化学大分子业务（含多肽）的收入贡献及研发费用金额\", \"A\": {\"content\": \"根据提供的 SQL 查询结果，**当前结构化数据无法直接支持“化学大分子业务（含多肽）”这一细分业务口径的查询**。\\n\\n**直接结论：**\\n无法从现有数据中获取凯莱英2025年第三季度化学大分子业务（含多肽）的具体收入贡献金额。查询返回的是公司整体的营业总收入和研发费用。\\n\\n**财务数据支撑：**\\n- **公司整体营业总收入**：凯莱英在2025年第三季度的营业总收入为 **462,987.71 万元**（约合 **46.30 亿元**，按1亿元=10,000万元换算）。\\n- **公司整体研发费用**：同期研发费用为 **43,307.14 万元**（约合 **4.33 亿元**）。\\n\\n**研报证据支撑：**\\n未检索到直接研报证据。\\n\\n**综合判断：**\\n1. 数据库中的财务视图（`financials_view`）提供了公司层级的合并财务数据，但未包含按业务线（如化学大分子）细分的收入信息。\\n2. 因此，无法回答关于“化学大分子业务（含多肽）的收入贡献”这一问题。\\n3. 关于研发费用，当前数据也仅为公司整体口径，无法区分其中有多少投入于化学大分子业务。\\n4. 如需获取细分业务数据，可能需要查阅公司定期报告中的“主营业务分行业/分产品情况”章节或相关专项说明。\", \"image\": [], \"references\": []}}]",
+  "references_json": "[]",
+  "notes": [
+    "route=sql_only",
+    "根据查询计划，需要查询凯莱英2025年第三季度的营业总收入和研发费用。虽然问题提到了\"化学大分子业务（含多肽）的收入贡献\"，但financials_view表中没有对应的细分业务收入字段，只有total_operating_revenue（营业总收入）和operating_expense_rnd_expenses（研发费用）字段可用。因此只能返回这些可用的财务数据。",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=0",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=0",
+    "self_check={\"pass\": true, \"notes\": [\"self_check_skipped_fast_path\"]}"
+  ],
+  "final_status": "ok"
+}

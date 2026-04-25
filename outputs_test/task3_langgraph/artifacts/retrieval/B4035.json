@@ -1,0 +1,77 @@
+[
+  {
+    "source_type": "stock",
+    "title": "25Q2收入和利润稳步提升，“DEL+AI+自动化”平台取得阶段性成果",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/25Q2收入和利润稳步提升，“DEL+AI+自动化”平台取得阶段性成果.pdf",
+    "publish_date": "2025-09-01 00:00:00.000",
+    "company_or_industry": "成都先导",
+    "organization": "国信证券",
+    "snippet": "25Q2收入和利润稳步提升，“DEL+AI+自动化”平台取得阶段性成果；成都先导；国信证券",
+    "score": 4.631165,
+    "metadata_ref": "stock::25Q2收入和利润稳步提升，“DEL+AI+自动化”平台取得阶段性成果::2025-09-01 00:00:00.000::国信证券::成都先导",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.802285
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "核心业务稳步增长，“DEL+AI+自动化”助力新药研发",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/核心业务稳步增长，“DEL+AI+自动化”助力新药研发.pdf",
+    "publish_date": "2025-05-09 00:00:00.000",
+    "company_or_industry": "成都先导",
+    "organization": "国信证券",
+    "snippet": "核心业务稳步增长，“DEL+AI+自动化”助力新药研发；成都先导；国信证券",
+    "score": 4.604667,
+    "metadata_ref": "stock::核心业务稳步增长，“DEL+AI+自动化”助力新药研发::2025-05-09 00:00:00.000::国信证券::成都先导",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.774485
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "2025年前三季度业绩加速提升，核心业务和自研管线进展顺利",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/2025年前三季度业绩加速提升，核心业务和自研管线进展顺利.pdf",
+    "publish_date": "2025-11-06 00:00:00.000",
+    "company_or_industry": "成都先导",
+    "organization": "国信证券",
+    "snippet": "2025年前三季度业绩加速提升，核心业务和自研管线进展顺利；成都先导；国信证券",
+    "score": 4.578024,
+    "metadata_ref": "stock::2025年前三季度业绩加速提升，核心业务和自研管线进展顺利::2025-11-06 00:00:00.000::国信证券::成都先导",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.775739
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "2025年半年报点评：DEL业务大幅回暖，AI持续贡献业绩增量",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/2025年半年报点评：DEL业务大幅回暖，AI持续贡献业绩增量.pdf",
+    "publish_date": "2025-09-02 00:00:00.000",
+    "company_or_industry": "成都先导",
+    "organization": "民生证券",
+    "snippet": "2025年半年报点评：DEL业务大幅回暖，AI持续贡献业绩增量；成都先导；民生证券",
+    "score": 3.8559989999999997,
+    "metadata_ref": "stock::2025年半年报点评：DEL业务大幅回暖，AI持续贡献业绩增量::2025-09-02 00:00:00.000::民生证券::成都先导",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.855999
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "2024年报&2025年一季报点评：行稳则致远，AI再创星辰大海",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/2024年报&2025年一季报点评：行稳则致远，AI再创星辰大海.pdf",
+    "publish_date": "2025-04-29 00:00:00.000",
+    "company_or_industry": "成都先导",
+    "organization": "民生证券",
+    "snippet": "2024年报&2025年一季报点评：行稳则致远，AI再创星辰大海；成都先导；民生证券",
+    "score": 3.835149,
+    "metadata_ref": "stock::2024年报&2025年一季报点评：行稳则致远，AI再创星辰大海::2025-04-29 00:00:00.000::民生证券::成都先导",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.835149
+    }
+  }
+]

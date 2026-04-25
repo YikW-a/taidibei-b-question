@@ -1,0 +1,103 @@
+{
+  "question_id": "B3032",
+  "question_type": "数据基本查询",
+  "raw_question": "药明康德2025年第三季度利润表中的营业总收入，与核心业绩指标表中的营业总收入是否一致？给出两个数值",
+  "raw_question_json": "[{\"Q\":\"药明康德2025年第三季度利润表中的营业总收入，与核心业绩指标表中的营业总收入是否一致？给出两个数值\"}]",
+  "parsed_slots": {
+    "companies": [
+      "药明康德"
+    ],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入"
+    ],
+    "chart_type": null,
+    "intent_type": "single_company_metric",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "comparison",
+    "companies": [
+      "药明康德"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入"
+    ],
+    "chart_type": "table",
+    "top_n": null,
+    "threshold": null,
+    "question": "药明康德2025年第三季度利润表中的营业总收入，与核心业绩指标表中的营业总收入是否一致？给出两个数值",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT stock_code, stock_abbr, report_period, total_operating_revenue_income AS 利润表营业总收入, total_operating_revenue_kpi AS 核心业绩指标表营业总收入 FROM financials_view WHERE stock_abbr = '药明康德' AND report_period = '2025Q3' LIMIT 1;",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, report_period, total_operating_revenue_income AS 利润表营业总收入, total_operating_revenue_kpi AS 核心业绩指标表营业总收入 FROM financials_view WHERE stock_abbr = '药明康德' AND report_period = '2025Q3' LIMIT 1;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 1,
+  "result_rows": [
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "report_period": "2025Q3",
+      "利润表营业总收入": 3285671.650886,
+      "核心业绩指标表营业总收入": 3285671.650886
+    }
+  ],
+  "context_companies": [
+    "药明康德"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "report_period": "2025Q3",
+      "利润表营业总收入": 3285671.650886,
+      "核心业绩指标表营业总收入": 3285671.650886
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"603259\",\"stock_abbr\":\"药明康德\",\"report_period\":\"2025Q3\",\"利润表营业总收入\":3285671.6508860001,\"核心业绩指标表营业总收入\":3285671.6508860001}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "药明康德2025Q3营业总收入对比",
+    "x_field": null,
+    "y_fields": [
+      "stock_code"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": "stock_code",
+    "sort_ascending": true,
+    "top_n": 1,
+    "should_draw": true
+  },
+  "chart_spec": {},
+  "all_chart_specs": [],
+  "all_chart_paths": [],
+  "graph_formats": [],
+  "turn_answers": [
+    {
+      "Q": "药明康德2025年第三季度利润表中的营业总收入，与核心业绩指标表中的营业总收入是否一致？给出两个数值",
+      "A": {
+        "content": "药明康德（603259）2025年第三季度利润表中的营业总收入为328.57亿元，核心业绩指标表中的营业总收入同样为328.57亿元，两者数值一致。",
+        "image": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"药明康德2025年第三季度利润表中的营业总收入，与核心业绩指标表中的营业总收入是否一致？给出两个数值\", \"A\": {\"content\": \"药明康德（603259）2025年第三季度利润表中的营业总收入为328.57亿元，核心业绩指标表中的营业总收入同样为328.57亿元，两者数值一致。\", \"image\": []}}]",
+  "notes": [
+    "根据查询计划，需要比较药明康德在2025Q3的利润表营业总收入（total_operating_revenue_income）和核心业绩指标表营业总收入（total_operating_revenue_kpi）。查询应返回这两个数值。"
+  ],
+  "final_status": "ok"
+}

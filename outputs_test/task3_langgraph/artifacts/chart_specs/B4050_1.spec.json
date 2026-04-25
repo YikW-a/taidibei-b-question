@@ -1,0 +1,267 @@
+{
+  "schema_version": "task3.chart-spec.v1",
+  "question_id": "B4050",
+  "image_index": 1,
+  "chart_type": "table",
+  "title": "检查利润表中的“营业利润”是否等于营业收入减营业... - 营业总收入",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 80,
+    "preview_rows": [
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q2",
+        "营业收入": 1114468.6578179998,
+        "营业成本": NaN,
+        "销售费用": NaN,
+        "管理费用": NaN,
+        "财务费用": NaN,
+        "税金及附加": NaN,
+        "报表营业利润": 562752.3007089999,
+        "推导营业利润": 1114468.6578179998,
+        "差异金额": -551716.357109,
+        "差异率百分比": -98.03893407701825,
+        "匹配状态": "不匹配"
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "营业收入": 3285671.650886,
+        "营业成本": 1753809.863779,
+        "销售费用": 56937.457448,
+        "管理费用": 185852.666926,
+        "财务费用": 19065.209842,
+        "税金及附加": 27396.520462,
+        "报表营业利润": 1503706.835044,
+        "推导营业利润": 1242609.932429,
+        "差异金额": 261096.90261500003,
+        "差异率百分比": 17.363550961538326,
+        "匹配状态": "不匹配"
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "营业收入": 3285671.650886,
+        "营业成本": 1753809.863779,
+        "销售费用": 56937.457448,
+        "管理费用": 185852.666926,
+        "财务费用": 19065.209842,
+        "税金及附加": 27396.520462,
+        "报表营业利润": 1503706.835044,
+        "推导营业利润": 1242609.932429,
+        "差异金额": 261096.90261500003,
+        "差异率百分比": 17.363550961538326,
+        "匹配状态": "不匹配"
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "营业收入": 3285671.650886,
+        "营业成本": 1753809.863779,
+        "销售费用": 56937.457448,
+        "管理费用": 185852.666926,
+        "财务费用": 19065.209842,
+        "税金及附加": 27396.520462,
+        "报表营业利润": 1503706.835044,
+        "推导营业利润": 1242609.932429,
+        "差异金额": 261096.90261500003,
+        "差异率百分比": 17.363550961538326,
+        "匹配状态": "不匹配"
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "营业收入": 3285671.650886,
+        "营业成本": 1753809.863779,
+        "销售费用": 56937.457448,
+        "管理费用": 185852.666926,
+        "财务费用": 19065.209842,
+        "税金及附加": 27396.520462,
+        "报表营业利润": 1503706.835044,
+        "推导营业利润": 1242609.932429,
+        "差异金额": 261096.90261500003,
+        "差异率百分比": 17.363550961538326,
+        "匹配状态": "不匹配"
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "营业收入": 3285671.650886,
+        "营业成本": 1753809.863779,
+        "销售费用": 56937.457448,
+        "管理费用": 185852.666926,
+        "财务费用": 19065.209842,
+        "税金及附加": 27396.520462,
+        "报表营业利润": 1503706.835044,
+        "推导营业利润": 1242609.932429,
+        "差异金额": 261096.90261500003,
+        "差异率百分比": 17.363550961538326,
+        "匹配状态": "不匹配"
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "营业收入": 3285671.650886,
+        "营业成本": 1753809.863779,
+        "销售费用": 56937.457448,
+        "管理费用": 185852.666926,
+        "财务费用": 19065.209842,
+        "税金及附加": 27396.520462,
+        "报表营业利润": 1503706.835044,
+        "推导营业利润": 1242609.932429,
+        "差异金额": 261096.90261500003,
+        "差异率百分比": 17.363550961538326,
+        "匹配状态": "不匹配"
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "营业收入": 3285671.650886,
+        "营业成本": 1753809.863779,
+        "销售费用": 56937.457448,
+        "管理费用": 185852.666926,
+        "财务费用": 19065.209842,
+        "税金及附加": 27396.520462,
+        "报表营业利润": 1503706.835044,
+        "推导营业利润": 1242609.932429,
+        "差异金额": 261096.90261500003,
+        "差异率百分比": 17.363550961538326,
+        "匹配状态": "不匹配"
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "营业收入": 3285671.650886,
+        "营业成本": 1753809.863779,
+        "销售费用": 56937.457448,
+        "管理费用": 185852.666926,
+        "财务费用": 19065.209842,
+        "税金及附加": 27396.520462,
+        "报表营业利润": 1503706.835044,
+        "推导营业利润": 1242609.932429,
+        "差异金额": 261096.90261500003,
+        "差异率百分比": 17.363550961538326,
+        "匹配状态": "不匹配"
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "营业收入": 3285671.650886,
+        "营业成本": 1753809.863779,
+        "销售费用": 56937.457448,
+        "管理费用": 185852.666926,
+        "财务费用": 19065.209842,
+        "税金及附加": 27396.520462,
+        "报表营业利润": 1503706.835044,
+        "推导营业利润": 1242609.932429,
+        "差异金额": 261096.90261500003,
+        "差异率百分比": 17.363550961538326,
+        "匹配状态": "不匹配"
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "营业收入": 3285671.650886,
+        "营业成本": 1753809.863779,
+        "销售费用": 56937.457448,
+        "管理费用": 185852.666926,
+        "财务费用": 19065.209842,
+        "税金及附加": 27396.520462,
+        "报表营业利润": 1503706.835044,
+        "推导营业利润": 1242609.932429,
+        "差异金额": 261096.90261500003,
+        "差异率百分比": 17.363550961538326,
+        "匹配状态": "不匹配"
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "营业收入": 3285671.650886,
+        "营业成本": 1753809.863779,
+        "销售费用": 56937.457448,
+        "管理费用": 185852.666926,
+        "财务费用": 19065.209842,
+        "税金及附加": 27396.520462,
+        "报表营业利润": 1503706.835044,
+        "推导营业利润": 1242609.932429,
+        "差异金额": 261096.90261500003,
+        "差异率百分比": 17.363550961538326,
+        "匹配状态": "不匹配"
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": null,
+    "sort_ascending": true,
+    "top_n": 12,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "stock_code",
+      "data_type": "quantitative",
+      "label": "股票代码",
+      "unit": "万元"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": false
+  },
+  "output": {
+    "filename": "B4050_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B4050_1.jpg"
+  },
+  "meta": {
+    "source_sql": "WITH derived_total_profit AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        total_operating_revenue AS 营业收入,\n        operating_cost AS 营业成本,\n        selling_expenses AS 销售费用,\n        administrative_expenses AS 管理费用,\n        financial_expenses AS 财务费用,\n        taxes_and_surcharges AS 税金及附加,\n        total_profit AS 报表营业利润,\n        -- 公式推导：营业利润 = 营业收入 - 营业成本 - 销售费用 - 管理费用 - 财务费用 - 税金及附加\n        total_operating_revenue \n            - COALESCE(operating_cost, 0) \n            - COALESCE(selling_expenses, 0) \n            - COALESCE(administrative_expenses, 0) \n            - COALESCE(financial_expenses, 0) \n            - COALESCE(taxes_and_surcharges, 0) AS 推导营业利润,\n        -- 计算差异\n        total_profit - (total_operating_revenue \n            - COALESCE(operating_cost, 0) \n            - COALESCE(selling_expenses, 0) \n            - COALESCE(administrative_expenses, 0) \n            - COALESCE(financial_expenses, 0) \n            - COALESCE(taxes_and_surcharges, 0)) AS 差异金额,\n        -- 计算差异率（避免除零）\n        CASE \n            WHEN total_profit IS NOT NULL AND total_profit != 0 \n            THEN (total_profit - (total_operating_revenue \n                - COALESCE(operating_cost, 0) \n                - COALESCE(selling_expenses, 0) \n                - COALESCE(administrative_expenses, 0) \n                - COALESCE(financial_expenses, 0) \n                - COALESCE(taxes_and_surcharges, 0))) * 100.0 / ABS(total_profit)\n            ELSE NULL \n        END AS 差异率百分比\n    FROM financials_view\n    WHERE report_period IN ('2024FY', '2025Q1', '2025Q2', '2025Q3', '2025Q4', '2025H1')\n        AND total_operating_revenue IS NOT NULL\n        AND total_profit IS NOT NULL\n)\nSELECT \n    stock_code,\n    stock_abbr,\n    report_period,\n    营业收入,\n    营业成本,\n    销售费用,\n    管理费用,\n    财务费用,\n    税金及附加,\n    报表营业利润,\n    推导营业利润,\n    差异金额,\n    差异率百分比,\n    CASE \n        WHEN ABS(差异金额) < 0.01 THEN '匹配' \n        ELSE '不匹配' \n    END AS 匹配状态\nFROM derived_total_profit\nWHERE ABS(差异金额) >= 0.01  -- 只显示有差异的记录\nORDER BY ABS(差异金额) DESC, stock_abbr, report_period\nLIMIT 100;",
+    "value_fields": [
+      "stock_code",
+      "营业收入",
+      "营业成本",
+      "销售费用"
+    ],
+    "value_labels": [
+      "股票代码",
+      "营业收入",
+      "营业成本",
+      "销售费用"
+    ],
+    "original_chart_plan": {
+      "chart_type": "table",
+      "x_field": null,
+      "y_fields": [
+        "stock_code",
+        "营业收入",
+        "营业成本",
+        "销售费用"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": null,
+      "sort_ascending": true,
+      "top_n": 12
+    }
+  }
+}

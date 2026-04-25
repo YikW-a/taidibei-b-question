@@ -1,0 +1,305 @@
+{
+  "question_id": "B3026",
+  "question_type": "数据基本查询",
+  "raw_question": "迪安诊断2025年第三季度存货金额及存货周转率（营业成本/平均存货）",
+  "raw_question_json": "[{\"Q\":\"迪安诊断2025年第三季度存货金额及存货周转率（营业成本/平均存货）\"}]",
+  "parsed_slots": {
+    "companies": [
+      "迪安诊断"
+    ],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "存货周转率"
+    ],
+    "chart_type": null,
+    "intent_type": "single_company_metric",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "single_company_metric",
+    "companies": [
+      "迪安诊断"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "存货",
+      "存货周转率"
+    ],
+    "chart_type": null,
+    "top_n": null,
+    "threshold": null,
+    "question": "迪安诊断2025年第三季度存货金额及存货周转率（营业成本/平均存货）",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": [],
+    "unsupported_metrics": [
+      "存货"
+    ]
+  },
+  "sql": "SELECT stock_code, stock_abbr, report_period, asset_inventory AS 存货, inventory_turnover_ratio AS 存货周转率 FROM financials_view WHERE stock_abbr = '迪安诊断' AND report_period = '2025Q3'",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, report_period, asset_inventory AS 存货, inventory_turnover_ratio AS 存货周转率 FROM financials_view WHERE stock_abbr = '迪安诊断' AND report_period = '2025Q3'"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 16,
+  "result_rows": [
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "存货": 154231.281551,
+      "存货周转率": 3.4792036900410546
+    },
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "存货": 154231.281551,
+      "存货周转率": 3.4792036900410546
+    },
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "存货": 154231.281551,
+      "存货周转率": 3.4792036900410546
+    },
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "存货": 154231.281551,
+      "存货周转率": 3.4792036900410546
+    },
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "存货": 154231.281551,
+      "存货周转率": 3.4792036900410546
+    },
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "存货": 154231.281551,
+      "存货周转率": 3.4792036900410546
+    },
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "存货": 154231.281551,
+      "存货周转率": 3.4792036900410546
+    },
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "存货": 154231.281551,
+      "存货周转率": 3.4792036900410546
+    },
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "存货": 154231.281551,
+      "存货周转率": 3.4792036900410546
+    },
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "存货": 154231.281551,
+      "存货周转率": 3.4792036900410546
+    },
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "存货": 154231.281551,
+      "存货周转率": 3.4792036900410546
+    },
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "存货": 154231.281551,
+      "存货周转率": 3.4792036900410546
+    },
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "存货": 154231.281551,
+      "存货周转率": 3.4792036900410546
+    },
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "存货": 154231.281551,
+      "存货周转率": 3.4792036900410546
+    },
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "存货": 154231.281551,
+      "存货周转率": 3.4792036900410546
+    },
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "存货": 154231.281551,
+      "存货周转率": 3.4792036900410546
+    }
+  ],
+  "context_companies": [
+    "迪安诊断"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "存货": 154231.281551,
+      "存货周转率": 3.4792036900410546
+    },
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "存货": 154231.281551,
+      "存货周转率": 3.4792036900410546
+    },
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "存货": 154231.281551,
+      "存货周转率": 3.4792036900410546
+    },
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "存货": 154231.281551,
+      "存货周转率": 3.4792036900410546
+    },
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "存货": 154231.281551,
+      "存货周转率": 3.4792036900410546
+    },
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "存货": 154231.281551,
+      "存货周转率": 3.4792036900410546
+    },
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "存货": 154231.281551,
+      "存货周转率": 3.4792036900410546
+    },
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "存货": 154231.281551,
+      "存货周转率": 3.4792036900410546
+    },
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "存货": 154231.281551,
+      "存货周转率": 3.4792036900410546
+    },
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "存货": 154231.281551,
+      "存货周转率": 3.4792036900410546
+    },
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "存货": 154231.281551,
+      "存货周转率": 3.4792036900410546
+    },
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "存货": 154231.281551,
+      "存货周转率": 3.4792036900410546
+    },
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "存货": 154231.281551,
+      "存货周转率": 3.4792036900410546
+    },
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "存货": 154231.281551,
+      "存货周转率": 3.4792036900410546
+    },
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "存货": 154231.281551,
+      "存货周转率": 3.4792036900410546
+    },
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "存货": 154231.281551,
+      "存货周转率": 3.4792036900410546
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"300244\",\"stock_abbr\":\"迪安诊断\",\"report_period\":\"2025Q3\",\"存货\":154231.281551,\"存货周转率\":3.47920369},{\"stock_code\":\"300244\",\"stock_abbr\":\"迪安诊断\",\"report_period\":\"2025Q3\",\"存货\":154231.281551,\"存货周转率\":3.47920369},{\"stock_code\":\"300244\",\"stock_abbr\":\"迪安诊断\",\"report_period\":\"2025Q3\",\"存货\":154231.281551,\"存货周转率\":3.47920369},{\"stock_code\":\"300244\",\"stock_abbr\":\"迪安诊断\",\"report_period\":\"2025Q3\",\"存货\":154231.281551,\"存货周转率\":3.47920369},{\"stock_code\":\"300244\",\"stock_abbr\":\"迪安诊断\",\"report_period\":\"2025Q3\",\"存货\":154231.281551,\"存货周转率\":3.47920369},{\"stock_code\":\"300244\",\"stock_abbr\":\"迪安诊断\",\"report_period\":\"2025Q3\",\"存货\":154231.281551,\"存货周转率\":3.47920369},{\"stock_code\":\"300244\",\"stock_abbr\":\"迪安诊断\",\"report_period\":\"2025Q3\",\"存货\":154231.281551,\"存货周转率\":3.47920369},{\"stock_code\":\"300244\",\"stock_abbr\":\"迪安诊断\",\"report_period\":\"2025Q3\",\"存货\":154231.281551,\"存货周转率\":3.47920369},{\"stock_code\":\"300244\",\"stock_abbr\":\"迪安诊断\",\"report_period\":\"2025Q3\",\"存货\":154231.281551,\"存货周转率\":3.47920369},{\"stock_code\":\"300244\",\"stock_abbr\":\"迪安诊断\",\"report_period\":\"2025Q3\",\"存货\":154231.281551,\"存货周转率\":3.47920369},{\"stock_code\":\"300244\",\"stock_abbr\":\"迪安诊断\",\"report_period\":\"2025Q3\",\"存货\":154231.281551,\"存货周转率\":3.47920369},{\"stock_code\":\"300244\",\"stock_abbr\":\"迪安诊断\",\"report_period\":\"2025Q3\",\"存货\":154231.281551,\"存货周转率\":3.47920369},{\"stock_code\":\"300244\",\"stock_abbr\":\"迪安诊断\",\"report_period\":\"2025Q3\",\"存货\":154231.281551,\"存货周转率\":3.47920369},{\"stock_code\":\"300244\",\"stock_abbr\":\"迪安诊断\",\"report_period\":\"2025Q3\",\"存货\":154231.281551,\"存货周转率\":3.47920369},{\"stock_code\":\"300244\",\"stock_abbr\":\"迪安诊断\",\"report_period\":\"2025Q3\",\"存货\":154231.281551,\"存货周转率\":3.47920369},{\"stock_code\":\"300244\",\"stock_abbr\":\"迪安诊断\",\"report_period\":\"2025Q3\",\"存货\":154231.281551,\"存货周转率\":3.47920369}]",
+  "chart_plan": {},
+  "chart_spec": {},
+  "all_chart_specs": [],
+  "all_chart_paths": [],
+  "graph_formats": [],
+  "turn_answers": [
+    {
+      "Q": "迪安诊断2025年第三季度存货金额及存货周转率（营业成本/平均存货）",
+      "A": {
+        "content": "迪安诊断（股票代码 300244）在 2025 年第三季度，存货金额为 154,231.28 万元，存货周转率为 3.48。",
+        "image": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"迪安诊断2025年第三季度存货金额及存货周转率（营业成本/平均存货）\", \"A\": {\"content\": \"迪安诊断（股票代码 300244）在 2025 年第三季度，存货金额为 154,231.28 万元，存货周转率为 3.48。\", \"image\": []}}]",
+  "notes": [
+    "根据查询计划，需要查询迪安诊断在2025Q3的存货金额和存货周转率。存货金额对应字段为asset_inventory，存货周转率对应字段为inventory_turnover_ratio。使用stock_abbr和report_period进行精确筛选。"
+  ],
+  "final_status": "ok"
+}

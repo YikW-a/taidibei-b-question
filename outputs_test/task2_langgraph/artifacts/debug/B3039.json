@@ -1,0 +1,458 @@
+{
+  "question_id": "B3039",
+  "question_type": "数据统计分析查询",
+  "raw_question": "2025年第三季度，经营性现金流量净额/净利润比值小于0.5的公司有哪些？列出简称和比值",
+  "raw_question_json": "[{\"Q\":\"2025年第三季度，经营性现金流量净额/净利润比值小于0.5的公司有哪些？列出简称和比值\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "净利润",
+      "经营性现金流量净额"
+    ],
+    "chart_type": null,
+    "intent_type": "filter",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "filter",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "净利润",
+      "经营性现金流量净额"
+    ],
+    "chart_type": "table",
+    "top_n": null,
+    "threshold": 0.5,
+    "question": "2025年第三季度，经营性现金流量净额/净利润比值小于0.5的公司有哪些？列出简称和比值",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT stock_abbr, operating_cf_net_amount / net_profit AS ratio FROM financials_view WHERE report_period = '2025Q3' AND net_profit != 0 AND operating_cf_net_amount / net_profit < 0.5 ORDER BY ratio",
+  "sql_history": [
+    "SELECT stock_abbr, operating_cf_net_amount / net_profit AS ratio FROM financials_view WHERE report_period = '2025Q3' AND net_profit != 0 AND operating_cf_net_amount / net_profit < 0.5 ORDER BY ratio"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 32,
+  "result_rows": [
+    {
+      "stock_abbr": "百诚医药",
+      "ratio": -29.356540418153788
+    },
+    {
+      "stock_abbr": "百诚医药",
+      "ratio": -29.356540418153788
+    },
+    {
+      "stock_abbr": "百诚医药",
+      "ratio": -29.356540418153788
+    },
+    {
+      "stock_abbr": "百诚医药",
+      "ratio": -29.356540418153788
+    },
+    {
+      "stock_abbr": "百诚医药",
+      "ratio": -29.356540418153788
+    },
+    {
+      "stock_abbr": "百诚医药",
+      "ratio": -29.356540418153788
+    },
+    {
+      "stock_abbr": "百诚医药",
+      "ratio": -29.356540418153788
+    },
+    {
+      "stock_abbr": "百诚医药",
+      "ratio": -29.356540418153788
+    },
+    {
+      "stock_abbr": "百诚医药",
+      "ratio": -29.356540418153788
+    },
+    {
+      "stock_abbr": "百诚医药",
+      "ratio": -29.356540418153788
+    },
+    {
+      "stock_abbr": "百诚医药",
+      "ratio": -29.356540418153788
+    },
+    {
+      "stock_abbr": "百诚医药",
+      "ratio": -29.356540418153788
+    },
+    {
+      "stock_abbr": "百诚医药",
+      "ratio": -29.356540418153788
+    },
+    {
+      "stock_abbr": "百诚医药",
+      "ratio": -29.356540418153788
+    },
+    {
+      "stock_abbr": "百诚医药",
+      "ratio": -29.356540418153788
+    },
+    {
+      "stock_abbr": "百诚医药",
+      "ratio": -29.356540418153788
+    },
+    {
+      "stock_abbr": "百克生物",
+      "ratio": 0.09358168685038581
+    },
+    {
+      "stock_abbr": "百克生物",
+      "ratio": 0.09358168685038581
+    },
+    {
+      "stock_abbr": "百克生物",
+      "ratio": 0.09358168685038581
+    },
+    {
+      "stock_abbr": "百克生物",
+      "ratio": 0.09358168685038581
+    },
+    {
+      "stock_abbr": "百克生物",
+      "ratio": 0.09358168685038581
+    },
+    {
+      "stock_abbr": "百克生物",
+      "ratio": 0.09358168685038581
+    },
+    {
+      "stock_abbr": "百克生物",
+      "ratio": 0.09358168685038581
+    },
+    {
+      "stock_abbr": "百克生物",
+      "ratio": 0.09358168685038581
+    },
+    {
+      "stock_abbr": "百克生物",
+      "ratio": 0.09358168685038581
+    },
+    {
+      "stock_abbr": "百克生物",
+      "ratio": 0.09358168685038581
+    },
+    {
+      "stock_abbr": "百克生物",
+      "ratio": 0.09358168685038581
+    },
+    {
+      "stock_abbr": "百克生物",
+      "ratio": 0.09358168685038581
+    },
+    {
+      "stock_abbr": "百克生物",
+      "ratio": 0.09358168685038581
+    },
+    {
+      "stock_abbr": "百克生物",
+      "ratio": 0.09358168685038581
+    },
+    {
+      "stock_abbr": "百克生物",
+      "ratio": 0.09358168685038581
+    },
+    {
+      "stock_abbr": "百克生物",
+      "ratio": 0.09358168685038581
+    }
+  ],
+  "context_companies": [
+    "百诚医药",
+    "百克生物"
+  ],
+  "context_rows": [
+    {
+      "stock_abbr": "百诚医药",
+      "ratio": -29.356540418153788
+    },
+    {
+      "stock_abbr": "百诚医药",
+      "ratio": -29.356540418153788
+    },
+    {
+      "stock_abbr": "百诚医药",
+      "ratio": -29.356540418153788
+    },
+    {
+      "stock_abbr": "百诚医药",
+      "ratio": -29.356540418153788
+    },
+    {
+      "stock_abbr": "百诚医药",
+      "ratio": -29.356540418153788
+    },
+    {
+      "stock_abbr": "百诚医药",
+      "ratio": -29.356540418153788
+    },
+    {
+      "stock_abbr": "百诚医药",
+      "ratio": -29.356540418153788
+    },
+    {
+      "stock_abbr": "百诚医药",
+      "ratio": -29.356540418153788
+    },
+    {
+      "stock_abbr": "百诚医药",
+      "ratio": -29.356540418153788
+    },
+    {
+      "stock_abbr": "百诚医药",
+      "ratio": -29.356540418153788
+    },
+    {
+      "stock_abbr": "百诚医药",
+      "ratio": -29.356540418153788
+    },
+    {
+      "stock_abbr": "百诚医药",
+      "ratio": -29.356540418153788
+    },
+    {
+      "stock_abbr": "百诚医药",
+      "ratio": -29.356540418153788
+    },
+    {
+      "stock_abbr": "百诚医药",
+      "ratio": -29.356540418153788
+    },
+    {
+      "stock_abbr": "百诚医药",
+      "ratio": -29.356540418153788
+    },
+    {
+      "stock_abbr": "百诚医药",
+      "ratio": -29.356540418153788
+    },
+    {
+      "stock_abbr": "百克生物",
+      "ratio": 0.09358168685038581
+    },
+    {
+      "stock_abbr": "百克生物",
+      "ratio": 0.09358168685038581
+    },
+    {
+      "stock_abbr": "百克生物",
+      "ratio": 0.09358168685038581
+    },
+    {
+      "stock_abbr": "百克生物",
+      "ratio": 0.09358168685038581
+    },
+    {
+      "stock_abbr": "百克生物",
+      "ratio": 0.09358168685038581
+    },
+    {
+      "stock_abbr": "百克生物",
+      "ratio": 0.09358168685038581
+    },
+    {
+      "stock_abbr": "百克生物",
+      "ratio": 0.09358168685038581
+    },
+    {
+      "stock_abbr": "百克生物",
+      "ratio": 0.09358168685038581
+    },
+    {
+      "stock_abbr": "百克生物",
+      "ratio": 0.09358168685038581
+    },
+    {
+      "stock_abbr": "百克生物",
+      "ratio": 0.09358168685038581
+    },
+    {
+      "stock_abbr": "百克生物",
+      "ratio": 0.09358168685038581
+    },
+    {
+      "stock_abbr": "百克生物",
+      "ratio": 0.09358168685038581
+    },
+    {
+      "stock_abbr": "百克生物",
+      "ratio": 0.09358168685038581
+    },
+    {
+      "stock_abbr": "百克生物",
+      "ratio": 0.09358168685038581
+    }
+  ],
+  "result_preview": "[{\"stock_abbr\":\"百诚医药\",\"ratio\":-29.3565404182},{\"stock_abbr\":\"百诚医药\",\"ratio\":-29.3565404182},{\"stock_abbr\":\"百诚医药\",\"ratio\":-29.3565404182},{\"stock_abbr\":\"百诚医药\",\"ratio\":-29.3565404182},{\"stock_abbr\":\"百诚医药\",\"ratio\":-29.3565404182},{\"stock_abbr\":\"百诚医药\",\"ratio\":-29.3565404182},{\"stock_abbr\":\"百诚医药\",\"ratio\":-29.3565404182},{\"stock_abbr\":\"百诚医药\",\"ratio\":-29.3565404182},{\"stock_abbr\":\"百诚医药\",\"ratio\":-29.3565404182},{\"stock_abbr\":\"百诚医药\",\"ratio\":-29.3565404182},{\"stock_abbr\":\"百诚医药\",\"ratio\":-29.3565404182},{\"stock_abbr\":\"百诚医药\",\"ratio\":-29.3565404182},{\"stock_abbr\":\"百诚医药\",\"ratio\":-29.3565404182},{\"stock_abbr\":\"百诚医药\",\"ratio\":-29.3565404182},{\"stock_abbr\":\"百诚医药\",\"ratio\":-29.3565404182},{\"stock_abbr\":\"百诚医药\",\"ratio\":-29.3565404182},{\"stock_abbr\":\"百克生物\",\"ratio\":0.0935816869},{\"stock_abbr\":\"百克生物\",\"ratio\":0.0935816869},{\"stock_abbr\":\"百克生物\",\"ratio\":0.0935816869},{\"stock_abbr\":\"百克生物\",\"ratio\":0.0935816869}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2025年第三季度经营性现金流量净额/净利润比值小于0.5的公司",
+    "x_field": null,
+    "y_fields": [
+      "ratio"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": "ratio",
+    "sort_ascending": true,
+    "top_n": 15,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B3039",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "2025年第三季度经营性现金流量净额/净利润比值小于0.5的公司",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 32,
+      "preview_rows": [
+        {
+          "stock_abbr": "百诚医药",
+          "ratio": -29.356540418153788
+        },
+        {
+          "stock_abbr": "百诚医药",
+          "ratio": -29.356540418153788
+        },
+        {
+          "stock_abbr": "百诚医药",
+          "ratio": -29.356540418153788
+        },
+        {
+          "stock_abbr": "百诚医药",
+          "ratio": -29.356540418153788
+        },
+        {
+          "stock_abbr": "百诚医药",
+          "ratio": -29.356540418153788
+        },
+        {
+          "stock_abbr": "百诚医药",
+          "ratio": -29.356540418153788
+        },
+        {
+          "stock_abbr": "百诚医药",
+          "ratio": -29.356540418153788
+        },
+        {
+          "stock_abbr": "百诚医药",
+          "ratio": -29.356540418153788
+        },
+        {
+          "stock_abbr": "百诚医药",
+          "ratio": -29.356540418153788
+        },
+        {
+          "stock_abbr": "百诚医药",
+          "ratio": -29.356540418153788
+        },
+        {
+          "stock_abbr": "百诚医药",
+          "ratio": -29.356540418153788
+        },
+        {
+          "stock_abbr": "百诚医药",
+          "ratio": -29.356540418153788
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "ratio",
+      "sort_ascending": true,
+      "top_n": 15,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "ratio",
+        "data_type": "quantitative",
+        "label": "ratio",
+        "unit": "%"
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B3039_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B3039_1.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT stock_abbr, operating_cf_net_amount / net_profit AS ratio FROM financials_view WHERE report_period = '2025Q3' AND net_profit != 0 AND operating_cf_net_amount / net_profit < 0.5 ORDER BY ratio",
+      "value_fields": [
+        "ratio"
+      ],
+      "value_labels": [
+        "ratio"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "ratio"
+        ],
+        "category_field": "stock_abbr",
+        "sort_by": "ratio",
+        "sort_ascending": true,
+        "top_n": 15
+      },
+      "category_aggregate": "max"
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs_test/task2_langgraph/artifacts/chart_specs/B3039_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B3039_1.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "2025年第三季度，经营性现金流量净额/净利润比值小于0.5的公司有哪些？列出简称和比值",
+      "A": {
+        "content": "根据查询结果，2025年第三季度，经营性现金流量净额/净利润比值小于0.5的公司有2家，具体如下：\n*   百诚医药，比值为-29.36\n*   百克生物，比值为0.09\n\n（注：结果中“百诚医药”和“百克生物”均出现多次重复记录，此处已去重展示。）",
+        "image": [
+          "./result/B3039_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"2025年第三季度，经营性现金流量净额/净利润比值小于0.5的公司有哪些？列出简称和比值\", \"A\": {\"content\": \"根据查询结果，2025年第三季度，经营性现金流量净额/净利润比值小于0.5的公司有2家，具体如下：\\n*   百诚医药，比值为-29.36\\n*   百克生物，比值为0.09\\n\\n（注：结果中“百诚医药”和“百克生物”均出现多次重复记录，此处已去重展示。）\", \"image\": [\"./result/B3039_1.jpg\"]}}]",
+  "notes": [
+    "查询计划要求筛选2025Q3报告期，计算经营性现金流量净额/净利润比值小于0.5的公司。使用operating_cf_net_amount和net_profit计算比值，排除净利润为0的情况以避免除零错误。返回公司简称和比值，并按比值排序。"
+  ],
+  "final_status": "ok"
+}

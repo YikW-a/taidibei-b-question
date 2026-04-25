@@ -1,0 +1,269 @@
+{
+  "question_id": "B3042",
+  "question_type": "数据基本查询",
+  "raw_question": "昭衍新药2025年第三季度股东权益-未分配利润金额",
+  "raw_question_json": "[{\"Q\":\"昭衍新药2025年第三季度股东权益-未分配利润金额\"}]",
+  "parsed_slots": {
+    "companies": [
+      "昭衍新药"
+    ],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "未分配利润"
+    ],
+    "chart_type": null,
+    "intent_type": "single_company_metric",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "single_company_metric",
+    "companies": [
+      "昭衍新药"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "未分配利润"
+    ],
+    "chart_type": null,
+    "top_n": null,
+    "threshold": null,
+    "question": "昭衍新药2025年第三季度股东权益-未分配利润金额",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT stock_code, stock_abbr, report_period, equity_unappropriated_profit FROM financials_view WHERE stock_abbr = '昭衍新药' AND report_period = '2025Q3'",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, report_period, equity_unappropriated_profit FROM financials_view WHERE stock_abbr = '昭衍新药' AND report_period = '2025Q3'"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 16,
+  "result_rows": [
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "equity_unappropriated_profit": 215328.990521
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "equity_unappropriated_profit": 215328.990521
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "equity_unappropriated_profit": 215328.990521
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "equity_unappropriated_profit": 215328.990521
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "equity_unappropriated_profit": 215328.990521
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "equity_unappropriated_profit": 215328.990521
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "equity_unappropriated_profit": 215328.990521
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "equity_unappropriated_profit": 215328.990521
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "equity_unappropriated_profit": 215328.990521
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "equity_unappropriated_profit": 215328.990521
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "equity_unappropriated_profit": 215328.990521
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "equity_unappropriated_profit": 215328.990521
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "equity_unappropriated_profit": 215328.990521
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "equity_unappropriated_profit": 215328.990521
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "equity_unappropriated_profit": 215328.990521
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "equity_unappropriated_profit": 215328.990521
+    }
+  ],
+  "context_companies": [
+    "昭衍新药"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "equity_unappropriated_profit": 215328.990521
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "equity_unappropriated_profit": 215328.990521
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "equity_unappropriated_profit": 215328.990521
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "equity_unappropriated_profit": 215328.990521
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "equity_unappropriated_profit": 215328.990521
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "equity_unappropriated_profit": 215328.990521
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "equity_unappropriated_profit": 215328.990521
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "equity_unappropriated_profit": 215328.990521
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "equity_unappropriated_profit": 215328.990521
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "equity_unappropriated_profit": 215328.990521
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "equity_unappropriated_profit": 215328.990521
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "equity_unappropriated_profit": 215328.990521
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "equity_unappropriated_profit": 215328.990521
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "equity_unappropriated_profit": 215328.990521
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "equity_unappropriated_profit": 215328.990521
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "equity_unappropriated_profit": 215328.990521
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"603127\",\"stock_abbr\":\"昭衍新药\",\"report_period\":\"2025Q3\",\"equity_unappropriated_profit\":215328.990521},{\"stock_code\":\"603127\",\"stock_abbr\":\"昭衍新药\",\"report_period\":\"2025Q3\",\"equity_unappropriated_profit\":215328.990521},{\"stock_code\":\"603127\",\"stock_abbr\":\"昭衍新药\",\"report_period\":\"2025Q3\",\"equity_unappropriated_profit\":215328.990521},{\"stock_code\":\"603127\",\"stock_abbr\":\"昭衍新药\",\"report_period\":\"2025Q3\",\"equity_unappropriated_profit\":215328.990521},{\"stock_code\":\"603127\",\"stock_abbr\":\"昭衍新药\",\"report_period\":\"2025Q3\",\"equity_unappropriated_profit\":215328.990521},{\"stock_code\":\"603127\",\"stock_abbr\":\"昭衍新药\",\"report_period\":\"2025Q3\",\"equity_unappropriated_profit\":215328.990521},{\"stock_code\":\"603127\",\"stock_abbr\":\"昭衍新药\",\"report_period\":\"2025Q3\",\"equity_unappropriated_profit\":215328.990521},{\"stock_code\":\"603127\",\"stock_abbr\":\"昭衍新药\",\"report_period\":\"2025Q3\",\"equity_unappropriated_profit\":215328.990521},{\"stock_code\":\"603127\",\"stock_abbr\":\"昭衍新药\",\"report_period\":\"2025Q3\",\"equity_unappropriated_profit\":215328.990521},{\"stock_code\":\"603127\",\"stock_abbr\":\"昭衍新药\",\"report_period\":\"2025Q3\",\"equity_unappropriated_profit\":215328.990521},{\"stock_code\":\"603127\",\"stock_abbr\":\"昭衍新药\",\"report_period\":\"2025Q3\",\"equity_unappropriated_profit\":215328.990521},{\"stock_code\":\"603127\",\"stock_abbr\":\"昭衍新药\",\"report_period\":\"2025Q3\",\"equity_unappropriated_profit\":215328.990521},{\"stock_code\":\"603127\",\"stock_abbr\":\"昭衍新药\",\"report_period\":\"2025Q3\",\"equity_unappropriated_profit\":215328.990521},{\"stock_code\":\"603127\",\"stock_abbr\":\"昭衍新药\",\"report_period\":\"2025Q3\",\"equity_unappropriated_profit\":215328.990521},{\"stock_code\":\"603127\",\"stock_abbr\":\"昭衍新药\",\"report_period\":\"2025Q3\",\"equity_unappropriated_profit\":215328.990521},{\"stock_code\":\"603127\",\"stock_abbr\":\"昭衍新药\",\"report_period\":\"2025Q3\",\"equity_unappropriated_profit\":215328.990521}]",
+  "chart_plan": {},
+  "chart_spec": {},
+  "all_chart_specs": [],
+  "all_chart_paths": [],
+  "graph_formats": [],
+  "turn_answers": [
+    {
+      "Q": "昭衍新药2025年第三季度股东权益-未分配利润金额",
+      "A": {
+        "content": "昭衍新药（股票代码603127）在2025年第三季度报告期的股东权益-未分配利润金额为215,328.99万元。",
+        "image": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"昭衍新药2025年第三季度股东权益-未分配利润金额\", \"A\": {\"content\": \"昭衍新药（股票代码603127）在2025年第三季度报告期的股东权益-未分配利润金额为215,328.99万元。\", \"image\": []}}]",
+  "notes": [
+    "根据查询计划，需要查询昭衍新药在2025年第三季度的未分配利润。在schema中，未分配利润对应字段为equity_unappropriated_profit。使用stock_abbr和report_period进行精确筛选。"
+  ],
+  "final_status": "ok"
+}

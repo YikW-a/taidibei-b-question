@@ -1,0 +1,224 @@
+{
+  "question_id": "B4048",
+  "question_type": "多意图",
+  "raw_question": "①统计2025年第三季度10家公司的资产总额；②计算固定资产占比；③找出轻资产运营的公司（固定资产占比<15%）；④对比轻重资产公司的ROE差异",
+  "raw_question_json": "[{\"Q\":\"①统计2025年第三季度10家公司的资产总额；②计算固定资产占比；③找出轻资产运营的公司（固定资产占比<15%）；④对比轻重资产公司的ROE差异\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "metrics": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "focus_topics": [],
+    "intent_type": "sql_only",
+    "needs_sql": true,
+    "needs_retrieval": false,
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "sql_only",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "total_assets",
+      "fixed_assets",
+      "roe"
+    ],
+    "needs_sql": true,
+    "top_n": 10,
+    "threshold": 0.15,
+    "question": "①统计2025年第三季度10家公司的资产总额；②计算固定资产占比；③找出轻资产运营的公司（固定资产占比<15%）；④对比轻重资产公司的ROE差异"
+  },
+  "retrieval_plan": {
+    "question": "①统计2025年第三季度10家公司的资产总额；②计算固定资产占比；③找出轻资产运营的公司（固定资产占比<15%）；④对比轻重资产公司的ROE差异",
+    "companies": [],
+    "focus_topics": [],
+    "needs_retrieval": false,
+    "top_k": 0,
+    "source_scope": "hybrid",
+    "retrieval_mode": "hybrid"
+  },
+  "sql": "WITH company_assets AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        total_assets,\n        roe,\n        -- 注意：视图中没有固定资产字段，无法计算固定资产占比\n        -- 假设固定资产数据不存在，无法完成问题②③④\n        NULL AS fixed_assets_ratio\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n    ORDER BY total_assets DESC\n    LIMIT 10\n)\nSELECT \n    stock_code,\n    stock_abbr,\n    total_assets,\n    roe,\n    fixed_assets_ratio,\n    CASE \n        WHEN fixed_assets_ratio < 0.15 THEN '轻资产'\n        WHEN fixed_assets_ratio >= 0.15 THEN '重资产'\n        ELSE '未知'\n    END AS asset_type\nFROM company_assets\nORDER BY total_assets DESC;",
+  "sql_history": [
+    "WITH company_assets AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        total_assets,\n        roe,\n        -- 注意：视图中没有固定资产字段，无法计算固定资产占比\n        -- 假设固定资产数据不存在，无法完成问题②③④\n        NULL AS fixed_assets_ratio\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n    ORDER BY total_assets DESC\n    LIMIT 10\n)\nSELECT \n    stock_code,\n    stock_abbr,\n    total_assets,\n    roe,\n    fixed_assets_ratio,\n    CASE \n        WHEN fixed_assets_ratio < 0.15 THEN '轻资产'\n        WHEN fixed_assets_ratio >= 0.15 THEN '重资产'\n        ELSE '未知'\n    END AS asset_type\nFROM company_assets\nORDER BY total_assets DESC;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 10,
+  "result_rows": [
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "total_assets": 9460613.541607,
+      "roe": 5.34,
+      "fixed_assets_ratio": null,
+      "asset_type": "未知"
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "total_assets": 9460613.541607,
+      "roe": 5.34,
+      "fixed_assets_ratio": null,
+      "asset_type": "未知"
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "total_assets": 9460613.541607,
+      "roe": 5.34,
+      "fixed_assets_ratio": null,
+      "asset_type": "未知"
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "total_assets": 9460613.541607,
+      "roe": 5.34,
+      "fixed_assets_ratio": null,
+      "asset_type": "未知"
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "total_assets": 9460613.541607,
+      "roe": 5.34,
+      "fixed_assets_ratio": null,
+      "asset_type": "未知"
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "total_assets": 9460613.541607,
+      "roe": 5.34,
+      "fixed_assets_ratio": null,
+      "asset_type": "未知"
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "total_assets": 9460613.541607,
+      "roe": 5.34,
+      "fixed_assets_ratio": null,
+      "asset_type": "未知"
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "total_assets": 9460613.541607,
+      "roe": 5.34,
+      "fixed_assets_ratio": null,
+      "asset_type": "未知"
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "total_assets": 9460613.541607,
+      "roe": 5.34,
+      "fixed_assets_ratio": null,
+      "asset_type": "未知"
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "total_assets": 9460613.541607,
+      "roe": 5.34,
+      "fixed_assets_ratio": null,
+      "asset_type": "未知"
+    }
+  ],
+  "retrieved_evidence": [],
+  "reranked_evidence": [],
+  "rerank_preview": "{\"strategy\": \"skipped_fast_path\", \"kept_count\": 0}",
+  "fused_context": {
+    "question": "①统计2025年第三季度10家公司的资产总额；②计算固定资产占比；③找出轻资产运营的公司（固定资产占比<15%）；④对比轻重资产公司的ROE差异",
+    "sql_row_count": 10,
+    "evidence_count": 0,
+    "sql_preview": [
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "total_assets": 9460613.541607,
+        "roe": 5.34,
+        "fixed_assets_ratio": null,
+        "asset_type": "未知"
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "total_assets": 9460613.541607,
+        "roe": 5.34,
+        "fixed_assets_ratio": null,
+        "asset_type": "未知"
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "total_assets": 9460613.541607,
+        "roe": 5.34,
+        "fixed_assets_ratio": null,
+        "asset_type": "未知"
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "total_assets": 9460613.541607,
+        "roe": 5.34,
+        "fixed_assets_ratio": null,
+        "asset_type": "未知"
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "total_assets": 9460613.541607,
+        "roe": 5.34,
+        "fixed_assets_ratio": null,
+        "asset_type": "未知"
+      }
+    ],
+    "evidence_preview": [],
+    "evidence_titles": [],
+    "source_breakdown": {}
+  },
+  "self_check": {
+    "pass": true,
+    "notes": [
+      "self_check_skipped_fast_path"
+    ]
+  },
+  "chart_plan": {},
+  "chart_spec": {},
+  "current_chart_paths": [],
+  "current_chart_specs": [],
+  "current_answer": "根据提供的 SQL 查询结果和研报证据，现对您的问题回答如下：\n\n**直接结论：**\n1.  成功统计了2025年第三季度资产总额最高的1家公司（药明康德）的数据，但未能获取到10家不同公司的完整列表。\n2.  由于当前财务视图中缺少“固定资产”字段，无法计算固定资产占比，因此无法识别轻资产运营的公司，也无法对比轻重资产公司的ROE差异。\n\n**财务数据支撑：**\n1.  **资产总额统计**：根据查询结果，2025年第三季度资产总额最高的公司是**药明康德**（股票代码：603259），其资产总额为94,606,135,416.07元。数据库金额单位为万元，换算为亿元约为**946.06亿元**（换算关系：1亿元 = 10,000万元）。\n2.  **ROE数据**：药明康德在2025年第三季度的净资产收益率（ROE）为**5.34%**。\n3.  **数据局限性**：SQL结果中`fixed_assets_ratio`（固定资产占比）字段全部为`NULL`，且`asset_type`（资产类型）字段均为“未知”。这表明当前结构化数据中缺少计算固定资产占比所需的关键字段，导致后续分析无法进行。\n\n**研报证据支撑：**\n未检索到直接研报证据。\n\n**综合判断：**\n本次分析仅能完成问题①的部分要求，即提供了资产总额排名第一的公司的具体数据。对于问题②（计算固定资产占比）、问题③（找出轻资产公司）和问题④（对比ROE差异），由于底层数据库的财务视图中未包含“固定资产”数据，导致这些分析步骤无法执行。因此，完整的四步分析在当前数据条件下无法实现。",
+  "current_references": [],
+  "answer_rewritten": false,
+  "turn_answers": [
+    {
+      "Q": "①统计2025年第三季度10家公司的资产总额；②计算固定资产占比；③找出轻资产运营的公司（固定资产占比<15%）；④对比轻重资产公司的ROE差异",
+      "A": {
+        "content": "根据提供的 SQL 查询结果和研报证据，现对您的问题回答如下：\n\n**直接结论：**\n1.  成功统计了2025年第三季度资产总额最高的1家公司（药明康德）的数据，但未能获取到10家不同公司的完整列表。\n2.  由于当前财务视图中缺少“固定资产”字段，无法计算固定资产占比，因此无法识别轻资产运营的公司，也无法对比轻重资产公司的ROE差异。\n\n**财务数据支撑：**\n1.  **资产总额统计**：根据查询结果，2025年第三季度资产总额最高的公司是**药明康德**（股票代码：603259），其资产总额为94,606,135,416.07元。数据库金额单位为万元，换算为亿元约为**946.06亿元**（换算关系：1亿元 = 10,000万元）。\n2.  **ROE数据**：药明康德在2025年第三季度的净资产收益率（ROE）为**5.34%**。\n3.  **数据局限性**：SQL结果中`fixed_assets_ratio`（固定资产占比）字段全部为`NULL`，且`asset_type`（资产类型）字段均为“未知”。这表明当前结构化数据中缺少计算固定资产占比所需的关键字段，导致后续分析无法进行。\n\n**研报证据支撑：**\n未检索到直接研报证据。\n\n**综合判断：**\n本次分析仅能完成问题①的部分要求，即提供了资产总额排名第一的公司的具体数据。对于问题②（计算固定资产占比）、问题③（找出轻资产公司）和问题④（对比ROE差异），由于底层数据库的财务视图中未包含“固定资产”数据，导致这些分析步骤无法执行。因此，完整的四步分析在当前数据条件下无法实现。",
+        "image": [],
+        "references": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"①统计2025年第三季度10家公司的资产总额；②计算固定资产占比；③找出轻资产运营的公司（固定资产占比<15%）；④对比轻重资产公司的ROE差异\", \"A\": {\"content\": \"根据提供的 SQL 查询结果和研报证据，现对您的问题回答如下：\\n\\n**直接结论：**\\n1.  成功统计了2025年第三季度资产总额最高的1家公司（药明康德）的数据，但未能获取到10家不同公司的完整列表。\\n2.  由于当前财务视图中缺少“固定资产”字段，无法计算固定资产占比，因此无法识别轻资产运营的公司，也无法对比轻重资产公司的ROE差异。\\n\\n**财务数据支撑：**\\n1.  **资产总额统计**：根据查询结果，2025年第三季度资产总额最高的公司是**药明康德**（股票代码：603259），其资产总额为94,606,135,416.07元。数据库金额单位为万元，换算为亿元约为**946.06亿元**（换算关系：1亿元 = 10,000万元）。\\n2.  **ROE数据**：药明康德在2025年第三季度的净资产收益率（ROE）为**5.34%**。\\n3.  **数据局限性**：SQL结果中`fixed_assets_ratio`（固定资产占比）字段全部为`NULL`，且`asset_type`（资产类型）字段均为“未知”。这表明当前结构化数据中缺少计算固定资产占比所需的关键字段，导致后续分析无法进行。\\n\\n**研报证据支撑：**\\n未检索到直接研报证据。\\n\\n**综合判断：**\\n本次分析仅能完成问题①的部分要求，即提供了资产总额排名第一的公司的具体数据。对于问题②（计算固定资产占比）、问题③（找出轻资产公司）和问题④（对比ROE差异），由于底层数据库的财务视图中未包含“固定资产”数据，导致这些分析步骤无法执行。因此，完整的四步分析在当前数据条件下无法实现。\", \"image\": [], \"references\": []}}]",
+  "references_json": "[]",
+  "notes": [
+    "route=sql_only",
+    "1. 根据查询计划，需要统计2025Q3的10家公司资产总额，因此使用WHERE report_period='2025Q3'并按total_assets DESC排序后LIMIT 10。\n2. 问题要求计算固定资产占比，但financials_view中没有任何固定资产相关字段（如fixed_assets、fixed_assets_ratio等），因此无法计算固定资产占比。\n3. 由于缺少固定资产数据，无法识别轻资产公司（固定资产占比<15%），也无法对比轻重资产公司的ROE差异。\n4. 在输出中添加了asset_type列以展示分类逻辑，但由于fixed_assets_ratio始终为NULL，所有公司都会显示为'未知'。\n5. 如果实际数据中存在固定资产字段，需要先确认字段名称（如fixed_assets、fixed_assets_to_total_assets等），但当前schema中确实没有。\n6. 只能完成问题①的部分要求（统计资产总额），其他问题因数据缺失无法实现。",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=0",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=0",
+    "self_check={\"pass\": true, \"notes\": [\"self_check_skipped_fast_path\"]}"
+  ],
+  "final_status": "ok"
+}

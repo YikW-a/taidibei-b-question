@@ -1,0 +1,459 @@
+{
+  "question_id": "B3038",
+  "question_type": "数据基本查询",
+  "raw_question": "百诚医药2024年第三季度与2025年第三季度净利润分别是多少",
+  "raw_question_json": "[{\"Q\":\"百诚医药2024年第三季度与2025年第三季度净利润分别是多少\"}]",
+  "parsed_slots": {
+    "companies": [
+      "百诚医药"
+    ],
+    "stock_codes": [],
+    "periods": [
+      "2024Q3",
+      "2025Q3"
+    ],
+    "metrics": [
+      "净利润"
+    ],
+    "chart_type": null,
+    "intent_type": "single_company_metric",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "single_company_metric",
+    "companies": [
+      "百诚医药"
+    ],
+    "periods": [
+      "2024Q3",
+      "2025Q3"
+    ],
+    "metrics": [
+      "净利润"
+    ],
+    "chart_type": null,
+    "top_n": null,
+    "threshold": null,
+    "question": "百诚医药2024年第三季度与2025年第三季度净利润分别是多少",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT report_period, net_profit FROM financials_view WHERE stock_abbr = '百诚医药' AND report_period IN ('2024Q3', '2025Q3') ORDER BY report_period;",
+  "sql_history": [
+    "SELECT report_period, net_profit FROM financials_view WHERE stock_abbr = '百诚医药' AND report_period IN ('2024Q3', '2025Q3') ORDER BY report_period;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 32,
+  "result_rows": [
+    {
+      "report_period": "2024Q3",
+      "net_profit": 14165.613334
+    },
+    {
+      "report_period": "2024Q3",
+      "net_profit": 14165.613334
+    },
+    {
+      "report_period": "2024Q3",
+      "net_profit": 14165.613334
+    },
+    {
+      "report_period": "2024Q3",
+      "net_profit": 14165.613334
+    },
+    {
+      "report_period": "2024Q3",
+      "net_profit": 14165.613334
+    },
+    {
+      "report_period": "2024Q3",
+      "net_profit": 14165.613334
+    },
+    {
+      "report_period": "2024Q3",
+      "net_profit": 14165.613334
+    },
+    {
+      "report_period": "2024Q3",
+      "net_profit": 14165.613334
+    },
+    {
+      "report_period": "2024Q3",
+      "net_profit": 14165.613334
+    },
+    {
+      "report_period": "2024Q3",
+      "net_profit": 14165.613334
+    },
+    {
+      "report_period": "2024Q3",
+      "net_profit": 14165.613334
+    },
+    {
+      "report_period": "2024Q3",
+      "net_profit": 14165.613334
+    },
+    {
+      "report_period": "2024Q3",
+      "net_profit": 14165.613334
+    },
+    {
+      "report_period": "2024Q3",
+      "net_profit": 14165.613334
+    },
+    {
+      "report_period": "2024Q3",
+      "net_profit": 14165.613334
+    },
+    {
+      "report_period": "2024Q3",
+      "net_profit": 14165.613334
+    },
+    {
+      "report_period": "2025Q3",
+      "net_profit": 612.420996
+    },
+    {
+      "report_period": "2025Q3",
+      "net_profit": 612.420996
+    },
+    {
+      "report_period": "2025Q3",
+      "net_profit": 612.420996
+    },
+    {
+      "report_period": "2025Q3",
+      "net_profit": 612.420996
+    },
+    {
+      "report_period": "2025Q3",
+      "net_profit": 612.420996
+    },
+    {
+      "report_period": "2025Q3",
+      "net_profit": 612.420996
+    },
+    {
+      "report_period": "2025Q3",
+      "net_profit": 612.420996
+    },
+    {
+      "report_period": "2025Q3",
+      "net_profit": 612.420996
+    },
+    {
+      "report_period": "2025Q3",
+      "net_profit": 612.420996
+    },
+    {
+      "report_period": "2025Q3",
+      "net_profit": 612.420996
+    },
+    {
+      "report_period": "2025Q3",
+      "net_profit": 612.420996
+    },
+    {
+      "report_period": "2025Q3",
+      "net_profit": 612.420996
+    },
+    {
+      "report_period": "2025Q3",
+      "net_profit": 612.420996
+    },
+    {
+      "report_period": "2025Q3",
+      "net_profit": 612.420996
+    },
+    {
+      "report_period": "2025Q3",
+      "net_profit": 612.420996
+    },
+    {
+      "report_period": "2025Q3",
+      "net_profit": 612.420996
+    }
+  ],
+  "context_companies": [],
+  "context_rows": [
+    {
+      "report_period": "2024Q3",
+      "net_profit": 14165.613334
+    },
+    {
+      "report_period": "2024Q3",
+      "net_profit": 14165.613334
+    },
+    {
+      "report_period": "2024Q3",
+      "net_profit": 14165.613334
+    },
+    {
+      "report_period": "2024Q3",
+      "net_profit": 14165.613334
+    },
+    {
+      "report_period": "2024Q3",
+      "net_profit": 14165.613334
+    },
+    {
+      "report_period": "2024Q3",
+      "net_profit": 14165.613334
+    },
+    {
+      "report_period": "2024Q3",
+      "net_profit": 14165.613334
+    },
+    {
+      "report_period": "2024Q3",
+      "net_profit": 14165.613334
+    },
+    {
+      "report_period": "2024Q3",
+      "net_profit": 14165.613334
+    },
+    {
+      "report_period": "2024Q3",
+      "net_profit": 14165.613334
+    },
+    {
+      "report_period": "2024Q3",
+      "net_profit": 14165.613334
+    },
+    {
+      "report_period": "2024Q3",
+      "net_profit": 14165.613334
+    },
+    {
+      "report_period": "2024Q3",
+      "net_profit": 14165.613334
+    },
+    {
+      "report_period": "2024Q3",
+      "net_profit": 14165.613334
+    },
+    {
+      "report_period": "2024Q3",
+      "net_profit": 14165.613334
+    },
+    {
+      "report_period": "2024Q3",
+      "net_profit": 14165.613334
+    },
+    {
+      "report_period": "2025Q3",
+      "net_profit": 612.420996
+    },
+    {
+      "report_period": "2025Q3",
+      "net_profit": 612.420996
+    },
+    {
+      "report_period": "2025Q3",
+      "net_profit": 612.420996
+    },
+    {
+      "report_period": "2025Q3",
+      "net_profit": 612.420996
+    },
+    {
+      "report_period": "2025Q3",
+      "net_profit": 612.420996
+    },
+    {
+      "report_period": "2025Q3",
+      "net_profit": 612.420996
+    },
+    {
+      "report_period": "2025Q3",
+      "net_profit": 612.420996
+    },
+    {
+      "report_period": "2025Q3",
+      "net_profit": 612.420996
+    },
+    {
+      "report_period": "2025Q3",
+      "net_profit": 612.420996
+    },
+    {
+      "report_period": "2025Q3",
+      "net_profit": 612.420996
+    },
+    {
+      "report_period": "2025Q3",
+      "net_profit": 612.420996
+    },
+    {
+      "report_period": "2025Q3",
+      "net_profit": 612.420996
+    },
+    {
+      "report_period": "2025Q3",
+      "net_profit": 612.420996
+    },
+    {
+      "report_period": "2025Q3",
+      "net_profit": 612.420996
+    }
+  ],
+  "result_preview": "[{\"report_period\":\"2024Q3\",\"net_profit\":14165.613334},{\"report_period\":\"2024Q3\",\"net_profit\":14165.613334},{\"report_period\":\"2024Q3\",\"net_profit\":14165.613334},{\"report_period\":\"2024Q3\",\"net_profit\":14165.613334},{\"report_period\":\"2024Q3\",\"net_profit\":14165.613334},{\"report_period\":\"2024Q3\",\"net_profit\":14165.613334},{\"report_period\":\"2024Q3\",\"net_profit\":14165.613334},{\"report_period\":\"2024Q3\",\"net_profit\":14165.613334},{\"report_period\":\"2024Q3\",\"net_profit\":14165.613334},{\"report_period\":\"2024Q3\",\"net_profit\":14165.613334},{\"report_period\":\"2024Q3\",\"net_profit\":14165.613334},{\"report_period\":\"2024Q3\",\"net_profit\":14165.613334},{\"report_period\":\"2024Q3\",\"net_profit\":14165.613334},{\"report_period\":\"2024Q3\",\"net_profit\":14165.613334},{\"report_period\":\"2024Q3\",\"net_profit\":14165.613334},{\"report_period\":\"2024Q3\",\"net_profit\":14165.613334},{\"report_period\":\"2025Q3\",\"net_profit\":612.420996},{\"report_period\":\"2025Q3\",\"net_profit\":612.420996},{\"report_period\":\"2025Q3\",\"net_profit\":612.420996},{\"report_period\":\"2025Q3\",\"net_profit\":612.420996}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "百诚医药2024Q3与2025Q3净利润对比",
+    "x_field": null,
+    "y_fields": [
+      "net_profit"
+    ],
+    "category_field": "report_period",
+    "sort_by": "report_period",
+    "sort_ascending": true,
+    "top_n": null,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B3038",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "百诚医药2024Q3与2025Q3净利润对比",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 32,
+      "preview_rows": [
+        {
+          "report_period": "2024Q3",
+          "net_profit": 14165.613334
+        },
+        {
+          "report_period": "2024Q3",
+          "net_profit": 14165.613334
+        },
+        {
+          "report_period": "2024Q3",
+          "net_profit": 14165.613334
+        },
+        {
+          "report_period": "2024Q3",
+          "net_profit": 14165.613334
+        },
+        {
+          "report_period": "2024Q3",
+          "net_profit": 14165.613334
+        },
+        {
+          "report_period": "2024Q3",
+          "net_profit": 14165.613334
+        },
+        {
+          "report_period": "2024Q3",
+          "net_profit": 14165.613334
+        },
+        {
+          "report_period": "2024Q3",
+          "net_profit": 14165.613334
+        },
+        {
+          "report_period": "2024Q3",
+          "net_profit": 14165.613334
+        },
+        {
+          "report_period": "2024Q3",
+          "net_profit": 14165.613334
+        },
+        {
+          "report_period": "2024Q3",
+          "net_profit": 14165.613334
+        },
+        {
+          "report_period": "2024Q3",
+          "net_profit": 14165.613334
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": "report_period",
+      "sort_ascending": true,
+      "top_n": null,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "net_profit",
+        "data_type": "quantitative",
+        "label": "净利润",
+        "unit": null
+      },
+      "category": {
+        "field": "report_period",
+        "data_type": "nominal",
+        "label": "报告期",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B3038_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B3038_1.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT report_period, net_profit FROM financials_view WHERE stock_abbr = '百诚医药' AND report_period IN ('2024Q3', '2025Q3') ORDER BY report_period;",
+      "value_fields": [
+        "net_profit"
+      ],
+      "value_labels": [
+        "净利润"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "net_profit"
+        ],
+        "category_field": "report_period",
+        "sort_by": "report_period",
+        "sort_ascending": true,
+        "top_n": null
+      },
+      "category_aggregate": "max"
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs_test/task2_langgraph/artifacts/chart_specs/B3038_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B3038_1.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "百诚医药2024年第三季度与2025年第三季度净利润分别是多少",
+      "A": {
+        "content": "百诚医药2024年第三季度净利润为14165.61万元，2025年第三季度净利润为612.42万元。",
+        "image": [
+          "./result/B3038_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"百诚医药2024年第三季度与2025年第三季度净利润分别是多少\", \"A\": {\"content\": \"百诚医药2024年第三季度净利润为14165.61万元，2025年第三季度净利润为612.42万元。\", \"image\": [\"./result/B3038_1.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，公司为百诚医药，期间为2024Q3和2025Q3，指标为净利润。净利润对应字段为net_profit。使用stock_abbr进行公司筛选，report_period进行期间筛选，并按报告期排序以清晰展示。"
+  ],
+  "final_status": "ok"
+}

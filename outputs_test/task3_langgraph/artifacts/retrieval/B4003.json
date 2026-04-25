@@ -1,0 +1,122 @@
+[
+  {
+    "source_type": "stock",
+    "title": "2025年半年报点评：TIDES业务高速增长，2025年二季度增长提速",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/2025年半年报点评：TIDES业务高速增长，2025年二季度增长提速.pdf",
+    "publish_date": "2025-07-31 00:00:00.000",
+    "company_or_industry": "药明康德",
+    "organization": "国信证券",
+    "snippet": "2025年半年报点评：TIDES业务高速增长，2025年二季度增长提速；药明康德；国信证券",
+    "score": 6.611387000000001,
+    "metadata_ref": "stock::2025年半年报点评：TIDES业务高速增长，2025年二季度增长提速::2025-07-31 00:00:00.000::国信证券::药明康德",
+    "score_components": {
+      "metadata": 5.0,
+      "vector": 0.770392
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "2025年一季报点评：TIDES业务高速增长，产能建设提速",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/2025年一季报点评：TIDES业务高速增长，产能建设提速.pdf",
+    "publish_date": "2025-05-12 00:00:00.000",
+    "company_or_industry": "药明康德",
+    "organization": "国信证券",
+    "snippet": "2025年一季报点评：TIDES业务高速增长，产能建设提速；药明康德；国信证券",
+    "score": 6.602621,
+    "metadata_ref": "stock::2025年一季报点评：TIDES业务高速增长，产能建设提速::2025-05-12 00:00:00.000::国信证券::药明康德",
+    "score_components": {
+      "metadata": 5.0,
+      "vector": 0.765185
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "公司信息更新报告：2025H1业绩超预期，TIDES业务强劲增长",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/公司信息更新报告：2025H1业绩超预期，TIDES业务强劲增长.pdf",
+    "publish_date": "2025-07-31 00:00:00.000",
+    "company_or_industry": "药明康德",
+    "organization": "开源证券",
+    "snippet": "公司信息更新报告：2025H1业绩超预期，TIDES业务强劲增长；药明康德；开源证券",
+    "score": 5.833908,
+    "metadata_ref": "stock::公司信息更新报告：2025H1业绩超预期，TIDES业务强劲增长::2025-07-31 00:00:00.000::开源证券::药明康德",
+    "score_components": {
+      "metadata": 5.0,
+      "vector": 0.833908
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "药明康德2025年中报业绩点评：TIDES业务持续高增，上调全年业绩指引",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/药明康德2025年中报业绩点评：TIDES业务持续高增，上调全年业绩指引.pdf",
+    "publish_date": "2025-07-31 00:00:00.000",
+    "company_or_industry": "药明康德",
+    "organization": "中国银河",
+    "snippet": "药明康德2025年中报业绩点评：TIDES业务持续高增，上调全年业绩指引；药明康德；中国银河",
+    "score": 5.0,
+    "metadata_ref": "stock::药明康德2025年中报业绩点评：TIDES业务持续高增，上调全年业绩指引::2025-07-31 00:00:00.000::中国银河::药明康德",
+    "score_components": {
+      "metadata": 5.0,
+      "vector": 0.0
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "药明康德2025年三季报业绩点评：持续聚焦CRDMO，再次上调全年指引",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/药明康德2025年三季报业绩点评：持续聚焦CRDMO，再次上调全年指引.pdf",
+    "publish_date": "2025-10-28 00:00:00.000",
+    "company_or_industry": "药明康德",
+    "organization": "中国银河",
+    "snippet": "药明康德2025年三季报业绩点评：持续聚焦CRDMO，再次上调全年指引；药明康德；中国银河",
+    "score": 3.0,
+    "metadata_ref": "stock::药明康德2025年三季报业绩点评：持续聚焦CRDMO，再次上调全年指引::2025-10-28 00:00:00.000::中国银河::药明康德",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.0
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "3Q25业绩及新签订单增速再超预期，上调全年指引",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/3Q25业绩及新签订单增速再超预期，上调全年指引.pdf",
+    "publish_date": "2025-10-28 00:00:00.000",
+    "company_or_industry": "药明康德",
+    "organization": "浦银国际证券",
+    "snippet": "3Q25业绩及新签订单增速再超预期，上调全年指引；药明康德；浦银国际证券",
+    "score": 3.0,
+    "metadata_ref": "stock::3Q25业绩及新签订单增速再超预期，上调全年指引::2025-10-28 00:00:00.000::浦银国际证券::药明康德",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.0
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "Rising demand for small molecule D&M business",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/Rising demand for small molecule D&M business.pdf",
+    "publish_date": "2025-10-28 00:00:00.000",
+    "company_or_industry": "药明康德",
+    "organization": "招银国际",
+    "snippet": "Rising demand for small molecule D&M business；药明康德；招银国际",
+    "score": 3.0,
+    "metadata_ref": "stock::Rising demand for small molecule D&M business::2025-10-28 00:00:00.000::招银国际::药明康德",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.0
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "业绩增长持续强劲，公司再次上调全年指引",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/业绩增长持续强劲，公司再次上调全年指引.pdf",
+    "publish_date": "2025-10-28 00:00:00.000",
+    "company_or_industry": "药明康德",
+    "organization": "信达证券",
+    "snippet": "业绩增长持续强劲，公司再次上调全年指引；药明康德；信达证券",
+    "score": 3.0,
+    "metadata_ref": "stock::业绩增长持续强劲，公司再次上调全年指引::2025-10-28 00:00:00.000::信达证券::药明康德",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.0
+    }
+  }
+]

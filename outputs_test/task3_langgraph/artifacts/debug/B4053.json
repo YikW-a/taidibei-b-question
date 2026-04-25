@@ -1,0 +1,148 @@
+{
+  "question_id": "B4053",
+  "question_type": "多意图",
+  "raw_question": "①找出2025年第三季度销售费用率最高的公司；②分析其销售费用的主要构成；③评估销售费用投入的效率（单位销售费用带来的营业总收入）",
+  "raw_question_json": "[{\"Q\":\"①找出2025年第三季度销售费用率最高的公司；②分析其销售费用的主要构成；③评估销售费用投入的效率（单位销售费用带来的营业总收入）\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "metrics": [
+      "营业总收入",
+      "销售费用"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "focus_topics": [],
+    "intent_type": "causal_analysis",
+    "needs_sql": true,
+    "needs_retrieval": true,
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "causal_analysis",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入",
+      "销售费用"
+    ],
+    "needs_sql": true,
+    "top_n": 1,
+    "threshold": null,
+    "question": "找出2025年第三季度销售费用率最高的公司，并计算其单位销售费用带来的营业总收入"
+  },
+  "retrieval_plan": {
+    "question": "①找出2025年第三季度销售费用率最高的公司；②分析其销售费用的主要构成；③评估销售费用投入的效率（单位销售费用带来的营业总收入）",
+    "companies": [
+      "百克生物"
+    ],
+    "focus_topics": [
+      "销售费用构成",
+      "销售费用效率",
+      "主营业务收入",
+      "营业总收入",
+      "收入增长",
+      "主营业务",
+      "主营业务类型",
+      "业务类型",
+      "成本控制",
+      "成本结构",
+      "销售费用",
+      "研发费用",
+      "中药",
+      "创新药"
+    ],
+    "needs_retrieval": true,
+    "top_k": 8,
+    "source_scope": "stock",
+    "retrieval_mode": "hybrid"
+  },
+  "sql": "WITH sales_expense_ratio_2025q3 AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        selling_expenses,\n        total_operating_revenue,\n        CASE \n            WHEN total_operating_revenue > 0 \n            THEN CAST(selling_expenses AS REAL) / total_operating_revenue * 100\n            ELSE NULL \n        END AS sales_expense_ratio_percent,\n        CASE \n            WHEN selling_expenses > 0 \n            THEN CAST(total_operating_revenue AS REAL) / selling_expenses\n            ELSE NULL \n        END AS revenue_per_sales_expense\n    FROM financials_view \n    WHERE report_period = '2025Q3'\n        AND total_operating_revenue IS NOT NULL\n        AND selling_expenses IS NOT NULL\n        AND selling_expenses > 0\n),\ntop_company AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        selling_expenses,\n        total_operating_revenue,\n        sales_expense_ratio_percent,\n        revenue_per_sales_expense\n    FROM sales_expense_ratio_2025q3\n    ORDER BY sales_expense_ratio_percent DESC\n    LIMIT 1\n)\nSELECT \n    stock_code,\n    stock_abbr,\n    report_period,\n    selling_expenses,\n    total_operating_revenue,\n    sales_expense_ratio_percent,\n    revenue_per_sales_expense\nFROM top_company;",
+  "sql_history": [
+    "WITH sales_expense_ratio_2025q3 AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        selling_expenses,\n        total_operating_revenue,\n        CASE \n            WHEN total_operating_revenue > 0 \n            THEN CAST(selling_expenses AS REAL) / total_operating_revenue * 100\n            ELSE NULL \n        END AS sales_expense_ratio_percent,\n        CASE \n            WHEN selling_expenses > 0 \n            THEN CAST(total_operating_revenue AS REAL) / selling_expenses\n            ELSE NULL \n        END AS revenue_per_sales_expense\n    FROM financials_view \n    WHERE report_period = '2025Q3'\n        AND total_operating_revenue IS NOT NULL\n        AND selling_expenses IS NOT NULL\n        AND selling_expenses > 0\n),\ntop_company AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        report_period,\n        selling_expenses,\n        total_operating_revenue,\n        sales_expense_ratio_percent,\n        revenue_per_sales_expense\n    FROM sales_expense_ratio_2025q3\n    ORDER BY sales_expense_ratio_percent DESC\n    LIMIT 1\n)\nSELECT \n    stock_code,\n    stock_abbr,\n    report_period,\n    selling_expenses,\n    total_operating_revenue,\n    sales_expense_ratio_percent,\n    revenue_per_sales_expense\nFROM top_company;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 1,
+  "result_rows": [
+    {
+      "stock_code": "688276",
+      "stock_abbr": "百克生物",
+      "report_period": "2025Q3",
+      "selling_expenses": 28545.463167,
+      "total_operating_revenue": 47444.276598000004,
+      "sales_expense_ratio_percent": 60.16629446975976,
+      "revenue_per_sales_expense": 1.6620601431630644
+    }
+  ],
+  "retrieved_evidence": [],
+  "reranked_evidence": [],
+  "rerank_preview": "{\"strategy\": \"skipped_fast_path\", \"kept_count\": 0}",
+  "fused_context": {
+    "question": "①找出2025年第三季度销售费用率最高的公司；②分析其销售费用的主要构成；③评估销售费用投入的效率（单位销售费用带来的营业总收入）",
+    "sql_row_count": 1,
+    "evidence_count": 0,
+    "sql_preview": [
+      {
+        "stock_code": "688276",
+        "stock_abbr": "百克生物",
+        "report_period": "2025Q3",
+        "selling_expenses": 28545.463167,
+        "total_operating_revenue": 47444.276598000004,
+        "sales_expense_ratio_percent": 60.16629446975976,
+        "revenue_per_sales_expense": 1.6620601431630644
+      }
+    ],
+    "evidence_preview": [],
+    "evidence_titles": [],
+    "source_breakdown": {}
+  },
+  "self_check": {
+    "pass": false,
+    "notes": [
+      "1. 数字一致性检查：回答中的数字（销售费用28,545.46万元、营业总收入47,444.28万元、销售费用率60.17%、单位销售费用带来的营业总收入1.66）与SQL rows中的数据完全一致，通过。",
+      "2. 证据引用检查：回答中提到'未检索到直接研报证据'，这与Evidences为空列表的情况相符，通过。",
+      "3. 关键点遗漏检查：问题要求分析'销售费用的主要构成'，回答明确指出'由于缺乏研报证据，销售费用的主要构成无法具体分析'，这诚实地反映了证据缺失的情况，但未能提供任何构成分析，属于客观限制下的合理回应。然而，回答在'直接结论'部分声称要分析构成，但后续未能提供，存在轻微的前后不一致。",
+      "4. 指标名称混淆检查：回答中正确使用了'销售费用'、'营业总收入'、'销售费用率'、'单位销售费用带来的营业总收入'等指标，没有发现混淆，通过。",
+      "5. 聚合统计对应检查：回答针对的是单一公司（百克生物）的具体数据，没有涉及AVG/MIN/MAX等聚合统计，也未错误对应，通过。",
+      "6. 总体逻辑问题：回答基于仅有一家公司的数据得出结论'是唯一符合查询条件的公司，其销售费用率最高'。从逻辑上讲，如果数据集中只有一家公司，那么它自然是'最高'的，但这也意味着可能没有进行真正的'找出最高'的比较过程。题目意图可能是从多家公司中找出最高者，但当前数据只提供了一家。回答没有明确指出这个数据局限性，可能给读者造成'在所有公司中它最高'的误解，而实际上可能只是'在现有数据中它最高（且唯一）'。"
+    ]
+  },
+  "chart_plan": {},
+  "chart_spec": {},
+  "current_chart_paths": [],
+  "current_chart_specs": [],
+  "current_answer": "**直接结论**  \n根据提供的2025年第三季度财务数据，**百克生物（股票代码：688276）** 是唯一符合查询条件的公司，其销售费用率最高，达到**60.17%**。\n\n**财务数据支撑**  \n- **销售费用率计算**：百克生物2025Q3销售费用为28,545.46万元，营业总收入为47,444.28万元，销售费用率 = 销售费用 / 营业总收入 × 100% = 60.17%。  \n- **销售费用投入效率**：单位销售费用带来的营业总收入为**1.66**（即每1元销售费用对应约1.66元营业总收入）。  \n- **金额口径说明**：数据库金额单位为万元，若换算为亿元，则销售费用约为2.85亿元，营业总收入约为4.74亿元（换算关系：1亿元 = 10,000万元）。\n\n**研报证据支撑**  \n未检索到直接研报证据，无法提供销售费用具体构成（如市场推广、职工薪酬、渠道建设等细分项）的定性分析。\n\n**综合判断**  \n1. **销售费用率水平**：基于当前数据，百克生物2025Q3销售费用率高达60.17%，表明公司当期销售投入占营收比重极大。  \n2. **费用构成缺失**：由于缺乏研报证据，销售费用的主要构成无法具体分析，需查阅公司财报或专项研报获取细分数据。  \n3. **投入效率评估**：单位销售费用带来1.66元营业总收入，从财务比率看，每单位销售费用创造的营收相对有限，可能与高销售费用率下边际收益递减或行业特性有关。  \n\n**说明**：以上分析完全基于提供的单家公司财务数据。如需更全面的行业对比或费用构成细节，需补充更多公司数据及研报证据。",
+  "current_references": [],
+  "answer_rewritten": true,
+  "turn_answers": [
+    {
+      "Q": "①找出2025年第三季度销售费用率最高的公司；②分析其销售费用的主要构成；③评估销售费用投入的效率（单位销售费用带来的营业总收入）",
+      "A": {
+        "content": "**直接结论**  \n根据提供的2025年第三季度财务数据，**百克生物（股票代码：688276）** 是唯一符合查询条件的公司，其销售费用率最高，达到**60.17%**。\n\n**财务数据支撑**  \n- **销售费用率计算**：百克生物2025Q3销售费用为28,545.46万元，营业总收入为47,444.28万元，销售费用率 = 销售费用 / 营业总收入 × 100% = 60.17%。  \n- **销售费用投入效率**：单位销售费用带来的营业总收入为**1.66**（即每1元销售费用对应约1.66元营业总收入）。  \n- **金额口径说明**：数据库金额单位为万元，若换算为亿元，则销售费用约为2.85亿元，营业总收入约为4.74亿元（换算关系：1亿元 = 10,000万元）。\n\n**研报证据支撑**  \n未检索到直接研报证据，无法提供销售费用具体构成（如市场推广、职工薪酬、渠道建设等细分项）的定性分析。\n\n**综合判断**  \n1. **销售费用率水平**：基于当前数据，百克生物2025Q3销售费用率高达60.17%，表明公司当期销售投入占营收比重极大。  \n2. **费用构成缺失**：由于缺乏研报证据，销售费用的主要构成无法具体分析，需查阅公司财报或专项研报获取细分数据。  \n3. **投入效率评估**：单位销售费用带来1.66元营业总收入，从财务比率看，每单位销售费用创造的营收相对有限，可能与高销售费用率下边际收益递减或行业特性有关。  \n\n**说明**：以上分析完全基于提供的单家公司财务数据。如需更全面的行业对比或费用构成细节，需补充更多公司数据及研报证据。",
+        "image": [],
+        "references": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"①找出2025年第三季度销售费用率最高的公司；②分析其销售费用的主要构成；③评估销售费用投入的效率（单位销售费用带来的营业总收入）\", \"A\": {\"content\": \"**直接结论**  \\n根据提供的2025年第三季度财务数据，**百克生物（股票代码：688276）** 是唯一符合查询条件的公司，其销售费用率最高，达到**60.17%**。\\n\\n**财务数据支撑**  \\n- **销售费用率计算**：百克生物2025Q3销售费用为28,545.46万元，营业总收入为47,444.28万元，销售费用率 = 销售费用 / 营业总收入 × 100% = 60.17%。  \\n- **销售费用投入效率**：单位销售费用带来的营业总收入为**1.66**（即每1元销售费用对应约1.66元营业总收入）。  \\n- **金额口径说明**：数据库金额单位为万元，若换算为亿元，则销售费用约为2.85亿元，营业总收入约为4.74亿元（换算关系：1亿元 = 10,000万元）。\\n\\n**研报证据支撑**  \\n未检索到直接研报证据，无法提供销售费用具体构成（如市场推广、职工薪酬、渠道建设等细分项）的定性分析。\\n\\n**综合判断**  \\n1. **销售费用率水平**：基于当前数据，百克生物2025Q3销售费用率高达60.17%，表明公司当期销售投入占营收比重极大。  \\n2. **费用构成缺失**：由于缺乏研报证据，销售费用的主要构成无法具体分析，需查阅公司财报或专项研报获取细分数据。  \\n3. **投入效率评估**：单位销售费用带来1.66元营业总收入，从财务比率看，每单位销售费用创造的营收相对有限，可能与高销售费用率下边际收益递减或行业特性有关。  \\n\\n**说明**：以上分析完全基于提供的单家公司财务数据。如需更全面的行业对比或费用构成细节，需补充更多公司数据及研报证据。\", \"image\": [], \"references\": []}}]",
+  "references_json": "[]",
+  "notes": [
+    "route=causal_analysis",
+    "1. 首先筛选2025Q3的数据，计算销售费用率（销售费用/营业总收入×100）和单位销售费用带来的营业总收入（营业总收入/销售费用）。\n2. 按销售费用率降序排序，取最高的公司（TOP 1）。\n3. 由于query_plan中没有指定具体公司，因此不手动枚举stock_abbr列表。\n4. 销售费用率以百分比形式输出，单位销售费用带来的营业总收入以倍数形式输出。\n5. 使用WITH子句先计算所有公司的比率，再找出最高者，避免在ORDER BY中使用复杂表达式。",
+    "retrieval_companies_seeded_from_sql=百克生物",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=0",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=0",
+    "answer_rewritten_after_self_check",
+    "self_check={\"pass\": false, \"notes\": [\"1. 数字一致性检查：回答中的数字（销售费用28,545.46万元、营业总收入47,444.28万元、销售费用率60.17%、单位销售费用带来的营业总收入1.66）与SQL rows中的数据完全一致，通过。\", \"2. 证据引用检查：回答中提到'未检索到直接研报证据'，这与Evidences为空列表的情况相符，通过。\", \"3. 关键点遗漏检查：问题要求分析'销售费用的主要构成'，回答明确指出'由于缺乏研报证据，销售费用的主要构成无法具体分析'，这诚实地反映了证据缺失的情况，但未能提供任何构成分析，属于客观限制下的合理回应。然而，回答在'直接结论'部分声称要分析构成，但后续未能提供，存在轻微的前后不一致。\", \"4. 指标名称混淆检查：回答中正确使用了'销售费用'、'营业总收入'、'销售费用率'、'单位销售费用带来的营业总收入'等指标，没有发现混淆，通过。\", \"5. 聚合统计对应检查：回答针对的是单一公司（百克生物）的具体数据，没有涉及AVG/MIN/MAX等聚合统计，也未错误对应，通过。\", \"6. 总体逻辑问题：回答基于仅有一家公司的数据得出结论'是唯一符合查询条件的公司，其销售费用率最高'。从逻辑上讲，如果数据集中只有一家公司，那么它自然是'最高'的，但这也意味着可能没有进行真正的'找出最高'的比较过程。题目意图可能是从多家公司中找出最高者，但当前数据只提供了一家。回答没有明确指出这个数据局限性，可能给读者造成'在所有公司中它最高'的误解，而实际上可能只是'在现有数据中它最高（且唯一）'。\"]}"
+  ],
+  "final_status": "ok"
+}

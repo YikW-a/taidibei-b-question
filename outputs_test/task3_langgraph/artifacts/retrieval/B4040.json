@@ -1,0 +1,92 @@
+[
+  {
+    "source_type": "stock",
+    "title": "受政策影响业绩承压，持续加大创新转型投入",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/受政策影响业绩承压，持续加大创新转型投入.pdf",
+    "publish_date": "2025-05-12 00:00:00.000",
+    "company_or_industry": "百诚医药",
+    "organization": "国信证券",
+    "snippet": "受政策影响业绩承压，持续加大创新转型投入；百诚医药；国信证券",
+    "score": 5.17791,
+    "metadata_ref": "stock::受政策影响业绩承压，持续加大创新转型投入::2025-05-12 00:00:00.000::国信证券::百诚医药",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.697934
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "公司事件点评报告：静待新集采落地，储备创新转型",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/公司事件点评报告：静待新集采落地，储备创新转型.pdf",
+    "publish_date": "2025-09-03 00:00:00.000",
+    "company_or_industry": "百诚医药",
+    "organization": "华鑫证券",
+    "snippet": "公司事件点评报告：静待新集采落地，储备创新转型；百诚医药；华鑫证券",
+    "score": 4.520189,
+    "metadata_ref": "stock::公司事件点评报告：静待新集采落地，储备创新转型::2025-09-03 00:00:00.000::华鑫证券::百诚医药",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.755037
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "业绩承压，持续推进创新转型",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/业绩承压，持续推进创新转型.pdf",
+    "publish_date": "2025-11-07 00:00:00.000",
+    "company_or_industry": "百诚医药",
+    "organization": "国信证券",
+    "snippet": "业绩承压，持续推进创新转型；百诚医药；国信证券",
+    "score": 4.515374,
+    "metadata_ref": "stock::业绩承压，持续推进创新转型::2025-11-07 00:00:00.000::国信证券::百诚医药",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.70056
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "Q3收入同比下降，短期利润持续承压",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/Q3收入同比下降，短期利润持续承压.pdf",
+    "publish_date": "2025-10-31 00:00:00.000",
+    "company_or_industry": "百诚医药",
+    "organization": "太平洋",
+    "snippet": "Q3收入同比下降，短期利润持续承压；百诚医药；太平洋",
+    "score": 3.701838,
+    "metadata_ref": "stock::Q3收入同比下降，短期利润持续承压::2025-10-31 00:00:00.000::太平洋::百诚医药",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.701838
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "短期业绩承压，临床盈利改善",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/短期业绩承压，临床盈利改善.pdf",
+    "publish_date": "2025-08-28 00:00:00.000",
+    "company_or_industry": "百诚医药",
+    "organization": "太平洋",
+    "snippet": "短期业绩承压，临床盈利改善；百诚医药；太平洋",
+    "score": 3.0,
+    "metadata_ref": "stock::短期业绩承压，临床盈利改善::2025-08-28 00:00:00.000::太平洋::百诚医药",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.0
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "业绩短期有所承压，临床业务稳定增长",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/业绩短期有所承压，临床业务稳定增长.pdf",
+    "publish_date": "2025-04-24 00:00:00.000",
+    "company_or_industry": "百诚医药",
+    "organization": "太平洋",
+    "snippet": "业绩短期有所承压，临床业务稳定增长；百诚医药；太平洋",
+    "score": 3.0,
+    "metadata_ref": "stock::业绩短期有所承压，临床业务稳定增长::2025-04-24 00:00:00.000::太平洋::百诚医药",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.0
+    }
+  }
+]

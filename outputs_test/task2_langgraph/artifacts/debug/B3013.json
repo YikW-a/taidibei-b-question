@@ -1,0 +1,150 @@
+{
+  "question_id": "B3013",
+  "question_type": "数据统计分析查询",
+  "raw_question": "2025年第三季度，10家公司的平均销售毛利率是多少？同时列出销售毛利率低于均值的公司",
+  "raw_question_json": "[{\"Q\":\"2025年第三季度，10家公司的平均销售毛利率是多少？同时列出销售毛利率低于均值的公司\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "销售毛利率"
+    ],
+    "chart_type": null,
+    "intent_type": "filter",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "filter",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "销售毛利率"
+    ],
+    "chart_type": null,
+    "top_n": null,
+    "threshold": null,
+    "question": "2025年第三季度，10家公司的平均销售毛利率是多少？同时列出销售毛利率低于均值的公司",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "WITH company_gross_margin AS ( SELECT stock_code, stock_abbr, gross_profit_margin FROM financials_view WHERE report_period = '2025Q3' AND gross_profit_margin IS NOT NULL ORDER BY stock_code LIMIT 10), avg_gross_margin AS ( SELECT AVG(gross_profit_margin) AS avg_gross_margin FROM company_gross_margin) SELECT cgm.stock_code, cgm.stock_abbr, cgm.gross_profit_margin, agm.avg_gross_margin FROM company_gross_margin cgm CROSS JOIN avg_gross_margin agm WHERE cgm.gross_profit_margin < agm.avg_gross_margin ORDER BY cgm.gross_profit_margin",
+  "sql_history": [
+    "WITH company_gross_margin AS ( SELECT stock_code, stock_abbr, gross_profit_margin FROM financials_view WHERE report_period = '2025Q3' AND gross_profit_margin IS NOT NULL ORDER BY stock_code LIMIT 10), avg_gross_margin AS ( SELECT AVG(gross_profit_margin) AS avg_gross_margin FROM company_gross_margin) SELECT cgm.stock_code, cgm.stock_abbr, cgm.gross_profit_margin, agm.avg_gross_margin FROM company_gross_margin cgm CROSS JOIN avg_gross_margin agm WHERE cgm.gross_profit_margin < agm.avg_gross_margin ORDER BY cgm.gross_profit_margin"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 6,
+  "result_rows": [
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "gross_profit_margin": 21.552125138504152,
+      "avg_gross_margin": 52.01823443017389
+    },
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "gross_profit_margin": 29.07330744405277,
+      "avg_gross_margin": 52.01823443017389
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "gross_profit_margin": 29.161453501594348,
+      "avg_gross_margin": 52.01823443017389
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749,
+      "avg_gross_margin": 52.01823443017389
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "gross_profit_margin": 46.622485442022935,
+      "avg_gross_margin": 52.01823443017389
+    },
+    {
+      "stock_code": "301096",
+      "stock_abbr": "百诚医药",
+      "gross_profit_margin": 48.9777097398478,
+      "avg_gross_margin": 52.01823443017389
+    }
+  ],
+  "context_companies": [
+    "昭衍新药",
+    "迪安诊断",
+    "泰格医药",
+    "凯莱英",
+    "药明康德",
+    "百诚医药"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "gross_profit_margin": 21.552125138504152,
+      "avg_gross_margin": 52.01823443017389
+    },
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "gross_profit_margin": 29.07330744405277,
+      "avg_gross_margin": 52.01823443017389
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "gross_profit_margin": 29.161453501594348,
+      "avg_gross_margin": 52.01823443017389
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "gross_profit_margin": 42.43943134607749,
+      "avg_gross_margin": 52.01823443017389
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "gross_profit_margin": 46.622485442022935,
+      "avg_gross_margin": 52.01823443017389
+    },
+    {
+      "stock_code": "301096",
+      "stock_abbr": "百诚医药",
+      "gross_profit_margin": 48.9777097398478,
+      "avg_gross_margin": 52.01823443017389
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"603127\",\"stock_abbr\":\"昭衍新药\",\"gross_profit_margin\":21.5521251385,\"avg_gross_margin\":52.0182344302},{\"stock_code\":\"300244\",\"stock_abbr\":\"迪安诊断\",\"gross_profit_margin\":29.0733074441,\"avg_gross_margin\":52.0182344302},{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"gross_profit_margin\":29.1614535016,\"avg_gross_margin\":52.0182344302},{\"stock_code\":\"002821\",\"stock_abbr\":\"凯莱英\",\"gross_profit_margin\":42.4394313461,\"avg_gross_margin\":52.0182344302},{\"stock_code\":\"603259\",\"stock_abbr\":\"药明康德\",\"gross_profit_margin\":46.622485442,\"avg_gross_margin\":52.0182344302},{\"stock_code\":\"301096\",\"stock_abbr\":\"百诚医药\",\"gross_profit_margin\":48.9777097398,\"avg_gross_margin\":52.0182344302}]",
+  "chart_plan": {},
+  "chart_spec": {},
+  "all_chart_specs": [],
+  "all_chart_paths": [],
+  "graph_formats": [],
+  "turn_answers": [
+    {
+      "Q": "2025年第三季度，10家公司的平均销售毛利率是多少？同时列出销售毛利率低于均值的公司",
+      "A": {
+        "content": "2025年第三季度，10家公司的平均销售毛利率为 52.02%。低于均值的公司有：昭衍新药（603127）：21.55%、迪安诊断（300244）：29.07%、泰格医药（300347）：29.16%、凯莱英（002821）：42.44%、药明康德（603259）：46.62%、百诚医药（301096）：48.98%。",
+        "image": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"2025年第三季度，10家公司的平均销售毛利率是多少？同时列出销售毛利率低于均值的公司\", \"A\": {\"content\": \"2025年第三季度，10家公司的平均销售毛利率为 52.02%。低于均值的公司有：昭衍新药（603127）：21.55%、迪安诊断（300244）：29.07%、泰格医药（300347）：29.16%、凯莱英（002821）：42.44%、药明康德（603259）：46.62%、百诚医药（301096）：48.98%。\", \"image\": []}}]",
+  "notes": [
+    "Used deterministic SQL template for a known query pattern."
+  ],
+  "final_status": "ok"
+}

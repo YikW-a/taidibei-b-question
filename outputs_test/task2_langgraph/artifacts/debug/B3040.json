@@ -1,0 +1,304 @@
+{
+  "question_id": "B3040",
+  "question_type": "数据基本查询",
+  "raw_question": "泰格医药2025年第三季度资产总额和负债总额",
+  "raw_question_json": "[{\"Q\":\"泰格医药2025年第三季度资产总额和负债总额\"}]",
+  "parsed_slots": {
+    "companies": [
+      "泰格医药"
+    ],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [],
+    "chart_type": null,
+    "intent_type": "generic",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "single_company_metric",
+    "companies": [
+      "泰格医药"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "资产总计",
+      "负债合计"
+    ],
+    "chart_type": null,
+    "top_n": null,
+    "threshold": null,
+    "question": "泰格医药2025年第三季度资产总额和负债总额",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": [],
+    "unsupported_metrics": [
+      "资产总计",
+      "负债合计"
+    ]
+  },
+  "sql": "SELECT stock_code, stock_abbr, report_period, asset_total_assets, liability_total_liabilities FROM financials_view WHERE stock_abbr = '泰格医药' AND report_period = '2025Q3'",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, report_period, asset_total_assets, liability_total_liabilities FROM financials_view WHERE stock_abbr = '泰格医药' AND report_period = '2025Q3'"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 16,
+  "result_rows": [
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "asset_total_assets": 2878425.1786889997,
+      "liability_total_liabilities": 407665.84835700004
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "asset_total_assets": 2878425.1786889997,
+      "liability_total_liabilities": 407665.84835700004
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "asset_total_assets": 2878425.1786889997,
+      "liability_total_liabilities": 407665.84835700004
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "asset_total_assets": 2878425.1786889997,
+      "liability_total_liabilities": 407665.84835700004
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "asset_total_assets": 2878425.1786889997,
+      "liability_total_liabilities": 407665.84835700004
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "asset_total_assets": 2878425.1786889997,
+      "liability_total_liabilities": 407665.84835700004
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "asset_total_assets": 2878425.1786889997,
+      "liability_total_liabilities": 407665.84835700004
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "asset_total_assets": 2878425.1786889997,
+      "liability_total_liabilities": 407665.84835700004
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "asset_total_assets": 2878425.1786889997,
+      "liability_total_liabilities": 407665.84835700004
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "asset_total_assets": 2878425.1786889997,
+      "liability_total_liabilities": 407665.84835700004
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "asset_total_assets": 2878425.1786889997,
+      "liability_total_liabilities": 407665.84835700004
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "asset_total_assets": 2878425.1786889997,
+      "liability_total_liabilities": 407665.84835700004
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "asset_total_assets": 2878425.1786889997,
+      "liability_total_liabilities": 407665.84835700004
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "asset_total_assets": 2878425.1786889997,
+      "liability_total_liabilities": 407665.84835700004
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "asset_total_assets": 2878425.1786889997,
+      "liability_total_liabilities": 407665.84835700004
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "asset_total_assets": 2878425.1786889997,
+      "liability_total_liabilities": 407665.84835700004
+    }
+  ],
+  "context_companies": [
+    "泰格医药"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "asset_total_assets": 2878425.1786889997,
+      "liability_total_liabilities": 407665.84835700004
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "asset_total_assets": 2878425.1786889997,
+      "liability_total_liabilities": 407665.84835700004
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "asset_total_assets": 2878425.1786889997,
+      "liability_total_liabilities": 407665.84835700004
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "asset_total_assets": 2878425.1786889997,
+      "liability_total_liabilities": 407665.84835700004
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "asset_total_assets": 2878425.1786889997,
+      "liability_total_liabilities": 407665.84835700004
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "asset_total_assets": 2878425.1786889997,
+      "liability_total_liabilities": 407665.84835700004
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "asset_total_assets": 2878425.1786889997,
+      "liability_total_liabilities": 407665.84835700004
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "asset_total_assets": 2878425.1786889997,
+      "liability_total_liabilities": 407665.84835700004
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "asset_total_assets": 2878425.1786889997,
+      "liability_total_liabilities": 407665.84835700004
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "asset_total_assets": 2878425.1786889997,
+      "liability_total_liabilities": 407665.84835700004
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "asset_total_assets": 2878425.1786889997,
+      "liability_total_liabilities": 407665.84835700004
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "asset_total_assets": 2878425.1786889997,
+      "liability_total_liabilities": 407665.84835700004
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "asset_total_assets": 2878425.1786889997,
+      "liability_total_liabilities": 407665.84835700004
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "asset_total_assets": 2878425.1786889997,
+      "liability_total_liabilities": 407665.84835700004
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "asset_total_assets": 2878425.1786889997,
+      "liability_total_liabilities": 407665.84835700004
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "asset_total_assets": 2878425.1786889997,
+      "liability_total_liabilities": 407665.84835700004
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"report_period\":\"2025Q3\",\"asset_total_assets\":2878425.1786889997,\"liability_total_liabilities\":407665.848357},{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"report_period\":\"2025Q3\",\"asset_total_assets\":2878425.1786889997,\"liability_total_liabilities\":407665.848357},{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"report_period\":\"2025Q3\",\"asset_total_assets\":2878425.1786889997,\"liability_total_liabilities\":407665.848357},{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"report_period\":\"2025Q3\",\"asset_total_assets\":2878425.1786889997,\"liability_total_liabilities\":407665.848357},{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"report_period\":\"2025Q3\",\"asset_total_assets\":2878425.1786889997,\"liability_total_liabilities\":407665.848357},{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"report_period\":\"2025Q3\",\"asset_total_assets\":2878425.1786889997,\"liability_total_liabilities\":407665.848357},{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"report_period\":\"2025Q3\",\"asset_total_assets\":2878425.1786889997,\"liability_total_liabilities\":407665.848357},{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"report_period\":\"2025Q3\",\"asset_total_assets\":2878425.1786889997,\"liability_total_liabilities\":407665.848357},{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"report_period\":\"2025Q3\",\"asset_total_assets\":2878425.1786889997,\"liability_total_liabilities\":407665.848357},{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"report_period\":\"2025Q3\",\"asset_total_assets\":2878425.1786889997,\"liability_total_liabilities\":407665.848357},{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"report_period\":\"2025Q3\",\"asset_total_assets\":2878425.1786889997,\"liability_total_liabilities\":407665.848357},{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"report_period\":\"2025Q3\",\"asset_total_assets\":2878425.1786889997,\"liability_total_liabilities\":407665.848357},{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"report_period\":\"2025Q3\",\"asset_total_assets\":2878425.1786889997,\"liability_total_liabilities\":407665.848357},{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"report_period\":\"2025Q3\",\"asset_total_assets\":2878425.1786889997,\"liability_total_liabilities\":407665.848357},{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"report_period\":\"2025Q3\",\"asset_total_assets\":2878425.1786889997,\"liability_total_liabilities\":407665.848357},{\"stock_code\":\"300347\",\"stock_abbr\":\"泰格医药\",\"report_period\":\"2025Q3\",\"asset_total_assets\":2878425.1786889997,\"liability_total_liabilities\":407665.848357}]",
+  "chart_plan": {},
+  "chart_spec": {},
+  "all_chart_specs": [],
+  "all_chart_paths": [],
+  "graph_formats": [],
+  "turn_answers": [
+    {
+      "Q": "泰格医药2025年第三季度资产总额和负债总额",
+      "A": {
+        "content": "泰格医药（股票代码300347）在2025年第三季度报告期的资产总额为287.84亿元，负债总额为40.77亿元。",
+        "image": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"泰格医药2025年第三季度资产总额和负债总额\", \"A\": {\"content\": \"泰格医药（股票代码300347）在2025年第三季度报告期的资产总额为287.84亿元，负债总额为40.77亿元。\", \"image\": []}}]",
+  "notes": [
+    "根据查询计划，需要查询泰格医药在2025年第三季度的资产总额和负债总额。对应字段为asset_total_assets和liability_total_liabilities。使用stock_abbr和report_period进行精确筛选。"
+  ],
+  "final_status": "ok"
+}

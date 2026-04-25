@@ -1,0 +1,171 @@
+{
+  "schema_version": "task3.chart-spec.v1",
+  "question_id": "B4055",
+  "image_index": 1,
+  "chart_type": "table",
+  "title": "2025年第三季度，药明康德信用减值损失转回，分... - 应收账款",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 33,
+    "preview_rows": [
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "应收账款": 844008.886881,
+        "应收账款占营业总收入比例": 25.68756030912,
+        "营业总收入": 3285671.650886
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "应收账款": 844008.886881,
+        "应收账款占营业总收入比例": 25.68756030912,
+        "营业总收入": 3285671.650886
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "应收账款": 844008.886881,
+        "应收账款占营业总收入比例": 25.68756030912,
+        "营业总收入": 3285671.650886
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "应收账款": 844008.886881,
+        "应收账款占营业总收入比例": 25.68756030912,
+        "营业总收入": 3285671.650886
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "应收账款": 844008.886881,
+        "应收账款占营业总收入比例": 25.68756030912,
+        "营业总收入": 3285671.650886
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "应收账款": 844008.886881,
+        "应收账款占营业总收入比例": 25.68756030912,
+        "营业总收入": 3285671.650886
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "应收账款": 844008.886881,
+        "应收账款占营业总收入比例": 25.68756030912,
+        "营业总收入": 3285671.650886
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "应收账款": 844008.886881,
+        "应收账款占营业总收入比例": 25.68756030912,
+        "营业总收入": 3285671.650886
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "应收账款": 844008.886881,
+        "应收账款占营业总收入比例": 25.68756030912,
+        "营业总收入": 3285671.650886
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "应收账款": 844008.886881,
+        "应收账款占营业总收入比例": 25.68756030912,
+        "营业总收入": 3285671.650886
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "应收账款": 844008.886881,
+        "应收账款占营业总收入比例": 25.68756030912,
+        "营业总收入": 3285671.650886
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "应收账款": 844008.886881,
+        "应收账款占营业总收入比例": 25.68756030912,
+        "营业总收入": 3285671.650886
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": null,
+    "sort_ascending": true,
+    "top_n": 12,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "stock_code",
+      "data_type": "quantitative",
+      "label": "股票代码",
+      "unit": "万元"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": false
+  },
+  "output": {
+    "filename": "B4055_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B4055_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT\n    stock_code,\n    stock_abbr,\n    report_period,\n    accounts_receivable AS 应收账款,\n    accounts_receivable_ratio AS 应收账款占营业总收入比例,\n    total_operating_revenue AS 营业总收入\nFROM financials_view\nWHERE stock_abbr = '药明康德'\n    AND report_period IN ('2025Q3', '2025Q2', '2024Q3')\nORDER BY report_period DESC;",
+    "value_fields": [
+      "stock_code",
+      "应收账款",
+      "应收账款占营业总收入比例",
+      "营业总收入"
+    ],
+    "value_labels": [
+      "股票代码",
+      "应收账款",
+      "应收账款占营业总收入比例",
+      "营业总收入"
+    ],
+    "original_chart_plan": {
+      "chart_type": "table",
+      "x_field": null,
+      "y_fields": [
+        "stock_code",
+        "应收账款",
+        "应收账款占营业总收入比例",
+        "营业总收入"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": null,
+      "sort_ascending": true,
+      "top_n": 12
+    }
+  }
+}

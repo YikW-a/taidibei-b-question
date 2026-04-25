@@ -1,0 +1,1086 @@
+{
+  "question_id": "B4042",
+  "question_type": "融合查询",
+  "raw_question": "检索研报中提及“产能利用率”或“在手订单”的公司（如药明康德、凯莱英），查询其2025年第三季度的固定资产周转率，分析产能利用情况",
+  "raw_question_json": "[{\"Q\":\"检索研报中提及“产能利用率”或“在手订单”的公司（如药明康德、凯莱英），查询其2025年第三季度的固定资产周转率，分析产能利用情况\"}]",
+  "parsed_slots": {
+    "companies": [
+      "药明康德",
+      "凯莱英"
+    ],
+    "stock_codes": [],
+    "metrics": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "focus_topics": [],
+    "intent_type": "causal_analysis",
+    "needs_sql": true,
+    "needs_retrieval": true,
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "causal_analysis",
+    "companies": [
+      "药明康德",
+      "凯莱英"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "固定资产周转率"
+    ],
+    "needs_sql": true,
+    "top_n": null,
+    "threshold": null,
+    "question": "查询药明康德、凯莱英2025年第三季度的固定资产周转率"
+  },
+  "retrieval_plan": {
+    "question": "检索研报中提及“产能利用率”或“在手订单”的公司（如药明康德、凯莱英），查询其2025年第三季度的固定资产周转率，分析产能利用情况",
+    "companies": [
+      "药明康德",
+      "凯莱英"
+    ],
+    "focus_topics": [
+      "产能利用率",
+      "在手订单"
+    ],
+    "needs_retrieval": true,
+    "top_k": 10,
+    "source_scope": "stock",
+    "retrieval_mode": "hybrid"
+  },
+  "sql": "SELECT stock_code, stock_abbr, report_period, total_operating_revenue, total_assets, total_assets - total_equity AS total_liabilities, total_operating_revenue / (total_assets - total_equity) AS fixed_asset_turnover_ratio FROM financials_view WHERE stock_abbr IN ('药明康德', '凯莱英') AND report_period = '2025Q3' ORDER BY fixed_asset_turnover_ratio DESC;",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, report_period, total_operating_revenue, total_assets, total_assets - total_equity AS total_liabilities, total_operating_revenue / (total_assets - total_equity) AS fixed_asset_turnover_ratio FROM financials_view WHERE stock_abbr IN ('药明康德', '凯莱英') AND report_period = '2025Q3' ORDER BY fixed_asset_turnover_ratio DESC;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 32,
+  "result_rows": [
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 462987.713098,
+      "total_assets": 1980717.584391,
+      "total_liabilities": 244713.45169000025,
+      "fixed_asset_turnover_ratio": 1.891958573999874
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 462987.713098,
+      "total_assets": 1980717.584391,
+      "total_liabilities": 244713.45169000025,
+      "fixed_asset_turnover_ratio": 1.891958573999874
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 462987.713098,
+      "total_assets": 1980717.584391,
+      "total_liabilities": 244713.45169000025,
+      "fixed_asset_turnover_ratio": 1.891958573999874
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 462987.713098,
+      "total_assets": 1980717.584391,
+      "total_liabilities": 244713.45169000025,
+      "fixed_asset_turnover_ratio": 1.891958573999874
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 462987.713098,
+      "total_assets": 1980717.584391,
+      "total_liabilities": 244713.45169000025,
+      "fixed_asset_turnover_ratio": 1.891958573999874
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 462987.713098,
+      "total_assets": 1980717.584391,
+      "total_liabilities": 244713.45169000025,
+      "fixed_asset_turnover_ratio": 1.891958573999874
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 462987.713098,
+      "total_assets": 1980717.584391,
+      "total_liabilities": 244713.45169000025,
+      "fixed_asset_turnover_ratio": 1.891958573999874
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 462987.713098,
+      "total_assets": 1980717.584391,
+      "total_liabilities": 244713.45169000025,
+      "fixed_asset_turnover_ratio": 1.891958573999874
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 462987.713098,
+      "total_assets": 1980717.584391,
+      "total_liabilities": 244713.45169000025,
+      "fixed_asset_turnover_ratio": 1.891958573999874
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 462987.713098,
+      "total_assets": 1980717.584391,
+      "total_liabilities": 244713.45169000025,
+      "fixed_asset_turnover_ratio": 1.891958573999874
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 462987.713098,
+      "total_assets": 1980717.584391,
+      "total_liabilities": 244713.45169000025,
+      "fixed_asset_turnover_ratio": 1.891958573999874
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 462987.713098,
+      "total_assets": 1980717.584391,
+      "total_liabilities": 244713.45169000025,
+      "fixed_asset_turnover_ratio": 1.891958573999874
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 462987.713098,
+      "total_assets": 1980717.584391,
+      "total_liabilities": 244713.45169000025,
+      "fixed_asset_turnover_ratio": 1.891958573999874
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 462987.713098,
+      "total_assets": 1980717.584391,
+      "total_liabilities": 244713.45169000025,
+      "fixed_asset_turnover_ratio": 1.891958573999874
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 462987.713098,
+      "total_assets": 1980717.584391,
+      "total_liabilities": 244713.45169000025,
+      "fixed_asset_turnover_ratio": 1.891958573999874
+    },
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 462987.713098,
+      "total_assets": 1980717.584391,
+      "total_liabilities": 244713.45169000025,
+      "fixed_asset_turnover_ratio": 1.891958573999874
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 3285671.650886,
+      "total_assets": 9460613.541607,
+      "total_liabilities": 2313363.811137,
+      "fixed_asset_turnover_ratio": 1.4203004452080188
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 3285671.650886,
+      "total_assets": 9460613.541607,
+      "total_liabilities": 2313363.811137,
+      "fixed_asset_turnover_ratio": 1.4203004452080188
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 3285671.650886,
+      "total_assets": 9460613.541607,
+      "total_liabilities": 2313363.811137,
+      "fixed_asset_turnover_ratio": 1.4203004452080188
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 3285671.650886,
+      "total_assets": 9460613.541607,
+      "total_liabilities": 2313363.811137,
+      "fixed_asset_turnover_ratio": 1.4203004452080188
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 3285671.650886,
+      "total_assets": 9460613.541607,
+      "total_liabilities": 2313363.811137,
+      "fixed_asset_turnover_ratio": 1.4203004452080188
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 3285671.650886,
+      "total_assets": 9460613.541607,
+      "total_liabilities": 2313363.811137,
+      "fixed_asset_turnover_ratio": 1.4203004452080188
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 3285671.650886,
+      "total_assets": 9460613.541607,
+      "total_liabilities": 2313363.811137,
+      "fixed_asset_turnover_ratio": 1.4203004452080188
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 3285671.650886,
+      "total_assets": 9460613.541607,
+      "total_liabilities": 2313363.811137,
+      "fixed_asset_turnover_ratio": 1.4203004452080188
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 3285671.650886,
+      "total_assets": 9460613.541607,
+      "total_liabilities": 2313363.811137,
+      "fixed_asset_turnover_ratio": 1.4203004452080188
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 3285671.650886,
+      "total_assets": 9460613.541607,
+      "total_liabilities": 2313363.811137,
+      "fixed_asset_turnover_ratio": 1.4203004452080188
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 3285671.650886,
+      "total_assets": 9460613.541607,
+      "total_liabilities": 2313363.811137,
+      "fixed_asset_turnover_ratio": 1.4203004452080188
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 3285671.650886,
+      "total_assets": 9460613.541607,
+      "total_liabilities": 2313363.811137,
+      "fixed_asset_turnover_ratio": 1.4203004452080188
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 3285671.650886,
+      "total_assets": 9460613.541607,
+      "total_liabilities": 2313363.811137,
+      "fixed_asset_turnover_ratio": 1.4203004452080188
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 3285671.650886,
+      "total_assets": 9460613.541607,
+      "total_liabilities": 2313363.811137,
+      "fixed_asset_turnover_ratio": 1.4203004452080188
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 3285671.650886,
+      "total_assets": 9460613.541607,
+      "total_liabilities": 2313363.811137,
+      "fixed_asset_turnover_ratio": 1.4203004452080188
+    },
+    {
+      "stock_code": "603259",
+      "stock_abbr": "药明康德",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 3285671.650886,
+      "total_assets": 9460613.541607,
+      "total_liabilities": 2313363.811137,
+      "fixed_asset_turnover_ratio": 1.4203004452080188
+    }
+  ],
+  "retrieved_evidence": [
+    {
+      "source_type": "stock",
+      "title": "在手订单持续增长，25年各业务稳中向好",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/在手订单持续增长，25年各业务稳中向好.pdf",
+      "publish_date": "2025-04-02 00:00:00.000",
+      "company_or_industry": "凯莱英",
+      "organization": "华安证券",
+      "snippet": "在手订单持续增长，25年各业务稳中向好；凯莱英；华安证券",
+      "score": 5.767809,
+      "metadata_ref": "stock::在手订单持续增长，25年各业务稳中向好::2025-04-02 00:00:00.000::华安证券::凯莱英",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.767809
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "2025年半年报点评：盈利能力稳步提升，在手订单储备充足",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/2025年半年报点评：盈利能力稳步提升，在手订单储备充足.pdf",
+      "publish_date": "2025-08-27 00:00:00.000",
+      "company_or_industry": "凯莱英",
+      "organization": "民生证券",
+      "snippet": "2025年半年报点评：盈利能力稳步提升，在手订单储备充足；凯莱英；民生证券",
+      "score": 5.703482,
+      "metadata_ref": "stock::2025年半年报点评：盈利能力稳步提升，在手订单储备充足::2025-08-27 00:00:00.000::民生证券::凯莱英",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.703482
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "2024年报点评：在手订单大幅增加，2025年持续经营业务收入有望双位数增长",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/2024年报点评：在手订单大幅增加，2025年持续经营业务收入有望双位数增长.pdf",
+      "publish_date": "2025-03-20 00:00:00.000",
+      "company_or_industry": "药明康德",
+      "organization": "中航证券",
+      "snippet": "2024年报点评：在手订单大幅增加，2025年持续经营业务收入有望双位数增长；药明康德；中航证券",
+      "score": 5.0,
+      "metadata_ref": "stock::2024年报点评：在手订单大幅增加，2025年持续经营业务收入有望双位数增长::2025-03-20 00:00:00.000::中航证券::药明康德",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "公司信息更新报告：在手订单稳健增长，赛道龙头复苏趋势已现",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/公司信息更新报告：在手订单稳健增长，赛道龙头复苏趋势已现.pdf",
+      "publish_date": "2025-03-20 00:00:00.000",
+      "company_or_industry": "药明康德",
+      "organization": "开源证券",
+      "snippet": "公司信息更新报告：在手订单稳健增长，赛道龙头复苏趋势已现；药明康德；开源证券",
+      "score": 5.0,
+      "metadata_ref": "stock::公司信息更新报告：在手订单稳健增长，赛道龙头复苏趋势已现::2025-03-20 00:00:00.000::开源证券::药明康德",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "3Q25业绩及新签订单增速再超预期，上调全年指引",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/3Q25业绩及新签订单增速再超预期，上调全年指引.pdf",
+      "publish_date": "2025-10-28 00:00:00.000",
+      "company_or_industry": "药明康德",
+      "organization": "浦银国际证券",
+      "snippet": "3Q25业绩及新签订单增速再超预期，上调全年指引；药明康德；浦银国际证券",
+      "score": 3.70424,
+      "metadata_ref": "stock::3Q25业绩及新签订单增速再超预期，上调全年指引::2025-10-28 00:00:00.000::浦银国际证券::药明康德",
+      "score_components": {
+        "metadata": 3.0,
+        "vector": 0.70424
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "2025年三季报点评：单三季度整体营收保持平稳，新兴业务提质放量",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/2025年三季报点评：单三季度整体营收保持平稳，新兴业务提质放量.pdf",
+      "publish_date": "2025-11-06 00:00:00.000",
+      "company_or_industry": "凯莱英",
+      "organization": "国信证券",
+      "snippet": "2025年三季报点评：单三季度整体营收保持平稳，新兴业务提质放量；凯莱英；国信证券",
+      "score": 3.0,
+      "metadata_ref": "stock::2025年三季报点评：单三季度整体营收保持平稳，新兴业务提质放量::2025-11-06 00:00:00.000::国信证券::凯莱英",
+      "score_components": {
+        "metadata": 3.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "新兴业务强劲增长，期待第四季度加速交付",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/新兴业务强劲增长，期待第四季度加速交付.pdf",
+      "publish_date": "2025-11-03 00:00:00.000",
+      "company_or_industry": "凯莱英",
+      "organization": "华安证券",
+      "snippet": "新兴业务强劲增长，期待第四季度加速交付；凯莱英；华安证券",
+      "score": 3.0,
+      "metadata_ref": "stock::新兴业务强劲增长，期待第四季度加速交付::2025-11-03 00:00:00.000::华安证券::凯莱英",
+      "score_components": {
+        "metadata": 3.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "凯莱英2025年三季度报点评：新兴业务维持高增长，长期发展趋势不改",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/凯莱英2025年三季度报点评：新兴业务维持高增长，长期发展趋势不改.pdf",
+      "publish_date": "2025-10-31 00:00:00.000",
+      "company_or_industry": "凯莱英",
+      "organization": "中国银河",
+      "snippet": "凯莱英2025年三季度报点评：新兴业务维持高增长，长期发展趋势不改；凯莱英；中国银河",
+      "score": 3.0,
+      "metadata_ref": "stock::凯莱英2025年三季度报点评：新兴业务维持高增长，长期发展趋势不改::2025-10-31 00:00:00.000::中国银河::凯莱英",
+      "score_components": {
+        "metadata": 3.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "药明康德2025年三季报业绩点评：持续聚焦CRDMO，再次上调全年指引",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/药明康德2025年三季报业绩点评：持续聚焦CRDMO，再次上调全年指引.pdf",
+      "publish_date": "2025-10-28 00:00:00.000",
+      "company_or_industry": "药明康德",
+      "organization": "中国银河",
+      "snippet": "药明康德2025年三季报业绩点评：持续聚焦CRDMO，再次上调全年指引；药明康德；中国银河",
+      "score": 3.0,
+      "metadata_ref": "stock::药明康德2025年三季报业绩点评：持续聚焦CRDMO，再次上调全年指引::2025-10-28 00:00:00.000::中国银河::药明康德",
+      "score_components": {
+        "metadata": 3.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "Rising demand for small molecule D&M business",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/Rising demand for small molecule D&M business.pdf",
+      "publish_date": "2025-10-28 00:00:00.000",
+      "company_or_industry": "药明康德",
+      "organization": "招银国际",
+      "snippet": "Rising demand for small molecule D&M business；药明康德；招银国际",
+      "score": 3.0,
+      "metadata_ref": "stock::Rising demand for small molecule D&M business::2025-10-28 00:00:00.000::招银国际::药明康德",
+      "score_components": {
+        "metadata": 3.0,
+        "vector": 0.0
+      }
+    }
+  ],
+  "reranked_evidence": [
+    {
+      "source_type": "stock",
+      "title": "2025年半年报点评：盈利能力稳步提升，在手订单储备充足",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/2025年半年报点评：盈利能力稳步提升，在手订单储备充足.pdf",
+      "publish_date": "2025-08-27 00:00:00.000",
+      "company_or_industry": "凯莱英",
+      "organization": "民生证券",
+      "snippet": "2025年半年报点评：盈利能力稳步提升，在手订单储备充足；凯莱英；民生证券",
+      "score": 5.703482,
+      "metadata_ref": "stock::2025年半年报点评：盈利能力稳步提升，在手订单储备充足::2025-08-27 00:00:00.000::民生证券::凯莱英",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.703482
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "在手订单持续增长，25年各业务稳中向好",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/在手订单持续增长，25年各业务稳中向好.pdf",
+      "publish_date": "2025-04-02 00:00:00.000",
+      "company_or_industry": "凯莱英",
+      "organization": "华安证券",
+      "snippet": "在手订单持续增长，25年各业务稳中向好；凯莱英；华安证券",
+      "score": 5.767809,
+      "metadata_ref": "stock::在手订单持续增长，25年各业务稳中向好::2025-04-02 00:00:00.000::华安证券::凯莱英",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.767809
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "2024年报点评：在手订单大幅增加，2025年持续经营业务收入有望双位数增长",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/2024年报点评：在手订单大幅增加，2025年持续经营业务收入有望双位数增长.pdf",
+      "publish_date": "2025-03-20 00:00:00.000",
+      "company_or_industry": "药明康德",
+      "organization": "中航证券",
+      "snippet": "2024年报点评：在手订单大幅增加，2025年持续经营业务收入有望双位数增长；药明康德；中航证券",
+      "score": 5.0,
+      "metadata_ref": "stock::2024年报点评：在手订单大幅增加，2025年持续经营业务收入有望双位数增长::2025-03-20 00:00:00.000::中航证券::药明康德",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "凯莱英2025年三季度报点评：新兴业务维持高增长，长期发展趋势不改",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/凯莱英2025年三季度报点评：新兴业务维持高增长，长期发展趋势不改.pdf",
+      "publish_date": "2025-10-31 00:00:00.000",
+      "company_or_industry": "凯莱英",
+      "organization": "中国银河",
+      "snippet": "凯莱英2025年三季度报点评：新兴业务维持高增长，长期发展趋势不改；凯莱英；中国银河",
+      "score": 3.0,
+      "metadata_ref": "stock::凯莱英2025年三季度报点评：新兴业务维持高增长，长期发展趋势不改::2025-10-31 00:00:00.000::中国银河::凯莱英",
+      "score_components": {
+        "metadata": 3.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "2025年三季报点评：单三季度整体营收保持平稳，新兴业务提质放量",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/2025年三季报点评：单三季度整体营收保持平稳，新兴业务提质放量.pdf",
+      "publish_date": "2025-11-06 00:00:00.000",
+      "company_or_industry": "凯莱英",
+      "organization": "国信证券",
+      "snippet": "2025年三季报点评：单三季度整体营收保持平稳，新兴业务提质放量；凯莱英；国信证券",
+      "score": 3.0,
+      "metadata_ref": "stock::2025年三季报点评：单三季度整体营收保持平稳，新兴业务提质放量::2025-11-06 00:00:00.000::国信证券::凯莱英",
+      "score_components": {
+        "metadata": 3.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "公司信息更新报告：在手订单稳健增长，赛道龙头复苏趋势已现",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/公司信息更新报告：在手订单稳健增长，赛道龙头复苏趋势已现.pdf",
+      "publish_date": "2025-03-20 00:00:00.000",
+      "company_or_industry": "药明康德",
+      "organization": "开源证券",
+      "snippet": "公司信息更新报告：在手订单稳健增长，赛道龙头复苏趋势已现；药明康德；开源证券",
+      "score": 5.0,
+      "metadata_ref": "stock::公司信息更新报告：在手订单稳健增长，赛道龙头复苏趋势已现::2025-03-20 00:00:00.000::开源证券::药明康德",
+      "score_components": {
+        "metadata": 5.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "药明康德2025年三季报业绩点评：持续聚焦CRDMO，再次上调全年指引",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/药明康德2025年三季报业绩点评：持续聚焦CRDMO，再次上调全年指引.pdf",
+      "publish_date": "2025-10-28 00:00:00.000",
+      "company_or_industry": "药明康德",
+      "organization": "中国银河",
+      "snippet": "药明康德2025年三季报业绩点评：持续聚焦CRDMO，再次上调全年指引；药明康德；中国银河",
+      "score": 3.0,
+      "metadata_ref": "stock::药明康德2025年三季报业绩点评：持续聚焦CRDMO，再次上调全年指引::2025-10-28 00:00:00.000::中国银河::药明康德",
+      "score_components": {
+        "metadata": 3.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "3Q25业绩及新签订单增速再超预期，上调全年指引",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/3Q25业绩及新签订单增速再超预期，上调全年指引.pdf",
+      "publish_date": "2025-10-28 00:00:00.000",
+      "company_or_industry": "药明康德",
+      "organization": "浦银国际证券",
+      "snippet": "3Q25业绩及新签订单增速再超预期，上调全年指引；药明康德；浦银国际证券",
+      "score": 3.70424,
+      "metadata_ref": "stock::3Q25业绩及新签订单增速再超预期，上调全年指引::2025-10-28 00:00:00.000::浦银国际证券::药明康德",
+      "score_components": {
+        "metadata": 3.0,
+        "vector": 0.70424
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "Rising demand for small molecule D&M business",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/Rising demand for small molecule D&M business.pdf",
+      "publish_date": "2025-10-28 00:00:00.000",
+      "company_or_industry": "药明康德",
+      "organization": "招银国际",
+      "snippet": "Rising demand for small molecule D&M business；药明康德；招银国际",
+      "score": 3.0,
+      "metadata_ref": "stock::Rising demand for small molecule D&M business::2025-10-28 00:00:00.000::招银国际::药明康德",
+      "score_components": {
+        "metadata": 3.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "新兴业务强劲增长，期待第四季度加速交付",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/新兴业务强劲增长，期待第四季度加速交付.pdf",
+      "publish_date": "2025-11-03 00:00:00.000",
+      "company_or_industry": "凯莱英",
+      "organization": "华安证券",
+      "snippet": "新兴业务强劲增长，期待第四季度加速交付；凯莱英；华安证券",
+      "score": 3.0,
+      "metadata_ref": "stock::新兴业务强劲增长，期待第四季度加速交付::2025-11-03 00:00:00.000::华安证券::凯莱英",
+      "score_components": {
+        "metadata": 3.0,
+        "vector": 0.0
+      }
+    }
+  ],
+  "rerank_preview": "{\"strategy\": \"reranker_model\", \"kept_count\": 10, \"reason\": \"BAAI/bge-reranker-v2-m3\"}",
+  "fused_context": {
+    "question": "检索研报中提及“产能利用率”或“在手订单”的公司（如药明康德、凯莱英），查询其2025年第三季度的固定资产周转率，分析产能利用情况",
+    "sql_row_count": 32,
+    "evidence_count": 10,
+    "sql_preview": [
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 462987.713098,
+        "total_assets": 1980717.584391,
+        "total_liabilities": 244713.45169000025,
+        "fixed_asset_turnover_ratio": 1.891958573999874
+      },
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 462987.713098,
+        "total_assets": 1980717.584391,
+        "total_liabilities": 244713.45169000025,
+        "fixed_asset_turnover_ratio": 1.891958573999874
+      },
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 462987.713098,
+        "total_assets": 1980717.584391,
+        "total_liabilities": 244713.45169000025,
+        "fixed_asset_turnover_ratio": 1.891958573999874
+      },
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 462987.713098,
+        "total_assets": 1980717.584391,
+        "total_liabilities": 244713.45169000025,
+        "fixed_asset_turnover_ratio": 1.891958573999874
+      },
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 462987.713098,
+        "total_assets": 1980717.584391,
+        "total_liabilities": 244713.45169000025,
+        "fixed_asset_turnover_ratio": 1.891958573999874
+      }
+    ],
+    "evidence_preview": [
+      {
+        "source_type": "stock",
+        "title": "2025年半年报点评：盈利能力稳步提升，在手订单储备充足",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/2025年半年报点评：盈利能力稳步提升，在手订单储备充足.pdf",
+        "publish_date": "2025-08-27 00:00:00.000",
+        "company_or_industry": "凯莱英",
+        "organization": "民生证券",
+        "snippet": "2025年半年报点评：盈利能力稳步提升，在手订单储备充足；凯莱英；民生证券",
+        "score": 5.703482,
+        "metadata_ref": "stock::2025年半年报点评：盈利能力稳步提升，在手订单储备充足::2025-08-27 00:00:00.000::民生证券::凯莱英",
+        "score_components": {
+          "metadata": 5.0,
+          "vector": 0.703482
+        }
+      },
+      {
+        "source_type": "stock",
+        "title": "在手订单持续增长，25年各业务稳中向好",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/在手订单持续增长，25年各业务稳中向好.pdf",
+        "publish_date": "2025-04-02 00:00:00.000",
+        "company_or_industry": "凯莱英",
+        "organization": "华安证券",
+        "snippet": "在手订单持续增长，25年各业务稳中向好；凯莱英；华安证券",
+        "score": 5.767809,
+        "metadata_ref": "stock::在手订单持续增长，25年各业务稳中向好::2025-04-02 00:00:00.000::华安证券::凯莱英",
+        "score_components": {
+          "metadata": 5.0,
+          "vector": 0.767809
+        }
+      },
+      {
+        "source_type": "stock",
+        "title": "2024年报点评：在手订单大幅增加，2025年持续经营业务收入有望双位数增长",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/2024年报点评：在手订单大幅增加，2025年持续经营业务收入有望双位数增长.pdf",
+        "publish_date": "2025-03-20 00:00:00.000",
+        "company_or_industry": "药明康德",
+        "organization": "中航证券",
+        "snippet": "2024年报点评：在手订单大幅增加，2025年持续经营业务收入有望双位数增长；药明康德；中航证券",
+        "score": 5.0,
+        "metadata_ref": "stock::2024年报点评：在手订单大幅增加，2025年持续经营业务收入有望双位数增长::2025-03-20 00:00:00.000::中航证券::药明康德",
+        "score_components": {
+          "metadata": 5.0,
+          "vector": 0.0
+        }
+      },
+      {
+        "source_type": "stock",
+        "title": "凯莱英2025年三季度报点评：新兴业务维持高增长，长期发展趋势不改",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/凯莱英2025年三季度报点评：新兴业务维持高增长，长期发展趋势不改.pdf",
+        "publish_date": "2025-10-31 00:00:00.000",
+        "company_or_industry": "凯莱英",
+        "organization": "中国银河",
+        "snippet": "凯莱英2025年三季度报点评：新兴业务维持高增长，长期发展趋势不改；凯莱英；中国银河",
+        "score": 3.0,
+        "metadata_ref": "stock::凯莱英2025年三季度报点评：新兴业务维持高增长，长期发展趋势不改::2025-10-31 00:00:00.000::中国银河::凯莱英",
+        "score_components": {
+          "metadata": 3.0,
+          "vector": 0.0
+        }
+      },
+      {
+        "source_type": "stock",
+        "title": "2025年三季报点评：单三季度整体营收保持平稳，新兴业务提质放量",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/2025年三季报点评：单三季度整体营收保持平稳，新兴业务提质放量.pdf",
+        "publish_date": "2025-11-06 00:00:00.000",
+        "company_or_industry": "凯莱英",
+        "organization": "国信证券",
+        "snippet": "2025年三季报点评：单三季度整体营收保持平稳，新兴业务提质放量；凯莱英；国信证券",
+        "score": 3.0,
+        "metadata_ref": "stock::2025年三季报点评：单三季度整体营收保持平稳，新兴业务提质放量::2025-11-06 00:00:00.000::国信证券::凯莱英",
+        "score_components": {
+          "metadata": 3.0,
+          "vector": 0.0
+        }
+      }
+    ],
+    "evidence_titles": [
+      "2025年半年报点评：盈利能力稳步提升，在手订单储备充足",
+      "在手订单持续增长，25年各业务稳中向好",
+      "2024年报点评：在手订单大幅增加，2025年持续经营业务收入有望双位数增长",
+      "凯莱英2025年三季度报点评：新兴业务维持高增长，长期发展趋势不改",
+      "2025年三季报点评：单三季度整体营收保持平稳，新兴业务提质放量"
+    ],
+    "source_breakdown": {
+      "stock": 10
+    }
+  },
+  "self_check": {
+    "pass": false,
+    "notes": [
+      "1. 回答中的数字与SQL rows不一致：SQL rows中明确包含'fixed_asset_turnover_ratio'字段，其值为1.891958573999874，但回答中错误地声称SQL查询使用了错误的计算公式（营业总收入/总负债），并得出1.89的结论。实际上，SQL rows直接提供了固定资产周转率的值，回答应直接引用该值。",
+      "2. 回答错误地声称药明康德未查询到有效记录，但问题要求检索提及'产能利用率'或'在手订单'的公司，药明康德在Evidences中被提及（中航证券研报），因此回答应提及药明康德在研报中的证据，即使SQL rows中没有其财务数据。",
+      "3. 回答遗漏了问题要求的关键点：问题要求分析产能利用情况，但回答仅指出无法通过固定资产周转率分析，未结合研报中'在手订单'的证据进行更深入的分析，例如讨论在手订单对产能利用的潜在影响。",
+      "4. 回答中指标名称混淆：虽然回答指出了计算公式错误，但SQL rows中实际存在正确的'fixed_asset_turnover_ratio'字段，回答应直接使用该字段值，而不是错误地计算并质疑。",
+      "5. 回答正确引用了Evidences中真实存在的内容，如凯莱英和药明康德的在手订单情况。",
+      "6. 回答未错误地将聚合统计结果对应到具体公司，因为SQL rows中只有凯莱英的数据。"
+    ]
+  },
+  "chart_plan": {
+    "chart_type": "table",
+    "title": "检索研报中提及“产能利用率”或“在手订单”的公司... - 固定资产周转率",
+    "x_field": null,
+    "y_fields": [
+      "stock_code",
+      "total_operating_revenue",
+      "total_assets",
+      "total_liabilities"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": null,
+    "sort_ascending": true,
+    "top_n": 12,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task3.chart-spec.v1",
+    "question_id": "B4042",
+    "image_index": 1,
+    "chart_type": "table",
+    "title": "检索研报中提及“产能利用率”或“在手订单”的公司... - 固定资产周转率",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 32,
+      "preview_rows": [
+        {
+          "stock_code": "002821",
+          "stock_abbr": "凯莱英",
+          "report_period": "2025Q3",
+          "total_operating_revenue": 462987.713098,
+          "total_assets": 1980717.584391,
+          "total_liabilities": 244713.45169000025,
+          "fixed_asset_turnover_ratio": 1.891958573999874
+        },
+        {
+          "stock_code": "002821",
+          "stock_abbr": "凯莱英",
+          "report_period": "2025Q3",
+          "total_operating_revenue": 462987.713098,
+          "total_assets": 1980717.584391,
+          "total_liabilities": 244713.45169000025,
+          "fixed_asset_turnover_ratio": 1.891958573999874
+        },
+        {
+          "stock_code": "002821",
+          "stock_abbr": "凯莱英",
+          "report_period": "2025Q3",
+          "total_operating_revenue": 462987.713098,
+          "total_assets": 1980717.584391,
+          "total_liabilities": 244713.45169000025,
+          "fixed_asset_turnover_ratio": 1.891958573999874
+        },
+        {
+          "stock_code": "002821",
+          "stock_abbr": "凯莱英",
+          "report_period": "2025Q3",
+          "total_operating_revenue": 462987.713098,
+          "total_assets": 1980717.584391,
+          "total_liabilities": 244713.45169000025,
+          "fixed_asset_turnover_ratio": 1.891958573999874
+        },
+        {
+          "stock_code": "002821",
+          "stock_abbr": "凯莱英",
+          "report_period": "2025Q3",
+          "total_operating_revenue": 462987.713098,
+          "total_assets": 1980717.584391,
+          "total_liabilities": 244713.45169000025,
+          "fixed_asset_turnover_ratio": 1.891958573999874
+        },
+        {
+          "stock_code": "002821",
+          "stock_abbr": "凯莱英",
+          "report_period": "2025Q3",
+          "total_operating_revenue": 462987.713098,
+          "total_assets": 1980717.584391,
+          "total_liabilities": 244713.45169000025,
+          "fixed_asset_turnover_ratio": 1.891958573999874
+        },
+        {
+          "stock_code": "002821",
+          "stock_abbr": "凯莱英",
+          "report_period": "2025Q3",
+          "total_operating_revenue": 462987.713098,
+          "total_assets": 1980717.584391,
+          "total_liabilities": 244713.45169000025,
+          "fixed_asset_turnover_ratio": 1.891958573999874
+        },
+        {
+          "stock_code": "002821",
+          "stock_abbr": "凯莱英",
+          "report_period": "2025Q3",
+          "total_operating_revenue": 462987.713098,
+          "total_assets": 1980717.584391,
+          "total_liabilities": 244713.45169000025,
+          "fixed_asset_turnover_ratio": 1.891958573999874
+        },
+        {
+          "stock_code": "002821",
+          "stock_abbr": "凯莱英",
+          "report_period": "2025Q3",
+          "total_operating_revenue": 462987.713098,
+          "total_assets": 1980717.584391,
+          "total_liabilities": 244713.45169000025,
+          "fixed_asset_turnover_ratio": 1.891958573999874
+        },
+        {
+          "stock_code": "002821",
+          "stock_abbr": "凯莱英",
+          "report_period": "2025Q3",
+          "total_operating_revenue": 462987.713098,
+          "total_assets": 1980717.584391,
+          "total_liabilities": 244713.45169000025,
+          "fixed_asset_turnover_ratio": 1.891958573999874
+        },
+        {
+          "stock_code": "002821",
+          "stock_abbr": "凯莱英",
+          "report_period": "2025Q3",
+          "total_operating_revenue": 462987.713098,
+          "total_assets": 1980717.584391,
+          "total_liabilities": 244713.45169000025,
+          "fixed_asset_turnover_ratio": 1.891958573999874
+        },
+        {
+          "stock_code": "002821",
+          "stock_abbr": "凯莱英",
+          "report_period": "2025Q3",
+          "total_operating_revenue": 462987.713098,
+          "total_assets": 1980717.584391,
+          "total_liabilities": 244713.45169000025,
+          "fixed_asset_turnover_ratio": 1.891958573999874
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": null,
+      "sort_ascending": true,
+      "top_n": 12,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "stock_code",
+        "data_type": "quantitative",
+        "label": "股票代码",
+        "unit": "万元"
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": false
+    },
+    "output": {
+      "filename": "B4042_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B4042_1.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT stock_code, stock_abbr, report_period, total_operating_revenue, total_assets, total_assets - total_equity AS total_liabilities, total_operating_revenue / (total_assets - total_equity) AS fixed_asset_turnover_ratio FROM financials_view WHERE stock_abbr IN ('药明康德', '凯莱英') AND report_period = '2025Q3' ORDER BY fixed_asset_turnover_ratio DESC;",
+      "value_fields": [
+        "stock_code",
+        "total_operating_revenue",
+        "total_assets",
+        "total_liabilities"
+      ],
+      "value_labels": [
+        "股票代码",
+        "营业总收入",
+        "total_assets",
+        "total_liabilities"
+      ],
+      "original_chart_plan": {
+        "chart_type": "table",
+        "x_field": null,
+        "y_fields": [
+          "stock_code",
+          "total_operating_revenue",
+          "total_assets",
+          "total_liabilities"
+        ],
+        "category_field": "stock_abbr",
+        "sort_by": null,
+        "sort_ascending": true,
+        "top_n": 12
+      }
+    }
+  },
+  "current_chart_paths": [
+    "./result/B4042_1.jpg"
+  ],
+  "current_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs_test/task3_langgraph/artifacts/chart_specs/B4042_1.spec.json"
+  ],
+  "current_answer": "根据提供的SQL查询结果和研报证据，对药明康德和凯莱英2025年第三季度的固定资产周转率及产能利用情况分析如下：\n\n**直接结论：**\n1.  **凯莱英**：2025年第三季度，根据财务数据计算得出的指标值为**1.89**。\n2.  **药明康德**：在2025年第三季度的财务数据中，**未查询到有效记录**。\n\n**财务数据支撑：**\n- **凯莱英**：当期营业总收入为462,987.71万元，总负债为244,713.45万元，计算得出的比值为1.89。\n- **药明康德**：SQL查询结果中未包含药明康德在2025年第三季度的有效财务数据行。\n- **重要说明**：数据库金额单位为万元。需要特别指出的是，SQL查询中使用的计算公式（营业总收入 / 总负债）**并非标准的“固定资产周转率”**。固定资产周转率通常为营业总收入与固定资产净值的比值。因此，当前基于总负债计算出的数值（1.89）不能直接作为凯莱英的固定资产周转率进行分析。\n\n**研报证据支撑：**\n检索到的研报证据主要提及了“在手订单”情况，但未直接讨论“固定资产周转率”或“产能利用率”。\n1.  **凯莱英**：多份研报（民生证券、华安证券）指出其“在手订单储备充足”或“在手订单持续增长”，这通常意味着下游需求旺盛，可能对产能利用形成支撑。此外，中国银河和国信证券对其2025年三季报的点评也提及业务增长或保持平稳。\n2.  **药明康德**：中航证券的研报指出其“在手订单大幅增加”，同样预示着潜在的业务需求。\n3.  **未检索到直接研报证据**：当前证据中，没有研报直接分析这两家公司2025年第三季度的“固定资产周转率”或“产能利用率”水平。\n\n**综合判断：**\n1.  **数据可靠性**：当前结构化财务数据无法支持对两家公司2025年第三季度标准“固定资产周转率”的准确计算和分析。对于药明康德，数据层面未获取到结果；对于凯莱英，现有数据字段不支持计算该指标。\n2.  **业务背景**：研报证据显示，两家公司在报告期前或同期均被提及“在手订单”充足或增长，这从需求侧为维持或提升产能利用率提供了积极的背景信息。\n3.  **分析局限**：\n    - 由于财务数据缺失或口径不符，无法从固定资产周转率指标直接分析资产运营效率或间接推断产能利用情况。\n    - “在手订单”是需求领先指标，而“产能利用率”是生产结果指标，两者存在关联但不等同。研报证据仅提供了需求侧的信息，未涉及具体的产能利用水平。\n\n**总结**：基于现有数据，**无法通过固定资产周转率分析药明康德和凯莱英2025年第三季度的产能利用情况**。财务数据方面，药明康德数据缺失，凯莱英的数据口径有误。研报证据仅表明两家公司均有较好的在手订单储备，这为产能利用提供了潜在支撑，但无法据此量化或精确判断其产能利用率的高低。",
+  "current_references": [
+    {
+      "paper_path": "./测试数据/附件5：研报数据/个股研报/2025年半年报点评：盈利能力稳步提升，在手订单储备充足.pdf",
+      "text": "➢事件：2025 年8 月25 日，凯莱英发布2025 年中报业绩。\n\n2025H1 公司实现营业收入31.88 亿元，同比上升18.20%；\n\n归母净利润6.17 亿元，同比上升23.71%。\n\n单季度看，公司25Q2 实现收入16.47 亿元，同比上升26.94%；\n\n归母净利润2.91 亿元，同比上升33.94%。\n\n2025H1 公司毛利率为43.49%（yoy+1.34pp），净利率为19.37%（yoy+0.86pp），期间费用率为21.74%（yoy-0.68pp）。\n\n其中销售费用率为2.85%（yoy-0.94pp），管理费用率为11.88%（yoy-1.55pp），研发费用率为8.96%（yoy-3.22pp），财务费用率为-1.95%（yoy+5.03pp）。\n\n2025H1 研发投入为2.86 亿元（yoy-13.06%）。\n\n公司加速全球市场拓展，2025H1新增CDMO 业务订单客户超150 家，分区域来看，来自美国市场客户收入17.89亿元，同比增长0.45%；\n\n来自境内市场客户收入7.13 亿元，同比增长3.44%；\n\n来自欧洲市场客户收入5.48 亿元，同比增长超200%。\n\n➢小分子CDMO 业务持续向上，商业化订单充足。\n\n2025H1，小分子业务保持稳健增长，实现收入24.29 亿元，同比增长10.64%，毛利率47.79%，同比提升0.6"
+    },
+    {
+      "paper_path": "./测试数据/附件5：研报数据/个股研报/在手订单持续增长，25年各业务稳中向好.pdf",
+      "text": "在手订单持续增长，25 年各业务稳中向好\n\n➢ 事件概述2025 年3 月，凯莱英发布2024 年报：公司2024 年实现营业收入58.05亿元，同比下降25.82%；\n\n归母净利润9.49 亿元，同比下降58.17%。\n\n若剔除上年同期大订单影响后营业收入同比增长7.40%。\n\n其中单四季度，公司实现营业收入16.64 亿元，同比增长15.4%，环比增长15.3%。\n\n截至25 年3 月，公司在手订单10.52 亿美元，同比增长20%，后续业绩有望继续稳健增长。\n\n➢ 事件点评⚫ 小分子业务已基本消化产能冗余，商业化项目储备充足2024 年小分子业务实现45.71 亿元，剔除大订单影响后同比增长8.9%，毛利率47.9%。\n\n公司小分子业务已基本消化大订单退潮带来的资源冗余，盈利水平也已恢复到历史上较好水平。\n\n其中1）商业化CDMO 实现收入28.04 亿元，剔除大订单后同比增长4.2%。\n\n2024 年交付商业化项目48 个（新增8 个）。\n\n2）临床CDMO 实现收入17.67 亿元，同比增长17.2%。\n\n2024 年交付临床阶段项目456 个，其中临床Ⅲ期项目73个（新增4 个）。\n\n充裕的商业化项目储备为公司后续业绩增长提供坚实保障。\n\n⚫ 新兴业务趋势向好，部分业务将逐步进入交付期2024 年新兴业务收入12.26 亿元，同比增长2.3%，主要受国内市场持续低迷、部"
+    },
+    {
+      "paper_path": "./测试数据/附件5：研报数据/个股研报/2024年报点评：在手订单大幅增加，2025年持续经营业务收入有望双位数增长.pdf",
+      "text": "2024年报点评：在手订单大幅增加，2025年持续经营业务收入有望双位数增长；药明康德；中航证券"
+    },
+    {
+      "paper_path": "./测试数据/附件5：研报数据/个股研报/凯莱英2025年三季度报点评：新兴业务维持高增长，长期发展趋势不改.pdf",
+      "text": "凯莱英2025年三季度报点评：新兴业务维持高增长，长期发展趋势不改；凯莱英；中国银河"
+    },
+    {
+      "paper_path": "./测试数据/附件5：研报数据/个股研报/2025年三季报点评：单三季度整体营收保持平稳，新兴业务提质放量.pdf",
+      "text": "相关研究报告《凯莱英（002821.SZ）-小分子CDMO 行业引领，新兴业务扬帆起航》 2025-09-112025 年前三季度业绩实现稳健增长。\n\n2025 年前三季度，公司实现营收46.30亿元（+11.82%），归母净利润8.00 亿元（+12.66%），扣非归母净利润7.28亿元（+9.74%）。\n\n分季度看，2025Q1/Q2/Q3 分别实现营收15.41/16.47/14.42亿元（+10.10%/+26.95%/-0.09%），归母净利润3.27/2.91/1.83 亿元（+15.83%/+33.94%/-13.46%），扣非归母净利润3.05/2.61/1.62 亿元（+20.14%/+34.33%/-24.75%）。\n\nQ3 单季度业绩有所波动的主要原因是季度间订单结算节奏差异，Q4 交付规模有望显著提升，延续高增长的态势。\n\n2025 年前三季度，公司期间费用率23.24%（-1.22pp），其中管理费用率12.59%（-0.34pp）、研发费用率9.35%（-2.34pp）、销售费用率3.24%（-0.79pp）、财务费用率-1.94%（+2.25pp），经营活动现金净流量11.44 亿元（+8.38%），公司营运效率持续提升，费用控制成效良好，盈利质量进一步改善。\n\n小分子业务基本盘稳固，新兴业务成核心增长引擎。\n\n作为公司的基石业务，2025 年前三季度",
+      "paper_image": "图1：凯莱英营业收入及增速（单位：亿元、%）"
+    }
+  ],
+  "answer_rewritten": true,
+  "turn_answers": [
+    {
+      "Q": "检索研报中提及“产能利用率”或“在手订单”的公司（如药明康德、凯莱英），查询其2025年第三季度的固定资产周转率，分析产能利用情况",
+      "A": {
+        "content": "根据提供的SQL查询结果和研报证据，对药明康德和凯莱英2025年第三季度的固定资产周转率及产能利用情况分析如下：\n\n**直接结论：**\n1.  **凯莱英**：2025年第三季度，根据财务数据计算得出的指标值为**1.89**。\n2.  **药明康德**：在2025年第三季度的财务数据中，**未查询到有效记录**。\n\n**财务数据支撑：**\n- **凯莱英**：当期营业总收入为462,987.71万元，总负债为244,713.45万元，计算得出的比值为1.89。\n- **药明康德**：SQL查询结果中未包含药明康德在2025年第三季度的有效财务数据行。\n- **重要说明**：数据库金额单位为万元。需要特别指出的是，SQL查询中使用的计算公式（营业总收入 / 总负债）**并非标准的“固定资产周转率”**。固定资产周转率通常为营业总收入与固定资产净值的比值。因此，当前基于总负债计算出的数值（1.89）不能直接作为凯莱英的固定资产周转率进行分析。\n\n**研报证据支撑：**\n检索到的研报证据主要提及了“在手订单”情况，但未直接讨论“固定资产周转率”或“产能利用率”。\n1.  **凯莱英**：多份研报（民生证券、华安证券）指出其“在手订单储备充足”或“在手订单持续增长”，这通常意味着下游需求旺盛，可能对产能利用形成支撑。此外，中国银河和国信证券对其2025年三季报的点评也提及业务增长或保持平稳。\n2.  **药明康德**：中航证券的研报指出其“在手订单大幅增加”，同样预示着潜在的业务需求。\n3.  **未检索到直接研报证据**：当前证据中，没有研报直接分析这两家公司2025年第三季度的“固定资产周转率”或“产能利用率”水平。\n\n**综合判断：**\n1.  **数据可靠性**：当前结构化财务数据无法支持对两家公司2025年第三季度标准“固定资产周转率”的准确计算和分析。对于药明康德，数据层面未获取到结果；对于凯莱英，现有数据字段不支持计算该指标。\n2.  **业务背景**：研报证据显示，两家公司在报告期前或同期均被提及“在手订单”充足或增长，这从需求侧为维持或提升产能利用率提供了积极的背景信息。\n3.  **分析局限**：\n    - 由于财务数据缺失或口径不符，无法从固定资产周转率指标直接分析资产运营效率或间接推断产能利用情况。\n    - “在手订单”是需求领先指标，而“产能利用率”是生产结果指标，两者存在关联但不等同。研报证据仅提供了需求侧的信息，未涉及具体的产能利用水平。\n\n**总结**：基于现有数据，**无法通过固定资产周转率分析药明康德和凯莱英2025年第三季度的产能利用情况**。财务数据方面，药明康德数据缺失，凯莱英的数据口径有误。研报证据仅表明两家公司均有较好的在手订单储备，这为产能利用提供了潜在支撑，但无法据此量化或精确判断其产能利用率的高低。",
+        "image": [
+          "./result/B4042_1.jpg"
+        ],
+        "references": [
+          {
+            "paper_path": "./测试数据/附件5：研报数据/个股研报/2025年半年报点评：盈利能力稳步提升，在手订单储备充足.pdf",
+            "text": "➢事件：2025 年8 月25 日，凯莱英发布2025 年中报业绩。\n\n2025H1 公司实现营业收入31.88 亿元，同比上升18.20%；\n\n归母净利润6.17 亿元，同比上升23.71%。\n\n单季度看，公司25Q2 实现收入16.47 亿元，同比上升26.94%；\n\n归母净利润2.91 亿元，同比上升33.94%。\n\n2025H1 公司毛利率为43.49%（yoy+1.34pp），净利率为19.37%（yoy+0.86pp），期间费用率为21.74%（yoy-0.68pp）。\n\n其中销售费用率为2.85%（yoy-0.94pp），管理费用率为11.88%（yoy-1.55pp），研发费用率为8.96%（yoy-3.22pp），财务费用率为-1.95%（yoy+5.03pp）。\n\n2025H1 研发投入为2.86 亿元（yoy-13.06%）。\n\n公司加速全球市场拓展，2025H1新增CDMO 业务订单客户超150 家，分区域来看，来自美国市场客户收入17.89亿元，同比增长0.45%；\n\n来自境内市场客户收入7.13 亿元，同比增长3.44%；\n\n来自欧洲市场客户收入5.48 亿元，同比增长超200%。\n\n➢小分子CDMO 业务持续向上，商业化订单充足。\n\n2025H1，小分子业务保持稳健增长，实现收入24.29 亿元，同比增长10.64%，毛利率47.79%，同比提升0.6"
+          },
+          {
+            "paper_path": "./测试数据/附件5：研报数据/个股研报/在手订单持续增长，25年各业务稳中向好.pdf",
+            "text": "在手订单持续增长，25 年各业务稳中向好\n\n➢ 事件概述2025 年3 月，凯莱英发布2024 年报：公司2024 年实现营业收入58.05亿元，同比下降25.82%；\n\n归母净利润9.49 亿元，同比下降58.17%。\n\n若剔除上年同期大订单影响后营业收入同比增长7.40%。\n\n其中单四季度，公司实现营业收入16.64 亿元，同比增长15.4%，环比增长15.3%。\n\n截至25 年3 月，公司在手订单10.52 亿美元，同比增长20%，后续业绩有望继续稳健增长。\n\n➢ 事件点评⚫ 小分子业务已基本消化产能冗余，商业化项目储备充足2024 年小分子业务实现45.71 亿元，剔除大订单影响后同比增长8.9%，毛利率47.9%。\n\n公司小分子业务已基本消化大订单退潮带来的资源冗余，盈利水平也已恢复到历史上较好水平。\n\n其中1）商业化CDMO 实现收入28.04 亿元，剔除大订单后同比增长4.2%。\n\n2024 年交付商业化项目48 个（新增8 个）。\n\n2）临床CDMO 实现收入17.67 亿元，同比增长17.2%。\n\n2024 年交付临床阶段项目456 个，其中临床Ⅲ期项目73个（新增4 个）。\n\n充裕的商业化项目储备为公司后续业绩增长提供坚实保障。\n\n⚫ 新兴业务趋势向好，部分业务将逐步进入交付期2024 年新兴业务收入12.26 亿元，同比增长2.3%，主要受国内市场持续低迷、部"
+          },
+          {
+            "paper_path": "./测试数据/附件5：研报数据/个股研报/2024年报点评：在手订单大幅增加，2025年持续经营业务收入有望双位数增长.pdf",
+            "text": "2024年报点评：在手订单大幅增加，2025年持续经营业务收入有望双位数增长；药明康德；中航证券"
+          },
+          {
+            "paper_path": "./测试数据/附件5：研报数据/个股研报/凯莱英2025年三季度报点评：新兴业务维持高增长，长期发展趋势不改.pdf",
+            "text": "凯莱英2025年三季度报点评：新兴业务维持高增长，长期发展趋势不改；凯莱英；中国银河"
+          },
+          {
+            "paper_path": "./测试数据/附件5：研报数据/个股研报/2025年三季报点评：单三季度整体营收保持平稳，新兴业务提质放量.pdf",
+            "text": "相关研究报告《凯莱英（002821.SZ）-小分子CDMO 行业引领，新兴业务扬帆起航》 2025-09-112025 年前三季度业绩实现稳健增长。\n\n2025 年前三季度，公司实现营收46.30亿元（+11.82%），归母净利润8.00 亿元（+12.66%），扣非归母净利润7.28亿元（+9.74%）。\n\n分季度看，2025Q1/Q2/Q3 分别实现营收15.41/16.47/14.42亿元（+10.10%/+26.95%/-0.09%），归母净利润3.27/2.91/1.83 亿元（+15.83%/+33.94%/-13.46%），扣非归母净利润3.05/2.61/1.62 亿元（+20.14%/+34.33%/-24.75%）。\n\nQ3 单季度业绩有所波动的主要原因是季度间订单结算节奏差异，Q4 交付规模有望显著提升，延续高增长的态势。\n\n2025 年前三季度，公司期间费用率23.24%（-1.22pp），其中管理费用率12.59%（-0.34pp）、研发费用率9.35%（-2.34pp）、销售费用率3.24%（-0.79pp）、财务费用率-1.94%（+2.25pp），经营活动现金净流量11.44 亿元（+8.38%），公司营运效率持续提升，费用控制成效良好，盈利质量进一步改善。\n\n小分子业务基本盘稳固，新兴业务成核心增长引擎。\n\n作为公司的基石业务，2025 年前三季度",
+            "paper_image": "图1：凯莱英营业收入及增速（单位：亿元、%）"
+          }
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"检索研报中提及“产能利用率”或“在手订单”的公司（如药明康德、凯莱英），查询其2025年第三季度的固定资产周转率，分析产能利用情况\", \"A\": {\"content\": \"根据提供的SQL查询结果和研报证据，对药明康德和凯莱英2025年第三季度的固定资产周转率及产能利用情况分析如下：\\n\\n**直接结论：**\\n1.  **凯莱英**：2025年第三季度，根据财务数据计算得出的指标值为**1.89**。\\n2.  **药明康德**：在2025年第三季度的财务数据中，**未查询到有效记录**。\\n\\n**财务数据支撑：**\\n- **凯莱英**：当期营业总收入为462,987.71万元，总负债为244,713.45万元，计算得出的比值为1.89。\\n- **药明康德**：SQL查询结果中未包含药明康德在2025年第三季度的有效财务数据行。\\n- **重要说明**：数据库金额单位为万元。需要特别指出的是，SQL查询中使用的计算公式（营业总收入 / 总负债）**并非标准的“固定资产周转率”**。固定资产周转率通常为营业总收入与固定资产净值的比值。因此，当前基于总负债计算出的数值（1.89）不能直接作为凯莱英的固定资产周转率进行分析。\\n\\n**研报证据支撑：**\\n检索到的研报证据主要提及了“在手订单”情况，但未直接讨论“固定资产周转率”或“产能利用率”。\\n1.  **凯莱英**：多份研报（民生证券、华安证券）指出其“在手订单储备充足”或“在手订单持续增长”，这通常意味着下游需求旺盛，可能对产能利用形成支撑。此外，中国银河和国信证券对其2025年三季报的点评也提及业务增长或保持平稳。\\n2.  **药明康德**：中航证券的研报指出其“在手订单大幅增加”，同样预示着潜在的业务需求。\\n3.  **未检索到直接研报证据**：当前证据中，没有研报直接分析这两家公司2025年第三季度的“固定资产周转率”或“产能利用率”水平。\\n\\n**综合判断：**\\n1.  **数据可靠性**：当前结构化财务数据无法支持对两家公司2025年第三季度标准“固定资产周转率”的准确计算和分析。对于药明康德，数据层面未获取到结果；对于凯莱英，现有数据字段不支持计算该指标。\\n2.  **业务背景**：研报证据显示，两家公司在报告期前或同期均被提及“在手订单”充足或增长，这从需求侧为维持或提升产能利用率提供了积极的背景信息。\\n3.  **分析局限**：\\n    - 由于财务数据缺失或口径不符，无法从固定资产周转率指标直接分析资产运营效率或间接推断产能利用情况。\\n    - “在手订单”是需求领先指标，而“产能利用率”是生产结果指标，两者存在关联但不等同。研报证据仅提供了需求侧的信息，未涉及具体的产能利用水平。\\n\\n**总结**：基于现有数据，**无法通过固定资产周转率分析药明康德和凯莱英2025年第三季度的产能利用情况**。财务数据方面，药明康德数据缺失，凯莱英的数据口径有误。研报证据仅表明两家公司均有较好的在手订单储备，这为产能利用提供了潜在支撑，但无法据此量化或精确判断其产能利用率的高低。\", \"image\": [\"./result/B4042_1.jpg\"], \"references\": [{\"paper_path\": \"./测试数据/附件5：研报数据/个股研报/2025年半年报点评：盈利能力稳步提升，在手订单储备充足.pdf\", \"text\": \"➢事件：2025 年8 月25 日，凯莱英发布2025 年中报业绩。\\n\\n2025H1 公司实现营业收入31.88 亿元，同比上升18.20%；\\n\\n归母净利润6.17 亿元，同比上升23.71%。\\n\\n单季度看，公司25Q2 实现收入16.47 亿元，同比上升26.94%；\\n\\n归母净利润2.91 亿元，同比上升33.94%。\\n\\n2025H1 公司毛利率为43.49%（yoy+1.34pp），净利率为19.37%（yoy+0.86pp），期间费用率为21.74%（yoy-0.68pp）。\\n\\n其中销售费用率为2.85%（yoy-0.94pp），管理费用率为11.88%（yoy-1.55pp），研发费用率为8.96%（yoy-3.22pp），财务费用率为-1.95%（yoy+5.03pp）。\\n\\n2025H1 研发投入为2.86 亿元（yoy-13.06%）。\\n\\n公司加速全球市场拓展，2025H1新增CDMO 业务订单客户超150 家，分区域来看，来自美国市场客户收入17.89亿元，同比增长0.45%；\\n\\n来自境内市场客户收入7.13 亿元，同比增长3.44%；\\n\\n来自欧洲市场客户收入5.48 亿元，同比增长超200%。\\n\\n➢小分子CDMO 业务持续向上，商业化订单充足。\\n\\n2025H1，小分子业务保持稳健增长，实现收入24.29 亿元，同比增长10.64%，毛利率47.79%，同比提升0.6\"}, {\"paper_path\": \"./测试数据/附件5：研报数据/个股研报/在手订单持续增长，25年各业务稳中向好.pdf\", \"text\": \"在手订单持续增长，25 年各业务稳中向好\\n\\n➢ 事件概述2025 年3 月，凯莱英发布2024 年报：公司2024 年实现营业收入58.05亿元，同比下降25.82%；\\n\\n归母净利润9.49 亿元，同比下降58.17%。\\n\\n若剔除上年同期大订单影响后营业收入同比增长7.40%。\\n\\n其中单四季度，公司实现营业收入16.64 亿元，同比增长15.4%，环比增长15.3%。\\n\\n截至25 年3 月，公司在手订单10.52 亿美元，同比增长20%，后续业绩有望继续稳健增长。\\n\\n➢ 事件点评⚫ 小分子业务已基本消化产能冗余，商业化项目储备充足2024 年小分子业务实现45.71 亿元，剔除大订单影响后同比增长8.9%，毛利率47.9%。\\n\\n公司小分子业务已基本消化大订单退潮带来的资源冗余，盈利水平也已恢复到历史上较好水平。\\n\\n其中1）商业化CDMO 实现收入28.04 亿元，剔除大订单后同比增长4.2%。\\n\\n2024 年交付商业化项目48 个（新增8 个）。\\n\\n2）临床CDMO 实现收入17.67 亿元，同比增长17.2%。\\n\\n2024 年交付临床阶段项目456 个，其中临床Ⅲ期项目73个（新增4 个）。\\n\\n充裕的商业化项目储备为公司后续业绩增长提供坚实保障。\\n\\n⚫ 新兴业务趋势向好，部分业务将逐步进入交付期2024 年新兴业务收入12.26 亿元，同比增长2.3%，主要受国内市场持续低迷、部\"}, {\"paper_path\": \"./测试数据/附件5：研报数据/个股研报/2024年报点评：在手订单大幅增加，2025年持续经营业务收入有望双位数增长.pdf\", \"text\": \"2024年报点评：在手订单大幅增加，2025年持续经营业务收入有望双位数增长；药明康德；中航证券\"}, {\"paper_path\": \"./测试数据/附件5：研报数据/个股研报/凯莱英2025年三季度报点评：新兴业务维持高增长，长期发展趋势不改.pdf\", \"text\": \"凯莱英2025年三季度报点评：新兴业务维持高增长，长期发展趋势不改；凯莱英；中国银河\"}, {\"paper_path\": \"./测试数据/附件5：研报数据/个股研报/2025年三季报点评：单三季度整体营收保持平稳，新兴业务提质放量.pdf\", \"text\": \"相关研究报告《凯莱英（002821.SZ）-小分子CDMO 行业引领，新兴业务扬帆起航》 2025-09-112025 年前三季度业绩实现稳健增长。\\n\\n2025 年前三季度，公司实现营收46.30亿元（+11.82%），归母净利润8.00 亿元（+12.66%），扣非归母净利润7.28亿元（+9.74%）。\\n\\n分季度看，2025Q1/Q2/Q3 分别实现营收15.41/16.47/14.42亿元（+10.10%/+26.95%/-0.09%），归母净利润3.27/2.91/1.83 亿元（+15.83%/+33.94%/-13.46%），扣非归母净利润3.05/2.61/1.62 亿元（+20.14%/+34.33%/-24.75%）。\\n\\nQ3 单季度业绩有所波动的主要原因是季度间订单结算节奏差异，Q4 交付规模有望显著提升，延续高增长的态势。\\n\\n2025 年前三季度，公司期间费用率23.24%（-1.22pp），其中管理费用率12.59%（-0.34pp）、研发费用率9.35%（-2.34pp）、销售费用率3.24%（-0.79pp）、财务费用率-1.94%（+2.25pp），经营活动现金净流量11.44 亿元（+8.38%），公司营运效率持续提升，费用控制成效良好，盈利质量进一步改善。\\n\\n小分子业务基本盘稳固，新兴业务成核心增长引擎。\\n\\n作为公司的基石业务，2025 年前三季度\", \"paper_image\": \"图1：凯莱英营业收入及增速（单位：亿元、%）\"}]}}]",
+  "references_json": "[{\"paper_path\": \"./测试数据/附件5：研报数据/个股研报/2025年半年报点评：盈利能力稳步提升，在手订单储备充足.pdf\", \"text\": \"➢事件：2025 年8 月25 日，凯莱英发布2025 年中报业绩。\\n\\n2025H1 公司实现营业收入31.88 亿元，同比上升18.20%；\\n\\n归母净利润6.17 亿元，同比上升23.71%。\\n\\n单季度看，公司25Q2 实现收入16.47 亿元，同比上升26.94%；\\n\\n归母净利润2.91 亿元，同比上升33.94%。\\n\\n2025H1 公司毛利率为43.49%（yoy+1.34pp），净利率为19.37%（yoy+0.86pp），期间费用率为21.74%（yoy-0.68pp）。\\n\\n其中销售费用率为2.85%（yoy-0.94pp），管理费用率为11.88%（yoy-1.55pp），研发费用率为8.96%（yoy-3.22pp），财务费用率为-1.95%（yoy+5.03pp）。\\n\\n2025H1 研发投入为2.86 亿元（yoy-13.06%）。\\n\\n公司加速全球市场拓展，2025H1新增CDMO 业务订单客户超150 家，分区域来看，来自美国市场客户收入17.89亿元，同比增长0.45%；\\n\\n来自境内市场客户收入7.13 亿元，同比增长3.44%；\\n\\n来自欧洲市场客户收入5.48 亿元，同比增长超200%。\\n\\n➢小分子CDMO 业务持续向上，商业化订单充足。\\n\\n2025H1，小分子业务保持稳健增长，实现收入24.29 亿元，同比增长10.64%，毛利率47.79%，同比提升0.6\"}, {\"paper_path\": \"./测试数据/附件5：研报数据/个股研报/在手订单持续增长，25年各业务稳中向好.pdf\", \"text\": \"在手订单持续增长，25 年各业务稳中向好\\n\\n➢ 事件概述2025 年3 月，凯莱英发布2024 年报：公司2024 年实现营业收入58.05亿元，同比下降25.82%；\\n\\n归母净利润9.49 亿元，同比下降58.17%。\\n\\n若剔除上年同期大订单影响后营业收入同比增长7.40%。\\n\\n其中单四季度，公司实现营业收入16.64 亿元，同比增长15.4%，环比增长15.3%。\\n\\n截至25 年3 月，公司在手订单10.52 亿美元，同比增长20%，后续业绩有望继续稳健增长。\\n\\n➢ 事件点评⚫ 小分子业务已基本消化产能冗余，商业化项目储备充足2024 年小分子业务实现45.71 亿元，剔除大订单影响后同比增长8.9%，毛利率47.9%。\\n\\n公司小分子业务已基本消化大订单退潮带来的资源冗余，盈利水平也已恢复到历史上较好水平。\\n\\n其中1）商业化CDMO 实现收入28.04 亿元，剔除大订单后同比增长4.2%。\\n\\n2024 年交付商业化项目48 个（新增8 个）。\\n\\n2）临床CDMO 实现收入17.67 亿元，同比增长17.2%。\\n\\n2024 年交付临床阶段项目456 个，其中临床Ⅲ期项目73个（新增4 个）。\\n\\n充裕的商业化项目储备为公司后续业绩增长提供坚实保障。\\n\\n⚫ 新兴业务趋势向好，部分业务将逐步进入交付期2024 年新兴业务收入12.26 亿元，同比增长2.3%，主要受国内市场持续低迷、部\"}, {\"paper_path\": \"./测试数据/附件5：研报数据/个股研报/2024年报点评：在手订单大幅增加，2025年持续经营业务收入有望双位数增长.pdf\", \"text\": \"2024年报点评：在手订单大幅增加，2025年持续经营业务收入有望双位数增长；药明康德；中航证券\"}, {\"paper_path\": \"./测试数据/附件5：研报数据/个股研报/凯莱英2025年三季度报点评：新兴业务维持高增长，长期发展趋势不改.pdf\", \"text\": \"凯莱英2025年三季度报点评：新兴业务维持高增长，长期发展趋势不改；凯莱英；中国银河\"}, {\"paper_path\": \"./测试数据/附件5：研报数据/个股研报/2025年三季报点评：单三季度整体营收保持平稳，新兴业务提质放量.pdf\", \"text\": \"相关研究报告《凯莱英（002821.SZ）-小分子CDMO 行业引领，新兴业务扬帆起航》 2025-09-112025 年前三季度业绩实现稳健增长。\\n\\n2025 年前三季度，公司实现营收46.30亿元（+11.82%），归母净利润8.00 亿元（+12.66%），扣非归母净利润7.28亿元（+9.74%）。\\n\\n分季度看，2025Q1/Q2/Q3 分别实现营收15.41/16.47/14.42亿元（+10.10%/+26.95%/-0.09%），归母净利润3.27/2.91/1.83 亿元（+15.83%/+33.94%/-13.46%），扣非归母净利润3.05/2.61/1.62 亿元（+20.14%/+34.33%/-24.75%）。\\n\\nQ3 单季度业绩有所波动的主要原因是季度间订单结算节奏差异，Q4 交付规模有望显著提升，延续高增长的态势。\\n\\n2025 年前三季度，公司期间费用率23.24%（-1.22pp），其中管理费用率12.59%（-0.34pp）、研发费用率9.35%（-2.34pp）、销售费用率3.24%（-0.79pp）、财务费用率-1.94%（+2.25pp），经营活动现金净流量11.44 亿元（+8.38%），公司营运效率持续提升，费用控制成效良好，盈利质量进一步改善。\\n\\n小分子业务基本盘稳固，新兴业务成核心增长引擎。\\n\\n作为公司的基石业务，2025 年前三季度\", \"paper_image\": \"图1：凯莱英营业收入及增速（单位：亿元、%）\"}]",
+  "notes": [
+    "route=causal_analysis",
+    "根据查询计划，需要检索药明康德和凯莱英两家公司在2025年第三季度（2025Q3）的固定资产周转率。由于financials_view中没有直接的固定资产周转率字段，需要根据财务指标计算：固定资产周转率 = 营业收入 / 固定资产净值。在资产负债表中，固定资产净值可以通过总资产减去股东权益总额（即总负债）来近似计算，因为固定资产是长期资产的主要组成部分。因此，使用公式：固定资产周转率 = total_operating_revenue / (total_assets - total_equity)。查询条件为stock_abbr IN ('药明康德', '凯莱英') AND report_period = '2025Q3'，并按固定资产周转率降序排列以显示利用效率。",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=10",
+    "rerank_strategy=reranker_model",
+    "rerank_kept=10",
+    "answer_rewritten_after_self_check",
+    "self_check={\"pass\": false, \"notes\": [\"1. 回答中的数字与SQL rows不一致：SQL rows中明确包含'fixed_asset_turnover_ratio'字段，其值为1.891958573999874，但回答中错误地声称SQL查询使用了错误的计算公式（营业总收入/总负债），并得出1.89的结论。实际上，SQL rows直接提供了固定资产周转率的值，回答应直接引用该值。\", \"2. 回答错误地声称药明康德未查询到有效记录，但问题要求检索提及'产能利用率'或'在手订单'的公司，药明康德在Evidences中被提及（中航证券研报），因此回答应提及药明康德在研报中的证据，即使SQL rows中没有其财务数据。\", \"3. 回答遗漏了问题要求的关键点：问题要求分析产能利用情况，但回答仅指出无法通过固定资产周转率分析，未结合研报中'在手订单'的证据进行更深入的分析，例如讨论在手订单对产能利用的潜在影响。\", \"4. 回答中指标名称混淆：虽然回答指出了计算公式错误，但SQL rows中实际存在正确的'fixed_asset_turnover_ratio'字段，回答应直接使用该字段值，而不是错误地计算并质疑。\", \"5. 回答正确引用了Evidences中真实存在的内容，如凯莱英和药明康德的在手订单情况。\", \"6. 回答未错误地将聚合统计结果对应到具体公司，因为SQL rows中只有凯莱英的数据。\"]}"
+  ],
+  "final_status": "ok"
+}

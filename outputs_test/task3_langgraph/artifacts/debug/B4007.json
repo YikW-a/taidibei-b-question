@@ -1,0 +1,967 @@
+{
+  "question_id": "B4007",
+  "question_type": "归因分析",
+  "raw_question": "百克生物2025年第三季度营业收入环比大幅增长，分析增长的主要驱动因素",
+  "raw_question_json": "[{\"Q\":\"百克生物2025年第三季度营业收入环比大幅增长，分析增长的主要驱动因素\"}]",
+  "parsed_slots": {
+    "companies": [
+      "百克生物"
+    ],
+    "stock_codes": [],
+    "metrics": [
+      "营业总收入"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "focus_topics": [
+      "驱动"
+    ],
+    "intent_type": "causal_analysis",
+    "needs_sql": true,
+    "needs_retrieval": true,
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "causal_analysis",
+    "companies": [
+      "百克生物"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入"
+    ],
+    "needs_sql": true,
+    "top_n": null,
+    "threshold": null,
+    "question": "百克生物2025年第三季度营业收入环比大幅增长，分析增长的主要驱动因素"
+  },
+  "retrieval_plan": {
+    "question": "百克生物2025年第三季度营业收入环比大幅增长，分析增长的主要驱动因素",
+    "companies": [
+      "百克生物"
+    ],
+    "focus_topics": [
+      "驱动因素",
+      "增长原因",
+      "业绩增长",
+      "营业收入",
+      "产品销量",
+      "市场拓展",
+      "政策影响",
+      "增长驱动",
+      "业务结构",
+      "产品线",
+      "品牌",
+      "渠道",
+      "主营业务收入",
+      "营业总收入",
+      "收入增长"
+    ],
+    "needs_retrieval": true,
+    "top_k": 8,
+    "source_scope": "hybrid",
+    "retrieval_mode": "hybrid"
+  },
+  "sql": "WITH q3_data AS (\n    SELECT \n        stock_abbr,\n        report_period,\n        total_operating_revenue AS revenue_q3,\n        operating_revenue_qoq_growth AS qoq_growth_q3,\n        operating_cost AS cost_q3,\n        selling_expenses AS selling_q3,\n        administrative_expenses AS admin_q3,\n        financial_expenses AS finance_q3,\n        taxes_and_surcharges AS taxes_q3,\n        rnd_expense_ratio AS rnd_ratio_q3,\n        accounts_receivable_ratio AS ar_ratio_q3,\n        inventory_turnover_ratio AS inventory_turnover_q3\n    FROM financials_view\n    WHERE stock_abbr = '百克生物' \n        AND report_period = '2025Q3'\n),\nq2_data AS (\n    SELECT \n        stock_abbr,\n        report_period,\n        total_operating_revenue AS revenue_q2,\n        operating_cost AS cost_q2,\n        selling_expenses AS selling_q2,\n        administrative_expenses AS admin_q2,\n        financial_expenses AS finance_q2,\n        taxes_and_surcharges AS taxes_q2,\n        rnd_expense_ratio AS rnd_ratio_q2,\n        accounts_receivable_ratio AS ar_ratio_q2,\n        inventory_turnover_ratio AS inventory_turnover_q2\n    FROM financials_view\n    WHERE stock_abbr = '百克生物' \n        AND report_period = '2025Q2'\n)\nSELECT \n    q3.stock_abbr,\n    q3.report_period AS period_q3,\n    q2.report_period AS period_q2,\n    q3.revenue_q3,\n    q2.revenue_q2,\n    ROUND((q3.revenue_q3 - q2.revenue_q2) / q2.revenue_q2 * 100, 2) AS calculated_qoq_growth_pct,\n    q3.qoq_growth_q3 AS reported_qoq_growth_pct,\n    -- 成本与费用分析\n    q3.cost_q3 - q2.cost_q2 AS cost_change,\n    ROUND((q3.cost_q3 - q2.cost_q2) / q2.revenue_q2 * 100, 2) AS cost_change_as_pct_of_q2_revenue,\n    q3.selling_q3 - q2.selling_q2 AS selling_change,\n    ROUND((q3.selling_q3 - q2.selling_q2) / q2.revenue_q2 * 100, 2) AS selling_change_as_pct_of_q2_revenue,\n    q3.admin_q3 - q2.admin_q2 AS admin_change,\n    ROUND((q3.admin_q3 - q2.admin_q2) / q2.revenue_q2 * 100, 2) AS admin_change_as_pct_of_q2_revenue,\n    q3.finance_q3 - q2.finance_q2 AS finance_change,\n    ROUND((q3.finance_q3 - q2.finance_q2) / q2.revenue_q2 * 100, 2) AS finance_change_as_pct_of_q2_revenue,\n    q3.taxes_q3 - q2.taxes_q2 AS taxes_change,\n    ROUND((q3.taxes_q3 - q2.taxes_q2) / q2.revenue_q2 * 100, 2) AS taxes_change_as_pct_of_q2_revenue,\n    -- 比率变化\n    q3.rnd_ratio_q3 - q2.rnd_ratio_q2 AS rnd_ratio_change_pct,\n    q3.ar_ratio_q3 - q2.ar_ratio_q2 AS ar_ratio_change_pct,\n    q3.inventory_turnover_q3 - q2.inventory_turnover_q2 AS inventory_turnover_change\nFROM q3_data q3\nLEFT JOIN q2_data q2 ON q3.stock_abbr = q2.stock_abbr\nWHERE q3.revenue_q3 IS NOT NULL \n    AND q2.revenue_q2 IS NOT NULL\nORDER BY q3.report_period DESC;",
+  "sql_history": [
+    "WITH q3_data AS (\n    SELECT \n        stock_abbr,\n        report_period,\n        total_operating_revenue AS revenue_q3,\n        operating_revenue_qoq_growth AS qoq_growth_q3,\n        operating_cost AS cost_q3,\n        selling_expenses AS selling_q3,\n        administrative_expenses AS admin_q3,\n        financial_expenses AS finance_q3,\n        taxes_and_surcharges AS taxes_q3,\n        rnd_expense_ratio AS rnd_ratio_q3,\n        accounts_receivable_ratio AS ar_ratio_q3,\n        inventory_turnover_ratio AS inventory_turnover_q3\n    FROM financials_view\n    WHERE stock_abbr = '百克生物' \n        AND report_period = '2025Q3'\n),\nq2_data AS (\n    SELECT \n        stock_abbr,\n        report_period,\n        total_operating_revenue AS revenue_q2,\n        operating_cost AS cost_q2,\n        selling_expenses AS selling_q2,\n        administrative_expenses AS admin_q2,\n        financial_expenses AS finance_q2,\n        taxes_and_surcharges AS taxes_q2,\n        rnd_expense_ratio AS rnd_ratio_q2,\n        accounts_receivable_ratio AS ar_ratio_q2,\n        inventory_turnover_ratio AS inventory_turnover_q2\n    FROM financials_view\n    WHERE stock_abbr = '百克生物' \n        AND report_period = '2025Q2'\n)\nSELECT \n    q3.stock_abbr,\n    q3.report_period AS period_q3,\n    q2.report_period AS period_q2,\n    q3.revenue_q3,\n    q2.revenue_q2,\n    ROUND((q3.revenue_q3 - q2.revenue_q2) / q2.revenue_q2 * 100, 2) AS calculated_qoq_growth_pct,\n    q3.qoq_growth_q3 AS reported_qoq_growth_pct,\n    -- 成本与费用分析\n    q3.cost_q3 - q2.cost_q2 AS cost_change,\n    ROUND((q3.cost_q3 - q2.cost_q2) / q2.revenue_q2 * 100, 2) AS cost_change_as_pct_of_q2_revenue,\n    q3.selling_q3 - q2.selling_q2 AS selling_change,\n    ROUND((q3.selling_q3 - q2.selling_q2) / q2.revenue_q2 * 100, 2) AS selling_change_as_pct_of_q2_revenue,\n    q3.admin_q3 - q2.admin_q2 AS admin_change,\n    ROUND((q3.admin_q3 - q2.admin_q2) / q2.revenue_q2 * 100, 2) AS admin_change_as_pct_of_q2_revenue,\n    q3.finance_q3 - q2.finance_q2 AS finance_change,\n    ROUND((q3.finance_q3 - q2.finance_q2) / q2.revenue_q2 * 100, 2) AS finance_change_as_pct_of_q2_revenue,\n    q3.taxes_q3 - q2.taxes_q2 AS taxes_change,\n    ROUND((q3.taxes_q3 - q2.taxes_q2) / q2.revenue_q2 * 100, 2) AS taxes_change_as_pct_of_q2_revenue,\n    -- 比率变化\n    q3.rnd_ratio_q3 - q2.rnd_ratio_q2 AS rnd_ratio_change_pct,\n    q3.ar_ratio_q3 - q2.ar_ratio_q2 AS ar_ratio_change_pct,\n    q3.inventory_turnover_q3 - q2.inventory_turnover_q2 AS inventory_turnover_change\nFROM q3_data q3\nLEFT JOIN q2_data q2 ON q3.stock_abbr = q2.stock_abbr\nWHERE q3.revenue_q3 IS NOT NULL \n    AND q2.revenue_q2 IS NOT NULL\nORDER BY q3.report_period DESC;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 16,
+  "result_rows": [
+    {
+      "stock_abbr": "百克生物",
+      "period_q3": "2025Q3",
+      "period_q2": "2025Q2",
+      "revenue_q3": 47444.276598000004,
+      "revenue_q2": 12260.565389000003,
+      "calculated_qoq_growth_pct": 286.97,
+      "reported_qoq_growth_pct": 54.59857624515293,
+      "cost_change": null,
+      "cost_change_as_pct_of_q2_revenue": null,
+      "selling_change": null,
+      "selling_change_as_pct_of_q2_revenue": null,
+      "admin_change": null,
+      "admin_change_as_pct_of_q2_revenue": null,
+      "finance_change": null,
+      "finance_change_as_pct_of_q2_revenue": null,
+      "taxes_change": null,
+      "taxes_change_as_pct_of_q2_revenue": null,
+      "rnd_ratio_change_pct": -16.765689192591164,
+      "ar_ratio_change_pct": null,
+      "inventory_turnover_change": null
+    },
+    {
+      "stock_abbr": "百克生物",
+      "period_q3": "2025Q3",
+      "period_q2": "2025Q2",
+      "revenue_q3": 47444.276598000004,
+      "revenue_q2": 12260.565389000003,
+      "calculated_qoq_growth_pct": 286.97,
+      "reported_qoq_growth_pct": 54.59857624515293,
+      "cost_change": null,
+      "cost_change_as_pct_of_q2_revenue": null,
+      "selling_change": null,
+      "selling_change_as_pct_of_q2_revenue": null,
+      "admin_change": null,
+      "admin_change_as_pct_of_q2_revenue": null,
+      "finance_change": null,
+      "finance_change_as_pct_of_q2_revenue": null,
+      "taxes_change": null,
+      "taxes_change_as_pct_of_q2_revenue": null,
+      "rnd_ratio_change_pct": -16.765689192591164,
+      "ar_ratio_change_pct": null,
+      "inventory_turnover_change": null
+    },
+    {
+      "stock_abbr": "百克生物",
+      "period_q3": "2025Q3",
+      "period_q2": "2025Q2",
+      "revenue_q3": 47444.276598000004,
+      "revenue_q2": 12260.565389000003,
+      "calculated_qoq_growth_pct": 286.97,
+      "reported_qoq_growth_pct": 54.59857624515293,
+      "cost_change": null,
+      "cost_change_as_pct_of_q2_revenue": null,
+      "selling_change": null,
+      "selling_change_as_pct_of_q2_revenue": null,
+      "admin_change": null,
+      "admin_change_as_pct_of_q2_revenue": null,
+      "finance_change": null,
+      "finance_change_as_pct_of_q2_revenue": null,
+      "taxes_change": null,
+      "taxes_change_as_pct_of_q2_revenue": null,
+      "rnd_ratio_change_pct": -16.765689192591164,
+      "ar_ratio_change_pct": null,
+      "inventory_turnover_change": null
+    },
+    {
+      "stock_abbr": "百克生物",
+      "period_q3": "2025Q3",
+      "period_q2": "2025Q2",
+      "revenue_q3": 47444.276598000004,
+      "revenue_q2": 12260.565389000003,
+      "calculated_qoq_growth_pct": 286.97,
+      "reported_qoq_growth_pct": 54.59857624515293,
+      "cost_change": null,
+      "cost_change_as_pct_of_q2_revenue": null,
+      "selling_change": null,
+      "selling_change_as_pct_of_q2_revenue": null,
+      "admin_change": null,
+      "admin_change_as_pct_of_q2_revenue": null,
+      "finance_change": null,
+      "finance_change_as_pct_of_q2_revenue": null,
+      "taxes_change": null,
+      "taxes_change_as_pct_of_q2_revenue": null,
+      "rnd_ratio_change_pct": -16.765689192591164,
+      "ar_ratio_change_pct": null,
+      "inventory_turnover_change": null
+    },
+    {
+      "stock_abbr": "百克生物",
+      "period_q3": "2025Q3",
+      "period_q2": "2025Q2",
+      "revenue_q3": 47444.276598000004,
+      "revenue_q2": 12260.565389000003,
+      "calculated_qoq_growth_pct": 286.97,
+      "reported_qoq_growth_pct": 54.59857624515293,
+      "cost_change": null,
+      "cost_change_as_pct_of_q2_revenue": null,
+      "selling_change": null,
+      "selling_change_as_pct_of_q2_revenue": null,
+      "admin_change": null,
+      "admin_change_as_pct_of_q2_revenue": null,
+      "finance_change": null,
+      "finance_change_as_pct_of_q2_revenue": null,
+      "taxes_change": null,
+      "taxes_change_as_pct_of_q2_revenue": null,
+      "rnd_ratio_change_pct": -16.765689192591164,
+      "ar_ratio_change_pct": null,
+      "inventory_turnover_change": null
+    },
+    {
+      "stock_abbr": "百克生物",
+      "period_q3": "2025Q3",
+      "period_q2": "2025Q2",
+      "revenue_q3": 47444.276598000004,
+      "revenue_q2": 12260.565389000003,
+      "calculated_qoq_growth_pct": 286.97,
+      "reported_qoq_growth_pct": 54.59857624515293,
+      "cost_change": null,
+      "cost_change_as_pct_of_q2_revenue": null,
+      "selling_change": null,
+      "selling_change_as_pct_of_q2_revenue": null,
+      "admin_change": null,
+      "admin_change_as_pct_of_q2_revenue": null,
+      "finance_change": null,
+      "finance_change_as_pct_of_q2_revenue": null,
+      "taxes_change": null,
+      "taxes_change_as_pct_of_q2_revenue": null,
+      "rnd_ratio_change_pct": -16.765689192591164,
+      "ar_ratio_change_pct": null,
+      "inventory_turnover_change": null
+    },
+    {
+      "stock_abbr": "百克生物",
+      "period_q3": "2025Q3",
+      "period_q2": "2025Q2",
+      "revenue_q3": 47444.276598000004,
+      "revenue_q2": 12260.565389000003,
+      "calculated_qoq_growth_pct": 286.97,
+      "reported_qoq_growth_pct": 54.59857624515293,
+      "cost_change": null,
+      "cost_change_as_pct_of_q2_revenue": null,
+      "selling_change": null,
+      "selling_change_as_pct_of_q2_revenue": null,
+      "admin_change": null,
+      "admin_change_as_pct_of_q2_revenue": null,
+      "finance_change": null,
+      "finance_change_as_pct_of_q2_revenue": null,
+      "taxes_change": null,
+      "taxes_change_as_pct_of_q2_revenue": null,
+      "rnd_ratio_change_pct": -16.765689192591164,
+      "ar_ratio_change_pct": null,
+      "inventory_turnover_change": null
+    },
+    {
+      "stock_abbr": "百克生物",
+      "period_q3": "2025Q3",
+      "period_q2": "2025Q2",
+      "revenue_q3": 47444.276598000004,
+      "revenue_q2": 12260.565389000003,
+      "calculated_qoq_growth_pct": 286.97,
+      "reported_qoq_growth_pct": 54.59857624515293,
+      "cost_change": null,
+      "cost_change_as_pct_of_q2_revenue": null,
+      "selling_change": null,
+      "selling_change_as_pct_of_q2_revenue": null,
+      "admin_change": null,
+      "admin_change_as_pct_of_q2_revenue": null,
+      "finance_change": null,
+      "finance_change_as_pct_of_q2_revenue": null,
+      "taxes_change": null,
+      "taxes_change_as_pct_of_q2_revenue": null,
+      "rnd_ratio_change_pct": -16.765689192591164,
+      "ar_ratio_change_pct": null,
+      "inventory_turnover_change": null
+    },
+    {
+      "stock_abbr": "百克生物",
+      "period_q3": "2025Q3",
+      "period_q2": "2025Q2",
+      "revenue_q3": 47444.276598000004,
+      "revenue_q2": 12260.565389000003,
+      "calculated_qoq_growth_pct": 286.97,
+      "reported_qoq_growth_pct": 54.59857624515293,
+      "cost_change": null,
+      "cost_change_as_pct_of_q2_revenue": null,
+      "selling_change": null,
+      "selling_change_as_pct_of_q2_revenue": null,
+      "admin_change": null,
+      "admin_change_as_pct_of_q2_revenue": null,
+      "finance_change": null,
+      "finance_change_as_pct_of_q2_revenue": null,
+      "taxes_change": null,
+      "taxes_change_as_pct_of_q2_revenue": null,
+      "rnd_ratio_change_pct": -16.765689192591164,
+      "ar_ratio_change_pct": null,
+      "inventory_turnover_change": null
+    },
+    {
+      "stock_abbr": "百克生物",
+      "period_q3": "2025Q3",
+      "period_q2": "2025Q2",
+      "revenue_q3": 47444.276598000004,
+      "revenue_q2": 12260.565389000003,
+      "calculated_qoq_growth_pct": 286.97,
+      "reported_qoq_growth_pct": 54.59857624515293,
+      "cost_change": null,
+      "cost_change_as_pct_of_q2_revenue": null,
+      "selling_change": null,
+      "selling_change_as_pct_of_q2_revenue": null,
+      "admin_change": null,
+      "admin_change_as_pct_of_q2_revenue": null,
+      "finance_change": null,
+      "finance_change_as_pct_of_q2_revenue": null,
+      "taxes_change": null,
+      "taxes_change_as_pct_of_q2_revenue": null,
+      "rnd_ratio_change_pct": -16.765689192591164,
+      "ar_ratio_change_pct": null,
+      "inventory_turnover_change": null
+    },
+    {
+      "stock_abbr": "百克生物",
+      "period_q3": "2025Q3",
+      "period_q2": "2025Q2",
+      "revenue_q3": 47444.276598000004,
+      "revenue_q2": 12260.565389000003,
+      "calculated_qoq_growth_pct": 286.97,
+      "reported_qoq_growth_pct": 54.59857624515293,
+      "cost_change": null,
+      "cost_change_as_pct_of_q2_revenue": null,
+      "selling_change": null,
+      "selling_change_as_pct_of_q2_revenue": null,
+      "admin_change": null,
+      "admin_change_as_pct_of_q2_revenue": null,
+      "finance_change": null,
+      "finance_change_as_pct_of_q2_revenue": null,
+      "taxes_change": null,
+      "taxes_change_as_pct_of_q2_revenue": null,
+      "rnd_ratio_change_pct": -16.765689192591164,
+      "ar_ratio_change_pct": null,
+      "inventory_turnover_change": null
+    },
+    {
+      "stock_abbr": "百克生物",
+      "period_q3": "2025Q3",
+      "period_q2": "2025Q2",
+      "revenue_q3": 47444.276598000004,
+      "revenue_q2": 12260.565389000003,
+      "calculated_qoq_growth_pct": 286.97,
+      "reported_qoq_growth_pct": 54.59857624515293,
+      "cost_change": null,
+      "cost_change_as_pct_of_q2_revenue": null,
+      "selling_change": null,
+      "selling_change_as_pct_of_q2_revenue": null,
+      "admin_change": null,
+      "admin_change_as_pct_of_q2_revenue": null,
+      "finance_change": null,
+      "finance_change_as_pct_of_q2_revenue": null,
+      "taxes_change": null,
+      "taxes_change_as_pct_of_q2_revenue": null,
+      "rnd_ratio_change_pct": -16.765689192591164,
+      "ar_ratio_change_pct": null,
+      "inventory_turnover_change": null
+    },
+    {
+      "stock_abbr": "百克生物",
+      "period_q3": "2025Q3",
+      "period_q2": "2025Q2",
+      "revenue_q3": 47444.276598000004,
+      "revenue_q2": 12260.565389000003,
+      "calculated_qoq_growth_pct": 286.97,
+      "reported_qoq_growth_pct": 54.59857624515293,
+      "cost_change": null,
+      "cost_change_as_pct_of_q2_revenue": null,
+      "selling_change": null,
+      "selling_change_as_pct_of_q2_revenue": null,
+      "admin_change": null,
+      "admin_change_as_pct_of_q2_revenue": null,
+      "finance_change": null,
+      "finance_change_as_pct_of_q2_revenue": null,
+      "taxes_change": null,
+      "taxes_change_as_pct_of_q2_revenue": null,
+      "rnd_ratio_change_pct": -16.765689192591164,
+      "ar_ratio_change_pct": null,
+      "inventory_turnover_change": null
+    },
+    {
+      "stock_abbr": "百克生物",
+      "period_q3": "2025Q3",
+      "period_q2": "2025Q2",
+      "revenue_q3": 47444.276598000004,
+      "revenue_q2": 12260.565389000003,
+      "calculated_qoq_growth_pct": 286.97,
+      "reported_qoq_growth_pct": 54.59857624515293,
+      "cost_change": null,
+      "cost_change_as_pct_of_q2_revenue": null,
+      "selling_change": null,
+      "selling_change_as_pct_of_q2_revenue": null,
+      "admin_change": null,
+      "admin_change_as_pct_of_q2_revenue": null,
+      "finance_change": null,
+      "finance_change_as_pct_of_q2_revenue": null,
+      "taxes_change": null,
+      "taxes_change_as_pct_of_q2_revenue": null,
+      "rnd_ratio_change_pct": -16.765689192591164,
+      "ar_ratio_change_pct": null,
+      "inventory_turnover_change": null
+    },
+    {
+      "stock_abbr": "百克生物",
+      "period_q3": "2025Q3",
+      "period_q2": "2025Q2",
+      "revenue_q3": 47444.276598000004,
+      "revenue_q2": 12260.565389000003,
+      "calculated_qoq_growth_pct": 286.97,
+      "reported_qoq_growth_pct": 54.59857624515293,
+      "cost_change": null,
+      "cost_change_as_pct_of_q2_revenue": null,
+      "selling_change": null,
+      "selling_change_as_pct_of_q2_revenue": null,
+      "admin_change": null,
+      "admin_change_as_pct_of_q2_revenue": null,
+      "finance_change": null,
+      "finance_change_as_pct_of_q2_revenue": null,
+      "taxes_change": null,
+      "taxes_change_as_pct_of_q2_revenue": null,
+      "rnd_ratio_change_pct": -16.765689192591164,
+      "ar_ratio_change_pct": null,
+      "inventory_turnover_change": null
+    },
+    {
+      "stock_abbr": "百克生物",
+      "period_q3": "2025Q3",
+      "period_q2": "2025Q2",
+      "revenue_q3": 47444.276598000004,
+      "revenue_q2": 12260.565389000003,
+      "calculated_qoq_growth_pct": 286.97,
+      "reported_qoq_growth_pct": 54.59857624515293,
+      "cost_change": null,
+      "cost_change_as_pct_of_q2_revenue": null,
+      "selling_change": null,
+      "selling_change_as_pct_of_q2_revenue": null,
+      "admin_change": null,
+      "admin_change_as_pct_of_q2_revenue": null,
+      "finance_change": null,
+      "finance_change_as_pct_of_q2_revenue": null,
+      "taxes_change": null,
+      "taxes_change_as_pct_of_q2_revenue": null,
+      "rnd_ratio_change_pct": -16.765689192591164,
+      "ar_ratio_change_pct": null,
+      "inventory_turnover_change": null
+    }
+  ],
+  "retrieved_evidence": [
+    {
+      "source_type": "stock",
+      "title": "2025投资者开放日主要亮点",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/2025投资者开放日主要亮点.pdf",
+      "publish_date": "2025-10-07 00:00:00.000",
+      "company_or_industry": "药明康德",
+      "organization": "浦银国际证券",
+      "metadata_ref": "stock::2025投资者开放日主要亮点::2025-10-07 00:00:00.000::浦银国际证券::药明康德",
+      "snippet": "个分子复杂度增加（例如：多肽、寡核苷酸、偶联小分子药物），公\n司认为未来单个项目价值将会进一步提升。\n\n此外，管理层表示，公司将持续以差异化的能力和资源来服务优质客户，此举亦有助于提升服务价格。\n\n 除了差异化服务带来的价格优势，持续提升的效率亦有助于提振利润率。\n\n公司目前已实现全行业最优的净利润率（1H25 经调净利率为30.4%）。\n\n除了上文提及的公司有望通过差异化能力服务客户从而获得一定价格优势之外，公司强大的运营效率亦将有助公司保持优秀的利润率。\n\n例如，公司在此次投资者开放日详细披露了产能爬坡效率，新工厂产能爬坡时间（从首个反应釜开始使用到所有反应釜开始使用）从过去约2 年迅速缩短至2+个月。\n\n尽管根据管理层该口径不包含具体项目的验证生产，我们认为该数字的提升仍从侧面反映出公司强大的爬坡效率，增强了我们对公司长期保持优秀利润率的信心。\n\n TIDES 业务有望在长期持续实现可观增长，制剂有望成为TIDES 业务之后的下一波驱动力。\n\n2025 年全年TIDES 业务有望实现人民币100+亿元收入（≥80% YoY），公司预计未来有望持续实现可观增长。\n\n目前公司已有环肽项目进入大批量商业化生产，核酸药物已进入PPQ 阶段。\n\n管理层预计核酸药物从目前罕见病扩展到大病种时，将会迎来爆发性增长。\n\n此外，公司在瑞士和美国建立制剂工厂（制剂后期商业化对本地化要求高），有望在中期释放产能，制剂有望成为下一波收入增长驱动力。\n\nSPDBI 目标价 ◆ 目前价◆市场预期区间*数据截至2025 年9 月29 日\n\n市场预期区间SPDBI 目标价 ◆ 目前价◆市场预期区间*数据截至2025 年9 月29 日",
+      "score": 1.850315,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.615054
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "2025年种植牙品牌推荐：数字化种植浪潮下，技术驱动型品牌盘点",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/行业研报/2025年种植牙品牌推荐：数字化种植浪潮下，技术驱动型品牌盘点.pdf",
+      "publish_date": "2025-11-28 00:00:00.000",
+      "company_or_industry": "医疗服务",
+      "organization": "头豹研究院",
+      "snippet": "2025年种植牙品牌推荐：数字化种植浪潮下，技术驱动型品牌盘点；医疗服务；头豹研究院",
+      "score": 2.0,
+      "metadata_ref": "industry::2025年种植牙品牌推荐：数字化种植浪潮下，技术驱动型品牌盘点::2025-11-28 00:00:00.000::头豹研究院::医疗服务",
+      "score_components": {
+        "metadata": 2.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "百普赛斯年报点评：Q4业绩大幅改善，核心业务稳步推进",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/百普赛斯年报点评：Q4业绩大幅改善，核心业务稳步推进.pdf",
+      "publish_date": "2025-04-25 00:00:00.000",
+      "company_or_industry": "百普赛斯",
+      "organization": "太平洋",
+      "metadata_ref": "stock::百普赛斯年报点评：Q4业绩大幅改善，核心业务稳步推进::2025-04-25 00:00:00.000::太平洋::百普赛斯",
+      "snippet": "百普赛斯年报点评：Q4 业绩大幅改善，核心业务稳步推进\n◼走势比较◼股票数据总股本/流通(亿股)\n\n相关研究报告<<业绩超预期，疫情不改快速增长，细胞因子助力重组蛋白收入扩容>>\n\n事件：近日，公司发布2024 年年度报告：2024 年实现营业收入6.45亿元，同比上涨18.65%；归母净利润1.24 亿元，同比下降19.38%；扣非归母净利润1.19 亿元，同比下降15.16%。其中，2024 年第四季度营业收入1.82 亿元，同比增长38.50%；归母净利润0.40 亿元，同比增长58.59%；扣非归母净利润0.36 亿元，同比增长122.31%。我们认为单季业绩大幅改善主要系下游客户订单回暖带动。\n\n核心业务快速增长，海外拓展稳步推进2024 年，重组蛋白业务实现收入5.36 亿元，同比增长17.35%，占总营收比重83.05%，稳居核心业务地位。\n\n全年重组蛋白类产品累计销售4,167 款，同比增长19.26%。\n\n订单结构方面，50 万元以上的中高单值订单数量合计达225 单，占重组蛋白当期订单比重50.08%（同比提升3.18pct），表明公司产品逐步受到客户认可。\n\n速超过20%）。公司在欧洲和亚太等地新设多家海外子公司，销售网络已经覆盖全球主要国家和地区。此外，公司计划建立海外生产基地，提升全球多国多地的供应能力。\n\n聚焦CGT 原料体系构建，GMP 平台逐步落地2024 年，公司在重组蛋白、抗体、试剂盒等关键生物试剂产品线上持续加大投入，GMP 级原料体系加快构建，产品矩阵进一步丰富。公司成功开发近50 款GMP 级产品，覆盖细胞因子、抗体、磁珠、核酸酶、Cas 酶等多个模块。此外，苏州GMP 级生产厂房正式投产，具备规模化、标准化的生产能力，强化了公司在细胞与基因治疗（CGT）产业链中的上游供应优势。\n\n毛利率维稳，费用投入加大短期影响净利率2024 年，公司的综合毛利率同比下降0.33pct 至90.93%。",
+      "score": 1.2913869999999998,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.632863
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "2025年睡眠健康品牌推荐：从智能监测到个性化干预的全周期管理",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/行业研报/2025年睡眠健康品牌推荐：从智能监测到个性化干预的全周期管理.pdf",
+      "publish_date": "2025-10-27 00:00:00.000",
+      "company_or_industry": "医疗服务",
+      "organization": "头豹研究院",
+      "snippet": "2025年睡眠健康品牌推荐：从智能监测到个性化干预的全周期管理；医疗服务；头豹研究院",
+      "score": 2.0,
+      "metadata_ref": "industry::2025年睡眠健康品牌推荐：从智能监测到个性化干预的全周期管理::2025-10-27 00:00:00.000::头豹研究院::医疗服务",
+      "score_components": {
+        "metadata": 2.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "2025年前三季度业绩加速提升，核心业务和自研管线进展顺利",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/2025年前三季度业绩加速提升，核心业务和自研管线进展顺利.pdf",
+      "publish_date": "2025-11-06 00:00:00.000",
+      "company_or_industry": "成都先导",
+      "organization": "国信证券",
+      "metadata_ref": "stock::2025年前三季度业绩加速提升，核心业务和自研管线进展顺利::2025-11-06 00:00:00.000::国信证券::成都先导",
+      "snippet": "投资建议：公司2025 年前三季度业绩快速提升，各业务板块商业化进展顺\n2025 年前三季度收入和利润加速提升。\n\n公司2025 年前三季度实现营收3.70 亿元（+23.98%），归母净利润0.93 亿元（+208.34%），扣非归母净利润0.90 亿元（+420.30%）。\n\n2025 年单三季度营收1.43 亿元（+37.89%），主要由于报告期内核心业务板块收入稳步增长，以及DEL 和FBDD/SBDD 板块项目取得阶段性进展，获得里程碑收入，归母净利润0.43 亿元（+114.98%），扣非归母净利润0.36 亿元（+137.09%）。",
+      "score": 1.256818,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.621798
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "2025海南（三亚）国际康养产业博览会：《中国康养产业消费趋势报告(2025)》暨康养品牌影响力指数发布",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/行业研报/2025海南（三亚）国际康养产业博览会：《中国康养产业消费趋势报告(2025)》暨康养品牌影响力指数发布.pdf",
+      "publish_date": "2025-04-07 00:00:00.000",
+      "company_or_industry": "医疗服务",
+      "organization": "中国老年保健协会",
+      "snippet": "2025海南（三亚）国际康养产业博览会：《中国康养产业消费趋势报告(2025)》暨康养品牌影响力指数发布；医疗服务；中国老年保健协会",
+      "score": 2.0,
+      "metadata_ref": "industry::2025海南（三亚）国际康养产业博览会：《中国康养产业消费趋势报告(2025)》暨康养品牌影响力指数发布::2025-04-07 00:00:00.000::中国老年保健协会::医疗服务",
+      "score_components": {
+        "metadata": 2.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "集采助力产品放量，盈利能力逐步增强",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/集采助力产品放量，盈利能力逐步增强.pdf",
+      "publish_date": "2025-04-28 00:00:00.000",
+      "company_or_industry": "迈普医学",
+      "organization": "信达证券",
+      "metadata_ref": "stock::集采助力产品放量，盈利能力逐步增强::2025-04-28 00:00:00.000::信达证券::迈普医学",
+      "snippet": "分市场来看，公司在国内积极开展有效营销活动，进行品牌推广及渠道拓展，产品已进入国内近 2000 家医院，品牌影响力不断提升，2024 年国内实现营业收入 2.22 亿元（yoy+22.63%）；\n\n同时公司积极参与国际市场竞争，通过“小普闯世界”国际学术活动提升品牌影响力，目前已覆盖全球超 100 个国家和地区，境外实现0.57 亿元（yoy+13.28%）。\n\n我们认为公司丰富的产品线和不断扩大的市场，有望为公司业绩持续增长提供动力。\n\n2024 年公司对费用管控能力增强，随着收入规模扩大，各项费用率均有所优化，其中管理费用率为20.41%（yoy-3.16pp），销售费用率为20.54%（yoy-6.21pp），研发费用率为9.73%（yoy-1.87pp）。\n\n2024 年实现归母净利润0.79 亿元，同比增长92.9%，增速远快于收入，若剔除股权激励费用影响，归母净利润增速达98.57%，盈利能力显著提升。\n\n从未来发展潜力来看，公司聚焦创新，持续推动新产品研发和注册拿证进度，其中“可吸收再生氧化纤维”止血产品已于2025 年1 月完成拓展适应症变更注册，有望提升公司产品的竞争能力，2025 年3 月，公司的硬脑膜医用胶产品获得欧盟MDR认证，有望增强公司海外市场拓展能力。\n\n我们认为随着公司新产品适用领域不断拓展，竞争优势不断增强，盈利能力有望持续提升。\n\n为1.14、1.50、1.97 亿元，同比分别增长44.4%、32.0%、31.2%，对应2025 年4 月25 日股价，PE 分别为33、25、19 倍。➢",
+      "score": 0.68825,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.68825
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "公司简评报告：业绩表现亮眼，盈利能力显著提升",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/公司简评报告：业绩表现亮眼，盈利能力显著提升.pdf",
+      "publish_date": "2025-08-30 00:00:00.000",
+      "company_or_industry": "百普赛斯",
+      "organization": "东海证券",
+      "metadata_ref": "stock::公司简评报告：业绩表现亮眼，盈利能力显著提升::2025-08-30 00:00:00.000::东海证券::百普赛斯",
+      "snippet": "HTTP://WWW.LONGONE.COM.CN请务必仔细阅读正文后的所有说明和声明\nHTTP://WWW.LONGONE.COM.CN请务必仔细阅读正文后的所有说明和声明\n\n速增长，境外市场表现亮眼 公司简评报告》 2024.04.25投资要点➢ 公司业绩表现亮眼。\n\n2025H1公司实现营业收入3.87亿元（同比+29.38%）、归母净利润8380万元（同比+47.81%）、扣非净利润8413万元（同比+45.82%）；\n\n其中，Q2单季度实现收入2.01亿元（同比+30.95%）、归母净利润4323万元（同比+66.10%）。\n\n2025H1公司毛利率和净利率分别为90.14%（同比-1.32pct）、21.53%（同比+3.58pct）。\n\n从费用来看，2025H1公司销售、管理、研发的费用率分别为29.69%、15.36%和23.26%，分别同比-2.60、-0.70、-2.86pct。\n\n公司业绩增长强劲主要由下游客户需求增长驱动，同时公司持续提高运营效率、优化费用率，盈利能力显著提升。\n\n分区域看，2025H1国内实现营收1.23亿元，同比增长36.65%，国内创新药研发投入明显增加，带动生物试剂需求大增。\n\n2025H1国外实现营收2.58亿元，同比增长22.94%，公司业务已成功拓展至全球近80个国家和地区，在北美、欧洲等海外成熟市场建设本地化团队和优化渠道，提升海外市场渗透率。\n\n分产品类型来看，核心业务板块重组蛋白试剂实现销售收入3.19亿元，同比增长25.71%，抗体、试剂盒及其他试剂实现营业收入4991万元，同比增长47.68%。\n\n公司在ADC（抗体偶联药物）、CGT（细胞与基因治疗）等前沿领域的深度布局逐步进入丰收期，相关产品线收入贡献持续提升，夯实公司在全球顶级医药企业核心供应商的地位。\n\n2024H1公司投入研发费用0.90亿元（同比+15.19%），截至报告期末，公司研发人员数量达到279人，占员工总数的30%以上。\n\n公司持续加大蛋白制备及制剂平台、蛋白衍生修饰标记平台等技术平台的升级力度，深化膜蛋白、酶、临床样本分析等产品和技术的研发。",
+      "score": 0.682153,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.682153
+      }
+    }
+  ],
+  "reranked_evidence": [
+    {
+      "source_type": "stock",
+      "title": "公司简评报告：业绩表现亮眼，盈利能力显著提升",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/公司简评报告：业绩表现亮眼，盈利能力显著提升.pdf",
+      "publish_date": "2025-08-30 00:00:00.000",
+      "company_or_industry": "百普赛斯",
+      "organization": "东海证券",
+      "metadata_ref": "stock::公司简评报告：业绩表现亮眼，盈利能力显著提升::2025-08-30 00:00:00.000::东海证券::百普赛斯",
+      "snippet": "HTTP://WWW.LONGONE.COM.CN请务必仔细阅读正文后的所有说明和声明\nHTTP://WWW.LONGONE.COM.CN请务必仔细阅读正文后的所有说明和声明\n\n速增长，境外市场表现亮眼 公司简评报告》 2024.04.25投资要点➢ 公司业绩表现亮眼。\n\n2025H1公司实现营业收入3.87亿元（同比+29.38%）、归母净利润8380万元（同比+47.81%）、扣非净利润8413万元（同比+45.82%）；\n\n其中，Q2单季度实现收入2.01亿元（同比+30.95%）、归母净利润4323万元（同比+66.10%）。\n\n2025H1公司毛利率和净利率分别为90.14%（同比-1.32pct）、21.53%（同比+3.58pct）。\n\n从费用来看，2025H1公司销售、管理、研发的费用率分别为29.69%、15.36%和23.26%，分别同比-2.60、-0.70、-2.86pct。\n\n公司业绩增长强劲主要由下游客户需求增长驱动，同时公司持续提高运营效率、优化费用率，盈利能力显著提升。\n\n分区域看，2025H1国内实现营收1.23亿元，同比增长36.65%，国内创新药研发投入明显增加，带动生物试剂需求大增。\n\n2025H1国外实现营收2.58亿元，同比增长22.94%，公司业务已成功拓展至全球近80个国家和地区，在北美、欧洲等海外成熟市场建设本地化团队和优化渠道，提升海外市场渗透率。\n\n分产品类型来看，核心业务板块重组蛋白试剂实现销售收入3.19亿元，同比增长25.71%，抗体、试剂盒及其他试剂实现营业收入4991万元，同比增长47.68%。\n\n公司在ADC（抗体偶联药物）、CGT（细胞与基因治疗）等前沿领域的深度布局逐步进入丰收期，相关产品线收入贡献持续提升，夯实公司在全球顶级医药企业核心供应商的地位。\n\n2024H1公司投入研发费用0.90亿元（同比+15.19%），截至报告期末，公司研发人员数量达到279人，占员工总数的30%以上。\n\n公司持续加大蛋白制备及制剂平台、蛋白衍生修饰标记平台等技术平台的升级力度，深化膜蛋白、酶、临床样本分析等产品和技术的研发。",
+      "score": 0.682153,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.682153
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "2025年前三季度业绩加速提升，核心业务和自研管线进展顺利",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/2025年前三季度业绩加速提升，核心业务和自研管线进展顺利.pdf",
+      "publish_date": "2025-11-06 00:00:00.000",
+      "company_or_industry": "成都先导",
+      "organization": "国信证券",
+      "metadata_ref": "stock::2025年前三季度业绩加速提升，核心业务和自研管线进展顺利::2025-11-06 00:00:00.000::国信证券::成都先导",
+      "snippet": "投资建议：公司2025 年前三季度业绩快速提升，各业务板块商业化进展顺\n2025 年前三季度收入和利润加速提升。\n\n公司2025 年前三季度实现营收3.70 亿元（+23.98%），归母净利润0.93 亿元（+208.34%），扣非归母净利润0.90 亿元（+420.30%）。\n\n2025 年单三季度营收1.43 亿元（+37.89%），主要由于报告期内核心业务板块收入稳步增长，以及DEL 和FBDD/SBDD 板块项目取得阶段性进展，获得里程碑收入，归母净利润0.43 亿元（+114.98%），扣非归母净利润0.36 亿元（+137.09%）。",
+      "score": 1.256818,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.621798
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "2025投资者开放日主要亮点",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/2025投资者开放日主要亮点.pdf",
+      "publish_date": "2025-10-07 00:00:00.000",
+      "company_or_industry": "药明康德",
+      "organization": "浦银国际证券",
+      "metadata_ref": "stock::2025投资者开放日主要亮点::2025-10-07 00:00:00.000::浦银国际证券::药明康德",
+      "snippet": "个分子复杂度增加（例如：多肽、寡核苷酸、偶联小分子药物），公\n司认为未来单个项目价值将会进一步提升。\n\n此外，管理层表示，公司将持续以差异化的能力和资源来服务优质客户，此举亦有助于提升服务价格。\n\n 除了差异化服务带来的价格优势，持续提升的效率亦有助于提振利润率。\n\n公司目前已实现全行业最优的净利润率（1H25 经调净利率为30.4%）。\n\n除了上文提及的公司有望通过差异化能力服务客户从而获得一定价格优势之外，公司强大的运营效率亦将有助公司保持优秀的利润率。\n\n例如，公司在此次投资者开放日详细披露了产能爬坡效率，新工厂产能爬坡时间（从首个反应釜开始使用到所有反应釜开始使用）从过去约2 年迅速缩短至2+个月。\n\n尽管根据管理层该口径不包含具体项目的验证生产，我们认为该数字的提升仍从侧面反映出公司强大的爬坡效率，增强了我们对公司长期保持优秀利润率的信心。\n\n TIDES 业务有望在长期持续实现可观增长，制剂有望成为TIDES 业务之后的下一波驱动力。\n\n2025 年全年TIDES 业务有望实现人民币100+亿元收入（≥80% YoY），公司预计未来有望持续实现可观增长。\n\n目前公司已有环肽项目进入大批量商业化生产，核酸药物已进入PPQ 阶段。\n\n管理层预计核酸药物从目前罕见病扩展到大病种时，将会迎来爆发性增长。\n\n此外，公司在瑞士和美国建立制剂工厂（制剂后期商业化对本地化要求高），有望在中期释放产能，制剂有望成为下一波收入增长驱动力。\n\nSPDBI 目标价 ◆ 目前价◆市场预期区间*数据截至2025 年9 月29 日\n\n市场预期区间SPDBI 目标价 ◆ 目前价◆市场预期区间*数据截至2025 年9 月29 日",
+      "score": 1.850315,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.615054
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "百普赛斯年报点评：Q4业绩大幅改善，核心业务稳步推进",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/百普赛斯年报点评：Q4业绩大幅改善，核心业务稳步推进.pdf",
+      "publish_date": "2025-04-25 00:00:00.000",
+      "company_or_industry": "百普赛斯",
+      "organization": "太平洋",
+      "metadata_ref": "stock::百普赛斯年报点评：Q4业绩大幅改善，核心业务稳步推进::2025-04-25 00:00:00.000::太平洋::百普赛斯",
+      "snippet": "百普赛斯年报点评：Q4 业绩大幅改善，核心业务稳步推进\n◼走势比较◼股票数据总股本/流通(亿股)\n\n相关研究报告<<业绩超预期，疫情不改快速增长，细胞因子助力重组蛋白收入扩容>>\n\n事件：近日，公司发布2024 年年度报告：2024 年实现营业收入6.45亿元，同比上涨18.65%；归母净利润1.24 亿元，同比下降19.38%；扣非归母净利润1.19 亿元，同比下降15.16%。其中，2024 年第四季度营业收入1.82 亿元，同比增长38.50%；归母净利润0.40 亿元，同比增长58.59%；扣非归母净利润0.36 亿元，同比增长122.31%。我们认为单季业绩大幅改善主要系下游客户订单回暖带动。\n\n核心业务快速增长，海外拓展稳步推进2024 年，重组蛋白业务实现收入5.36 亿元，同比增长17.35%，占总营收比重83.05%，稳居核心业务地位。\n\n全年重组蛋白类产品累计销售4,167 款，同比增长19.26%。\n\n订单结构方面，50 万元以上的中高单值订单数量合计达225 单，占重组蛋白当期订单比重50.08%（同比提升3.18pct），表明公司产品逐步受到客户认可。\n\n速超过20%）。公司在欧洲和亚太等地新设多家海外子公司，销售网络已经覆盖全球主要国家和地区。此外，公司计划建立海外生产基地，提升全球多国多地的供应能力。\n\n聚焦CGT 原料体系构建，GMP 平台逐步落地2024 年，公司在重组蛋白、抗体、试剂盒等关键生物试剂产品线上持续加大投入，GMP 级原料体系加快构建，产品矩阵进一步丰富。公司成功开发近50 款GMP 级产品，覆盖细胞因子、抗体、磁珠、核酸酶、Cas 酶等多个模块。此外，苏州GMP 级生产厂房正式投产，具备规模化、标准化的生产能力，强化了公司在细胞与基因治疗（CGT）产业链中的上游供应优势。\n\n毛利率维稳，费用投入加大短期影响净利率2024 年，公司的综合毛利率同比下降0.33pct 至90.93%。",
+      "score": 1.2913869999999998,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.632863
+      }
+    },
+    {
+      "source_type": "stock",
+      "title": "集采助力产品放量，盈利能力逐步增强",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/集采助力产品放量，盈利能力逐步增强.pdf",
+      "publish_date": "2025-04-28 00:00:00.000",
+      "company_or_industry": "迈普医学",
+      "organization": "信达证券",
+      "metadata_ref": "stock::集采助力产品放量，盈利能力逐步增强::2025-04-28 00:00:00.000::信达证券::迈普医学",
+      "snippet": "分市场来看，公司在国内积极开展有效营销活动，进行品牌推广及渠道拓展，产品已进入国内近 2000 家医院，品牌影响力不断提升，2024 年国内实现营业收入 2.22 亿元（yoy+22.63%）；\n\n同时公司积极参与国际市场竞争，通过“小普闯世界”国际学术活动提升品牌影响力，目前已覆盖全球超 100 个国家和地区，境外实现0.57 亿元（yoy+13.28%）。\n\n我们认为公司丰富的产品线和不断扩大的市场，有望为公司业绩持续增长提供动力。\n\n2024 年公司对费用管控能力增强，随着收入规模扩大，各项费用率均有所优化，其中管理费用率为20.41%（yoy-3.16pp），销售费用率为20.54%（yoy-6.21pp），研发费用率为9.73%（yoy-1.87pp）。\n\n2024 年实现归母净利润0.79 亿元，同比增长92.9%，增速远快于收入，若剔除股权激励费用影响，归母净利润增速达98.57%，盈利能力显著提升。\n\n从未来发展潜力来看，公司聚焦创新，持续推动新产品研发和注册拿证进度，其中“可吸收再生氧化纤维”止血产品已于2025 年1 月完成拓展适应症变更注册，有望提升公司产品的竞争能力，2025 年3 月，公司的硬脑膜医用胶产品获得欧盟MDR认证，有望增强公司海外市场拓展能力。\n\n我们认为随着公司新产品适用领域不断拓展，竞争优势不断增强，盈利能力有望持续提升。\n\n为1.14、1.50、1.97 亿元，同比分别增长44.4%、32.0%、31.2%，对应2025 年4 月25 日股价，PE 分别为33、25、19 倍。➢",
+      "score": 0.68825,
+      "score_components": {
+        "metadata": 0.0,
+        "vector": 0.68825
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "2025海南（三亚）国际康养产业博览会：《中国康养产业消费趋势报告(2025)》暨康养品牌影响力指数发布",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/行业研报/2025海南（三亚）国际康养产业博览会：《中国康养产业消费趋势报告(2025)》暨康养品牌影响力指数发布.pdf",
+      "publish_date": "2025-04-07 00:00:00.000",
+      "company_or_industry": "医疗服务",
+      "organization": "中国老年保健协会",
+      "snippet": "2025海南（三亚）国际康养产业博览会：《中国康养产业消费趋势报告(2025)》暨康养品牌影响力指数发布；医疗服务；中国老年保健协会",
+      "score": 2.0,
+      "metadata_ref": "industry::2025海南（三亚）国际康养产业博览会：《中国康养产业消费趋势报告(2025)》暨康养品牌影响力指数发布::2025-04-07 00:00:00.000::中国老年保健协会::医疗服务",
+      "score_components": {
+        "metadata": 2.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "2025年种植牙品牌推荐：数字化种植浪潮下，技术驱动型品牌盘点",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/行业研报/2025年种植牙品牌推荐：数字化种植浪潮下，技术驱动型品牌盘点.pdf",
+      "publish_date": "2025-11-28 00:00:00.000",
+      "company_or_industry": "医疗服务",
+      "organization": "头豹研究院",
+      "snippet": "2025年种植牙品牌推荐：数字化种植浪潮下，技术驱动型品牌盘点；医疗服务；头豹研究院",
+      "score": 2.0,
+      "metadata_ref": "industry::2025年种植牙品牌推荐：数字化种植浪潮下，技术驱动型品牌盘点::2025-11-28 00:00:00.000::头豹研究院::医疗服务",
+      "score_components": {
+        "metadata": 2.0,
+        "vector": 0.0
+      }
+    },
+    {
+      "source_type": "industry",
+      "title": "2025年睡眠健康品牌推荐：从智能监测到个性化干预的全周期管理",
+      "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/行业研报/2025年睡眠健康品牌推荐：从智能监测到个性化干预的全周期管理.pdf",
+      "publish_date": "2025-10-27 00:00:00.000",
+      "company_or_industry": "医疗服务",
+      "organization": "头豹研究院",
+      "snippet": "2025年睡眠健康品牌推荐：从智能监测到个性化干预的全周期管理；医疗服务；头豹研究院",
+      "score": 2.0,
+      "metadata_ref": "industry::2025年睡眠健康品牌推荐：从智能监测到个性化干预的全周期管理::2025-10-27 00:00:00.000::头豹研究院::医疗服务",
+      "score_components": {
+        "metadata": 2.0,
+        "vector": 0.0
+      }
+    }
+  ],
+  "rerank_preview": "{\"strategy\": \"reranker_model\", \"kept_count\": 8, \"reason\": \"BAAI/bge-reranker-v2-m3\"}",
+  "fused_context": {
+    "question": "百克生物2025年第三季度营业收入环比大幅增长，分析增长的主要驱动因素",
+    "sql_row_count": 16,
+    "evidence_count": 8,
+    "sql_preview": [
+      {
+        "stock_abbr": "百克生物",
+        "period_q3": "2025Q3",
+        "period_q2": "2025Q2",
+        "revenue_q3": 47444.276598000004,
+        "revenue_q2": 12260.565389000003,
+        "calculated_qoq_growth_pct": 286.97,
+        "reported_qoq_growth_pct": 54.59857624515293,
+        "cost_change": null,
+        "cost_change_as_pct_of_q2_revenue": null,
+        "selling_change": null,
+        "selling_change_as_pct_of_q2_revenue": null,
+        "admin_change": null,
+        "admin_change_as_pct_of_q2_revenue": null,
+        "finance_change": null,
+        "finance_change_as_pct_of_q2_revenue": null,
+        "taxes_change": null,
+        "taxes_change_as_pct_of_q2_revenue": null,
+        "rnd_ratio_change_pct": -16.765689192591164,
+        "ar_ratio_change_pct": null,
+        "inventory_turnover_change": null
+      },
+      {
+        "stock_abbr": "百克生物",
+        "period_q3": "2025Q3",
+        "period_q2": "2025Q2",
+        "revenue_q3": 47444.276598000004,
+        "revenue_q2": 12260.565389000003,
+        "calculated_qoq_growth_pct": 286.97,
+        "reported_qoq_growth_pct": 54.59857624515293,
+        "cost_change": null,
+        "cost_change_as_pct_of_q2_revenue": null,
+        "selling_change": null,
+        "selling_change_as_pct_of_q2_revenue": null,
+        "admin_change": null,
+        "admin_change_as_pct_of_q2_revenue": null,
+        "finance_change": null,
+        "finance_change_as_pct_of_q2_revenue": null,
+        "taxes_change": null,
+        "taxes_change_as_pct_of_q2_revenue": null,
+        "rnd_ratio_change_pct": -16.765689192591164,
+        "ar_ratio_change_pct": null,
+        "inventory_turnover_change": null
+      },
+      {
+        "stock_abbr": "百克生物",
+        "period_q3": "2025Q3",
+        "period_q2": "2025Q2",
+        "revenue_q3": 47444.276598000004,
+        "revenue_q2": 12260.565389000003,
+        "calculated_qoq_growth_pct": 286.97,
+        "reported_qoq_growth_pct": 54.59857624515293,
+        "cost_change": null,
+        "cost_change_as_pct_of_q2_revenue": null,
+        "selling_change": null,
+        "selling_change_as_pct_of_q2_revenue": null,
+        "admin_change": null,
+        "admin_change_as_pct_of_q2_revenue": null,
+        "finance_change": null,
+        "finance_change_as_pct_of_q2_revenue": null,
+        "taxes_change": null,
+        "taxes_change_as_pct_of_q2_revenue": null,
+        "rnd_ratio_change_pct": -16.765689192591164,
+        "ar_ratio_change_pct": null,
+        "inventory_turnover_change": null
+      },
+      {
+        "stock_abbr": "百克生物",
+        "period_q3": "2025Q3",
+        "period_q2": "2025Q2",
+        "revenue_q3": 47444.276598000004,
+        "revenue_q2": 12260.565389000003,
+        "calculated_qoq_growth_pct": 286.97,
+        "reported_qoq_growth_pct": 54.59857624515293,
+        "cost_change": null,
+        "cost_change_as_pct_of_q2_revenue": null,
+        "selling_change": null,
+        "selling_change_as_pct_of_q2_revenue": null,
+        "admin_change": null,
+        "admin_change_as_pct_of_q2_revenue": null,
+        "finance_change": null,
+        "finance_change_as_pct_of_q2_revenue": null,
+        "taxes_change": null,
+        "taxes_change_as_pct_of_q2_revenue": null,
+        "rnd_ratio_change_pct": -16.765689192591164,
+        "ar_ratio_change_pct": null,
+        "inventory_turnover_change": null
+      },
+      {
+        "stock_abbr": "百克生物",
+        "period_q3": "2025Q3",
+        "period_q2": "2025Q2",
+        "revenue_q3": 47444.276598000004,
+        "revenue_q2": 12260.565389000003,
+        "calculated_qoq_growth_pct": 286.97,
+        "reported_qoq_growth_pct": 54.59857624515293,
+        "cost_change": null,
+        "cost_change_as_pct_of_q2_revenue": null,
+        "selling_change": null,
+        "selling_change_as_pct_of_q2_revenue": null,
+        "admin_change": null,
+        "admin_change_as_pct_of_q2_revenue": null,
+        "finance_change": null,
+        "finance_change_as_pct_of_q2_revenue": null,
+        "taxes_change": null,
+        "taxes_change_as_pct_of_q2_revenue": null,
+        "rnd_ratio_change_pct": -16.765689192591164,
+        "ar_ratio_change_pct": null,
+        "inventory_turnover_change": null
+      }
+    ],
+    "evidence_preview": [
+      {
+        "source_type": "stock",
+        "title": "公司简评报告：业绩表现亮眼，盈利能力显著提升",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/公司简评报告：业绩表现亮眼，盈利能力显著提升.pdf",
+        "publish_date": "2025-08-30 00:00:00.000",
+        "company_or_industry": "百普赛斯",
+        "organization": "东海证券",
+        "metadata_ref": "stock::公司简评报告：业绩表现亮眼，盈利能力显著提升::2025-08-30 00:00:00.000::东海证券::百普赛斯",
+        "snippet": "HTTP://WWW.LONGONE.COM.CN请务必仔细阅读正文后的所有说明和声明\nHTTP://WWW.LONGONE.COM.CN请务必仔细阅读正文后的所有说明和声明\n\n速增长，境外市场表现亮眼 公司简评报告》 2024.04.25投资要点➢ 公司业绩表现亮眼。\n\n2025H1公司实现营业收入3.87亿元（同比+29.38%）、归母净利润8380万元（同比+47.81%）、扣非净利润8413万元（同比+45.82%）；\n\n其中，Q2单季度实现收入2.01亿元（同比+30.95%）、归母净利润4323万元（同比+66.10%）。\n\n2025H1公司毛利率和净利率分别为90.14%（同比-1.32pct）、21.53%（同比+3.58pct）。\n\n从费用来看，2025H1公司销售、管理、研发的费用率分别为29.69%、15.36%和23.26%，分别同比-2.60、-0.70、-2.86pct。\n\n公司业绩增长强劲主要由下游客户需求增长驱动，同时公司持续提高运营效率、优化费用率，盈利能力显著提升。\n\n分区域看，2025H1国内实现营收1.23亿元，同比增长36.65%，国内创新药研发投入明显增加，带动生物试剂需求大增。\n\n2025H1国外实现营收2.58亿元，同比增长22.94%，公司业务已成功拓展至全球近80个国家和地区，在北美、欧洲等海外成熟市场建设本地化团队和优化渠道，提升海外市场渗透率。\n\n分产品类型来看，核心业务板块重组蛋白试剂实现销售收入3.19亿元，同比增长25.71%，抗体、试剂盒及其他试剂实现营业收入4991万元，同比增长47.68%。\n\n公司在ADC（抗体偶联药物）、CGT（细胞与基因治疗）等前沿领域的深度布局逐步进入丰收期，相关产品线收入贡献持续提升，夯实公司在全球顶级医药企业核心供应商的地位。\n\n2024H1公司投入研发费用0.90亿元（同比+15.19%），截至报告期末，公司研发人员数量达到279人，占员工总数的30%以上。\n\n公司持续加大蛋白制备及制剂平台、蛋白衍生修饰标记平台等技术平台的升级力度，深化膜蛋白、酶、临床样本分析等产品和技术的研发。",
+        "score": 0.682153,
+        "score_components": {
+          "metadata": 0.0,
+          "vector": 0.682153
+        }
+      },
+      {
+        "source_type": "stock",
+        "title": "2025年前三季度业绩加速提升，核心业务和自研管线进展顺利",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/2025年前三季度业绩加速提升，核心业务和自研管线进展顺利.pdf",
+        "publish_date": "2025-11-06 00:00:00.000",
+        "company_or_industry": "成都先导",
+        "organization": "国信证券",
+        "metadata_ref": "stock::2025年前三季度业绩加速提升，核心业务和自研管线进展顺利::2025-11-06 00:00:00.000::国信证券::成都先导",
+        "snippet": "投资建议：公司2025 年前三季度业绩快速提升，各业务板块商业化进展顺\n2025 年前三季度收入和利润加速提升。\n\n公司2025 年前三季度实现营收3.70 亿元（+23.98%），归母净利润0.93 亿元（+208.34%），扣非归母净利润0.90 亿元（+420.30%）。\n\n2025 年单三季度营收1.43 亿元（+37.89%），主要由于报告期内核心业务板块收入稳步增长，以及DEL 和FBDD/SBDD 板块项目取得阶段性进展，获得里程碑收入，归母净利润0.43 亿元（+114.98%），扣非归母净利润0.36 亿元（+137.09%）。",
+        "score": 1.256818,
+        "score_components": {
+          "metadata": 0.0,
+          "vector": 0.621798
+        }
+      },
+      {
+        "source_type": "stock",
+        "title": "2025投资者开放日主要亮点",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/2025投资者开放日主要亮点.pdf",
+        "publish_date": "2025-10-07 00:00:00.000",
+        "company_or_industry": "药明康德",
+        "organization": "浦银国际证券",
+        "metadata_ref": "stock::2025投资者开放日主要亮点::2025-10-07 00:00:00.000::浦银国际证券::药明康德",
+        "snippet": "个分子复杂度增加（例如：多肽、寡核苷酸、偶联小分子药物），公\n司认为未来单个项目价值将会进一步提升。\n\n此外，管理层表示，公司将持续以差异化的能力和资源来服务优质客户，此举亦有助于提升服务价格。\n\n 除了差异化服务带来的价格优势，持续提升的效率亦有助于提振利润率。\n\n公司目前已实现全行业最优的净利润率（1H25 经调净利率为30.4%）。\n\n除了上文提及的公司有望通过差异化能力服务客户从而获得一定价格优势之外，公司强大的运营效率亦将有助公司保持优秀的利润率。\n\n例如，公司在此次投资者开放日详细披露了产能爬坡效率，新工厂产能爬坡时间（从首个反应釜开始使用到所有反应釜开始使用）从过去约2 年迅速缩短至2+个月。\n\n尽管根据管理层该口径不包含具体项目的验证生产，我们认为该数字的提升仍从侧面反映出公司强大的爬坡效率，增强了我们对公司长期保持优秀利润率的信心。\n\n TIDES 业务有望在长期持续实现可观增长，制剂有望成为TIDES 业务之后的下一波驱动力。\n\n2025 年全年TIDES 业务有望实现人民币100+亿元收入（≥80% YoY），公司预计未来有望持续实现可观增长。\n\n目前公司已有环肽项目进入大批量商业化生产，核酸药物已进入PPQ 阶段。\n\n管理层预计核酸药物从目前罕见病扩展到大病种时，将会迎来爆发性增长。\n\n此外，公司在瑞士和美国建立制剂工厂（制剂后期商业化对本地化要求高），有望在中期释放产能，制剂有望成为下一波收入增长驱动力。\n\nSPDBI 目标价 ◆ 目前价◆市场预期区间*数据截至2025 年9 月29 日\n\n市场预期区间SPDBI 目标价 ◆ 目前价◆市场预期区间*数据截至2025 年9 月29 日",
+        "score": 1.850315,
+        "score_components": {
+          "metadata": 0.0,
+          "vector": 0.615054
+        }
+      },
+      {
+        "source_type": "stock",
+        "title": "百普赛斯年报点评：Q4业绩大幅改善，核心业务稳步推进",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/百普赛斯年报点评：Q4业绩大幅改善，核心业务稳步推进.pdf",
+        "publish_date": "2025-04-25 00:00:00.000",
+        "company_or_industry": "百普赛斯",
+        "organization": "太平洋",
+        "metadata_ref": "stock::百普赛斯年报点评：Q4业绩大幅改善，核心业务稳步推进::2025-04-25 00:00:00.000::太平洋::百普赛斯",
+        "snippet": "百普赛斯年报点评：Q4 业绩大幅改善，核心业务稳步推进\n◼走势比较◼股票数据总股本/流通(亿股)\n\n相关研究报告<<业绩超预期，疫情不改快速增长，细胞因子助力重组蛋白收入扩容>>\n\n事件：近日，公司发布2024 年年度报告：2024 年实现营业收入6.45亿元，同比上涨18.65%；归母净利润1.24 亿元，同比下降19.38%；扣非归母净利润1.19 亿元，同比下降15.16%。其中，2024 年第四季度营业收入1.82 亿元，同比增长38.50%；归母净利润0.40 亿元，同比增长58.59%；扣非归母净利润0.36 亿元，同比增长122.31%。我们认为单季业绩大幅改善主要系下游客户订单回暖带动。\n\n核心业务快速增长，海外拓展稳步推进2024 年，重组蛋白业务实现收入5.36 亿元，同比增长17.35%，占总营收比重83.05%，稳居核心业务地位。\n\n全年重组蛋白类产品累计销售4,167 款，同比增长19.26%。\n\n订单结构方面，50 万元以上的中高单值订单数量合计达225 单，占重组蛋白当期订单比重50.08%（同比提升3.18pct），表明公司产品逐步受到客户认可。\n\n速超过20%）。公司在欧洲和亚太等地新设多家海外子公司，销售网络已经覆盖全球主要国家和地区。此外，公司计划建立海外生产基地，提升全球多国多地的供应能力。\n\n聚焦CGT 原料体系构建，GMP 平台逐步落地2024 年，公司在重组蛋白、抗体、试剂盒等关键生物试剂产品线上持续加大投入，GMP 级原料体系加快构建，产品矩阵进一步丰富。公司成功开发近50 款GMP 级产品，覆盖细胞因子、抗体、磁珠、核酸酶、Cas 酶等多个模块。此外，苏州GMP 级生产厂房正式投产，具备规模化、标准化的生产能力，强化了公司在细胞与基因治疗（CGT）产业链中的上游供应优势。\n\n毛利率维稳，费用投入加大短期影响净利率2024 年，公司的综合毛利率同比下降0.33pct 至90.93%。",
+        "score": 1.2913869999999998,
+        "score_components": {
+          "metadata": 0.0,
+          "vector": 0.632863
+        }
+      },
+      {
+        "source_type": "stock",
+        "title": "集采助力产品放量，盈利能力逐步增强",
+        "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/集采助力产品放量，盈利能力逐步增强.pdf",
+        "publish_date": "2025-04-28 00:00:00.000",
+        "company_or_industry": "迈普医学",
+        "organization": "信达证券",
+        "metadata_ref": "stock::集采助力产品放量，盈利能力逐步增强::2025-04-28 00:00:00.000::信达证券::迈普医学",
+        "snippet": "分市场来看，公司在国内积极开展有效营销活动，进行品牌推广及渠道拓展，产品已进入国内近 2000 家医院，品牌影响力不断提升，2024 年国内实现营业收入 2.22 亿元（yoy+22.63%）；\n\n同时公司积极参与国际市场竞争，通过“小普闯世界”国际学术活动提升品牌影响力，目前已覆盖全球超 100 个国家和地区，境外实现0.57 亿元（yoy+13.28%）。\n\n我们认为公司丰富的产品线和不断扩大的市场，有望为公司业绩持续增长提供动力。\n\n2024 年公司对费用管控能力增强，随着收入规模扩大，各项费用率均有所优化，其中管理费用率为20.41%（yoy-3.16pp），销售费用率为20.54%（yoy-6.21pp），研发费用率为9.73%（yoy-1.87pp）。\n\n2024 年实现归母净利润0.79 亿元，同比增长92.9%，增速远快于收入，若剔除股权激励费用影响，归母净利润增速达98.57%，盈利能力显著提升。\n\n从未来发展潜力来看，公司聚焦创新，持续推动新产品研发和注册拿证进度，其中“可吸收再生氧化纤维”止血产品已于2025 年1 月完成拓展适应症变更注册，有望提升公司产品的竞争能力，2025 年3 月，公司的硬脑膜医用胶产品获得欧盟MDR认证，有望增强公司海外市场拓展能力。\n\n我们认为随着公司新产品适用领域不断拓展，竞争优势不断增强，盈利能力有望持续提升。\n\n为1.14、1.50、1.97 亿元，同比分别增长44.4%、32.0%、31.2%，对应2025 年4 月25 日股价，PE 分别为33、25、19 倍。➢",
+        "score": 0.68825,
+        "score_components": {
+          "metadata": 0.0,
+          "vector": 0.68825
+        }
+      }
+    ],
+    "evidence_titles": [
+      "公司简评报告：业绩表现亮眼，盈利能力显著提升",
+      "2025年前三季度业绩加速提升，核心业务和自研管线进展顺利",
+      "2025投资者开放日主要亮点",
+      "百普赛斯年报点评：Q4业绩大幅改善，核心业务稳步推进",
+      "集采助力产品放量，盈利能力逐步增强"
+    ],
+    "source_breakdown": {
+      "stock": 5,
+      "industry": 3
+    }
+  },
+  "self_check": {
+    "pass": true,
+    "notes": [
+      "1. 回答中的数字（如营业收入、环比增长率）与 SQL rows 中的数据完全一致。",
+      "2. 回答正确指出 Evidences 中未包含百克生物2025年第三季度的相关研报，引用的研报均涉及其他公司，符合事实。",
+      "3. 回答没有遗漏问题要求的关键点：确认了增长事实，并分析了驱动因素分析的局限性（数据缺失）。",
+      "4. 回答没有混淆指标名称，正确使用了“营业总收入”等术语。",
+      "5. 回答没有错误地将聚合统计结果对应到具体公司，因为 SQL rows 中只有百克生物一家的数据。"
+    ]
+  },
+  "chart_plan": {},
+  "chart_spec": {},
+  "current_chart_paths": [],
+  "current_chart_specs": [],
+  "current_answer": "**直接结论**  \n百克生物2025年第三季度营业总收入环比实现大幅增长，但当前结构化财务数据中大部分成本费用明细为空，无法直接通过费用或成本变动分析驱动因素。同时，未检索到直接针对百克生物2025年第三季度营收增长的研报证据。\n\n**财务数据支撑**  \n1. **环比增长确认**：根据财务视图数据，百克生物2025年第三季度营业总收入为 **47,444.28万元**（约4.74亿元，按1亿元=10,000万元换算），2025年第二季度为 **12,260.57万元**（约1.23亿元）。据此计算，环比增长率为 **286.97%**（计算值），而报表记录的环比增长率（`reported_qoq_growth_pct`）为54.60%，两者差异显著。  \n2. **其他财务指标**：当前SQL结果中，除研发费用率（`rnd_ratio`）下降16.77个百分点外，营业成本、销售费用、管理费用、财务费用、税金及附加等项目的环比变动值均为`null`，应收账款比率、存货周转率变动也为`null`。因此，无法从现有结构化数据中识别出成本费用端的具体驱动或拖累因素。\n\n**研报证据支撑**  \n未检索到直接针对百克生物2025年第三季度营业收入环比增长的研报证据。已提供的研报片段均涉及其他公司（如百普赛斯、成都先导、药明康德、迈普医学），不适用于百克生物的本问题分析。\n\n**综合判断**  \n1. **增长事实确认**：百克生物2025年第三季度营业总收入环比（较2025Q2）确实大幅提升，计算增幅达286.97%。  \n2. **驱动因素分析局限**：  \n   - 由于当前财务视图中多数成本费用明细字段为空，无法从结构化数据中分析是否由成本控制、费用优化或税收变化等因素驱动。  \n   - 研发费用率环比下降16.77个百分点，表明研发投入占比相对降低，但这可能是收入大幅增长导致的比率下降，而非营收增长的主因。  \n   - 缺乏针对百克生物的近期研报，无法获得关于其2025年第三季度营收增长的定性解释（如产品放量、市场需求、渠道拓展等）。  \n3. **结论**：百克生物2025年第三季度营业总收入环比大幅增长，但受限于数据覆盖，无法从现有财务明细和研报中明确识别增长的主要驱动因素。建议关注公司后续发布的季度报告或相关分析师评论以获取更深入的原因分析。",
+  "current_references": [
+    {
+      "paper_path": "./测试数据/附件5：研报数据/个股研报/公司简评报告：业绩表现亮眼，盈利能力显著提升.pdf",
+      "text": "HTTP://WWW.LONGONE.COM.CN请务必仔细阅读正文后的所有说明和声明\nHTTP://WWW.LONGONE.COM.CN请务必仔细阅读正文后的所有说明和声明\n\n速增长，境外市场表现亮眼 公司简评报告》 2024.04.25投资要点➢ 公司业绩表现亮眼。\n\n2025H1公司实现营业收入3.87亿元（同比+29.38%）、归母净利润8380万元（同比+47.81%）、扣非净利润8413万元（同比+45.82%）；\n\n其中，Q2单季度实现收入2.01亿元（同比+30.95%）、归母净利润4323万元（同比+66.10%）。\n\n2025H1公司毛利率和净利率分别为90.14%（同比-1.32pct）、21.53%（同比+3.58pct）。\n\n从费用来看，2025H1公司销售、管理、研发的费用率分别为29.69%、15.36%和23.26%，分别同比-2.60、-0.70、-2.86pct。\n\n公司业绩增长强劲主要由下游客户需求增长驱动，同时公司持续提高运营效率、优化费用率，盈利能力显著提升。\n\n分区域看，2025H1国内实现营收1.23亿元，同比增长36.65%，国内创新药研发投入明显增加，带动生物试剂需求大增。\n\n2025H1国外实现营收2.58亿元，同比增长22.94%，公司业务已成功拓展至全球近80个国家和地区，在北美、欧洲等海外成熟市场建设本地化团队和优化渠道，提"
+    },
+    {
+      "paper_path": "./测试数据/附件5：研报数据/个股研报/2025年前三季度业绩加速提升，核心业务和自研管线进展顺利.pdf",
+      "text": "相关研究报告《成都先导（688222.SH）-25Q2 收入和利润稳步提升，“DEL+AI+自动化”平台取得阶段性成果》 2025-08-31《成都先导（688222.SH）-核心业务稳步增长，“DEL+AI+自动化”助力新药研发》 2025-05-06《成都先导（688222.SH）-前三季度业绩稳步回升，“DEL+AI+自动化”打造新药研发新动能》 2024-11-052025 年前三季度收入和利润加速提升。\n\n公司2025 年前三季度实现营收3.70 亿元（+23.98%），归母净利润0.93 亿元（+208.34%），扣非归母净利润0.90 亿元（+420.30%）。\n\n2025 年单三季度营收1.43 亿元（+37.89%），主要由于报告期内核心业务板块收入稳步增长，以及DEL和FBDD/SBDD 板块项目取得阶段性进展，获得里程碑收入，归母净利润0.43 亿元（+114.98%），扣非归母净利润0.36 亿元（+137.09%）。\n\n核心业务板块商业项目增加，自研管线临床推进顺利。\n\n2025 年前三季度公司核心业务实现持续增长，通过与全球合作伙伴建立长期稳定的深度协作，商业项目按计划顺利推进，同时DEL 和FBDD/SBDD 板块交付客户的项目取得阶段性进展，获得项目的里程碑收入。\n\n除此之外，自研管线HG146 针对实体瘤的临床2 期研究推进顺利，仍在其他适应症中开",
+      "paper_image": "图1：成都先导营业收入及增速（单位：亿元、%）"
+    },
+    {
+      "paper_path": "./测试数据/附件5：研报数据/个股研报/2025投资者开放日主要亮点.pdf",
+      "text": "个分子复杂度增加（例如：多肽、寡核苷酸、偶联小分子药物），公\n财务报表分析与预测 - 药明康德（2359.HK）利润表现金流量表（百万人民币）",
+      "paper_image": "图表2：浦银国际目标价：药明康德H 股 (2359.HK)"
+    },
+    {
+      "paper_path": "./测试数据/附件5：研报数据/个股研报/百普赛斯年报点评：Q4业绩大幅改善，核心业务稳步推进.pdf",
+      "text": "百普赛斯年报点评：Q4 业绩大幅改善，核心业务稳步推进\n◼走势比较◼股票数据总股本/流通(亿股)\n\n相关研究报告<<业绩超预期，疫情不改快速增长，细胞因子助力重组蛋白收入扩容>>\n\n事件：近日，公司发布2024 年年度报告：2024 年实现营业收入6.45亿元，同比上涨18.65%；归母净利润1.24 亿元，同比下降19.38%；扣非归母净利润1.19 亿元，同比下降15.16%。其中，2024 年第四季度营业收入1.82 亿元，同比增长38.50%；归母净利润0.40 亿元，同比增长58.59%；扣非归母净利润0.36 亿元，同比增长122.31%。我们认为单季业绩大幅改善主要系下游客户订单回暖带动。\n\n核心业务快速增长，海外拓展稳步推进2024 年，重组蛋白业务实现收入5.36 亿元，同比增长17.35%，占总营收比重83.05%，稳居核心业务地位。\n\n全年重组蛋白类产品累计销售4,167 款，同比增长19.26%。\n\n订单结构方面，50 万元以上的中高单值订单数量合计达225 单，占重组蛋白当期订单比重50.08%（同比提升3.18pct），表明公司产品逐步受到客户认可。\n\n速超过20%）。公司在欧洲和亚太等地新设多家海外子公司，销售网络已经覆盖全球主要国家和地区。此外，公司计划建立海外生产基地，提升全球多国多地的供应能力。\n\n聚焦CGT 原料体系构建，GMP 平台逐步落地2"
+    },
+    {
+      "paper_path": "./测试数据/附件5：研报数据/个股研报/集采助力产品放量，盈利能力逐步增强.pdf",
+      "text": "风险因素：市场需求提升不及预期；产品研发进度不及预期；市场竞争\n浙江大学硕士，曾就职于东阳光药先后任研发工程师及营销市场专员，具备优异的药物化学专业背景和医药市场经营运作经验，曾经就职于广证恒生和方正证券研究所负责医药团队卖方业务工作超9 年。\n\n贺鑫，医药业研究经验，2024 年加入信达证券，主要覆盖医疗服务、CX0、生命科学上游、中药等细分领域。\n\n曹佳琳，医药券，2023 年加入信达证券，负责医疗器械设备、体外诊断、ICL 等领域的研究工作。\n\n章钟涛，医药方正证券，2023 年加入信达证券，主要覆盖中药、医药商业&药店、疫苗。"
+    }
+  ],
+  "answer_rewritten": false,
+  "turn_answers": [
+    {
+      "Q": "百克生物2025年第三季度营业收入环比大幅增长，分析增长的主要驱动因素",
+      "A": {
+        "content": "**直接结论**  \n百克生物2025年第三季度营业总收入环比实现大幅增长，但当前结构化财务数据中大部分成本费用明细为空，无法直接通过费用或成本变动分析驱动因素。同时，未检索到直接针对百克生物2025年第三季度营收增长的研报证据。\n\n**财务数据支撑**  \n1. **环比增长确认**：根据财务视图数据，百克生物2025年第三季度营业总收入为 **47,444.28万元**（约4.74亿元，按1亿元=10,000万元换算），2025年第二季度为 **12,260.57万元**（约1.23亿元）。据此计算，环比增长率为 **286.97%**（计算值），而报表记录的环比增长率（`reported_qoq_growth_pct`）为54.60%，两者差异显著。  \n2. **其他财务指标**：当前SQL结果中，除研发费用率（`rnd_ratio`）下降16.77个百分点外，营业成本、销售费用、管理费用、财务费用、税金及附加等项目的环比变动值均为`null`，应收账款比率、存货周转率变动也为`null`。因此，无法从现有结构化数据中识别出成本费用端的具体驱动或拖累因素。\n\n**研报证据支撑**  \n未检索到直接针对百克生物2025年第三季度营业收入环比增长的研报证据。已提供的研报片段均涉及其他公司（如百普赛斯、成都先导、药明康德、迈普医学），不适用于百克生物的本问题分析。\n\n**综合判断**  \n1. **增长事实确认**：百克生物2025年第三季度营业总收入环比（较2025Q2）确实大幅提升，计算增幅达286.97%。  \n2. **驱动因素分析局限**：  \n   - 由于当前财务视图中多数成本费用明细字段为空，无法从结构化数据中分析是否由成本控制、费用优化或税收变化等因素驱动。  \n   - 研发费用率环比下降16.77个百分点，表明研发投入占比相对降低，但这可能是收入大幅增长导致的比率下降，而非营收增长的主因。  \n   - 缺乏针对百克生物的近期研报，无法获得关于其2025年第三季度营收增长的定性解释（如产品放量、市场需求、渠道拓展等）。  \n3. **结论**：百克生物2025年第三季度营业总收入环比大幅增长，但受限于数据覆盖，无法从现有财务明细和研报中明确识别增长的主要驱动因素。建议关注公司后续发布的季度报告或相关分析师评论以获取更深入的原因分析。",
+        "image": [],
+        "references": [
+          {
+            "paper_path": "./测试数据/附件5：研报数据/个股研报/公司简评报告：业绩表现亮眼，盈利能力显著提升.pdf",
+            "text": "HTTP://WWW.LONGONE.COM.CN请务必仔细阅读正文后的所有说明和声明\nHTTP://WWW.LONGONE.COM.CN请务必仔细阅读正文后的所有说明和声明\n\n速增长，境外市场表现亮眼 公司简评报告》 2024.04.25投资要点➢ 公司业绩表现亮眼。\n\n2025H1公司实现营业收入3.87亿元（同比+29.38%）、归母净利润8380万元（同比+47.81%）、扣非净利润8413万元（同比+45.82%）；\n\n其中，Q2单季度实现收入2.01亿元（同比+30.95%）、归母净利润4323万元（同比+66.10%）。\n\n2025H1公司毛利率和净利率分别为90.14%（同比-1.32pct）、21.53%（同比+3.58pct）。\n\n从费用来看，2025H1公司销售、管理、研发的费用率分别为29.69%、15.36%和23.26%，分别同比-2.60、-0.70、-2.86pct。\n\n公司业绩增长强劲主要由下游客户需求增长驱动，同时公司持续提高运营效率、优化费用率，盈利能力显著提升。\n\n分区域看，2025H1国内实现营收1.23亿元，同比增长36.65%，国内创新药研发投入明显增加，带动生物试剂需求大增。\n\n2025H1国外实现营收2.58亿元，同比增长22.94%，公司业务已成功拓展至全球近80个国家和地区，在北美、欧洲等海外成熟市场建设本地化团队和优化渠道，提"
+          },
+          {
+            "paper_path": "./测试数据/附件5：研报数据/个股研报/2025年前三季度业绩加速提升，核心业务和自研管线进展顺利.pdf",
+            "text": "相关研究报告《成都先导（688222.SH）-25Q2 收入和利润稳步提升，“DEL+AI+自动化”平台取得阶段性成果》 2025-08-31《成都先导（688222.SH）-核心业务稳步增长，“DEL+AI+自动化”助力新药研发》 2025-05-06《成都先导（688222.SH）-前三季度业绩稳步回升，“DEL+AI+自动化”打造新药研发新动能》 2024-11-052025 年前三季度收入和利润加速提升。\n\n公司2025 年前三季度实现营收3.70 亿元（+23.98%），归母净利润0.93 亿元（+208.34%），扣非归母净利润0.90 亿元（+420.30%）。\n\n2025 年单三季度营收1.43 亿元（+37.89%），主要由于报告期内核心业务板块收入稳步增长，以及DEL和FBDD/SBDD 板块项目取得阶段性进展，获得里程碑收入，归母净利润0.43 亿元（+114.98%），扣非归母净利润0.36 亿元（+137.09%）。\n\n核心业务板块商业项目增加，自研管线临床推进顺利。\n\n2025 年前三季度公司核心业务实现持续增长，通过与全球合作伙伴建立长期稳定的深度协作，商业项目按计划顺利推进，同时DEL 和FBDD/SBDD 板块交付客户的项目取得阶段性进展，获得项目的里程碑收入。\n\n除此之外，自研管线HG146 针对实体瘤的临床2 期研究推进顺利，仍在其他适应症中开",
+            "paper_image": "图1：成都先导营业收入及增速（单位：亿元、%）"
+          },
+          {
+            "paper_path": "./测试数据/附件5：研报数据/个股研报/2025投资者开放日主要亮点.pdf",
+            "text": "个分子复杂度增加（例如：多肽、寡核苷酸、偶联小分子药物），公\n财务报表分析与预测 - 药明康德（2359.HK）利润表现金流量表（百万人民币）",
+            "paper_image": "图表2：浦银国际目标价：药明康德H 股 (2359.HK)"
+          },
+          {
+            "paper_path": "./测试数据/附件5：研报数据/个股研报/百普赛斯年报点评：Q4业绩大幅改善，核心业务稳步推进.pdf",
+            "text": "百普赛斯年报点评：Q4 业绩大幅改善，核心业务稳步推进\n◼走势比较◼股票数据总股本/流通(亿股)\n\n相关研究报告<<业绩超预期，疫情不改快速增长，细胞因子助力重组蛋白收入扩容>>\n\n事件：近日，公司发布2024 年年度报告：2024 年实现营业收入6.45亿元，同比上涨18.65%；归母净利润1.24 亿元，同比下降19.38%；扣非归母净利润1.19 亿元，同比下降15.16%。其中，2024 年第四季度营业收入1.82 亿元，同比增长38.50%；归母净利润0.40 亿元，同比增长58.59%；扣非归母净利润0.36 亿元，同比增长122.31%。我们认为单季业绩大幅改善主要系下游客户订单回暖带动。\n\n核心业务快速增长，海外拓展稳步推进2024 年，重组蛋白业务实现收入5.36 亿元，同比增长17.35%，占总营收比重83.05%，稳居核心业务地位。\n\n全年重组蛋白类产品累计销售4,167 款，同比增长19.26%。\n\n订单结构方面，50 万元以上的中高单值订单数量合计达225 单，占重组蛋白当期订单比重50.08%（同比提升3.18pct），表明公司产品逐步受到客户认可。\n\n速超过20%）。公司在欧洲和亚太等地新设多家海外子公司，销售网络已经覆盖全球主要国家和地区。此外，公司计划建立海外生产基地，提升全球多国多地的供应能力。\n\n聚焦CGT 原料体系构建，GMP 平台逐步落地2"
+          },
+          {
+            "paper_path": "./测试数据/附件5：研报数据/个股研报/集采助力产品放量，盈利能力逐步增强.pdf",
+            "text": "风险因素：市场需求提升不及预期；产品研发进度不及预期；市场竞争\n浙江大学硕士，曾就职于东阳光药先后任研发工程师及营销市场专员，具备优异的药物化学专业背景和医药市场经营运作经验，曾经就职于广证恒生和方正证券研究所负责医药团队卖方业务工作超9 年。\n\n贺鑫，医药业研究经验，2024 年加入信达证券，主要覆盖医疗服务、CX0、生命科学上游、中药等细分领域。\n\n曹佳琳，医药券，2023 年加入信达证券，负责医疗器械设备、体外诊断、ICL 等领域的研究工作。\n\n章钟涛，医药方正证券，2023 年加入信达证券，主要覆盖中药、医药商业&药店、疫苗。"
+          }
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"百克生物2025年第三季度营业收入环比大幅增长，分析增长的主要驱动因素\", \"A\": {\"content\": \"**直接结论**  \\n百克生物2025年第三季度营业总收入环比实现大幅增长，但当前结构化财务数据中大部分成本费用明细为空，无法直接通过费用或成本变动分析驱动因素。同时，未检索到直接针对百克生物2025年第三季度营收增长的研报证据。\\n\\n**财务数据支撑**  \\n1. **环比增长确认**：根据财务视图数据，百克生物2025年第三季度营业总收入为 **47,444.28万元**（约4.74亿元，按1亿元=10,000万元换算），2025年第二季度为 **12,260.57万元**（约1.23亿元）。据此计算，环比增长率为 **286.97%**（计算值），而报表记录的环比增长率（`reported_qoq_growth_pct`）为54.60%，两者差异显著。  \\n2. **其他财务指标**：当前SQL结果中，除研发费用率（`rnd_ratio`）下降16.77个百分点外，营业成本、销售费用、管理费用、财务费用、税金及附加等项目的环比变动值均为`null`，应收账款比率、存货周转率变动也为`null`。因此，无法从现有结构化数据中识别出成本费用端的具体驱动或拖累因素。\\n\\n**研报证据支撑**  \\n未检索到直接针对百克生物2025年第三季度营业收入环比增长的研报证据。已提供的研报片段均涉及其他公司（如百普赛斯、成都先导、药明康德、迈普医学），不适用于百克生物的本问题分析。\\n\\n**综合判断**  \\n1. **增长事实确认**：百克生物2025年第三季度营业总收入环比（较2025Q2）确实大幅提升，计算增幅达286.97%。  \\n2. **驱动因素分析局限**：  \\n   - 由于当前财务视图中多数成本费用明细字段为空，无法从结构化数据中分析是否由成本控制、费用优化或税收变化等因素驱动。  \\n   - 研发费用率环比下降16.77个百分点，表明研发投入占比相对降低，但这可能是收入大幅增长导致的比率下降，而非营收增长的主因。  \\n   - 缺乏针对百克生物的近期研报，无法获得关于其2025年第三季度营收增长的定性解释（如产品放量、市场需求、渠道拓展等）。  \\n3. **结论**：百克生物2025年第三季度营业总收入环比大幅增长，但受限于数据覆盖，无法从现有财务明细和研报中明确识别增长的主要驱动因素。建议关注公司后续发布的季度报告或相关分析师评论以获取更深入的原因分析。\", \"image\": [], \"references\": [{\"paper_path\": \"./测试数据/附件5：研报数据/个股研报/公司简评报告：业绩表现亮眼，盈利能力显著提升.pdf\", \"text\": \"HTTP://WWW.LONGONE.COM.CN请务必仔细阅读正文后的所有说明和声明\\nHTTP://WWW.LONGONE.COM.CN请务必仔细阅读正文后的所有说明和声明\\n\\n速增长，境外市场表现亮眼 公司简评报告》 2024.04.25投资要点➢ 公司业绩表现亮眼。\\n\\n2025H1公司实现营业收入3.87亿元（同比+29.38%）、归母净利润8380万元（同比+47.81%）、扣非净利润8413万元（同比+45.82%）；\\n\\n其中，Q2单季度实现收入2.01亿元（同比+30.95%）、归母净利润4323万元（同比+66.10%）。\\n\\n2025H1公司毛利率和净利率分别为90.14%（同比-1.32pct）、21.53%（同比+3.58pct）。\\n\\n从费用来看，2025H1公司销售、管理、研发的费用率分别为29.69%、15.36%和23.26%，分别同比-2.60、-0.70、-2.86pct。\\n\\n公司业绩增长强劲主要由下游客户需求增长驱动，同时公司持续提高运营效率、优化费用率，盈利能力显著提升。\\n\\n分区域看，2025H1国内实现营收1.23亿元，同比增长36.65%，国内创新药研发投入明显增加，带动生物试剂需求大增。\\n\\n2025H1国外实现营收2.58亿元，同比增长22.94%，公司业务已成功拓展至全球近80个国家和地区，在北美、欧洲等海外成熟市场建设本地化团队和优化渠道，提\"}, {\"paper_path\": \"./测试数据/附件5：研报数据/个股研报/2025年前三季度业绩加速提升，核心业务和自研管线进展顺利.pdf\", \"text\": \"相关研究报告《成都先导（688222.SH）-25Q2 收入和利润稳步提升，“DEL+AI+自动化”平台取得阶段性成果》 2025-08-31《成都先导（688222.SH）-核心业务稳步增长，“DEL+AI+自动化”助力新药研发》 2025-05-06《成都先导（688222.SH）-前三季度业绩稳步回升，“DEL+AI+自动化”打造新药研发新动能》 2024-11-052025 年前三季度收入和利润加速提升。\\n\\n公司2025 年前三季度实现营收3.70 亿元（+23.98%），归母净利润0.93 亿元（+208.34%），扣非归母净利润0.90 亿元（+420.30%）。\\n\\n2025 年单三季度营收1.43 亿元（+37.89%），主要由于报告期内核心业务板块收入稳步增长，以及DEL和FBDD/SBDD 板块项目取得阶段性进展，获得里程碑收入，归母净利润0.43 亿元（+114.98%），扣非归母净利润0.36 亿元（+137.09%）。\\n\\n核心业务板块商业项目增加，自研管线临床推进顺利。\\n\\n2025 年前三季度公司核心业务实现持续增长，通过与全球合作伙伴建立长期稳定的深度协作，商业项目按计划顺利推进，同时DEL 和FBDD/SBDD 板块交付客户的项目取得阶段性进展，获得项目的里程碑收入。\\n\\n除此之外，自研管线HG146 针对实体瘤的临床2 期研究推进顺利，仍在其他适应症中开\", \"paper_image\": \"图1：成都先导营业收入及增速（单位：亿元、%）\"}, {\"paper_path\": \"./测试数据/附件5：研报数据/个股研报/2025投资者开放日主要亮点.pdf\", \"text\": \"个分子复杂度增加（例如：多肽、寡核苷酸、偶联小分子药物），公\\n财务报表分析与预测 - 药明康德（2359.HK）利润表现金流量表（百万人民币）\", \"paper_image\": \"图表2：浦银国际目标价：药明康德H 股 (2359.HK)\"}, {\"paper_path\": \"./测试数据/附件5：研报数据/个股研报/百普赛斯年报点评：Q4业绩大幅改善，核心业务稳步推进.pdf\", \"text\": \"百普赛斯年报点评：Q4 业绩大幅改善，核心业务稳步推进\\n◼走势比较◼股票数据总股本/流通(亿股)\\n\\n相关研究报告<<业绩超预期，疫情不改快速增长，细胞因子助力重组蛋白收入扩容>>\\n\\n事件：近日，公司发布2024 年年度报告：2024 年实现营业收入6.45亿元，同比上涨18.65%；归母净利润1.24 亿元，同比下降19.38%；扣非归母净利润1.19 亿元，同比下降15.16%。其中，2024 年第四季度营业收入1.82 亿元，同比增长38.50%；归母净利润0.40 亿元，同比增长58.59%；扣非归母净利润0.36 亿元，同比增长122.31%。我们认为单季业绩大幅改善主要系下游客户订单回暖带动。\\n\\n核心业务快速增长，海外拓展稳步推进2024 年，重组蛋白业务实现收入5.36 亿元，同比增长17.35%，占总营收比重83.05%，稳居核心业务地位。\\n\\n全年重组蛋白类产品累计销售4,167 款，同比增长19.26%。\\n\\n订单结构方面，50 万元以上的中高单值订单数量合计达225 单，占重组蛋白当期订单比重50.08%（同比提升3.18pct），表明公司产品逐步受到客户认可。\\n\\n速超过20%）。公司在欧洲和亚太等地新设多家海外子公司，销售网络已经覆盖全球主要国家和地区。此外，公司计划建立海外生产基地，提升全球多国多地的供应能力。\\n\\n聚焦CGT 原料体系构建，GMP 平台逐步落地2\"}, {\"paper_path\": \"./测试数据/附件5：研报数据/个股研报/集采助力产品放量，盈利能力逐步增强.pdf\", \"text\": \"风险因素：市场需求提升不及预期；产品研发进度不及预期；市场竞争\\n浙江大学硕士，曾就职于东阳光药先后任研发工程师及营销市场专员，具备优异的药物化学专业背景和医药市场经营运作经验，曾经就职于广证恒生和方正证券研究所负责医药团队卖方业务工作超9 年。\\n\\n贺鑫，医药业研究经验，2024 年加入信达证券，主要覆盖医疗服务、CX0、生命科学上游、中药等细分领域。\\n\\n曹佳琳，医药券，2023 年加入信达证券，负责医疗器械设备、体外诊断、ICL 等领域的研究工作。\\n\\n章钟涛，医药方正证券，2023 年加入信达证券，主要覆盖中药、医药商业&药店、疫苗。\"}]}}]",
+  "references_json": "[{\"paper_path\": \"./测试数据/附件5：研报数据/个股研报/公司简评报告：业绩表现亮眼，盈利能力显著提升.pdf\", \"text\": \"HTTP://WWW.LONGONE.COM.CN请务必仔细阅读正文后的所有说明和声明\\nHTTP://WWW.LONGONE.COM.CN请务必仔细阅读正文后的所有说明和声明\\n\\n速增长，境外市场表现亮眼 公司简评报告》 2024.04.25投资要点➢ 公司业绩表现亮眼。\\n\\n2025H1公司实现营业收入3.87亿元（同比+29.38%）、归母净利润8380万元（同比+47.81%）、扣非净利润8413万元（同比+45.82%）；\\n\\n其中，Q2单季度实现收入2.01亿元（同比+30.95%）、归母净利润4323万元（同比+66.10%）。\\n\\n2025H1公司毛利率和净利率分别为90.14%（同比-1.32pct）、21.53%（同比+3.58pct）。\\n\\n从费用来看，2025H1公司销售、管理、研发的费用率分别为29.69%、15.36%和23.26%，分别同比-2.60、-0.70、-2.86pct。\\n\\n公司业绩增长强劲主要由下游客户需求增长驱动，同时公司持续提高运营效率、优化费用率，盈利能力显著提升。\\n\\n分区域看，2025H1国内实现营收1.23亿元，同比增长36.65%，国内创新药研发投入明显增加，带动生物试剂需求大增。\\n\\n2025H1国外实现营收2.58亿元，同比增长22.94%，公司业务已成功拓展至全球近80个国家和地区，在北美、欧洲等海外成熟市场建设本地化团队和优化渠道，提\"}, {\"paper_path\": \"./测试数据/附件5：研报数据/个股研报/2025年前三季度业绩加速提升，核心业务和自研管线进展顺利.pdf\", \"text\": \"相关研究报告《成都先导（688222.SH）-25Q2 收入和利润稳步提升，“DEL+AI+自动化”平台取得阶段性成果》 2025-08-31《成都先导（688222.SH）-核心业务稳步增长，“DEL+AI+自动化”助力新药研发》 2025-05-06《成都先导（688222.SH）-前三季度业绩稳步回升，“DEL+AI+自动化”打造新药研发新动能》 2024-11-052025 年前三季度收入和利润加速提升。\\n\\n公司2025 年前三季度实现营收3.70 亿元（+23.98%），归母净利润0.93 亿元（+208.34%），扣非归母净利润0.90 亿元（+420.30%）。\\n\\n2025 年单三季度营收1.43 亿元（+37.89%），主要由于报告期内核心业务板块收入稳步增长，以及DEL和FBDD/SBDD 板块项目取得阶段性进展，获得里程碑收入，归母净利润0.43 亿元（+114.98%），扣非归母净利润0.36 亿元（+137.09%）。\\n\\n核心业务板块商业项目增加，自研管线临床推进顺利。\\n\\n2025 年前三季度公司核心业务实现持续增长，通过与全球合作伙伴建立长期稳定的深度协作，商业项目按计划顺利推进，同时DEL 和FBDD/SBDD 板块交付客户的项目取得阶段性进展，获得项目的里程碑收入。\\n\\n除此之外，自研管线HG146 针对实体瘤的临床2 期研究推进顺利，仍在其他适应症中开\", \"paper_image\": \"图1：成都先导营业收入及增速（单位：亿元、%）\"}, {\"paper_path\": \"./测试数据/附件5：研报数据/个股研报/2025投资者开放日主要亮点.pdf\", \"text\": \"个分子复杂度增加（例如：多肽、寡核苷酸、偶联小分子药物），公\\n财务报表分析与预测 - 药明康德（2359.HK）利润表现金流量表（百万人民币）\", \"paper_image\": \"图表2：浦银国际目标价：药明康德H 股 (2359.HK)\"}, {\"paper_path\": \"./测试数据/附件5：研报数据/个股研报/百普赛斯年报点评：Q4业绩大幅改善，核心业务稳步推进.pdf\", \"text\": \"百普赛斯年报点评：Q4 业绩大幅改善，核心业务稳步推进\\n◼走势比较◼股票数据总股本/流通(亿股)\\n\\n相关研究报告<<业绩超预期，疫情不改快速增长，细胞因子助力重组蛋白收入扩容>>\\n\\n事件：近日，公司发布2024 年年度报告：2024 年实现营业收入6.45亿元，同比上涨18.65%；归母净利润1.24 亿元，同比下降19.38%；扣非归母净利润1.19 亿元，同比下降15.16%。其中，2024 年第四季度营业收入1.82 亿元，同比增长38.50%；归母净利润0.40 亿元，同比增长58.59%；扣非归母净利润0.36 亿元，同比增长122.31%。我们认为单季业绩大幅改善主要系下游客户订单回暖带动。\\n\\n核心业务快速增长，海外拓展稳步推进2024 年，重组蛋白业务实现收入5.36 亿元，同比增长17.35%，占总营收比重83.05%，稳居核心业务地位。\\n\\n全年重组蛋白类产品累计销售4,167 款，同比增长19.26%。\\n\\n订单结构方面，50 万元以上的中高单值订单数量合计达225 单，占重组蛋白当期订单比重50.08%（同比提升3.18pct），表明公司产品逐步受到客户认可。\\n\\n速超过20%）。公司在欧洲和亚太等地新设多家海外子公司，销售网络已经覆盖全球主要国家和地区。此外，公司计划建立海外生产基地，提升全球多国多地的供应能力。\\n\\n聚焦CGT 原料体系构建，GMP 平台逐步落地2\"}, {\"paper_path\": \"./测试数据/附件5：研报数据/个股研报/集采助力产品放量，盈利能力逐步增强.pdf\", \"text\": \"风险因素：市场需求提升不及预期；产品研发进度不及预期；市场竞争\\n浙江大学硕士，曾就职于东阳光药先后任研发工程师及营销市场专员，具备优异的药物化学专业背景和医药市场经营运作经验，曾经就职于广证恒生和方正证券研究所负责医药团队卖方业务工作超9 年。\\n\\n贺鑫，医药业研究经验，2024 年加入信达证券，主要覆盖医疗服务、CX0、生命科学上游、中药等细分领域。\\n\\n曹佳琳，医药券，2023 年加入信达证券，负责医疗器械设备、体外诊断、ICL 等领域的研究工作。\\n\\n章钟涛，医药方正证券，2023 年加入信达证券，主要覆盖中药、医药商业&药店、疫苗。\"}]",
+  "notes": [
+    "route=causal_analysis",
+    "该查询旨在分析百克生物2025年第三季度营业收入环比增长的主要驱动因素。根据查询计划，需要针对特定公司（百克生物）和特定期间（2025Q3）进行分析。由于问题要求分析增长驱动因素，我设计了以下分析框架：\n1. 获取2025Q3和2025Q2两个季度的财务数据，以便进行环比比较。\n2. 计算营业收入的实际环比增长率，并与报表中已计算的增长率进行核对。\n3. 分析各项成本与费用的绝对变化，以及它们相对于Q2营业收入的变化百分比，这有助于识别是收入增长带动了成本同步变化，还是成本控制促进了利润增长。\n4. 考察研发费用比率、应收账款比率和存货周转率的变化，这些指标可能反映公司运营效率、信用政策或研发投入对收入增长的影响。\n5. 使用LEFT JOIN确保即使Q2数据缺失也能看到Q3数据，但通过WHERE子句过滤掉缺少Q2数据的情况，以确保环比计算的有效性。\n\n注意：由于financials_view中没有直接标识具体业务线或产品的字段（如疫苗销售、技术服务等），无法从业务结构角度进行更细粒度的驱动因素分析。本查询提供了从成本费用结构和运营效率角度分析收入增长驱动因素的基础数据。",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=8",
+    "rerank_strategy=reranker_model",
+    "rerank_kept=8",
+    "self_check={\"pass\": true, \"notes\": [\"1. 回答中的数字（如营业收入、环比增长率）与 SQL rows 中的数据完全一致。\", \"2. 回答正确指出 Evidences 中未包含百克生物2025年第三季度的相关研报，引用的研报均涉及其他公司，符合事实。\", \"3. 回答没有遗漏问题要求的关键点：确认了增长事实，并分析了驱动因素分析的局限性（数据缺失）。\", \"4. 回答没有混淆指标名称，正确使用了“营业总收入”等术语。\", \"5. 回答没有错误地将聚合统计结果对应到具体公司，因为 SQL rows 中只有百克生物一家的数据。\"]}"
+  ],
+  "final_status": "ok"
+}

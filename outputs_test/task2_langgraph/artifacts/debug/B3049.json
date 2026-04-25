@@ -1,0 +1,83 @@
+{
+  "question_id": "B3049",
+  "question_type": "数据统计分析查询",
+  "raw_question": "2025年第三季度，10家公司的研发费用总额占营业总收入总额的比例（整体研发费用率）",
+  "raw_question_json": "[{\"Q\":\"2025年第三季度，10家公司的研发费用总额占营业总收入总额的比例（整体研发费用率）\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入",
+      "研发费用"
+    ],
+    "chart_type": null,
+    "intent_type": "period_stat",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "period_stat",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "研发费用",
+      "营业总收入"
+    ],
+    "chart_type": null,
+    "top_n": 10,
+    "threshold": null,
+    "question": "2025年第三季度，10家公司的研发费用总额占营业总收入总额的比例（整体研发费用率）",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "WITH selected_companies AS (\n  SELECT stock_code, stock_abbr, operating_expense_rnd_expenses, total_operating_revenue\n  FROM financials_view\n  WHERE report_period = '2025Q3'\n  ORDER BY operating_expense_rnd_expenses DESC\n  LIMIT 10\n)\nSELECT \n  SUM(operating_expense_rnd_expenses) AS total_rnd_expenses,\n  SUM(total_operating_revenue) AS total_operating_revenue,\n  CASE \n    WHEN SUM(total_operating_revenue) = 0 THEN NULL\n    ELSE SUM(operating_expense_rnd_expenses) * 100.0 / SUM(total_operating_revenue)\n  END AS overall_rnd_expense_ratio_percent\nFROM selected_companies;",
+  "sql_history": [
+    "WITH selected_companies AS (\n  SELECT stock_code, stock_abbr, operating_expense_rnd_expenses, total_operating_revenue\n  FROM financials_view\n  WHERE report_period = '2025Q3'\n  ORDER BY operating_expense_rnd_expenses DESC\n  LIMIT 10\n)\nSELECT \n  SUM(operating_expense_rnd_expenses) AS total_rnd_expenses,\n  SUM(total_operating_revenue) AS total_operating_revenue,\n  CASE \n    WHEN SUM(total_operating_revenue) = 0 THEN NULL\n    ELSE SUM(operating_expense_rnd_expenses) * 100.0 / SUM(total_operating_revenue)\n  END AS overall_rnd_expense_ratio_percent\nFROM selected_companies;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 1,
+  "result_rows": [
+    {
+      "total_rnd_expenses": 825650.5231,
+      "total_operating_revenue": 32856716.50886,
+      "overall_rnd_expense_ratio_percent": 2.5128820248284964
+    }
+  ],
+  "context_companies": [],
+  "context_rows": [
+    {
+      "total_rnd_expenses": 825650.5231,
+      "total_operating_revenue": 32856716.50886,
+      "overall_rnd_expense_ratio_percent": 2.5128820248284964
+    }
+  ],
+  "result_preview": "[{\"total_rnd_expenses\":825650.5231,\"total_operating_revenue\":32856716.5088599995,\"overall_rnd_expense_ratio_percent\":2.5128820248}]",
+  "chart_plan": {},
+  "chart_spec": {},
+  "all_chart_specs": [],
+  "all_chart_paths": [],
+  "graph_formats": [],
+  "turn_answers": [
+    {
+      "Q": "2025年第三季度，10家公司的研发费用总额占营业总收入总额的比例（整体研发费用率）",
+      "A": {
+        "content": "2025年第三季度，这10家公司的研发费用总额为825,650.52万元，营业总收入总额为32,856,716.51万元，整体研发费用率约为2.51%。",
+        "image": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"2025年第三季度，10家公司的研发费用总额占营业总收入总额的比例（整体研发费用率）\", \"A\": {\"content\": \"2025年第三季度，这10家公司的研发费用总额为825,650.52万元，营业总收入总额为32,856,716.51万元，整体研发费用率约为2.51%。\", \"image\": []}}]",
+  "notes": [
+    "根据查询计划，需要计算2025Q3期间10家公司的研发费用总额占营业总收入总额的比例。由于查询计划中companies为空，但top_n为10，我理解为需要选取研发费用最高的10家公司（因为问题可能隐含了“10家公司”是指研发费用最高的10家）。首先筛选出2025Q3的数据，按研发费用降序取前10家，然后计算这10家公司的研发费用总和、营业总收入总和，以及整体研发费用率（以百分比形式表示）。"
+  ],
+  "final_status": "ok"
+}

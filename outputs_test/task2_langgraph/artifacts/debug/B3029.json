@@ -1,0 +1,113 @@
+{
+  "question_id": "B3029",
+  "question_type": "数据统计分析查询",
+  "raw_question": "2025年第三季度，资产-总资产同比增长率超过营业总收入同比增长率的公司有哪些？列出简称",
+  "raw_question_json": "[{\"Q\":\"2025年第三季度，资产-总资产同比增长率超过营业总收入同比增长率的公司有哪些？列出简称\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入",
+      "同比增长率"
+    ],
+    "chart_type": null,
+    "intent_type": "filter",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "filter",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "总资产同比增长率",
+      "营业总收入同比增长率"
+    ],
+    "chart_type": "table",
+    "top_n": null,
+    "threshold": null,
+    "question": "2025年第三季度，资产-总资产同比增长率超过营业总收入同比增长率的公司有哪些？列出简称",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": [],
+    "unsupported_metrics": [
+      "总资产同比增长率",
+      "营业总收入同比增长率"
+    ]
+  },
+  "sql": "SELECT DISTINCT stock_abbr FROM financials_view WHERE report_period = '2025Q3' AND asset_total_assets_yoy_growth > operating_revenue_yoy_growth",
+  "sql_history": [
+    "SELECT DISTINCT stock_abbr FROM financials_view WHERE report_period = '2025Q3' AND asset_total_assets_yoy_growth > operating_revenue_yoy_growth"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 5,
+  "result_rows": [
+    {
+      "stock_abbr": "迪安诊断"
+    },
+    {
+      "stock_abbr": "泰格医药"
+    },
+    {
+      "stock_abbr": "百诚医药"
+    },
+    {
+      "stock_abbr": "昭衍新药"
+    },
+    {
+      "stock_abbr": "百克生物"
+    }
+  ],
+  "context_companies": [
+    "迪安诊断",
+    "泰格医药",
+    "百诚医药",
+    "昭衍新药",
+    "百克生物"
+  ],
+  "context_rows": [
+    {
+      "stock_abbr": "迪安诊断"
+    },
+    {
+      "stock_abbr": "泰格医药"
+    },
+    {
+      "stock_abbr": "百诚医药"
+    },
+    {
+      "stock_abbr": "昭衍新药"
+    },
+    {
+      "stock_abbr": "百克生物"
+    }
+  ],
+  "result_preview": "[{\"stock_abbr\":\"迪安诊断\"},{\"stock_abbr\":\"泰格医药\"},{\"stock_abbr\":\"百诚医药\"},{\"stock_abbr\":\"昭衍新药\"},{\"stock_abbr\":\"百克生物\"}]",
+  "chart_plan": {},
+  "chart_spec": {},
+  "all_chart_specs": [],
+  "all_chart_paths": [],
+  "graph_formats": [],
+  "turn_answers": [
+    {
+      "Q": "2025年第三季度，资产-总资产同比增长率超过营业总收入同比增长率的公司有哪些？列出简称",
+      "A": {
+        "content": "根据查询结果，2025年第三季度，资产-总资产同比增长率超过营业总收入同比增长率的公司共有5家，其简称分别为：迪安诊断、泰格医药、百诚医药、昭衍新药、百克生物。",
+        "image": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"2025年第三季度，资产-总资产同比增长率超过营业总收入同比增长率的公司有哪些？列出简称\", \"A\": {\"content\": \"根据查询结果，2025年第三季度，资产-总资产同比增长率超过营业总收入同比增长率的公司共有5家，其简称分别为：迪安诊断、泰格医药、百诚医药、昭衍新药、百克生物。\", \"image\": []}}]",
+  "notes": [
+    "查询计划要求筛选2025Q3报告期，且资产-总资产同比增长率（对应asset_total_assets_yoy_growth）超过营业总收入同比增长率（对应operating_revenue_yoy_growth）的公司。由于query_plan.companies为空，表示全市场筛选，不应添加公司列表限制。直接使用WHERE条件比较两个增长率字段，并返回公司简称。"
+  ],
+  "final_status": "ok"
+}

@@ -1,0 +1,91 @@
+{
+  "database_url": "sqlite:////Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs_test/task1/task1_financials.db",
+  "input_manifest_sse": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs_test/task1/manifests/sse_reports_manifest.csv",
+  "input_manifest_szse": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs_test/task1/manifests/szse_reports_manifest.csv",
+  "sample_limit": null,
+  "summary": {
+    "total_records": 480,
+    "table_record_counts": {
+      "balance_sheet": 120,
+      "cash_flow_sheet": 120,
+      "core_performance_indicators_sheet": 120,
+      "income_sheet": 120
+    },
+    "avg_mapped_fields": {
+      "balance_sheet": 20.88,
+      "cash_flow_sheet": 17.88,
+      "core_performance_indicators_sheet": 19.39,
+      "income_sheet": 20.99
+    },
+    "validation_issue_counts": {
+      "cash_flow_sheet|warning": 14,
+      "core_performance_indicators_sheet|warning": 1
+    },
+    "table_avg_field_coverage": {
+      "balance_sheet": 0.9927,
+      "cash_flow_sheet": 0.9904,
+      "core_performance_indicators_sheet": 0.9594,
+      "income_sheet": 0.9995
+    },
+    "high_missing_fields": {},
+    "dominant_missing_reasons": {
+      "balance_sheet": [
+        {
+          "field_name": "liability_advance_from_customers",
+          "missing_count": 14,
+          "dominant_reason": "likely_extraction_gap"
+        }
+      ],
+      "cash_flow_sheet": [
+        {
+          "field_name": "net_cash_flow_yoy_growth",
+          "missing_count": 15,
+          "dominant_reason": "prior_period_value_unavailable"
+        }
+      ],
+      "core_performance_indicators_sheet": [
+        {
+          "field_name": "net_profit_excl_non_recurring_yoy",
+          "missing_count": 26,
+          "dominant_reason": "likely_extraction_gap"
+        },
+        {
+          "field_name": "net_profit_qoq_growth",
+          "missing_count": 22,
+          "dominant_reason": "likely_not_disclosed_in_source"
+        },
+        {
+          "field_name": "operating_revenue_qoq_growth",
+          "missing_count": 20,
+          "dominant_reason": "likely_not_disclosed_in_source"
+        },
+        {
+          "field_name": "net_asset_per_share",
+          "missing_count": 2,
+          "dominant_reason": "missing_share_basis"
+        },
+        {
+          "field_name": "operating_cf_per_share",
+          "missing_count": 2,
+          "dominant_reason": "upstream_cash_flow_missing"
+        },
+        {
+          "field_name": "eps",
+          "missing_count": 1,
+          "dominant_reason": "likely_extraction_gap"
+        }
+      ],
+      "income_sheet": [
+        {
+          "field_name": "asset_impairment_loss",
+          "missing_count": 1,
+          "dominant_reason": "likely_extraction_gap"
+        }
+      ]
+    }
+  },
+  "test_cash_flow_repairs": {
+    "override_near_zero_net_cash": true,
+    "relaxed_cash_flow_equation_validator": true
+  }
+}

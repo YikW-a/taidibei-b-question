@@ -1,0 +1,90 @@
+{
+  "question_id": "B3010",
+  "question_type": "数据基本查询",
+  "raw_question": "迪安诊断2025年第三季度扣非净利润是多少",
+  "raw_question_json": "[{\"Q\":\"迪安诊断2025年第三季度扣非净利润是多少\"}]",
+  "parsed_slots": {
+    "companies": [
+      "迪安诊断"
+    ],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "净利润",
+      "扣非净利润"
+    ],
+    "chart_type": null,
+    "intent_type": "single_company_metric",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "single_company_metric",
+    "companies": [
+      "迪安诊断"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "扣非净利润"
+    ],
+    "chart_type": null,
+    "top_n": null,
+    "threshold": null,
+    "question": "迪安诊断2025年第三季度扣非净利润是多少",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT stock_code, stock_abbr, report_period, net_profit_excl_non_recurring FROM financials_view WHERE stock_abbr = '迪安诊断' AND report_period = '2025Q3' LIMIT 1",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, report_period, net_profit_excl_non_recurring FROM financials_view WHERE stock_abbr = '迪安诊断' AND report_period = '2025Q3' LIMIT 1"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 1,
+  "result_rows": [
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "net_profit_excl_non_recurring": 4478.73404
+    }
+  ],
+  "context_companies": [
+    "迪安诊断"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "300244",
+      "stock_abbr": "迪安诊断",
+      "report_period": "2025Q3",
+      "net_profit_excl_non_recurring": 4478.73404
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"300244\",\"stock_abbr\":\"迪安诊断\",\"report_period\":\"2025Q3\",\"net_profit_excl_non_recurring\":4478.73404}]",
+  "chart_plan": {},
+  "chart_spec": {},
+  "all_chart_specs": [],
+  "all_chart_paths": [],
+  "graph_formats": [],
+  "turn_answers": [
+    {
+      "Q": "迪安诊断2025年第三季度扣非净利润是多少",
+      "A": {
+        "content": "迪安诊断（股票代码：300244）在2025年第三季度的扣非净利润为4478.73万元。",
+        "image": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"迪安诊断2025年第三季度扣非净利润是多少\", \"A\": {\"content\": \"迪安诊断（股票代码：300244）在2025年第三季度的扣非净利润为4478.73万元。\", \"image\": []}}]",
+  "notes": [
+    "根据查询计划，需要查询迪安诊断在2025年第三季度的扣非净利润。对应字段为 net_profit_excl_non_recurring，报告期格式为2025Q3。"
+  ],
+  "final_status": "ok"
+}

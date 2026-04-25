@@ -1,0 +1,110 @@
+[
+  {
+    "chunk_id": "stock::重组蛋白专家，科研试剂新星::p1::body::1",
+    "source_type": "stock",
+    "chunk_type": "body",
+    "title": "重组蛋白专家，科研试剂新星",
+    "company": "百普赛斯",
+    "industry": "医疗服务",
+    "page_start": 1,
+    "page_end": 1,
+    "section_title": "",
+    "subsection_title": "",
+    "figure_table_refs": [],
+    "content_source": "pdf_page",
+    "char_count": 88,
+    "text_preview": "重组蛋白专家，科研试剂新星走势比较\n\n报告摘要深耕重组蛋白多年，赋能医药研发。百普赛斯成立于2010 年，是一家专业提供重组蛋白、抗体等关键生物试剂产品及技术服务的高新技术企"
+  },
+  {
+    "chunk_id": "stock::重组蛋白专家，科研试剂新星::p5::visual::3",
+    "source_type": "stock",
+    "chunk_type": "visual_caption",
+    "title": "重组蛋白专家，科研试剂新星",
+    "company": "百普赛斯",
+    "industry": "医疗服务",
+    "page_start": 5,
+    "page_end": 5,
+    "section_title": "",
+    "subsection_title": "(一)深耕重组蛋白多年，公司股权结构清晰",
+    "figure_table_refs": [
+      {
+        "label": "图表1",
+        "kind": "figure",
+        "caption": "公司业务遍及全球、客户类型多元"
+      }
+    ],
+    "content_source": "pdf_page",
+    "char_count": 19,
+    "text_preview": "图表1：公司业务遍及全球、客户类型多元"
+  },
+  {
+    "chunk_id": "industry::2025年中国智能化健康管理行业研究报告::p1::body::1",
+    "source_type": "industry",
+    "chunk_type": "body",
+    "title": "2025年中国智能化健康管理行业研究报告",
+    "company": "",
+    "industry": "医疗服务",
+    "page_start": 1,
+    "page_end": 1,
+    "section_title": "",
+    "subsection_title": "",
+    "figure_table_refs": [],
+    "content_source": "pdf_page",
+    "char_count": 116,
+    "text_preview": "2025 年中国智能化健康管理行业研究报告亿欧智库https://www.iyiou.com/researchCopyright reserved to Equal Ocean Intelligence, December 2025"
+  },
+  {
+    "chunk_id": "industry::量子技术：健康与医疗保健领导者的战略要务::p16::visual::2",
+    "source_type": "industry",
+    "chunk_type": "visual_caption",
+    "title": "量子技术：健康与医疗保健领导者的战略要务",
+    "company": "",
+    "industry": "医疗服务",
+    "page_start": 16,
+    "page_end": 16,
+    "section_title": "健康与医疗保健领导者的战略要务：量子技术：16",
+    "subsection_title": "",
+    "figure_table_refs": [
+      {
+        "label": "表7",
+        "kind": "table",
+        "caption": "包括一组已在美国投入商业和早期临床应用的量子"
+      }
+    ],
+    "content_source": "pdf_page",
+    "char_count": 24,
+    "text_preview": "表7包括一组已在美国投入商业和早期临床应用的量子"
+  },
+  {
+    "chunk_id": "stock::重组蛋白专家，科研试剂新星::p1::body::2",
+    "source_type": "stock",
+    "chunk_type": "body",
+    "title": "重组蛋白专家，科研试剂新星",
+    "company": "百普赛斯",
+    "industry": "医疗服务",
+    "page_start": 1,
+    "page_end": 1,
+    "section_title": "业，主要业务包括：重组蛋白、抗体试剂盒及其他试剂、技术服务。公司",
+    "subsection_title": "",
+    "figure_table_refs": [],
+    "content_source": "pdf_page",
+    "char_count": 873,
+    "text_preview": "业，主要业务包括：重组蛋白、抗体试剂盒及其他试剂、技术服务。公司\n是重组蛋白行业内中的主要生产供应商之一，业务实现全球化布局，覆盖全球70 个国家，累计服务客户超11000 家。\n\n科研试剂市场不断扩容，内资逐步实现进口替代。\n\n研发的持续投入是医药创新的重要驱动力，预计2030 年全球及中国医药研发市场规模分别为4177、766 亿美元。\n\n医药研发的持续投入推动科研试剂市场规模不断扩容，2024 年全球及中国科研试剂市场规模已增长到"
+  },
+  {
+    "chunk_id": "stock::重组蛋白专家，科研试剂新星::p1::body::3",
+    "source_type": "stock",
+    "chunk_type": "body",
+    "title": "重组蛋白专家，科研试剂新星",
+    "company": "百普赛斯",
+    "industry": "医疗服务",
+    "page_start": 1,
+    "page_end": 1,
+    "section_title": "风险提示：中美贸易战、汇率波动、存货减值、研发进度不及预期、",
+    "subsection_title": "",
+    "figure_table_refs": [],
+    "content_source": "pdf_page",
+    "char_count": 52,
+    "text_preview": "风险提示：中美贸易战、汇率波动、存货减值、研发进度不及预期、\n市场竞争加剧、工业客户需求不及预期等风险。"
+  }
+]

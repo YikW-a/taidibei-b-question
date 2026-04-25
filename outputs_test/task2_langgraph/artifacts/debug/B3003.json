@@ -1,0 +1,195 @@
+{
+  "question_id": "B3003",
+  "question_type": "数据统计分析查询",
+  "raw_question": "2025年第三季度，10家医药公司中营业总收入排名前3的公司有哪些？请列出简称和营业总收入（万元）",
+  "raw_question_json": "[{\"Q\":\"2025年第三季度，10家医药公司中营业总收入排名前3的公司有哪些？请列出简称和营业总收入（万元）\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入"
+    ],
+    "chart_type": null,
+    "intent_type": "ranking",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "ranking",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入"
+    ],
+    "chart_type": "table",
+    "top_n": 3,
+    "threshold": null,
+    "question": "2025年第三季度，10家医药公司中营业总收入排名前3的公司有哪些？请列出简称和营业总收入（万元）",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT stock_abbr, total_operating_revenue FROM financials_view WHERE report_period = '2025Q3' ORDER BY total_operating_revenue DESC LIMIT 3",
+  "sql_history": [
+    "SELECT stock_abbr, total_operating_revenue FROM financials_view WHERE report_period = '2025Q3' ORDER BY total_operating_revenue DESC LIMIT 3"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 3,
+  "result_rows": [
+    {
+      "stock_abbr": "药明康德",
+      "total_operating_revenue": 3285671.650886
+    },
+    {
+      "stock_abbr": "药明康德",
+      "total_operating_revenue": 3285671.650886
+    },
+    {
+      "stock_abbr": "药明康德",
+      "total_operating_revenue": 3285671.650886
+    }
+  ],
+  "context_companies": [
+    "药明康德"
+  ],
+  "context_rows": [
+    {
+      "stock_abbr": "药明康德",
+      "total_operating_revenue": 3285671.650886
+    },
+    {
+      "stock_abbr": "药明康德",
+      "total_operating_revenue": 3285671.650886
+    },
+    {
+      "stock_abbr": "药明康德",
+      "total_operating_revenue": 3285671.650886
+    }
+  ],
+  "result_preview": "[{\"stock_abbr\":\"药明康德\",\"total_operating_revenue\":3285671.6508860001},{\"stock_abbr\":\"药明康德\",\"total_operating_revenue\":3285671.6508860001},{\"stock_abbr\":\"药明康德\",\"total_operating_revenue\":3285671.6508860001}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2025年第三季度营业总收入前三名",
+    "x_field": null,
+    "y_fields": [
+      "total_operating_revenue"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": null,
+    "sort_ascending": false,
+    "top_n": 3,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B3003",
+    "image_index": 1,
+    "chart_type": "bar",
+    "title": "2025年第三季度营业总收入前三名",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 3,
+      "preview_rows": [
+        {
+          "stock_abbr": "药明康德",
+          "total_operating_revenue": 3285671.650886
+        },
+        {
+          "stock_abbr": "药明康德",
+          "total_operating_revenue": 3285671.650886
+        },
+        {
+          "stock_abbr": "药明康德",
+          "total_operating_revenue": 3285671.650886
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": null,
+      "sort_ascending": false,
+      "top_n": 3,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "total_operating_revenue",
+        "data_type": "quantitative",
+        "label": "营业总收入",
+        "unit": "万元"
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": true
+    },
+    "output": {
+      "filename": "B3003_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B3003_1.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT stock_abbr, total_operating_revenue FROM financials_view WHERE report_period = '2025Q3' ORDER BY total_operating_revenue DESC LIMIT 3",
+      "value_fields": [
+        "total_operating_revenue"
+      ],
+      "value_labels": [
+        "营业总收入"
+      ],
+      "original_chart_plan": {
+        "chart_type": "bar",
+        "x_field": null,
+        "y_fields": [
+          "total_operating_revenue"
+        ],
+        "category_field": "stock_abbr",
+        "sort_by": null,
+        "sort_ascending": false,
+        "top_n": 3
+      },
+      "category_aggregate": "max"
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs_test/task2_langgraph/artifacts/chart_specs/B3003_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B3003_1.jpg"
+  ],
+  "graph_formats": [
+    "柱状图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "2025年第三季度，10家医药公司中营业总收入排名前3的公司有哪些？请列出简称和营业总收入（万元）",
+      "A": {
+        "content": "根据查询结果，2025年第三季度，在10家医药公司中，营业总收入排名前三的公司均为药明康德，其营业总收入为3,285,671.65万元。",
+        "image": [
+          "./result/B3003_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"2025年第三季度，10家医药公司中营业总收入排名前3的公司有哪些？请列出简称和营业总收入（万元）\", \"A\": {\"content\": \"根据查询结果，2025年第三季度，在10家医药公司中，营业总收入排名前三的公司均为药明康德，其营业总收入为3,285,671.65万元。\", \"image\": [\"./result/B3003_1.jpg\"]}}]",
+  "notes": [
+    "根据查询计划，意图是排名，报告期为2025Q3，指标为营业总收入，top_n为3。查询计划中companies为空列表，表示问题中的'10家医药公司'是泛指或上下文已知，不应在SQL中硬编码公司列表。因此直接按total_operating_revenue降序取前3名，并返回简称和营业总收入。"
+  ],
+  "final_status": "ok"
+}

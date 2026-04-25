@@ -1,0 +1,90 @@
+{
+  "question_id": "B3014",
+  "question_type": "数据基本查询",
+  "raw_question": "成都先导2025年第三季度研发费用占营业总收入的比例（%）",
+  "raw_question_json": "[{\"Q\":\"成都先导2025年第三季度研发费用占营业总收入的比例（%）\"}]",
+  "parsed_slots": {
+    "companies": [
+      "成都先导"
+    ],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入",
+      "研发费用"
+    ],
+    "chart_type": null,
+    "intent_type": "single_company_metric",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "single_company_metric",
+    "companies": [
+      "成都先导"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "研发费用占比"
+    ],
+    "chart_type": null,
+    "top_n": null,
+    "threshold": null,
+    "question": "成都先导2025年第三季度研发费用占营业总收入的比例（%）",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT stock_code, stock_abbr, report_period, rnd_expense_ratio FROM financials_view WHERE stock_abbr = '成都先导' AND report_period = '2025Q3' LIMIT 1;",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, report_period, rnd_expense_ratio FROM financials_view WHERE stock_abbr = '成都先导' AND report_period = '2025Q3' LIMIT 1;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 1,
+  "result_rows": [
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "rnd_expense_ratio": 11.737115947640081
+    }
+  ],
+  "context_companies": [
+    "成都先导"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "rnd_expense_ratio": 11.737115947640081
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"688222\",\"stock_abbr\":\"成都先导\",\"report_period\":\"2025Q3\",\"rnd_expense_ratio\":11.7371159476}]",
+  "chart_plan": {},
+  "chart_spec": {},
+  "all_chart_specs": [],
+  "all_chart_paths": [],
+  "graph_formats": [],
+  "turn_answers": [
+    {
+      "Q": "成都先导2025年第三季度研发费用占营业总收入的比例（%）",
+      "A": {
+        "content": "成都先导（股票代码 688222）在 2025 年第三季度的研发费用占营业总收入的比例为 11.74%。",
+        "image": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"成都先导2025年第三季度研发费用占营业总收入的比例（%）\", \"A\": {\"content\": \"成都先导（股票代码 688222）在 2025 年第三季度的研发费用占营业总收入的比例为 11.74%。\", \"image\": []}}]",
+  "notes": [
+    "根据查询计划，需要查询成都先导在2025Q3的研发费用占比。视图中有现成的字段 rnd_expense_ratio，它代表研发费用占营业总收入的比例，且通常以百分比值存储。因此直接查询该字段即可。"
+  ],
+  "final_status": "ok"
+}

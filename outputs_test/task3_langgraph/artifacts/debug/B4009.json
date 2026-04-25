@@ -1,0 +1,261 @@
+{
+  "question_id": "B4009",
+  "question_type": "融合查询",
+  "raw_question": "查询昭衍新药2025年第三季度境外收入占比及营业总收入同比增长率",
+  "raw_question_json": "[{\"Q\":\"查询昭衍新药2025年第三季度境外收入占比及营业总收入同比增长率\"}]",
+  "parsed_slots": {
+    "companies": [
+      "昭衍新药"
+    ],
+    "stock_codes": [],
+    "metrics": [
+      "营业总收入"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "focus_topics": [],
+    "intent_type": "sql_only",
+    "needs_sql": true,
+    "needs_retrieval": false,
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "sql_only",
+    "companies": [
+      "昭衍新药"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入"
+    ],
+    "needs_sql": true,
+    "top_n": null,
+    "threshold": null,
+    "question": "查询昭衍新药2025年第三季度境外收入占比及营业总收入同比增长率"
+  },
+  "retrieval_plan": {
+    "question": "查询昭衍新药2025年第三季度境外收入占比及营业总收入同比增长率",
+    "companies": [
+      "昭衍新药"
+    ],
+    "focus_topics": [
+      "主营业务收入",
+      "营业总收入",
+      "收入增长"
+    ],
+    "needs_retrieval": false,
+    "top_k": 0,
+    "source_scope": "stock",
+    "retrieval_mode": "hybrid"
+  },
+  "sql": "SELECT stock_code, stock_abbr, report_period, total_operating_revenue, operating_revenue_yoy_growth FROM financials_view WHERE stock_abbr = '昭衍新药' AND report_period = '2025Q3';",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, report_period, total_operating_revenue, operating_revenue_yoy_growth FROM financials_view WHERE stock_abbr = '昭衍新药' AND report_period = '2025Q3';"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 16,
+  "result_rows": [
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 98496.152976,
+      "operating_revenue_yoy_growth": -26.22873337802613
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 98496.152976,
+      "operating_revenue_yoy_growth": -26.22873337802613
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 98496.152976,
+      "operating_revenue_yoy_growth": -26.22873337802613
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 98496.152976,
+      "operating_revenue_yoy_growth": -26.22873337802613
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 98496.152976,
+      "operating_revenue_yoy_growth": -26.22873337802613
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 98496.152976,
+      "operating_revenue_yoy_growth": -26.22873337802613
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 98496.152976,
+      "operating_revenue_yoy_growth": -26.22873337802613
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 98496.152976,
+      "operating_revenue_yoy_growth": -26.22873337802613
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 98496.152976,
+      "operating_revenue_yoy_growth": -26.22873337802613
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 98496.152976,
+      "operating_revenue_yoy_growth": -26.22873337802613
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 98496.152976,
+      "operating_revenue_yoy_growth": -26.22873337802613
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 98496.152976,
+      "operating_revenue_yoy_growth": -26.22873337802613
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 98496.152976,
+      "operating_revenue_yoy_growth": -26.22873337802613
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 98496.152976,
+      "operating_revenue_yoy_growth": -26.22873337802613
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 98496.152976,
+      "operating_revenue_yoy_growth": -26.22873337802613
+    },
+    {
+      "stock_code": "603127",
+      "stock_abbr": "昭衍新药",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 98496.152976,
+      "operating_revenue_yoy_growth": -26.22873337802613
+    }
+  ],
+  "retrieved_evidence": [],
+  "reranked_evidence": [],
+  "rerank_preview": "{\"strategy\": \"skipped_fast_path\", \"kept_count\": 0}",
+  "fused_context": {
+    "question": "查询昭衍新药2025年第三季度境外收入占比及营业总收入同比增长率",
+    "sql_row_count": 16,
+    "evidence_count": 0,
+    "sql_preview": [
+      {
+        "stock_code": "603127",
+        "stock_abbr": "昭衍新药",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 98496.152976,
+        "operating_revenue_yoy_growth": -26.22873337802613
+      },
+      {
+        "stock_code": "603127",
+        "stock_abbr": "昭衍新药",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 98496.152976,
+        "operating_revenue_yoy_growth": -26.22873337802613
+      },
+      {
+        "stock_code": "603127",
+        "stock_abbr": "昭衍新药",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 98496.152976,
+        "operating_revenue_yoy_growth": -26.22873337802613
+      },
+      {
+        "stock_code": "603127",
+        "stock_abbr": "昭衍新药",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 98496.152976,
+        "operating_revenue_yoy_growth": -26.22873337802613
+      },
+      {
+        "stock_code": "603127",
+        "stock_abbr": "昭衍新药",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 98496.152976,
+        "operating_revenue_yoy_growth": -26.22873337802613
+      }
+    ],
+    "evidence_preview": [],
+    "evidence_titles": [],
+    "source_breakdown": {}
+  },
+  "self_check": {
+    "pass": true,
+    "notes": [
+      "self_check_skipped_fast_path"
+    ]
+  },
+  "chart_plan": {},
+  "chart_spec": {},
+  "current_chart_paths": [],
+  "current_chart_specs": [],
+  "current_answer": "根据提供的 SQL 查询结果，针对昭衍新药2025年第三季度的数据，回答如下：\n\n**直接结论：**\n1.  **营业总收入同比增长率**：昭衍新药2025年第三季度的营业总收入同比增长率为 **-26.23%**。\n2.  **境外收入占比**：当前结构化数据无法直接支持该口径。SQL 查询结果中未包含“境外收入”或相关占比字段，因此无法提供昭衍新药2025年第三季度的境外收入占比数据。\n\n**财务数据支撑：**\n- 根据 `financials_view` 视图数据，昭衍新药（股票代码：603127）在2025年第三季度（`report_period`：2025Q3）的营业总收入（`total_operating_revenue`）为 **98,496.15 万元**。按照1亿元 = 10,000万元的换算关系，约合 **9.85 亿元**。\n- 该季度的营业总收入同比增长率（`operating_revenue_yoy_growth`）为 **-26.23%**，表明其营业总收入较上年同期有所下降。\n\n**研报证据支撑：**\n未检索到直接研报证据。\n\n**综合判断：**\n基于现有财务数据，昭衍新药在2025年第三季度营业总收入出现同比下滑，增长率为负。然而，关于问题中提及的“境外收入占比”，当前数据库中的结构化财务视图未提供相应字段，因此无法进行计算或展示。如需了解该细分业务口径的详情，可能需要查阅公司定期报告或相关研报的详细分析。",
+  "current_references": [],
+  "answer_rewritten": false,
+  "turn_answers": [
+    {
+      "Q": "查询昭衍新药2025年第三季度境外收入占比及营业总收入同比增长率",
+      "A": {
+        "content": "根据提供的 SQL 查询结果，针对昭衍新药2025年第三季度的数据，回答如下：\n\n**直接结论：**\n1.  **营业总收入同比增长率**：昭衍新药2025年第三季度的营业总收入同比增长率为 **-26.23%**。\n2.  **境外收入占比**：当前结构化数据无法直接支持该口径。SQL 查询结果中未包含“境外收入”或相关占比字段，因此无法提供昭衍新药2025年第三季度的境外收入占比数据。\n\n**财务数据支撑：**\n- 根据 `financials_view` 视图数据，昭衍新药（股票代码：603127）在2025年第三季度（`report_period`：2025Q3）的营业总收入（`total_operating_revenue`）为 **98,496.15 万元**。按照1亿元 = 10,000万元的换算关系，约合 **9.85 亿元**。\n- 该季度的营业总收入同比增长率（`operating_revenue_yoy_growth`）为 **-26.23%**，表明其营业总收入较上年同期有所下降。\n\n**研报证据支撑：**\n未检索到直接研报证据。\n\n**综合判断：**\n基于现有财务数据，昭衍新药在2025年第三季度营业总收入出现同比下滑，增长率为负。然而，关于问题中提及的“境外收入占比”，当前数据库中的结构化财务视图未提供相应字段，因此无法进行计算或展示。如需了解该细分业务口径的详情，可能需要查阅公司定期报告或相关研报的详细分析。",
+        "image": [],
+        "references": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"查询昭衍新药2025年第三季度境外收入占比及营业总收入同比增长率\", \"A\": {\"content\": \"根据提供的 SQL 查询结果，针对昭衍新药2025年第三季度的数据，回答如下：\\n\\n**直接结论：**\\n1.  **营业总收入同比增长率**：昭衍新药2025年第三季度的营业总收入同比增长率为 **-26.23%**。\\n2.  **境外收入占比**：当前结构化数据无法直接支持该口径。SQL 查询结果中未包含“境外收入”或相关占比字段，因此无法提供昭衍新药2025年第三季度的境外收入占比数据。\\n\\n**财务数据支撑：**\\n- 根据 `financials_view` 视图数据，昭衍新药（股票代码：603127）在2025年第三季度（`report_period`：2025Q3）的营业总收入（`total_operating_revenue`）为 **98,496.15 万元**。按照1亿元 = 10,000万元的换算关系，约合 **9.85 亿元**。\\n- 该季度的营业总收入同比增长率（`operating_revenue_yoy_growth`）为 **-26.23%**，表明其营业总收入较上年同期有所下降。\\n\\n**研报证据支撑：**\\n未检索到直接研报证据。\\n\\n**综合判断：**\\n基于现有财务数据，昭衍新药在2025年第三季度营业总收入出现同比下滑，增长率为负。然而，关于问题中提及的“境外收入占比”，当前数据库中的结构化财务视图未提供相应字段，因此无法进行计算或展示。如需了解该细分业务口径的详情，可能需要查阅公司定期报告或相关研报的详细分析。\", \"image\": [], \"references\": []}}]",
+  "references_json": "[]",
+  "notes": [
+    "route=sql_only",
+    "根据查询计划，需要查询昭衍新药2025年第三季度的营业总收入同比增长率。在financials_view中，operating_revenue_yoy_growth字段对应营业总收入同比增长率。但是，表中没有直接提供'境外收入占比'这个字段。根据要求第12条，如果schema中没有对应字段，不能擅自用其他字段代替。因此，只能查询可用的字段。",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=0",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=0",
+    "self_check={\"pass\": true, \"notes\": [\"self_check_skipped_fast_path\"]}"
+  ],
+  "final_status": "ok"
+}

@@ -1,0 +1,97 @@
+{
+  "question_id": "B3016",
+  "question_type": "数据基本查询",
+  "raw_question": "百普赛斯2025年第三季度货币资金占总资产的比例是多少",
+  "raw_question_json": "[{\"Q\":\"百普赛斯2025年第三季度货币资金占总资产的比例是多少\"}]",
+  "parsed_slots": {
+    "companies": [
+      "百普赛斯"
+    ],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "货币资金"
+    ],
+    "chart_type": null,
+    "intent_type": "single_company_metric",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "single_company_metric",
+    "companies": [
+      "百普赛斯"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "货币资金",
+      "总资产"
+    ],
+    "chart_type": null,
+    "top_n": null,
+    "threshold": null,
+    "question": "百普赛斯2025年第三季度货币资金占总资产的比例是多少",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": [],
+    "unsupported_metrics": [
+      "总资产"
+    ]
+  },
+  "sql": "SELECT stock_code, stock_abbr, report_period, asset_cash_and_cash_equivalents, asset_total_assets, (asset_cash_and_cash_equivalents * 100.0 / asset_total_assets) AS cash_to_total_assets_ratio_percent FROM financials_view WHERE stock_abbr = '百普赛斯' AND report_period = '2025Q3' LIMIT 1;",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, report_period, asset_cash_and_cash_equivalents, asset_total_assets, (asset_cash_and_cash_equivalents * 100.0 / asset_total_assets) AS cash_to_total_assets_ratio_percent FROM financials_view WHERE stock_abbr = '百普赛斯' AND report_period = '2025Q3' LIMIT 1;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 1,
+  "result_rows": [
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2025Q3",
+      "asset_cash_and_cash_equivalents": 153046.68864,
+      "asset_total_assets": 292976.98387,
+      "cash_to_total_assets_ratio_percent": 52.23846822995147
+    }
+  ],
+  "context_companies": [
+    "百普赛斯"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2025Q3",
+      "asset_cash_and_cash_equivalents": 153046.68864,
+      "asset_total_assets": 292976.98387,
+      "cash_to_total_assets_ratio_percent": 52.23846822995147
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"301080\",\"stock_abbr\":\"百普赛斯\",\"report_period\":\"2025Q3\",\"asset_cash_and_cash_equivalents\":153046.68864,\"asset_total_assets\":292976.98387,\"cash_to_total_assets_ratio_percent\":52.23846823}]",
+  "chart_plan": {},
+  "chart_spec": {},
+  "all_chart_specs": [],
+  "all_chart_paths": [],
+  "graph_formats": [],
+  "turn_answers": [
+    {
+      "Q": "百普赛斯2025年第三季度货币资金占总资产的比例是多少",
+      "A": {
+        "content": "百普赛斯（股票代码 301080）在 2025 年第三季度，货币资金占总资产的比例为 52.24%。",
+        "image": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"百普赛斯2025年第三季度货币资金占总资产的比例是多少\", \"A\": {\"content\": \"百普赛斯（股票代码 301080）在 2025 年第三季度，货币资金占总资产的比例为 52.24%。\", \"image\": []}}]",
+  "notes": [
+    "根据查询计划，需要查询百普赛斯公司在2025Q3的货币资金和总资产。货币资金对应字段为asset_cash_and_cash_equivalents，总资产对应asset_total_assets。计算比例并乘以100以百分比形式展示。"
+  ],
+  "final_status": "ok"
+}

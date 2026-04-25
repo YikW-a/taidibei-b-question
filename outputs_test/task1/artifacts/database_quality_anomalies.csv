@@ -1,0 +1,17 @@
+﻿table_name,record_key,source_name,field_name,value,anomaly_type
+cash_flow_sheet,603127|2023Q3|2023,603127_20231031_5CXP.pdf,operating_cf_ratio_of_net_cf,-5472.2643123852595,percentage_outlier
+cash_flow_sheet,603127|2023Q3|2023,603127_20231031_5CXP.pdf,investing_cf_ratio_of_net_cf,1673.5982615819169,percentage_outlier
+cash_flow_sheet,603127|2023Q3|2023,603127_20231031_5CXP.pdf,financing_cf_ratio_of_net_cf,4067.089675803032,percentage_outlier
+cash_flow_sheet,603127|2024Q1|2024,603127_20240430_LFA5.pdf,operating_cf_ratio_of_net_cf,1028.1323338794014,percentage_outlier
+cash_flow_sheet,603259|2022FY|2022,603259_20230321_1G8R.pdf,investing_cf_ratio_of_net_cf,5062.007029162446,percentage_outlier
+cash_flow_sheet,603259|2024H1|2024,603259_20240730_A65N.pdf,investing_cf_ratio_of_net_cf,-1868.2651274411196,percentage_outlier
+cash_flow_sheet,603259|2024H1|2024,603259_20240730_A65N.pdf,financing_cf_ratio_of_net_cf,1951.9875866583188,percentage_outlier
+cash_flow_sheet,603259|2024Q3|2024,603259_20241029_5CER.pdf,operating_cf_ratio_of_net_cf,-1148.7082448577783,percentage_outlier
+cash_flow_sheet,002821|2023FY|2023,凯莱英：2023年年度报告.pdf,operating_cf_ratio_of_net_cf,1004.3553681951589,percentage_outlier
+cash_flow_sheet,002821|2024Q1|2024,凯莱英：2024年一季度报告.pdf,operating_cf_ratio_of_net_cf,16042.925049951114,percentage_outlier
+cash_flow_sheet,002821|2024Q1|2024,凯莱英：2024年一季度报告.pdf,investing_cf_ratio_of_net_cf,-9305.438352641882,percentage_outlier
+cash_flow_sheet,002821|2024Q1|2024,凯莱英：2024年一季度报告.pdf,financing_cf_ratio_of_net_cf,-7150.330504221245,percentage_outlier
+cash_flow_sheet,301096|2025H1|2025,百诚医药：2025年半年度报告.pdf,financing_cf_ratio_of_net_cf,-1429.7569888983087,percentage_outlier
+cash_flow_sheet,301033|2023Q3|2023,迈普医学：2023年三季度报告.pdf,operating_cf_ratio_of_net_cf,-1205.6099756888575,percentage_outlier
+cash_flow_sheet,301033|2024H1|2024,迈普医学：2024年半年度报告.pdf,investing_cf_ratio_of_net_cf,1116.8268983012756,percentage_outlier
+cash_flow_sheet,301033|2024H1|2024,迈普医学：2024年半年度报告.pdf,financing_cf_ratio_of_net_cf,-1663.0257112123597,percentage_outlier

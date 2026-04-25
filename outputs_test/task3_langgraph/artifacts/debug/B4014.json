@@ -1,0 +1,269 @@
+{
+  "question_id": "B4014",
+  "question_type": "融合查询",
+  "raw_question": "查询成都先导2025年第三季度营业总收入同比增长情况，评估AI对其业绩的贡献",
+  "raw_question_json": "[{\"Q\":\"查询成都先导2025年第三季度营业总收入同比增长情况，评估AI对其业绩的贡献\"}]",
+  "parsed_slots": {
+    "companies": [
+      "成都先导"
+    ],
+    "stock_codes": [],
+    "metrics": [
+      "营业总收入"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "focus_topics": [],
+    "intent_type": "sql_only",
+    "needs_sql": true,
+    "needs_retrieval": false,
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "sql_only",
+    "companies": [
+      "成都先导"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入"
+    ],
+    "needs_sql": true,
+    "top_n": null,
+    "threshold": null,
+    "question": "查询成都先导2025年第三季度营业总收入同比增长情况"
+  },
+  "retrieval_plan": {
+    "question": "查询成都先导2025年第三季度营业总收入同比增长情况，评估AI对其业绩的贡献",
+    "companies": [
+      "成都先导"
+    ],
+    "focus_topics": [
+      "AI",
+      "人工智能",
+      "业绩贡献",
+      "技术应用",
+      "产业升级",
+      "智能化",
+      "数字化",
+      "信息化",
+      "主营业务收入",
+      "营业总收入",
+      "收入增长"
+    ],
+    "needs_retrieval": false,
+    "top_k": 0,
+    "source_scope": "stock",
+    "retrieval_mode": "hybrid"
+  },
+  "sql": "SELECT stock_code, stock_abbr, report_period, total_operating_revenue, operating_revenue_yoy_growth FROM financials_view WHERE stock_abbr = '成都先导' AND report_period = '2025Q3';",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, report_period, total_operating_revenue, operating_revenue_yoy_growth FROM financials_view WHERE stock_abbr = '成都先导' AND report_period = '2025Q3';"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 16,
+  "result_rows": [
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 36979.383073000005,
+      "operating_revenue_yoy_growth": 23.979652295955308
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 36979.383073000005,
+      "operating_revenue_yoy_growth": 23.979652295955308
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 36979.383073000005,
+      "operating_revenue_yoy_growth": 23.979652295955308
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 36979.383073000005,
+      "operating_revenue_yoy_growth": 23.979652295955308
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 36979.383073000005,
+      "operating_revenue_yoy_growth": 23.979652295955308
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 36979.383073000005,
+      "operating_revenue_yoy_growth": 23.979652295955308
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 36979.383073000005,
+      "operating_revenue_yoy_growth": 23.979652295955308
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 36979.383073000005,
+      "operating_revenue_yoy_growth": 23.979652295955308
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 36979.383073000005,
+      "operating_revenue_yoy_growth": 23.979652295955308
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 36979.383073000005,
+      "operating_revenue_yoy_growth": 23.979652295955308
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 36979.383073000005,
+      "operating_revenue_yoy_growth": 23.979652295955308
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 36979.383073000005,
+      "operating_revenue_yoy_growth": 23.979652295955308
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 36979.383073000005,
+      "operating_revenue_yoy_growth": 23.979652295955308
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 36979.383073000005,
+      "operating_revenue_yoy_growth": 23.979652295955308
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 36979.383073000005,
+      "operating_revenue_yoy_growth": 23.979652295955308
+    },
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "report_period": "2025Q3",
+      "total_operating_revenue": 36979.383073000005,
+      "operating_revenue_yoy_growth": 23.979652295955308
+    }
+  ],
+  "retrieved_evidence": [],
+  "reranked_evidence": [],
+  "rerank_preview": "{\"strategy\": \"skipped_fast_path\", \"kept_count\": 0}",
+  "fused_context": {
+    "question": "查询成都先导2025年第三季度营业总收入同比增长情况，评估AI对其业绩的贡献",
+    "sql_row_count": 16,
+    "evidence_count": 0,
+    "sql_preview": [
+      {
+        "stock_code": "688222",
+        "stock_abbr": "成都先导",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 36979.383073000005,
+        "operating_revenue_yoy_growth": 23.979652295955308
+      },
+      {
+        "stock_code": "688222",
+        "stock_abbr": "成都先导",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 36979.383073000005,
+        "operating_revenue_yoy_growth": 23.979652295955308
+      },
+      {
+        "stock_code": "688222",
+        "stock_abbr": "成都先导",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 36979.383073000005,
+        "operating_revenue_yoy_growth": 23.979652295955308
+      },
+      {
+        "stock_code": "688222",
+        "stock_abbr": "成都先导",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 36979.383073000005,
+        "operating_revenue_yoy_growth": 23.979652295955308
+      },
+      {
+        "stock_code": "688222",
+        "stock_abbr": "成都先导",
+        "report_period": "2025Q3",
+        "total_operating_revenue": 36979.383073000005,
+        "operating_revenue_yoy_growth": 23.979652295955308
+      }
+    ],
+    "evidence_preview": [],
+    "evidence_titles": [],
+    "source_breakdown": {}
+  },
+  "self_check": {
+    "pass": true,
+    "notes": [
+      "self_check_skipped_fast_path"
+    ]
+  },
+  "chart_plan": {},
+  "chart_spec": {},
+  "current_chart_paths": [],
+  "current_chart_specs": [],
+  "current_answer": "**直接结论**  \n成都先导2025年第三季度营业总收入同比增长23.98%，呈现较快增长。但当前结构化数据无法直接评估AI对其业绩的具体贡献。\n\n**财务数据支撑**  \n根据财务数据视图，成都先导（股票代码：688222）在2025年第三季度实现营业总收入36,979.38万元（约3.70亿元，按1亿元=10,000万元换算），同比增长率为23.98%。\n\n**研报证据支撑**  \n未检索到直接研报证据，无法从定性角度说明AI技术对成都先导2025年第三季度业绩增长的具体贡献程度或驱动机制。\n\n**综合判断**  \n1. **增长情况**：财务数据显示成都先导2025年第三季度营业总收入同比增长接近24%，增长势头较为明显。  \n2. **AI贡献评估**：由于缺乏研报证据，且当前结构化财务数据（仅包含营业总收入及其增长率）未提供AI相关业务收入或贡献占比的细分口径，因此无法直接量化或评估AI对其该季度业绩的具体贡献。建议进一步查阅公司定期报告或专项研报中关于AI业务进展的描述。",
+  "current_references": [],
+  "answer_rewritten": false,
+  "turn_answers": [
+    {
+      "Q": "查询成都先导2025年第三季度营业总收入同比增长情况，评估AI对其业绩的贡献",
+      "A": {
+        "content": "**直接结论**  \n成都先导2025年第三季度营业总收入同比增长23.98%，呈现较快增长。但当前结构化数据无法直接评估AI对其业绩的具体贡献。\n\n**财务数据支撑**  \n根据财务数据视图，成都先导（股票代码：688222）在2025年第三季度实现营业总收入36,979.38万元（约3.70亿元，按1亿元=10,000万元换算），同比增长率为23.98%。\n\n**研报证据支撑**  \n未检索到直接研报证据，无法从定性角度说明AI技术对成都先导2025年第三季度业绩增长的具体贡献程度或驱动机制。\n\n**综合判断**  \n1. **增长情况**：财务数据显示成都先导2025年第三季度营业总收入同比增长接近24%，增长势头较为明显。  \n2. **AI贡献评估**：由于缺乏研报证据，且当前结构化财务数据（仅包含营业总收入及其增长率）未提供AI相关业务收入或贡献占比的细分口径，因此无法直接量化或评估AI对其该季度业绩的具体贡献。建议进一步查阅公司定期报告或专项研报中关于AI业务进展的描述。",
+        "image": [],
+        "references": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"查询成都先导2025年第三季度营业总收入同比增长情况，评估AI对其业绩的贡献\", \"A\": {\"content\": \"**直接结论**  \\n成都先导2025年第三季度营业总收入同比增长23.98%，呈现较快增长。但当前结构化数据无法直接评估AI对其业绩的具体贡献。\\n\\n**财务数据支撑**  \\n根据财务数据视图，成都先导（股票代码：688222）在2025年第三季度实现营业总收入36,979.38万元（约3.70亿元，按1亿元=10,000万元换算），同比增长率为23.98%。\\n\\n**研报证据支撑**  \\n未检索到直接研报证据，无法从定性角度说明AI技术对成都先导2025年第三季度业绩增长的具体贡献程度或驱动机制。\\n\\n**综合判断**  \\n1. **增长情况**：财务数据显示成都先导2025年第三季度营业总收入同比增长接近24%，增长势头较为明显。  \\n2. **AI贡献评估**：由于缺乏研报证据，且当前结构化财务数据（仅包含营业总收入及其增长率）未提供AI相关业务收入或贡献占比的细分口径，因此无法直接量化或评估AI对其该季度业绩的具体贡献。建议进一步查阅公司定期报告或专项研报中关于AI业务进展的描述。\", \"image\": [], \"references\": []}}]",
+  "references_json": "[]",
+  "notes": [
+    "route=sql_only",
+    "根据查询计划，需要查询成都先导2025年第三季度（2025Q3）的营业总收入（total_operating_revenue）及其同比增长率（operating_revenue_yoy_growth）。financials_view 中已有这些字段，直接查询即可。关于评估AI对其业绩的贡献，financials_view 中没有专门的AI业务收入字段，因此无法在SQL中直接评估，只能返回基础财务数据供后续分析。",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=0",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=0",
+    "self_check={\"pass\": true, \"notes\": [\"self_check_skipped_fast_path\"]}"
+  ],
+  "final_status": "ok"
+}

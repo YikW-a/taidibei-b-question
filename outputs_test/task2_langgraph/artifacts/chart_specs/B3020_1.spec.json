@@ -1,0 +1,160 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B3020",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "药明康德2025Q3与2024Q3净利润及同比增长率",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 32,
+    "preview_rows": [
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "net_profit": 1207551.295692,
+        "net_profit_yoy_growth": 84.89717899533953
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "net_profit": 1207551.295692,
+        "net_profit_yoy_growth": 84.89717899533953
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "net_profit": 1207551.295692,
+        "net_profit_yoy_growth": 84.89717899533953
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "net_profit": 1207551.295692,
+        "net_profit_yoy_growth": 84.89717899533953
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "net_profit": 1207551.295692,
+        "net_profit_yoy_growth": 84.89717899533953
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "net_profit": 1207551.295692,
+        "net_profit_yoy_growth": 84.89717899533953
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "net_profit": 1207551.295692,
+        "net_profit_yoy_growth": 84.89717899533953
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "net_profit": 1207551.295692,
+        "net_profit_yoy_growth": 84.89717899533953
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "net_profit": 1207551.295692,
+        "net_profit_yoy_growth": 84.89717899533953
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "net_profit": 1207551.295692,
+        "net_profit_yoy_growth": 84.89717899533953
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "net_profit": 1207551.295692,
+        "net_profit_yoy_growth": 84.89717899533953
+      },
+      {
+        "stock_code": "603259",
+        "stock_abbr": "药明康德",
+        "report_period": "2025Q3",
+        "net_profit": 1207551.295692,
+        "net_profit_yoy_growth": 84.89717899533953
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "report_period",
+    "sort_ascending": true,
+    "top_n": null,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "net_profit",
+      "data_type": "quantitative",
+      "label": "净利润",
+      "unit": "万元"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    },
+    "series": {
+      "field": "report_period",
+      "data_type": "nominal",
+      "label": "报告期",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": true,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B3020_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B3020_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT stock_code, stock_abbr, report_period, net_profit, net_profit_yoy_growth FROM financials_view WHERE stock_abbr = '药明康德' AND report_period IN ('2025Q3', '2024Q3') ORDER BY report_period DESC;",
+    "value_fields": [
+      "net_profit",
+      "net_profit_yoy_growth"
+    ],
+    "value_labels": [
+      "净利润",
+      "net_profit_yoy_growth"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "net_profit",
+        "net_profit_yoy_growth"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": "report_period",
+      "sort_ascending": true,
+      "top_n": null
+    },
+    "category_aggregate": "max"
+  }
+}

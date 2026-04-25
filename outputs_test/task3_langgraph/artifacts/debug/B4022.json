@@ -1,0 +1,135 @@
+{
+  "question_id": "B4022",
+  "question_type": "多意图",
+  "raw_question": "①统计2025年第三季度研发费用占营业总收入比例超过10%的公司；②计算这些公司2024年第三季度到2025年第三季度的收入同比增长率；③找出增长最快的公司；④绘制该公司的研发费用与收入增长的双轴图",
+  "raw_question_json": "[{\"Q\":\"①统计2025年第三季度研发费用占营业总收入比例超过10%的公司；②计算这些公司2024年第三季度到2025年第三季度的收入同比增长率；③找出增长最快的公司；④绘制该公司的研发费用与收入增长的双轴图\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "metrics": [
+      "营业总收入",
+      "研发费用"
+    ],
+    "periods": [
+      "2025Q3",
+      "2024Q3"
+    ],
+    "focus_topics": [],
+    "intent_type": "sql_only",
+    "needs_sql": true,
+    "needs_retrieval": false,
+    "top_n": null,
+    "threshold": 10.0
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "sql_only",
+    "companies": [],
+    "periods": [
+      "2025Q3",
+      "2024Q3"
+    ],
+    "metrics": [
+      "营业总收入",
+      "研发费用"
+    ],
+    "needs_sql": true,
+    "top_n": null,
+    "threshold": 10.0,
+    "question": "①统计2025年第三季度研发费用占营业总收入比例超过10%的公司；②计算这些公司2024年第三季度到2025年第三季度的收入同比增长率；③找出增长最快的公司；④绘制该公司的研发费用与收入增长的双轴图"
+  },
+  "retrieval_plan": {
+    "question": "①统计2025年第三季度研发费用占营业总收入比例超过10%的公司；②计算这些公司2024年第三季度到2025年第三季度的收入同比增长率；③找出增长最快的公司；④绘制该公司的研发费用与收入增长的双轴图",
+    "companies": [
+      "百普赛斯"
+    ],
+    "focus_topics": [
+      "主营业务收入",
+      "营业总收入",
+      "收入增长",
+      "主营业务",
+      "主营业务类型",
+      "业务类型",
+      "成本控制",
+      "成本结构",
+      "销售费用",
+      "研发费用",
+      "中药",
+      "创新药"
+    ],
+    "needs_retrieval": false,
+    "top_k": 0,
+    "source_scope": "stock",
+    "retrieval_mode": "hybrid"
+  },
+  "sql": "WITH high_rnd_companies AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        rnd_expense_ratio\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n        AND rnd_expense_ratio > 10.0\n),\nrevenue_growth AS (\n    SELECT \n        hrc.stock_code,\n        hrc.stock_abbr,\n        hrc.rnd_expense_ratio,\n        curr.total_operating_revenue AS revenue_2025q3,\n        prev.total_operating_revenue AS revenue_2024q3,\n        CASE \n            WHEN prev.total_operating_revenue IS NULL OR prev.total_operating_revenue = 0 THEN NULL\n            ELSE ROUND((curr.total_operating_revenue - prev.total_operating_revenue) * 100.0 / prev.total_operating_revenue, 2)\n        END AS revenue_yoy_growth_percent\n    FROM high_rnd_companies hrc\n    LEFT JOIN financials_view curr ON hrc.stock_code = curr.stock_code AND curr.report_period = '2025Q3'\n    LEFT JOIN financials_view prev ON hrc.stock_code = prev.stock_code AND prev.report_period = '2024Q3'\n),\nfastest_growing AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        rnd_expense_ratio,\n        revenue_yoy_growth_percent,\n        ROW_NUMBER() OVER (ORDER BY revenue_yoy_growth_percent DESC) AS growth_rank\n    FROM revenue_growth\n    WHERE revenue_yoy_growth_percent IS NOT NULL\n)\nSELECT \n    stock_code,\n    stock_abbr,\n    rnd_expense_ratio AS 研发费用占比_2025Q3,\n    revenue_yoy_growth_percent AS 收入同比增长率_2024Q3_2025Q3\nFROM fastest_growing\nWHERE growth_rank = 1;",
+  "sql_history": [
+    "WITH high_rnd_companies AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        rnd_expense_ratio\n    FROM financials_view\n    WHERE report_period = '2025Q3'\n        AND rnd_expense_ratio > 10.0\n),\nrevenue_growth AS (\n    SELECT \n        hrc.stock_code,\n        hrc.stock_abbr,\n        hrc.rnd_expense_ratio,\n        curr.total_operating_revenue AS revenue_2025q3,\n        prev.total_operating_revenue AS revenue_2024q3,\n        CASE \n            WHEN prev.total_operating_revenue IS NULL OR prev.total_operating_revenue = 0 THEN NULL\n            ELSE ROUND((curr.total_operating_revenue - prev.total_operating_revenue) * 100.0 / prev.total_operating_revenue, 2)\n        END AS revenue_yoy_growth_percent\n    FROM high_rnd_companies hrc\n    LEFT JOIN financials_view curr ON hrc.stock_code = curr.stock_code AND curr.report_period = '2025Q3'\n    LEFT JOIN financials_view prev ON hrc.stock_code = prev.stock_code AND prev.report_period = '2024Q3'\n),\nfastest_growing AS (\n    SELECT \n        stock_code,\n        stock_abbr,\n        rnd_expense_ratio,\n        revenue_yoy_growth_percent,\n        ROW_NUMBER() OVER (ORDER BY revenue_yoy_growth_percent DESC) AS growth_rank\n    FROM revenue_growth\n    WHERE revenue_yoy_growth_percent IS NOT NULL\n)\nSELECT \n    stock_code,\n    stock_abbr,\n    rnd_expense_ratio AS 研发费用占比_2025Q3,\n    revenue_yoy_growth_percent AS 收入同比增长率_2024Q3_2025Q3\nFROM fastest_growing\nWHERE growth_rank = 1;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 1,
+  "result_rows": [
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "研发费用占比_2025Q3": 22.103264986534487,
+      "收入同比增长率_2024Q3_2025Q3": 32.26
+    }
+  ],
+  "retrieved_evidence": [],
+  "reranked_evidence": [],
+  "rerank_preview": "{\"strategy\": \"skipped_fast_path\", \"kept_count\": 0}",
+  "fused_context": {
+    "question": "①统计2025年第三季度研发费用占营业总收入比例超过10%的公司；②计算这些公司2024年第三季度到2025年第三季度的收入同比增长率；③找出增长最快的公司；④绘制该公司的研发费用与收入增长的双轴图",
+    "sql_row_count": 1,
+    "evidence_count": 0,
+    "sql_preview": [
+      {
+        "stock_code": "301080",
+        "stock_abbr": "百普赛斯",
+        "研发费用占比_2025Q3": 22.103264986534487,
+        "收入同比增长率_2024Q3_2025Q3": 32.26
+      }
+    ],
+    "evidence_preview": [],
+    "evidence_titles": [],
+    "source_breakdown": {}
+  },
+  "self_check": {
+    "pass": true,
+    "notes": [
+      "self_check_skipped_fast_path"
+    ]
+  },
+  "chart_plan": {},
+  "chart_spec": {},
+  "current_chart_paths": [],
+  "current_chart_specs": [],
+  "current_answer": "根据SQL查询结果，满足条件的公司如下：\n1. **百普赛斯 (301080)**：研发费用为22.10万元。",
+  "current_references": [],
+  "answer_rewritten": false,
+  "turn_answers": [
+    {
+      "Q": "①统计2025年第三季度研发费用占营业总收入比例超过10%的公司；②计算这些公司2024年第三季度到2025年第三季度的收入同比增长率；③找出增长最快的公司；④绘制该公司的研发费用与收入增长的双轴图",
+      "A": {
+        "content": "根据SQL查询结果，满足条件的公司如下：\n1. **百普赛斯 (301080)**：研发费用为22.10万元。",
+        "image": [],
+        "references": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"①统计2025年第三季度研发费用占营业总收入比例超过10%的公司；②计算这些公司2024年第三季度到2025年第三季度的收入同比增长率；③找出增长最快的公司；④绘制该公司的研发费用与收入增长的双轴图\", \"A\": {\"content\": \"根据SQL查询结果，满足条件的公司如下：\\n1. **百普赛斯 (301080)**：研发费用为22.10万元。\", \"image\": [], \"references\": []}}]",
+  "references_json": "[]",
+  "notes": [
+    "route=sql_only",
+    "1. 首先筛选2025Q3研发费用占比超过10%的公司（rnd_expense_ratio > 10.0）。\n2. 然后计算这些公司2024Q3到2025Q3的收入同比增长率：使用2025Q3和2024Q3的单季度营业总收入（total_operating_revenue）计算同比增长率，并转换为百分比格式。\n3. 最后找出增长最快的公司：按收入同比增长率降序排列，取第一名。\n4. 注意：题目要求的是“2024年第三季度到2025年第三季度的收入同比增长率”，因此使用单季度口径（2024Q3和2025Q3）计算，符合要求。\n5. 由于query_plan中companies为空列表，不手动枚举公司，而是通过条件动态筛选。\n6. 输出包含公司代码、简称、2025Q3研发费用占比、收入同比增长率，用于后续绘图。",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=0",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=0",
+    "self_check={\"pass\": true, \"notes\": [\"self_check_skipped_fast_path\"]}"
+  ],
+  "final_status": "ok"
+}

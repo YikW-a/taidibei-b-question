@@ -1,0 +1,152 @@
+[
+  {
+    "source_type": "stock",
+    "title": "在手订单持续增长，25年各业务稳中向好",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/在手订单持续增长，25年各业务稳中向好.pdf",
+    "publish_date": "2025-04-02 00:00:00.000",
+    "company_or_industry": "凯莱英",
+    "organization": "华安证券",
+    "snippet": "在手订单持续增长，25年各业务稳中向好；凯莱英；华安证券",
+    "score": 5.767809,
+    "metadata_ref": "stock::在手订单持续增长，25年各业务稳中向好::2025-04-02 00:00:00.000::华安证券::凯莱英",
+    "score_components": {
+      "metadata": 5.0,
+      "vector": 0.767809
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "2025年半年报点评：盈利能力稳步提升，在手订单储备充足",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/2025年半年报点评：盈利能力稳步提升，在手订单储备充足.pdf",
+    "publish_date": "2025-08-27 00:00:00.000",
+    "company_or_industry": "凯莱英",
+    "organization": "民生证券",
+    "snippet": "2025年半年报点评：盈利能力稳步提升，在手订单储备充足；凯莱英；民生证券",
+    "score": 5.703482,
+    "metadata_ref": "stock::2025年半年报点评：盈利能力稳步提升，在手订单储备充足::2025-08-27 00:00:00.000::民生证券::凯莱英",
+    "score_components": {
+      "metadata": 5.0,
+      "vector": 0.703482
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "2024年报点评：在手订单大幅增加，2025年持续经营业务收入有望双位数增长",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/2024年报点评：在手订单大幅增加，2025年持续经营业务收入有望双位数增长.pdf",
+    "publish_date": "2025-03-20 00:00:00.000",
+    "company_or_industry": "药明康德",
+    "organization": "中航证券",
+    "snippet": "2024年报点评：在手订单大幅增加，2025年持续经营业务收入有望双位数增长；药明康德；中航证券",
+    "score": 5.0,
+    "metadata_ref": "stock::2024年报点评：在手订单大幅增加，2025年持续经营业务收入有望双位数增长::2025-03-20 00:00:00.000::中航证券::药明康德",
+    "score_components": {
+      "metadata": 5.0,
+      "vector": 0.0
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "公司信息更新报告：在手订单稳健增长，赛道龙头复苏趋势已现",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/公司信息更新报告：在手订单稳健增长，赛道龙头复苏趋势已现.pdf",
+    "publish_date": "2025-03-20 00:00:00.000",
+    "company_or_industry": "药明康德",
+    "organization": "开源证券",
+    "snippet": "公司信息更新报告：在手订单稳健增长，赛道龙头复苏趋势已现；药明康德；开源证券",
+    "score": 5.0,
+    "metadata_ref": "stock::公司信息更新报告：在手订单稳健增长，赛道龙头复苏趋势已现::2025-03-20 00:00:00.000::开源证券::药明康德",
+    "score_components": {
+      "metadata": 5.0,
+      "vector": 0.0
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "3Q25业绩及新签订单增速再超预期，上调全年指引",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/3Q25业绩及新签订单增速再超预期，上调全年指引.pdf",
+    "publish_date": "2025-10-28 00:00:00.000",
+    "company_or_industry": "药明康德",
+    "organization": "浦银国际证券",
+    "snippet": "3Q25业绩及新签订单增速再超预期，上调全年指引；药明康德；浦银国际证券",
+    "score": 3.70424,
+    "metadata_ref": "stock::3Q25业绩及新签订单增速再超预期，上调全年指引::2025-10-28 00:00:00.000::浦银国际证券::药明康德",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.70424
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "2025年三季报点评：单三季度整体营收保持平稳，新兴业务提质放量",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/2025年三季报点评：单三季度整体营收保持平稳，新兴业务提质放量.pdf",
+    "publish_date": "2025-11-06 00:00:00.000",
+    "company_or_industry": "凯莱英",
+    "organization": "国信证券",
+    "snippet": "2025年三季报点评：单三季度整体营收保持平稳，新兴业务提质放量；凯莱英；国信证券",
+    "score": 3.0,
+    "metadata_ref": "stock::2025年三季报点评：单三季度整体营收保持平稳，新兴业务提质放量::2025-11-06 00:00:00.000::国信证券::凯莱英",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.0
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "新兴业务强劲增长，期待第四季度加速交付",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/新兴业务强劲增长，期待第四季度加速交付.pdf",
+    "publish_date": "2025-11-03 00:00:00.000",
+    "company_or_industry": "凯莱英",
+    "organization": "华安证券",
+    "snippet": "新兴业务强劲增长，期待第四季度加速交付；凯莱英；华安证券",
+    "score": 3.0,
+    "metadata_ref": "stock::新兴业务强劲增长，期待第四季度加速交付::2025-11-03 00:00:00.000::华安证券::凯莱英",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.0
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "凯莱英2025年三季度报点评：新兴业务维持高增长，长期发展趋势不改",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/凯莱英2025年三季度报点评：新兴业务维持高增长，长期发展趋势不改.pdf",
+    "publish_date": "2025-10-31 00:00:00.000",
+    "company_or_industry": "凯莱英",
+    "organization": "中国银河",
+    "snippet": "凯莱英2025年三季度报点评：新兴业务维持高增长，长期发展趋势不改；凯莱英；中国银河",
+    "score": 3.0,
+    "metadata_ref": "stock::凯莱英2025年三季度报点评：新兴业务维持高增长，长期发展趋势不改::2025-10-31 00:00:00.000::中国银河::凯莱英",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.0
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "药明康德2025年三季报业绩点评：持续聚焦CRDMO，再次上调全年指引",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/药明康德2025年三季报业绩点评：持续聚焦CRDMO，再次上调全年指引.pdf",
+    "publish_date": "2025-10-28 00:00:00.000",
+    "company_or_industry": "药明康德",
+    "organization": "中国银河",
+    "snippet": "药明康德2025年三季报业绩点评：持续聚焦CRDMO，再次上调全年指引；药明康德；中国银河",
+    "score": 3.0,
+    "metadata_ref": "stock::药明康德2025年三季报业绩点评：持续聚焦CRDMO，再次上调全年指引::2025-10-28 00:00:00.000::中国银河::药明康德",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.0
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "Rising demand for small molecule D&M business",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/Rising demand for small molecule D&M business.pdf",
+    "publish_date": "2025-10-28 00:00:00.000",
+    "company_or_industry": "药明康德",
+    "organization": "招银国际",
+    "snippet": "Rising demand for small molecule D&M business；药明康德；招银国际",
+    "score": 3.0,
+    "metadata_ref": "stock::Rising demand for small molecule D&M business::2025-10-28 00:00:00.000::招银国际::药明康德",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.0
+    }
+  }
+]

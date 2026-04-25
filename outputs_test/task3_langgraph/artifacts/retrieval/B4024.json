@@ -1,0 +1,122 @@
+[
+  {
+    "source_type": "stock",
+    "title": "集采助力产品放量，盈利能力逐步增强",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/集采助力产品放量，盈利能力逐步增强.pdf",
+    "publish_date": "2025-04-28 00:00:00.000",
+    "company_or_industry": "迈普医学",
+    "organization": "信达证券",
+    "snippet": "集采助力产品放量，盈利能力逐步增强；迈普医学；信达证券",
+    "score": 5.0,
+    "metadata_ref": "stock::集采助力产品放量，盈利能力逐步增强::2025-04-28 00:00:00.000::信达证券::迈普医学",
+    "score_components": {
+      "metadata": 5.0,
+      "vector": 0.0
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "公司深度报告：深耕神外赛道，脑膜胶和可吸收止血纱新品上量可期",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/公司深度报告：深耕神外赛道，脑膜胶和可吸收止血纱新品上量可期.pdf",
+    "publish_date": "2025-06-16 00:00:00.000",
+    "company_or_industry": "迈普医学",
+    "organization": "信达证券",
+    "snippet": "公司深度报告：深耕神外赛道，脑膜胶和可吸收止血纱新品上量可期；迈普医学；信达证券",
+    "score": 4.384651,
+    "metadata_ref": "stock::公司深度报告：深耕神外赛道，脑膜胶和可吸收止血纱新品上量可期::2025-06-16 00:00:00.000::信达证券::迈普医学",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.690036
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "业绩符合预期，收购易介拓宽天花板",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/业绩符合预期，收购易介拓宽天花板.pdf",
+    "publish_date": "2025-11-13 00:00:00.000",
+    "company_or_industry": "迈普医学",
+    "organization": "中邮证券",
+    "snippet": "业绩符合预期，收购易介拓宽天花板；迈普医学；中邮证券",
+    "score": 3.683764,
+    "metadata_ref": "stock::业绩符合预期，收购易介拓宽天花板::2025-11-13 00:00:00.000::中邮证券::迈普医学",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.683764
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "新产品海外加速放量，收购易介医疗打开上限",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/新产品海外加速放量，收购易介医疗打开上限.pdf",
+    "publish_date": "2025-10-28 00:00:00.000",
+    "company_or_industry": "迈普医学",
+    "organization": "华安证券",
+    "snippet": "新产品海外加速放量，收购易介医疗打开上限；迈普医学；华安证券",
+    "score": 3.0,
+    "metadata_ref": "stock::新产品海外加速放量，收购易介医疗打开上限::2025-10-28 00:00:00.000::华安证券::迈普医学",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.0
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "公司新产品收入占比突破20%，国际市场销量增速强劲",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/公司新产品收入占比突破20%，国际市场销量增速强劲.pdf",
+    "publish_date": "2025-08-22 00:00:00.000",
+    "company_or_industry": "迈普医学",
+    "organization": "中邮证券",
+    "snippet": "公司新产品收入占比突破20%，国际市场销量增速强劲；迈普医学；中邮证券",
+    "score": 3.0,
+    "metadata_ref": "stock::公司新产品收入占比突破20%，国际市场销量增速强劲::2025-08-22 00:00:00.000::中邮证券::迈普医学",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.0
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "国内海外协同加速，新产品放量超预期",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/国内海外协同加速，新产品放量超预期.pdf",
+    "publish_date": "2025-08-22 00:00:00.000",
+    "company_or_industry": "迈普医学",
+    "organization": "华安证券",
+    "snippet": "国内海外协同加速，新产品放量超预期；迈普医学；华安证券",
+    "score": 3.0,
+    "metadata_ref": "stock::国内海外协同加速，新产品放量超预期::2025-08-22 00:00:00.000::华安证券::迈普医学",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.0
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "业绩符合预期，多产品驱动成长",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/业绩符合预期，多产品驱动成长.pdf",
+    "publish_date": "2025-08-22 00:00:00.000",
+    "company_or_industry": "迈普医学",
+    "organization": "信达证券",
+    "snippet": "业绩符合预期，多产品驱动成长；迈普医学；信达证券",
+    "score": 3.0,
+    "metadata_ref": "stock::业绩符合预期，多产品驱动成长::2025-08-22 00:00:00.000::信达证券::迈普医学",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.0
+    }
+  },
+  {
+    "source_type": "stock",
+    "title": "公司新产品占比持续提高，第二成长曲线雏形已现",
+    "relative_path": "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/测试数据/附件5：研报数据/个股研报/公司新产品占比持续提高，第二成长曲线雏形已现.pdf",
+    "publish_date": "2025-05-07 00:00:00.000",
+    "company_or_industry": "迈普医学",
+    "organization": "中邮证券",
+    "snippet": "公司新产品占比持续提高，第二成长曲线雏形已现；迈普医学；中邮证券",
+    "score": 3.0,
+    "metadata_ref": "stock::公司新产品占比持续提高，第二成长曲线雏形已现::2025-05-07 00:00:00.000::中邮证券::迈普医学",
+    "score_components": {
+      "metadata": 3.0,
+      "vector": 0.0
+    }
+  }
+]

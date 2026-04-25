@@ -1,0 +1,115 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B3009",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "2025年第三季度销售净利率超过20%的公司",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 50,
+    "preview_rows": [
+      {
+        "stock_abbr": "药明康德",
+        "net_profit_margin": 36.75203806096622
+      },
+      {
+        "stock_abbr": "药明康德",
+        "net_profit_margin": 36.75203806096622
+      },
+      {
+        "stock_abbr": "药明康德",
+        "net_profit_margin": 36.75203806096622
+      },
+      {
+        "stock_abbr": "药明康德",
+        "net_profit_margin": 36.75203806096622
+      },
+      {
+        "stock_abbr": "药明康德",
+        "net_profit_margin": 36.75203806096622
+      },
+      {
+        "stock_abbr": "药明康德",
+        "net_profit_margin": 36.75203806096622
+      },
+      {
+        "stock_abbr": "药明康德",
+        "net_profit_margin": 36.75203806096622
+      },
+      {
+        "stock_abbr": "药明康德",
+        "net_profit_margin": 36.75203806096622
+      },
+      {
+        "stock_abbr": "药明康德",
+        "net_profit_margin": 36.75203806096622
+      },
+      {
+        "stock_abbr": "药明康德",
+        "net_profit_margin": 36.75203806096622
+      },
+      {
+        "stock_abbr": "药明康德",
+        "net_profit_margin": 36.75203806096622
+      },
+      {
+        "stock_abbr": "药明康德",
+        "net_profit_margin": 36.75203806096622
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "net_profit_margin",
+    "sort_ascending": false,
+    "top_n": 15,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "net_profit_margin",
+      "data_type": "quantitative",
+      "label": "销售净利率",
+      "unit": "%"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B3009_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B3009_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT stock_abbr, net_profit_margin FROM financials_view WHERE report_period = '2025Q3' AND net_profit_margin > 20.0 ORDER BY net_profit_margin DESC",
+    "value_fields": [
+      "net_profit_margin"
+    ],
+    "value_labels": [
+      "销售净利率"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "net_profit_margin"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": "net_profit_margin",
+      "sort_ascending": false,
+      "top_n": 15
+    },
+    "category_aggregate": "max"
+  }
+}

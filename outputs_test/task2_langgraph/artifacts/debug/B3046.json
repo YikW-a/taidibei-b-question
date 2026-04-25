@@ -1,0 +1,708 @@
+{
+  "question_id": "B3046",
+  "question_type": "数据基本查询",
+  "raw_question": "百普赛斯2022-2025年第三季度销售毛利率变化情况，用表格列出各期毛利率",
+  "raw_question_json": "[{\"Q\":\"百普赛斯2022-2025年第三季度销售毛利率变化情况，用表格列出各期毛利率\"}]",
+  "parsed_slots": {
+    "companies": [
+      "百普赛斯"
+    ],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3",
+      "2022Q3",
+      "2023Q3",
+      "2024Q3"
+    ],
+    "metrics": [
+      "销售毛利率"
+    ],
+    "chart_type": "table",
+    "intent_type": "trend_or_chart",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "trend_or_chart",
+    "companies": [
+      "百普赛斯"
+    ],
+    "periods": [
+      "2022Q3",
+      "2023Q3",
+      "2024Q3",
+      "2025Q3"
+    ],
+    "metrics": [
+      "销售毛利率"
+    ],
+    "chart_type": "table",
+    "top_n": null,
+    "threshold": null,
+    "question": "百普赛斯2022-2025年第三季度销售毛利率变化情况，用表格列出各期毛利率",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT stock_code, stock_abbr, report_period, gross_profit_margin FROM financials_view WHERE stock_abbr = '百普赛斯' AND report_period IN ('2022Q3', '2023Q3', '2024Q3', '2025Q3') ORDER BY report_period",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, report_period, gross_profit_margin FROM financials_view WHERE stock_abbr = '百普赛斯' AND report_period IN ('2022Q3', '2023Q3', '2024Q3', '2025Q3') ORDER BY report_period"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 48,
+  "result_rows": [
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2023Q3",
+      "gross_profit_margin": 91.36872948814407
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2023Q3",
+      "gross_profit_margin": 91.36872948814407
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2023Q3",
+      "gross_profit_margin": 91.36872948814407
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2023Q3",
+      "gross_profit_margin": 91.36872948814407
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2023Q3",
+      "gross_profit_margin": 91.36872948814407
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2023Q3",
+      "gross_profit_margin": 91.36872948814407
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2023Q3",
+      "gross_profit_margin": 91.36872948814407
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2023Q3",
+      "gross_profit_margin": 91.36872948814407
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2023Q3",
+      "gross_profit_margin": 91.36872948814407
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2023Q3",
+      "gross_profit_margin": 91.36872948814407
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2023Q3",
+      "gross_profit_margin": 91.36872948814407
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2023Q3",
+      "gross_profit_margin": 91.36872948814407
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2023Q3",
+      "gross_profit_margin": 91.36872948814407
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2023Q3",
+      "gross_profit_margin": 91.36872948814407
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2023Q3",
+      "gross_profit_margin": 91.36872948814407
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2023Q3",
+      "gross_profit_margin": 91.36872948814407
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2024Q3",
+      "gross_profit_margin": 91.3283718285963
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2024Q3",
+      "gross_profit_margin": 91.3283718285963
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2024Q3",
+      "gross_profit_margin": 91.3283718285963
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2024Q3",
+      "gross_profit_margin": 91.3283718285963
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2024Q3",
+      "gross_profit_margin": 91.3283718285963
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2024Q3",
+      "gross_profit_margin": 91.3283718285963
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2024Q3",
+      "gross_profit_margin": 91.3283718285963
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2024Q3",
+      "gross_profit_margin": 91.3283718285963
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2024Q3",
+      "gross_profit_margin": 91.3283718285963
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2024Q3",
+      "gross_profit_margin": 91.3283718285963
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2024Q3",
+      "gross_profit_margin": 91.3283718285963
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2024Q3",
+      "gross_profit_margin": 91.3283718285963
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2024Q3",
+      "gross_profit_margin": 91.3283718285963
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2024Q3",
+      "gross_profit_margin": 91.3283718285963
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2024Q3",
+      "gross_profit_margin": 91.3283718285963
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2024Q3",
+      "gross_profit_margin": 91.3283718285963
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2025Q3",
+      "gross_profit_margin": 91.23439189554867
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2025Q3",
+      "gross_profit_margin": 91.23439189554867
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2025Q3",
+      "gross_profit_margin": 91.23439189554867
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2025Q3",
+      "gross_profit_margin": 91.23439189554867
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2025Q3",
+      "gross_profit_margin": 91.23439189554867
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2025Q3",
+      "gross_profit_margin": 91.23439189554867
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2025Q3",
+      "gross_profit_margin": 91.23439189554867
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2025Q3",
+      "gross_profit_margin": 91.23439189554867
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2025Q3",
+      "gross_profit_margin": 91.23439189554867
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2025Q3",
+      "gross_profit_margin": 91.23439189554867
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2025Q3",
+      "gross_profit_margin": 91.23439189554867
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2025Q3",
+      "gross_profit_margin": 91.23439189554867
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2025Q3",
+      "gross_profit_margin": 91.23439189554867
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2025Q3",
+      "gross_profit_margin": 91.23439189554867
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2025Q3",
+      "gross_profit_margin": 91.23439189554867
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2025Q3",
+      "gross_profit_margin": 91.23439189554867
+    }
+  ],
+  "context_companies": [
+    "百普赛斯"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2023Q3",
+      "gross_profit_margin": 91.36872948814407
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2023Q3",
+      "gross_profit_margin": 91.36872948814407
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2023Q3",
+      "gross_profit_margin": 91.36872948814407
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2023Q3",
+      "gross_profit_margin": 91.36872948814407
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2023Q3",
+      "gross_profit_margin": 91.36872948814407
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2023Q3",
+      "gross_profit_margin": 91.36872948814407
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2023Q3",
+      "gross_profit_margin": 91.36872948814407
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2023Q3",
+      "gross_profit_margin": 91.36872948814407
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2023Q3",
+      "gross_profit_margin": 91.36872948814407
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2023Q3",
+      "gross_profit_margin": 91.36872948814407
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2023Q3",
+      "gross_profit_margin": 91.36872948814407
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2023Q3",
+      "gross_profit_margin": 91.36872948814407
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2023Q3",
+      "gross_profit_margin": 91.36872948814407
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2023Q3",
+      "gross_profit_margin": 91.36872948814407
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2023Q3",
+      "gross_profit_margin": 91.36872948814407
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2023Q3",
+      "gross_profit_margin": 91.36872948814407
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2024Q3",
+      "gross_profit_margin": 91.3283718285963
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2024Q3",
+      "gross_profit_margin": 91.3283718285963
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2024Q3",
+      "gross_profit_margin": 91.3283718285963
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2024Q3",
+      "gross_profit_margin": 91.3283718285963
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2024Q3",
+      "gross_profit_margin": 91.3283718285963
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2024Q3",
+      "gross_profit_margin": 91.3283718285963
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2024Q3",
+      "gross_profit_margin": 91.3283718285963
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2024Q3",
+      "gross_profit_margin": 91.3283718285963
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2024Q3",
+      "gross_profit_margin": 91.3283718285963
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2024Q3",
+      "gross_profit_margin": 91.3283718285963
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2024Q3",
+      "gross_profit_margin": 91.3283718285963
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2024Q3",
+      "gross_profit_margin": 91.3283718285963
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2024Q3",
+      "gross_profit_margin": 91.3283718285963
+    },
+    {
+      "stock_code": "301080",
+      "stock_abbr": "百普赛斯",
+      "report_period": "2024Q3",
+      "gross_profit_margin": 91.3283718285963
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"301080\",\"stock_abbr\":\"百普赛斯\",\"report_period\":\"2023Q3\",\"gross_profit_margin\":91.3687294881},{\"stock_code\":\"301080\",\"stock_abbr\":\"百普赛斯\",\"report_period\":\"2023Q3\",\"gross_profit_margin\":91.3687294881},{\"stock_code\":\"301080\",\"stock_abbr\":\"百普赛斯\",\"report_period\":\"2023Q3\",\"gross_profit_margin\":91.3687294881},{\"stock_code\":\"301080\",\"stock_abbr\":\"百普赛斯\",\"report_period\":\"2023Q3\",\"gross_profit_margin\":91.3687294881},{\"stock_code\":\"301080\",\"stock_abbr\":\"百普赛斯\",\"report_period\":\"2023Q3\",\"gross_profit_margin\":91.3687294881},{\"stock_code\":\"301080\",\"stock_abbr\":\"百普赛斯\",\"report_period\":\"2023Q3\",\"gross_profit_margin\":91.3687294881},{\"stock_code\":\"301080\",\"stock_abbr\":\"百普赛斯\",\"report_period\":\"2023Q3\",\"gross_profit_margin\":91.3687294881},{\"stock_code\":\"301080\",\"stock_abbr\":\"百普赛斯\",\"report_period\":\"2023Q3\",\"gross_profit_margin\":91.3687294881},{\"stock_code\":\"301080\",\"stock_abbr\":\"百普赛斯\",\"report_period\":\"2023Q3\",\"gross_profit_margin\":91.3687294881},{\"stock_code\":\"301080\",\"stock_abbr\":\"百普赛斯\",\"report_period\":\"2023Q3\",\"gross_profit_margin\":91.3687294881},{\"stock_code\":\"301080\",\"stock_abbr\":\"百普赛斯\",\"report_period\":\"2023Q3\",\"gross_profit_margin\":91.3687294881},{\"stock_code\":\"301080\",\"stock_abbr\":\"百普赛斯\",\"report_period\":\"2023Q3\",\"gross_profit_margin\":91.3687294881},{\"stock_code\":\"301080\",\"stock_abbr\":\"百普赛斯\",\"report_period\":\"2023Q3\",\"gross_profit_margin\":91.3687294881},{\"stock_code\":\"301080\",\"stock_abbr\":\"百普赛斯\",\"report_period\":\"2023Q3\",\"gross_profit_margin\":91.3687294881},{\"stock_code\":\"301080\",\"stock_abbr\":\"百普赛斯\",\"report_period\":\"2023Q3\",\"gross_profit_margin\":91.3687294881},{\"stock_code\":\"301080\",\"stock_abbr\":\"百普赛斯\",\"report_period\":\"2023Q3\",\"gross_profit_margin\":91.3687294881},{\"stock_code\":\"301080\",\"stock_abbr\":\"百普赛斯\",\"report_period\":\"2024Q3\",\"gross_profit_margin\":91.3283718286},{\"stock_code\":\"301080\",\"stock_abbr\":\"百普赛斯\",\"report_period\":\"2024Q3\",\"gross_profit_margin\":91.3283718286},{\"stock_code\":\"301080\",\"stock_abbr\":\"百普赛斯\",\"report_period\":\"2024Q3\",\"gross_profit_margin\":91.3283718286},{\"stock_code\":\"301080\",\"stock_abbr\":\"百普赛斯\",\"report_period\":\"2024Q3\",\"gross_profit_margin\":91.3283718286}]",
+  "chart_plan": {
+    "chart_type": "table",
+    "title": "百普赛斯2022-2025年第三季度销售毛利率",
+    "x_field": null,
+    "y_fields": [
+      "gross_profit_margin"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": null,
+    "sort_ascending": true,
+    "top_n": 12,
+    "should_draw": true
+  },
+  "chart_spec": {
+    "schema_version": "task2.chart-spec.v2",
+    "question_id": "B3046",
+    "image_index": 1,
+    "chart_type": "table",
+    "title": "百普赛斯2022-2025年第三季度销售毛利率",
+    "data": {
+      "dataset_name": "financials_view.result",
+      "row_count": 48,
+      "preview_rows": [
+        {
+          "stock_code": "301080",
+          "stock_abbr": "百普赛斯",
+          "report_period": "2023Q3",
+          "gross_profit_margin": 91.36872948814407
+        },
+        {
+          "stock_code": "301080",
+          "stock_abbr": "百普赛斯",
+          "report_period": "2023Q3",
+          "gross_profit_margin": 91.36872948814407
+        },
+        {
+          "stock_code": "301080",
+          "stock_abbr": "百普赛斯",
+          "report_period": "2023Q3",
+          "gross_profit_margin": 91.36872948814407
+        },
+        {
+          "stock_code": "301080",
+          "stock_abbr": "百普赛斯",
+          "report_period": "2023Q3",
+          "gross_profit_margin": 91.36872948814407
+        },
+        {
+          "stock_code": "301080",
+          "stock_abbr": "百普赛斯",
+          "report_period": "2023Q3",
+          "gross_profit_margin": 91.36872948814407
+        },
+        {
+          "stock_code": "301080",
+          "stock_abbr": "百普赛斯",
+          "report_period": "2023Q3",
+          "gross_profit_margin": 91.36872948814407
+        },
+        {
+          "stock_code": "301080",
+          "stock_abbr": "百普赛斯",
+          "report_period": "2023Q3",
+          "gross_profit_margin": 91.36872948814407
+        },
+        {
+          "stock_code": "301080",
+          "stock_abbr": "百普赛斯",
+          "report_period": "2023Q3",
+          "gross_profit_margin": 91.36872948814407
+        },
+        {
+          "stock_code": "301080",
+          "stock_abbr": "百普赛斯",
+          "report_period": "2023Q3",
+          "gross_profit_margin": 91.36872948814407
+        },
+        {
+          "stock_code": "301080",
+          "stock_abbr": "百普赛斯",
+          "report_period": "2023Q3",
+          "gross_profit_margin": 91.36872948814407
+        },
+        {
+          "stock_code": "301080",
+          "stock_abbr": "百普赛斯",
+          "report_period": "2023Q3",
+          "gross_profit_margin": 91.36872948814407
+        },
+        {
+          "stock_code": "301080",
+          "stock_abbr": "百普赛斯",
+          "report_period": "2023Q3",
+          "gross_profit_margin": 91.36872948814407
+        }
+      ]
+    },
+    "transforms": {
+      "sort_by": null,
+      "sort_ascending": true,
+      "top_n": 12,
+      "filters": []
+    },
+    "encodings": {
+      "value": {
+        "field": "gross_profit_margin",
+        "data_type": "quantitative",
+        "label": "销售毛利率",
+        "unit": "%"
+      },
+      "category": {
+        "field": "stock_abbr",
+        "data_type": "nominal",
+        "label": "公司简称",
+        "unit": null
+      }
+    },
+    "layout": {
+      "width": 10.5,
+      "height": 6.0,
+      "dpi": 150,
+      "legend": false,
+      "rotate_xticks": 30,
+      "show_value_labels": false
+    },
+    "output": {
+      "filename": "B3046_1.jpg",
+      "image_format": "jpg",
+      "relative_path": "./result/B3046_1.jpg"
+    },
+    "meta": {
+      "source_sql": "SELECT stock_code, stock_abbr, report_period, gross_profit_margin FROM financials_view WHERE stock_abbr = '百普赛斯' AND report_period IN ('2022Q3', '2023Q3', '2024Q3', '2025Q3') ORDER BY report_period",
+      "value_fields": [
+        "gross_profit_margin"
+      ],
+      "value_labels": [
+        "销售毛利率"
+      ],
+      "original_chart_plan": {
+        "chart_type": "table",
+        "x_field": null,
+        "y_fields": [
+          "gross_profit_margin"
+        ],
+        "category_field": "stock_abbr",
+        "sort_by": null,
+        "sort_ascending": true,
+        "top_n": 12
+      }
+    }
+  },
+  "all_chart_specs": [
+    "/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs_test/task2_langgraph/artifacts/chart_specs/B3046_1.spec.json"
+  ],
+  "all_chart_paths": [
+    "./result/B3046_1.jpg"
+  ],
+  "graph_formats": [
+    "表格图"
+  ],
+  "turn_answers": [
+    {
+      "Q": "百普赛斯2022-2025年第三季度销售毛利率变化情况，用表格列出各期毛利率",
+      "A": {
+        "content": "根据查询结果，百普赛斯（股票代码：301080）在2022年第三季度的销售毛利率数据缺失。  \n在可获取数据的报告期内，其销售毛利率如下：  \n\n| 报告期 | 销售毛利率（%） |\n|--------|----------------|\n| 2023Q3 | 91.37          |\n| 2024Q3 | 91.33          |\n\n从现有数据看，百普赛斯2023年第三季度至2024年第三季度的销售毛利率保持在91.3%以上，且略有下降（从91.37%降至91.33%）。  \n2025年第三季度及2022年第三季度的数据未在结果中提供。",
+        "image": [
+          "./result/B3046_1.jpg"
+        ]
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"百普赛斯2022-2025年第三季度销售毛利率变化情况，用表格列出各期毛利率\", \"A\": {\"content\": \"根据查询结果，百普赛斯（股票代码：301080）在2022年第三季度的销售毛利率数据缺失。  \\n在可获取数据的报告期内，其销售毛利率如下：  \\n\\n| 报告期 | 销售毛利率（%） |\\n|--------|----------------|\\n| 2023Q3 | 91.37          |\\n| 2024Q3 | 91.33          |\\n\\n从现有数据看，百普赛斯2023年第三季度至2024年第三季度的销售毛利率保持在91.3%以上，且略有下降（从91.37%降至91.33%）。  \\n2025年第三季度及2022年第三季度的数据未在结果中提供。\", \"image\": [\"./result/B3046_1.jpg\"]}}]",
+  "notes": [
+    "根据 query_plan，需要查询百普赛斯公司在2022Q3、2023Q3、2024Q3、2025Q3四个报告期的销售毛利率（gross_profit_margin）。使用 stock_abbr 精确匹配公司，report_period IN 筛选指定季度，并按报告期排序以展示趋势。"
+  ],
+  "final_status": "ok"
+}

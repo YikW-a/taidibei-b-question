@@ -1,0 +1,184 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B3044",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "凯莱英2025年第三季度营业总成本构成",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 16,
+    "preview_rows": [
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "营业成本": 266498.36045700003,
+        "销售费用": 15021.866855000002,
+        "管理费用": 58267.132875,
+        "研发费用": 43307.140531
+      },
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "营业成本": 266498.36045700003,
+        "销售费用": 15021.866855000002,
+        "管理费用": 58267.132875,
+        "研发费用": 43307.140531
+      },
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "营业成本": 266498.36045700003,
+        "销售费用": 15021.866855000002,
+        "管理费用": 58267.132875,
+        "研发费用": 43307.140531
+      },
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "营业成本": 266498.36045700003,
+        "销售费用": 15021.866855000002,
+        "管理费用": 58267.132875,
+        "研发费用": 43307.140531
+      },
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "营业成本": 266498.36045700003,
+        "销售费用": 15021.866855000002,
+        "管理费用": 58267.132875,
+        "研发费用": 43307.140531
+      },
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "营业成本": 266498.36045700003,
+        "销售费用": 15021.866855000002,
+        "管理费用": 58267.132875,
+        "研发费用": 43307.140531
+      },
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "营业成本": 266498.36045700003,
+        "销售费用": 15021.866855000002,
+        "管理费用": 58267.132875,
+        "研发费用": 43307.140531
+      },
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "营业成本": 266498.36045700003,
+        "销售费用": 15021.866855000002,
+        "管理费用": 58267.132875,
+        "研发费用": 43307.140531
+      },
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "营业成本": 266498.36045700003,
+        "销售费用": 15021.866855000002,
+        "管理费用": 58267.132875,
+        "研发费用": 43307.140531
+      },
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "营业成本": 266498.36045700003,
+        "销售费用": 15021.866855000002,
+        "管理费用": 58267.132875,
+        "研发费用": 43307.140531
+      },
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "营业成本": 266498.36045700003,
+        "销售费用": 15021.866855000002,
+        "管理费用": 58267.132875,
+        "研发费用": 43307.140531
+      },
+      {
+        "stock_code": "002821",
+        "stock_abbr": "凯莱英",
+        "report_period": "2025Q3",
+        "营业成本": 266498.36045700003,
+        "销售费用": 15021.866855000002,
+        "管理费用": 58267.132875,
+        "研发费用": 43307.140531
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": null,
+    "sort_ascending": true,
+    "top_n": 12,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "营业成本",
+      "data_type": "quantitative",
+      "label": "营业成本",
+      "unit": "万元"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B3044_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B3044_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT stock_code, stock_abbr, report_period, operating_expense_cost_of_sales AS 营业成本, operating_expense_selling_expenses AS 销售费用, operating_expense_administrative_expenses AS 管理费用, operating_expense_rnd_expenses AS 研发费用 FROM financials_view WHERE stock_abbr = '凯莱英' AND report_period = '2025Q3'",
+    "value_fields": [
+      "营业成本",
+      "销售费用",
+      "管理费用",
+      "研发费用"
+    ],
+    "value_labels": [
+      "营业成本",
+      "销售费用",
+      "管理费用",
+      "研发费用"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "营业成本",
+        "销售费用",
+        "管理费用",
+        "研发费用"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": null,
+      "sort_ascending": true,
+      "top_n": 12
+    },
+    "category_aggregate": "max"
+  }
+}

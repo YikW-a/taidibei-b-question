@@ -20,23 +20,32 @@
 ├── README_task3_langgraph.md
 ├── requirements.txt
 ├── run_task1.py
+├── run_task1_test.py
 ├── run_task2_langgraph.py
+├── run_task2_langgraph_test.py
 ├── run_task3_index.py
+├── run_task3_index_test.py
 ├── run_task3_langgraph.py
+├── run_task3_langgraph_test.py
 ├── run_web_assistant.py
-├── run_test_question_sets.py
 ├── configs/
 ├── docs/
 │   ├── 任务一建模与求解（论文版）.md
 │   ├── 任务二建模与求解（论文版）.md
 │   └── 任务三建模与求解（论文版）.md
 ├── outputs/
+├── outputs_test/
 ├── scripts/
 ├── src/
 │   ├── task1_pipeline/
 │   ├── task2_langgraph/
 │   └── task3_langgraph/
-└── 正式数据/
+├── src_test/
+│   ├── task1_pipeline/
+│   ├── task2_langgraph/
+│   └── task3_langgraph/
+├── 正式数据/
+└── 测试数据/
 ```
 
 ---
@@ -46,11 +55,14 @@
 ### 根目录入口
 
 - [run_task1.py](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/run_task1.py)：任务一主入口
+- [run_task1_test.py](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/run_task1_test.py)：任务一测试数据入口
 - [run_task2_langgraph.py](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/run_task2_langgraph.py)：任务二主入口
+- [run_task2_langgraph_test.py](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/run_task2_langgraph_test.py)：任务二测试数据入口
 - [run_task3_index.py](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/run_task3_index.py)：任务三知识库构建入口
+- [run_task3_index_test.py](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/run_task3_index_test.py)：任务三测试数据建库入口
 - [run_task3_langgraph.py](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/run_task3_langgraph.py)：任务三回答入口
+- [run_task3_langgraph_test.py](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/run_task3_langgraph_test.py)：任务三测试数据回答入口
 - [run_web_assistant.py](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/run_web_assistant.py)：上市公司财报“智能问数”助手网页入口
-- [run_test_question_sets.py](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/run_test_question_sets.py)：任务二、任务三统一测试入口
 
 ### `src/`
 
@@ -58,6 +70,7 @@
 - [src/task2_langgraph](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/src/task2_langgraph)：任务二主线代码
 - [src/task3_langgraph](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/src/task3_langgraph)：任务三主线代码
 - [src/web_assistant](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/src/web_assistant)：独立网页问答界面，复用任务三后端逻辑，不改动三项任务主线代码
+- [src_test](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/src_test)：测试数据专用包装层，默认读取 `测试数据/`，默认输出到 `outputs_test/`，不改动主线 `src/`
 
 ### `scripts/`
 
@@ -112,12 +125,14 @@ cp configs/task3_llm.env.example configs/task3_llm.env
 - `outputs/task1`
 - `outputs/task2_langgraph`
 - `outputs/task3_langgraph`
+- `outputs_test/`
 
 其中：
 
 - `outputs/task1`：任务一正式版结果
 - `outputs/task2_langgraph`：任务二正式版结果
 - `outputs/task3_langgraph`：任务三正式版结果与知识库产物
+- `outputs_test`：测试数据独立运行产物，不污染正式版结果
 
 ### `正式数据/`
 
@@ -126,15 +141,27 @@ cp configs/task3_llm.env.example configs/task3_llm.env
 - `附件2：财务报告`
 - `附件5：研报数据`
 
+### `测试数据/`
+
+测试数据与正式数据保持相同附件框架，但内容独立，用于单独建库和问答：
+
+- `附件1：医药上市公司基本信息（截至到2026年1月13日）.xlsx`
+- `附件2：财务报告`
+- `附件4：问题汇总.xlsx`
+- `附件5：研报数据`
+- `附件6：问题汇总.xlsx`
+
 ---
 
 ## 当前实现状态
 
 ### 任务一
 
-- 当前仅保留主线实现，不再保留 `task1_test / outputs_test`
+- 当前保留主线实现，并新增 `src_test/task1_pipeline` 作为测试数据专用包装层
 - 主代码目录：
   - [src/task1_pipeline](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/src/task1_pipeline)
+- 测试代码目录：
+  - [src_test/task1_pipeline](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/src_test/task1_pipeline)
 - 详细说明：
   - [README_task1.md](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/README_task1.md)
 
@@ -142,6 +169,8 @@ cp configs/task3_llm.env.example configs/task3_llm.env
 
 - 主代码目录：
   - [src/task2_langgraph](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/src/task2_langgraph)
+- 测试代码目录：
+  - [src_test/task2_langgraph](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/src_test/task2_langgraph)
 - 正式输出目录：
   - [outputs/task2_langgraph](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task2_langgraph)
 - 当前正式结果：
@@ -156,6 +185,8 @@ cp configs/task3_llm.env.example configs/task3_llm.env
 
 - 主代码目录：
   - [src/task3_langgraph](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/src/task3_langgraph)
+- 测试代码目录：
+  - [src_test/task3_langgraph](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/src_test/task3_langgraph)
 - 正式输出目录：
   - [outputs/task3_langgraph](/Users/yijiawen/YJW/竞赛/2026.4 泰迪杯/最终选题/outputs/task3_langgraph)
 - 当前正式结果：
@@ -220,11 +251,68 @@ http://127.0.0.1:8765
 python3 run_web_assistant.py --no-open
 ```
 
-### 统一测试入口
+### 测试数据独立运行
+
+测试分支默认：
+
+- 代码目录：`src_test/`
+- 输入目录：`测试数据/`
+- 输出目录：`outputs_test/`
+
+推荐运行顺序如下。
+
+#### 测试数据任务一
 
 ```bash
-python3 run_test_question_sets.py
+python3 run_task1_test.py
 ```
+
+该入口会先根据 `测试数据/附件2：财务报告` 自动生成测试版 manifest，再写入：
+
+- `outputs_test/task1/task1_financials.db`
+- `outputs_test/task1/final_tables/`
+
+#### 测试数据任务二
+
+```bash
+python3 run_task2_langgraph_test.py
+```
+
+默认读取：
+
+- `测试数据/附件4：问题汇总.xlsx`
+- `测试数据/附件1：医药上市公司基本信息（截至到2026年1月13日）.xlsx`
+- `outputs_test/task1/task1_financials.db`
+
+#### 测试数据任务三建库
+
+```bash
+python3 run_task3_index_test.py
+```
+
+默认读取：
+
+- `测试数据/附件5：研报数据/医疗服务_个股_研报信息.xlsx`
+- `测试数据/附件5：研报数据/医疗服务_行业_研报信息.xlsx`
+- `测试数据/附件5：研报数据/个股研报`
+- `测试数据/附件5：研报数据/行业研报`
+- `outputs_test/task1/task1_financials.db`
+
+知识库与索引写入：
+
+- `outputs_test/task3_langgraph/artifacts/`
+
+#### 测试数据任务三回答
+
+```bash
+python3 run_task3_langgraph_test.py
+```
+
+默认读取：
+
+- `测试数据/附件6：问题汇总.xlsx`
+- `outputs_test/task1/task1_financials.db`
+- `outputs_test/task3_langgraph/artifacts/`
 
 ---
 

@@ -1,0 +1,89 @@
+{
+  "question_id": "B3002",
+  "question_type": "数据基本查询",
+  "raw_question": "凯莱英2024年全年净利润是多少",
+  "raw_question_json": "[{\"Q\":\"凯莱英2024年全年净利润是多少\"}]",
+  "parsed_slots": {
+    "companies": [
+      "凯莱英"
+    ],
+    "stock_codes": [],
+    "periods": [
+      "2024FY"
+    ],
+    "metrics": [
+      "净利润"
+    ],
+    "chart_type": null,
+    "intent_type": "single_company_metric",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "single_company_metric",
+    "companies": [
+      "凯莱英"
+    ],
+    "periods": [
+      "2024FY"
+    ],
+    "metrics": [
+      "净利润"
+    ],
+    "chart_type": null,
+    "top_n": null,
+    "threshold": null,
+    "question": "凯莱英2024年全年净利润是多少",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT stock_code, stock_abbr, report_period, net_profit FROM financials_view WHERE stock_abbr = '凯莱英' AND report_period = '2024FY' LIMIT 1;",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, report_period, net_profit FROM financials_view WHERE stock_abbr = '凯莱英' AND report_period = '2024FY' LIMIT 1;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 1,
+  "result_rows": [
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2024FY",
+      "net_profit": 94895.0036
+    }
+  ],
+  "context_companies": [
+    "凯莱英"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "002821",
+      "stock_abbr": "凯莱英",
+      "report_period": "2024FY",
+      "net_profit": 94895.0036
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"002821\",\"stock_abbr\":\"凯莱英\",\"report_period\":\"2024FY\",\"net_profit\":94895.0036}]",
+  "chart_plan": {},
+  "chart_spec": {},
+  "all_chart_specs": [],
+  "all_chart_paths": [],
+  "graph_formats": [],
+  "turn_answers": [
+    {
+      "Q": "凯莱英2024年全年净利润是多少",
+      "A": {
+        "content": "凯莱英（股票代码002821）2024年全年净利润为94,895.00万元。",
+        "image": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"凯莱英2024年全年净利润是多少\", \"A\": {\"content\": \"凯莱英（股票代码002821）2024年全年净利润为94,895.00万元。\", \"image\": []}}]",
+  "notes": [
+    "根据查询计划，需要查询凯莱英公司在2024年全年的净利润。净利润对应字段为 net_profit，报告期使用标准格式 '2024FY'。"
+  ],
+  "final_status": "ok"
+}

@@ -1,0 +1,305 @@
+{
+  "question_id": "B4026",
+  "question_type": "数据校验",
+  "raw_question": "查询泰格医药2025年第三季度利润表中的“营业收入”和核心业绩指标表中的“营业总收入”，两者数值是否一致？不一致请指出差异",
+  "raw_question_json": "[{\"Q\":\"查询泰格医药2025年第三季度利润表中的“营业收入”和核心业绩指标表中的“营业总收入”，两者数值是否一致？不一致请指出差异\"}]",
+  "parsed_slots": {
+    "companies": [
+      "泰格医药"
+    ],
+    "stock_codes": [],
+    "metrics": [
+      "营业总收入",
+      "净利润"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "focus_topics": [],
+    "intent_type": "sql_only",
+    "needs_sql": true,
+    "needs_retrieval": false,
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "sql_only",
+    "companies": [
+      "泰格医药"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入",
+      "净利润"
+    ],
+    "needs_sql": true,
+    "top_n": null,
+    "threshold": null,
+    "question": "查询泰格医药2025年第三季度利润表中的“营业收入”和核心业绩指标表中的“营业总收入”，两者数值是否一致？不一致请指出差异"
+  },
+  "retrieval_plan": {
+    "question": "查询泰格医药2025年第三季度利润表中的“营业收入”和核心业绩指标表中的“营业总收入”，两者数值是否一致？不一致请指出差异",
+    "companies": [
+      "泰格医药"
+    ],
+    "focus_topics": [
+      "主营业务收入",
+      "营业总收入",
+      "收入增长"
+    ],
+    "needs_retrieval": false,
+    "top_k": 0,
+    "source_scope": "hybrid",
+    "retrieval_mode": "hybrid"
+  },
+  "sql": "SELECT \n    stock_code,\n    stock_abbr,\n    report_period,\n    income_total_operating_revenue AS 利润表_营业收入,\n    kpi_total_operating_revenue AS 核心业绩指标表_营业总收入,\n    CASE \n        WHEN income_total_operating_revenue = kpi_total_operating_revenue THEN '一致'\n        ELSE '不一致'\n    END AS 是否一致,\n    CASE \n        WHEN income_total_operating_revenue != kpi_total_operating_revenue \n        THEN income_total_operating_revenue - kpi_total_operating_revenue\n        ELSE 0\n    END AS 差异值\nFROM financials_view\nWHERE stock_abbr = '泰格医药' \n    AND report_period = '2025Q3'\n    AND (income_total_operating_revenue IS NOT NULL OR kpi_total_operating_revenue IS NOT NULL)",
+  "sql_history": [
+    "SELECT \n    stock_code,\n    stock_abbr,\n    report_period,\n    income_total_operating_revenue AS 利润表_营业收入,\n    kpi_total_operating_revenue AS 核心业绩指标表_营业总收入,\n    CASE \n        WHEN income_total_operating_revenue = kpi_total_operating_revenue THEN '一致'\n        ELSE '不一致'\n    END AS 是否一致,\n    CASE \n        WHEN income_total_operating_revenue != kpi_total_operating_revenue \n        THEN income_total_operating_revenue - kpi_total_operating_revenue\n        ELSE 0\n    END AS 差异值\nFROM financials_view\nWHERE stock_abbr = '泰格医药' \n    AND report_period = '2025Q3'\n    AND (income_total_operating_revenue IS NOT NULL OR kpi_total_operating_revenue IS NOT NULL)"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 16,
+  "result_rows": [
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "利润表_营业收入": 502586.826075,
+      "核心业绩指标表_营业总收入": 502586.826075,
+      "是否一致": "一致",
+      "差异值": 0
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "利润表_营业收入": 502586.826075,
+      "核心业绩指标表_营业总收入": 502586.826075,
+      "是否一致": "一致",
+      "差异值": 0
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "利润表_营业收入": 502586.826075,
+      "核心业绩指标表_营业总收入": 502586.826075,
+      "是否一致": "一致",
+      "差异值": 0
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "利润表_营业收入": 502586.826075,
+      "核心业绩指标表_营业总收入": 502586.826075,
+      "是否一致": "一致",
+      "差异值": 0
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "利润表_营业收入": 502586.826075,
+      "核心业绩指标表_营业总收入": 502586.826075,
+      "是否一致": "一致",
+      "差异值": 0
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "利润表_营业收入": 502586.826075,
+      "核心业绩指标表_营业总收入": 502586.826075,
+      "是否一致": "一致",
+      "差异值": 0
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "利润表_营业收入": 502586.826075,
+      "核心业绩指标表_营业总收入": 502586.826075,
+      "是否一致": "一致",
+      "差异值": 0
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "利润表_营业收入": 502586.826075,
+      "核心业绩指标表_营业总收入": 502586.826075,
+      "是否一致": "一致",
+      "差异值": 0
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "利润表_营业收入": 502586.826075,
+      "核心业绩指标表_营业总收入": 502586.826075,
+      "是否一致": "一致",
+      "差异值": 0
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "利润表_营业收入": 502586.826075,
+      "核心业绩指标表_营业总收入": 502586.826075,
+      "是否一致": "一致",
+      "差异值": 0
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "利润表_营业收入": 502586.826075,
+      "核心业绩指标表_营业总收入": 502586.826075,
+      "是否一致": "一致",
+      "差异值": 0
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "利润表_营业收入": 502586.826075,
+      "核心业绩指标表_营业总收入": 502586.826075,
+      "是否一致": "一致",
+      "差异值": 0
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "利润表_营业收入": 502586.826075,
+      "核心业绩指标表_营业总收入": 502586.826075,
+      "是否一致": "一致",
+      "差异值": 0
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "利润表_营业收入": 502586.826075,
+      "核心业绩指标表_营业总收入": 502586.826075,
+      "是否一致": "一致",
+      "差异值": 0
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "利润表_营业收入": 502586.826075,
+      "核心业绩指标表_营业总收入": 502586.826075,
+      "是否一致": "一致",
+      "差异值": 0
+    },
+    {
+      "stock_code": "300347",
+      "stock_abbr": "泰格医药",
+      "report_period": "2025Q3",
+      "利润表_营业收入": 502586.826075,
+      "核心业绩指标表_营业总收入": 502586.826075,
+      "是否一致": "一致",
+      "差异值": 0
+    }
+  ],
+  "retrieved_evidence": [],
+  "reranked_evidence": [],
+  "rerank_preview": "{\"strategy\": \"skipped_fast_path\", \"kept_count\": 0}",
+  "fused_context": {
+    "question": "查询泰格医药2025年第三季度利润表中的“营业收入”和核心业绩指标表中的“营业总收入”，两者数值是否一致？不一致请指出差异",
+    "sql_row_count": 16,
+    "evidence_count": 0,
+    "sql_preview": [
+      {
+        "stock_code": "300347",
+        "stock_abbr": "泰格医药",
+        "report_period": "2025Q3",
+        "利润表_营业收入": 502586.826075,
+        "核心业绩指标表_营业总收入": 502586.826075,
+        "是否一致": "一致",
+        "差异值": 0
+      },
+      {
+        "stock_code": "300347",
+        "stock_abbr": "泰格医药",
+        "report_period": "2025Q3",
+        "利润表_营业收入": 502586.826075,
+        "核心业绩指标表_营业总收入": 502586.826075,
+        "是否一致": "一致",
+        "差异值": 0
+      },
+      {
+        "stock_code": "300347",
+        "stock_abbr": "泰格医药",
+        "report_period": "2025Q3",
+        "利润表_营业收入": 502586.826075,
+        "核心业绩指标表_营业总收入": 502586.826075,
+        "是否一致": "一致",
+        "差异值": 0
+      },
+      {
+        "stock_code": "300347",
+        "stock_abbr": "泰格医药",
+        "report_period": "2025Q3",
+        "利润表_营业收入": 502586.826075,
+        "核心业绩指标表_营业总收入": 502586.826075,
+        "是否一致": "一致",
+        "差异值": 0
+      },
+      {
+        "stock_code": "300347",
+        "stock_abbr": "泰格医药",
+        "report_period": "2025Q3",
+        "利润表_营业收入": 502586.826075,
+        "核心业绩指标表_营业总收入": 502586.826075,
+        "是否一致": "一致",
+        "差异值": 0
+      }
+    ],
+    "evidence_preview": [],
+    "evidence_titles": [],
+    "source_breakdown": {}
+  },
+  "self_check": {
+    "pass": true,
+    "notes": [
+      "self_check_skipped_fast_path"
+    ]
+  },
+  "chart_plan": {},
+  "chart_spec": {},
+  "current_chart_paths": [],
+  "current_chart_specs": [],
+  "current_answer": "**直接结论**  \n泰格医药2025年第三季度利润表中的“营业收入”与核心业绩指标表中的“营业总收入”数值完全一致，均为502,586.826075万元。\n\n**财务数据支撑**  \n根据SQL查询结果，泰格医药（股票代码300347）在2025Q3报告期内：\n- 利润表_营业收入：502,586.826075万元  \n- 核心业绩指标表_营业总收入：502,586.826075万元  \n- 是否一致：一致  \n- 差异值：0  \n\n**研报证据支撑**  \n未检索到直接研报证据。\n\n**综合判断**  \n基于当前财务数据视图，泰格医药2025年第三季度利润表的“营业收入”与核心业绩指标表的“营业总收入”数值相同，不存在差异。数据来源为标准化财务视图，且当前查询结果中所有行均显示一致。",
+  "current_references": [],
+  "answer_rewritten": false,
+  "turn_answers": [
+    {
+      "Q": "查询泰格医药2025年第三季度利润表中的“营业收入”和核心业绩指标表中的“营业总收入”，两者数值是否一致？不一致请指出差异",
+      "A": {
+        "content": "**直接结论**  \n泰格医药2025年第三季度利润表中的“营业收入”与核心业绩指标表中的“营业总收入”数值完全一致，均为502,586.826075万元。\n\n**财务数据支撑**  \n根据SQL查询结果，泰格医药（股票代码300347）在2025Q3报告期内：\n- 利润表_营业收入：502,586.826075万元  \n- 核心业绩指标表_营业总收入：502,586.826075万元  \n- 是否一致：一致  \n- 差异值：0  \n\n**研报证据支撑**  \n未检索到直接研报证据。\n\n**综合判断**  \n基于当前财务数据视图，泰格医药2025年第三季度利润表的“营业收入”与核心业绩指标表的“营业总收入”数值相同，不存在差异。数据来源为标准化财务视图，且当前查询结果中所有行均显示一致。",
+        "image": [],
+        "references": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"查询泰格医药2025年第三季度利润表中的“营业收入”和核心业绩指标表中的“营业总收入”，两者数值是否一致？不一致请指出差异\", \"A\": {\"content\": \"**直接结论**  \\n泰格医药2025年第三季度利润表中的“营业收入”与核心业绩指标表中的“营业总收入”数值完全一致，均为502,586.826075万元。\\n\\n**财务数据支撑**  \\n根据SQL查询结果，泰格医药（股票代码300347）在2025Q3报告期内：\\n- 利润表_营业收入：502,586.826075万元  \\n- 核心业绩指标表_营业总收入：502,586.826075万元  \\n- 是否一致：一致  \\n- 差异值：0  \\n\\n**研报证据支撑**  \\n未检索到直接研报证据。\\n\\n**综合判断**  \\n基于当前财务数据视图，泰格医药2025年第三季度利润表的“营业收入”与核心业绩指标表的“营业总收入”数值相同，不存在差异。数据来源为标准化财务视图，且当前查询结果中所有行均显示一致。\", \"image\": [], \"references\": []}}]",
+  "references_json": "[]",
+  "notes": [
+    "route=sql_only",
+    "1. 根据query_plan，明确指定了公司为泰格医药，报告期为2025Q3，因此可以直接使用stock_abbr = '泰格医药' AND report_period = '2025Q3'进行筛选。\n2. 利润表中的“营业收入”对应income_total_operating_revenue字段。\n3. 核心业绩指标表中的“营业总收入”对应kpi_total_operating_revenue字段。\n4. 查询这两个字段的值，并计算它们是否一致。如果不一致，计算差异值（利润表营业收入 - 核心业绩指标表营业总收入）。\n5. 使用CASE语句判断是否一致，并输出差异值。\n6. 添加了非空检查，确保至少有一个字段有值。",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=0",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=0",
+    "self_check={\"pass\": true, \"notes\": [\"self_check_skipped_fast_path\"]}"
+  ],
+  "final_status": "ok"
+}

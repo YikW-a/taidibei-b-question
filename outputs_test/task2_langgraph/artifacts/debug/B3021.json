@@ -1,0 +1,99 @@
+{
+  "question_id": "B3021",
+  "question_type": "数据统计分析查询",
+  "raw_question": "2025年第三季度，净利润同比增长率波动最大（绝对值最大）的公司是哪家？展示具体增长率",
+  "raw_question_json": "[{\"Q\":\"2025年第三季度，净利润同比增长率波动最大（绝对值最大）的公司是哪家？展示具体增长率\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "净利润",
+      "同比增长率"
+    ],
+    "chart_type": null,
+    "intent_type": "period_stat",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "ranking",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "净利润同比增长率"
+    ],
+    "chart_type": "table",
+    "top_n": 1,
+    "threshold": null,
+    "question": "2025年第三季度，净利润同比增长率波动最大（绝对值最大）的公司是哪家？展示具体增长率",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": [],
+    "unsupported_metrics": [
+      "净利润同比增长率"
+    ]
+  },
+  "sql": "SELECT stock_code, stock_abbr, net_profit_yoy_growth FROM financials_view WHERE report_period = '2025Q3' AND net_profit_yoy_growth IS NOT NULL ORDER BY ABS(net_profit_yoy_growth) DESC LIMIT 1",
+  "sql_history": [
+    "SELECT stock_code, stock_abbr, net_profit_yoy_growth FROM financials_view WHERE report_period = '2025Q3' AND net_profit_yoy_growth IS NOT NULL ORDER BY ABS(net_profit_yoy_growth) DESC LIMIT 1"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 1,
+  "result_rows": [
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "net_profit_yoy_growth": 220.09739282618895
+    }
+  ],
+  "context_companies": [
+    "成都先导"
+  ],
+  "context_rows": [
+    {
+      "stock_code": "688222",
+      "stock_abbr": "成都先导",
+      "net_profit_yoy_growth": 220.09739282618895
+    }
+  ],
+  "result_preview": "[{\"stock_code\":\"688222\",\"stock_abbr\":\"成都先导\",\"net_profit_yoy_growth\":220.0973928262}]",
+  "chart_plan": {
+    "chart_type": "bar",
+    "title": "2025年第三季度净利润同比增长率波动最大的公司",
+    "x_field": null,
+    "y_fields": [
+      "net_profit_yoy_growth"
+    ],
+    "category_field": "stock_abbr",
+    "sort_by": "stock_code",
+    "sort_ascending": true,
+    "top_n": 1,
+    "should_draw": true
+  },
+  "chart_spec": {},
+  "all_chart_specs": [],
+  "all_chart_paths": [],
+  "graph_formats": [],
+  "turn_answers": [
+    {
+      "Q": "2025年第三季度，净利润同比增长率波动最大（绝对值最大）的公司是哪家？展示具体增长率",
+      "A": {
+        "content": "2025年第三季度，净利润同比增长率波动最大（绝对值最大）的公司是成都先导（股票代码：688222），其净利润同比增长率为220.10%。",
+        "image": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"2025年第三季度，净利润同比增长率波动最大（绝对值最大）的公司是哪家？展示具体增长率\", \"A\": {\"content\": \"2025年第三季度，净利润同比增长率波动最大（绝对值最大）的公司是成都先导（股票代码：688222），其净利润同比增长率为220.10%。\", \"image\": []}}]",
+  "notes": [
+    "根据查询计划，意图是排名，期间为2025Q3，指标为净利润同比增长率，取Top 1。问题要求波动最大（绝对值最大），因此按 net_profit_yoy_growth 的绝对值降序排列，取第一条记录。同时展示具体增长率。"
+  ],
+  "final_status": "ok"
+}

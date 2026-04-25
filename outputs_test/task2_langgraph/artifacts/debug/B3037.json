@@ -1,0 +1,75 @@
+{
+  "question_id": "B3037",
+  "question_type": "数据统计分析查询",
+  "raw_question": "2022-2025年第三季度，营业总收入连续保持正增长的公司有哪些？列出简称",
+  "raw_question_json": "[{\"Q\":\"2022-2025年第三季度，营业总收入连续保持正增长的公司有哪些？列出简称\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3",
+      "2022Q3",
+      "2023Q3",
+      "2024Q3"
+    ],
+    "metrics": [
+      "营业总收入"
+    ],
+    "chart_type": null,
+    "intent_type": "filter",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "filter",
+    "companies": [],
+    "periods": [
+      "2022Q3",
+      "2023Q3",
+      "2024Q3",
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入"
+    ],
+    "chart_type": "table",
+    "top_n": null,
+    "threshold": null,
+    "question": "2022-2025年第三季度，营业总收入连续保持正增长的公司有哪些？列出简称",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "WITH growth_data AS (\n  SELECT stock_abbr, report_period, operating_revenue_yoy_growth\n  FROM financials_view\n  WHERE report_period IN ('2022Q3', '2023Q3', '2024Q3', '2025Q3')\n    AND operating_revenue_yoy_growth IS NOT NULL\n),\npositive_growth_companies AS (\n  SELECT stock_abbr\n  FROM growth_data\n  GROUP BY stock_abbr\n  HAVING COUNT(*) = 4\n    AND MIN(operating_revenue_yoy_growth) > 0\n)\nSELECT stock_abbr\nFROM positive_growth_companies\nORDER BY stock_abbr;",
+  "sql_history": [
+    "WITH growth_data AS (\n  SELECT stock_abbr, report_period, operating_revenue_yoy_growth\n  FROM financials_view\n  WHERE report_period IN ('2022Q3', '2023Q3', '2024Q3', '2025Q3')\n    AND operating_revenue_yoy_growth IS NOT NULL\n),\npositive_growth_companies AS (\n  SELECT stock_abbr\n  FROM growth_data\n  GROUP BY stock_abbr\n  HAVING COUNT(*) = 4\n    AND MIN(operating_revenue_yoy_growth) > 0\n)\nSELECT stock_abbr\nFROM positive_growth_companies\nORDER BY stock_abbr;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 0,
+  "result_rows": [],
+  "context_companies": [],
+  "context_rows": [],
+  "result_preview": "[]",
+  "chart_plan": {},
+  "chart_spec": {},
+  "all_chart_specs": [],
+  "all_chart_paths": [],
+  "graph_formats": [],
+  "turn_answers": [
+    {
+      "Q": "2022-2025年第三季度，营业总收入连续保持正增长的公司有哪些？列出简称",
+      "A": {
+        "content": "当前数据库中，没有公司在 2022Q3、2023Q3、2024Q3、2025Q3 这几个报告期内连续满足题目设定的 营业总收入 条件。",
+        "image": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"2022-2025年第三季度，营业总收入连续保持正增长的公司有哪些？列出简称\", \"A\": {\"content\": \"当前数据库中，没有公司在 2022Q3、2023Q3、2024Q3、2025Q3 这几个报告期内连续满足题目设定的 营业总收入 条件。\", \"image\": []}}]",
+  "notes": [
+    "查询计划要求筛选2022-2025年第三季度（四个报告期），指标为营业总收入（对应operating_revenue_yoy_growth）。问题要求找出连续保持正增长的公司，即在这四个报告期operating_revenue_yoy_growth都大于0。使用CTE先获取相关数据，然后按公司分组，确保四个报告期都有数据且最小增长率大于0。最后返回公司简称列表。"
+  ],
+  "final_status": "ok"
+}

@@ -1,0 +1,130 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B3043",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "2025年第三季度短期借款超过货币资金的公司",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 32,
+    "preview_rows": [
+      {
+        "stock_abbr": "百克生物",
+        "asset_cash_and_cash_equivalents": 15743.978829,
+        "liability_short_term_loans": 20418.641091
+      },
+      {
+        "stock_abbr": "百克生物",
+        "asset_cash_and_cash_equivalents": 15743.978829,
+        "liability_short_term_loans": 20418.641091
+      },
+      {
+        "stock_abbr": "百克生物",
+        "asset_cash_and_cash_equivalents": 15743.978829,
+        "liability_short_term_loans": 20418.641091
+      },
+      {
+        "stock_abbr": "百克生物",
+        "asset_cash_and_cash_equivalents": 15743.978829,
+        "liability_short_term_loans": 20418.641091
+      },
+      {
+        "stock_abbr": "百克生物",
+        "asset_cash_and_cash_equivalents": 15743.978829,
+        "liability_short_term_loans": 20418.641091
+      },
+      {
+        "stock_abbr": "百克生物",
+        "asset_cash_and_cash_equivalents": 15743.978829,
+        "liability_short_term_loans": 20418.641091
+      },
+      {
+        "stock_abbr": "百克生物",
+        "asset_cash_and_cash_equivalents": 15743.978829,
+        "liability_short_term_loans": 20418.641091
+      },
+      {
+        "stock_abbr": "百克生物",
+        "asset_cash_and_cash_equivalents": 15743.978829,
+        "liability_short_term_loans": 20418.641091
+      },
+      {
+        "stock_abbr": "百克生物",
+        "asset_cash_and_cash_equivalents": 15743.978829,
+        "liability_short_term_loans": 20418.641091
+      },
+      {
+        "stock_abbr": "百克生物",
+        "asset_cash_and_cash_equivalents": 15743.978829,
+        "liability_short_term_loans": 20418.641091
+      },
+      {
+        "stock_abbr": "百克生物",
+        "asset_cash_and_cash_equivalents": 15743.978829,
+        "liability_short_term_loans": 20418.641091
+      },
+      {
+        "stock_abbr": "百克生物",
+        "asset_cash_and_cash_equivalents": 15743.978829,
+        "liability_short_term_loans": 20418.641091
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "liability_short_term_loans",
+    "sort_ascending": false,
+    "top_n": 15,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "asset_cash_and_cash_equivalents",
+      "data_type": "quantitative",
+      "label": "货币资金",
+      "unit": null
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B3043_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B3043_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT stock_abbr, asset_cash_and_cash_equivalents, liability_short_term_loans FROM financials_view WHERE report_period = '2025Q3' AND liability_short_term_loans > asset_cash_and_cash_equivalents ORDER BY stock_abbr",
+    "value_fields": [
+      "asset_cash_and_cash_equivalents",
+      "liability_short_term_loans"
+    ],
+    "value_labels": [
+      "货币资金",
+      "短期借款"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "asset_cash_and_cash_equivalents",
+        "liability_short_term_loans"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": "liability_short_term_loans",
+      "sort_ascending": false,
+      "top_n": 15
+    },
+    "category_aggregate": "max"
+  }
+}

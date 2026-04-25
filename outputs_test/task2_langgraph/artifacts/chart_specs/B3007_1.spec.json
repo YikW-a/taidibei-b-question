@@ -1,0 +1,74 @@
+{
+  "schema_version": "task2.chart-spec.v2",
+  "question_id": "B3007",
+  "image_index": 1,
+  "chart_type": "bar",
+  "title": "2025年第三季度经营性现金流量净额为负数的公司",
+  "data": {
+    "dataset_name": "financials_view.result",
+    "row_count": 2,
+    "preview_rows": [
+      {
+        "stock_code": "301096",
+        "stock_abbr": "百诚医药"
+      },
+      {
+        "stock_code": "688276",
+        "stock_abbr": "百克生物"
+      }
+    ]
+  },
+  "transforms": {
+    "sort_by": "stock_code",
+    "sort_ascending": true,
+    "top_n": 2,
+    "filters": []
+  },
+  "encodings": {
+    "value": {
+      "field": "stock_code",
+      "data_type": "quantitative",
+      "label": "股票代码",
+      "unit": "万元"
+    },
+    "category": {
+      "field": "stock_abbr",
+      "data_type": "nominal",
+      "label": "公司简称",
+      "unit": null
+    }
+  },
+  "layout": {
+    "width": 10.5,
+    "height": 6.0,
+    "dpi": 150,
+    "legend": false,
+    "rotate_xticks": 30,
+    "show_value_labels": true
+  },
+  "output": {
+    "filename": "B3007_1.jpg",
+    "image_format": "jpg",
+    "relative_path": "./result/B3007_1.jpg"
+  },
+  "meta": {
+    "source_sql": "SELECT DISTINCT stock_code, stock_abbr FROM financials_view WHERE report_period = '2025Q3' AND operating_cf_net_amount < 0 ORDER BY stock_code",
+    "value_fields": [
+      "stock_code"
+    ],
+    "value_labels": [
+      "股票代码"
+    ],
+    "original_chart_plan": {
+      "chart_type": "bar",
+      "x_field": null,
+      "y_fields": [
+        "stock_code"
+      ],
+      "category_field": "stock_abbr",
+      "sort_by": "stock_code",
+      "sort_ascending": true,
+      "top_n": 2
+    }
+  }
+}

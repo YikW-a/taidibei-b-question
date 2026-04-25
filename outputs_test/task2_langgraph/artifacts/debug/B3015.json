@@ -1,0 +1,130 @@
+{
+  "question_id": "B3015",
+  "question_type": "数据统计分析查询",
+  "raw_question": "2025年第三季度，净利润与经营性现金流量净额均为正的公司有哪些？请列出简称",
+  "raw_question_json": "[{\"Q\":\"2025年第三季度，净利润与经营性现金流量净额均为正的公司有哪些？请列出简称\"}]",
+  "parsed_slots": {
+    "companies": [],
+    "stock_codes": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "净利润",
+      "经营性现金流量净额"
+    ],
+    "chart_type": null,
+    "intent_type": "filter",
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "filter",
+    "companies": [],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "净利润",
+      "经营性现金流量净额"
+    ],
+    "chart_type": "table",
+    "top_n": null,
+    "threshold": null,
+    "question": "2025年第三季度，净利润与经营性现金流量净额均为正的公司有哪些？请列出简称",
+    "should_draw": false,
+    "needs_clarification": false,
+    "missing_slots": []
+  },
+  "sql": "SELECT DISTINCT stock_abbr FROM financials_view WHERE report_period = '2025Q3' AND net_profit > 0 AND operating_cf_net_amount > 0 ORDER BY stock_abbr;",
+  "sql_history": [
+    "SELECT DISTINCT stock_abbr FROM financials_view WHERE report_period = '2025Q3' AND net_profit > 0 AND operating_cf_net_amount > 0 ORDER BY stock_abbr;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 8,
+  "result_rows": [
+    {
+      "stock_abbr": "凯莱英"
+    },
+    {
+      "stock_abbr": "成都先导"
+    },
+    {
+      "stock_abbr": "昭衍新药"
+    },
+    {
+      "stock_abbr": "泰格医药"
+    },
+    {
+      "stock_abbr": "百普赛斯"
+    },
+    {
+      "stock_abbr": "药明康德"
+    },
+    {
+      "stock_abbr": "迈普医学"
+    },
+    {
+      "stock_abbr": "迪安诊断"
+    }
+  ],
+  "context_companies": [
+    "凯莱英",
+    "成都先导",
+    "昭衍新药",
+    "泰格医药",
+    "百普赛斯",
+    "药明康德",
+    "迈普医学",
+    "迪安诊断"
+  ],
+  "context_rows": [
+    {
+      "stock_abbr": "凯莱英"
+    },
+    {
+      "stock_abbr": "成都先导"
+    },
+    {
+      "stock_abbr": "昭衍新药"
+    },
+    {
+      "stock_abbr": "泰格医药"
+    },
+    {
+      "stock_abbr": "百普赛斯"
+    },
+    {
+      "stock_abbr": "药明康德"
+    },
+    {
+      "stock_abbr": "迈普医学"
+    },
+    {
+      "stock_abbr": "迪安诊断"
+    }
+  ],
+  "result_preview": "[{\"stock_abbr\":\"凯莱英\"},{\"stock_abbr\":\"成都先导\"},{\"stock_abbr\":\"昭衍新药\"},{\"stock_abbr\":\"泰格医药\"},{\"stock_abbr\":\"百普赛斯\"},{\"stock_abbr\":\"药明康德\"},{\"stock_abbr\":\"迈普医学\"},{\"stock_abbr\":\"迪安诊断\"}]",
+  "chart_plan": {},
+  "chart_spec": {},
+  "all_chart_specs": [],
+  "all_chart_paths": [],
+  "graph_formats": [],
+  "turn_answers": [
+    {
+      "Q": "2025年第三季度，净利润与经营性现金流量净额均为正的公司有哪些？请列出简称",
+      "A": {
+        "content": "2025年第三季度，净利润与经营性现金流量净额均为正的公司共有8家，分别是：凯莱英、成都先导、昭衍新药、泰格医药、百普赛斯、药明康德、迈普医学、迪安诊断。",
+        "image": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"2025年第三季度，净利润与经营性现金流量净额均为正的公司有哪些？请列出简称\", \"A\": {\"content\": \"2025年第三季度，净利润与经营性现金流量净额均为正的公司共有8家，分别是：凯莱英、成都先导、昭衍新药、泰格医药、百普赛斯、药明康德、迈普医学、迪安诊断。\", \"image\": []}}]",
+  "notes": [
+    "根据查询计划，需要筛选2025Q3报告期，且净利润（net_profit）和经营性现金流量净额（operating_cf_net_amount）均为正的公司。查询计划中companies为空，因此不添加公司过滤。返回公司简称并去重排序。"
+  ],
+  "final_status": "ok"
+}

@@ -1,0 +1,382 @@
+{
+  "question_id": "B4011",
+  "question_type": "融合查询",
+  "raw_question": "《百普赛斯2025三季报点评：业绩持续高增长，启动赴港上市》研报提及境外业务，请查询百普赛斯2025年第三季度的国内收入占比及毛利率变化",
+  "raw_question_json": "[{\"Q\":\"《百普赛斯2025三季报点评：业绩持续高增长，启动赴港上市》研报提及境外业务，请查询百普赛斯2025年第三季度的国内收入占比及毛利率变化\"}]",
+  "parsed_slots": {
+    "companies": [
+      "百普赛斯"
+    ],
+    "stock_codes": [],
+    "metrics": [
+      "营业总收入",
+      "销售毛利率"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "focus_topics": [],
+    "intent_type": "sql_only",
+    "needs_sql": true,
+    "needs_retrieval": false,
+    "top_n": null,
+    "threshold": null
+  },
+  "missing_slots": [],
+  "needs_clarification": false,
+  "query_plan": {
+    "intent_type": "sql_only",
+    "companies": [
+      "百普赛斯"
+    ],
+    "periods": [
+      "2025Q3"
+    ],
+    "metrics": [
+      "营业总收入",
+      "销售毛利率"
+    ],
+    "needs_sql": true,
+    "top_n": null,
+    "threshold": null,
+    "question": "查询百普赛斯2025年第三季度的国内收入占比及毛利率变化"
+  },
+  "retrieval_plan": {
+    "question": "《百普赛斯2025三季报点评：业绩持续高增长，启动赴港上市》研报提及境外业务，请查询百普赛斯2025年第三季度的国内收入占比及毛利率变化",
+    "companies": [
+      "百普赛斯"
+    ],
+    "focus_topics": [
+      "境外业务",
+      "国内收入占比",
+      "毛利率变化"
+    ],
+    "needs_retrieval": false,
+    "top_k": 0,
+    "source_scope": "stock",
+    "retrieval_mode": "hybrid"
+  },
+  "sql": "WITH q3_data AS (\n    SELECT \n        stock_abbr,\n        report_period,\n        total_operating_revenue,\n        gross_profit_margin,\n        operating_cost\n    FROM financials_view\n    WHERE stock_abbr = '百普赛斯'\n        AND report_period = '2025Q3'\n),\nprev_data AS (\n    SELECT \n        stock_abbr,\n        report_period,\n        total_operating_revenue,\n        gross_profit_margin,\n        operating_cost\n    FROM financials_view\n    WHERE stock_abbr = '百普赛斯'\n        AND report_period IN ('2025Q2', '2024Q3')\n)\nSELECT \n    '2025Q3' AS report_period,\n    '百普赛斯' AS company,\n    '国内收入占比' AS metric_name,\n    '无法计算，表中无境外/国内收入细分字段' AS value,\n    'N/A' AS change\nUNION ALL\nSELECT \n    '2025Q3' AS report_period,\n    '百普赛斯' AS company,\n    '毛利率' AS metric_name,\n    ROUND(gross_profit_margin, 2) || '%' AS value,\n    CASE \n        WHEN EXISTS (SELECT 1 FROM prev_data WHERE report_period = '2025Q2') \n        THEN '较2025Q2：' || ROUND(gross_profit_margin - (SELECT gross_profit_margin FROM prev_data WHERE report_period = '2025Q2'), 2) || '个百分点'\n        ELSE '环比数据不可得'\n    END AS change\nFROM q3_data\nUNION ALL\nSELECT \n    '2025Q3' AS report_period,\n    '百普赛斯' AS company,\n    '毛利率同比变化' AS metric_name,\n    ROUND(gross_profit_margin, 2) || '%' AS value,\n    CASE \n        WHEN EXISTS (SELECT 1 FROM prev_data WHERE report_period = '2024Q3') \n        THEN '较2024Q3：' || ROUND(gross_profit_margin - (SELECT gross_profit_margin FROM prev_data WHERE report_period = '2024Q3'), 2) || '个百分点'\n        ELSE '同比数据不可得'\n    END AS change\nFROM q3_data;",
+  "sql_history": [
+    "WITH q3_data AS (\n    SELECT \n        stock_abbr,\n        report_period,\n        total_operating_revenue,\n        gross_profit_margin,\n        operating_cost\n    FROM financials_view\n    WHERE stock_abbr = '百普赛斯'\n        AND report_period = '2025Q3'\n),\nprev_data AS (\n    SELECT \n        stock_abbr,\n        report_period,\n        total_operating_revenue,\n        gross_profit_margin,\n        operating_cost\n    FROM financials_view\n    WHERE stock_abbr = '百普赛斯'\n        AND report_period IN ('2025Q2', '2024Q3')\n)\nSELECT \n    '2025Q3' AS report_period,\n    '百普赛斯' AS company,\n    '国内收入占比' AS metric_name,\n    '无法计算，表中无境外/国内收入细分字段' AS value,\n    'N/A' AS change\nUNION ALL\nSELECT \n    '2025Q3' AS report_period,\n    '百普赛斯' AS company,\n    '毛利率' AS metric_name,\n    ROUND(gross_profit_margin, 2) || '%' AS value,\n    CASE \n        WHEN EXISTS (SELECT 1 FROM prev_data WHERE report_period = '2025Q2') \n        THEN '较2025Q2：' || ROUND(gross_profit_margin - (SELECT gross_profit_margin FROM prev_data WHERE report_period = '2025Q2'), 2) || '个百分点'\n        ELSE '环比数据不可得'\n    END AS change\nFROM q3_data\nUNION ALL\nSELECT \n    '2025Q3' AS report_period,\n    '百普赛斯' AS company,\n    '毛利率同比变化' AS metric_name,\n    ROUND(gross_profit_margin, 2) || '%' AS value,\n    CASE \n        WHEN EXISTS (SELECT 1 FROM prev_data WHERE report_period = '2024Q3') \n        THEN '较2024Q3：' || ROUND(gross_profit_margin - (SELECT gross_profit_margin FROM prev_data WHERE report_period = '2024Q3'), 2) || '个百分点'\n        ELSE '同比数据不可得'\n    END AS change\nFROM q3_data;"
+  ],
+  "sql_attempts": 1,
+  "sql_error": "",
+  "result_row_count": 33,
+  "result_rows": [
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "国内收入占比",
+      "value": "无法计算，表中无境外/国内收入细分字段",
+      "change": "N/A"
+    },
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "毛利率",
+      "value": "91.23%",
+      "change": null
+    },
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "毛利率",
+      "value": "91.23%",
+      "change": null
+    },
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "毛利率",
+      "value": "91.23%",
+      "change": null
+    },
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "毛利率",
+      "value": "91.23%",
+      "change": null
+    },
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "毛利率",
+      "value": "91.23%",
+      "change": null
+    },
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "毛利率",
+      "value": "91.23%",
+      "change": null
+    },
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "毛利率",
+      "value": "91.23%",
+      "change": null
+    },
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "毛利率",
+      "value": "91.23%",
+      "change": null
+    },
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "毛利率",
+      "value": "91.23%",
+      "change": null
+    },
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "毛利率",
+      "value": "91.23%",
+      "change": null
+    },
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "毛利率",
+      "value": "91.23%",
+      "change": null
+    },
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "毛利率",
+      "value": "91.23%",
+      "change": null
+    },
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "毛利率",
+      "value": "91.23%",
+      "change": null
+    },
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "毛利率",
+      "value": "91.23%",
+      "change": null
+    },
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "毛利率",
+      "value": "91.23%",
+      "change": null
+    },
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "毛利率",
+      "value": "91.23%",
+      "change": null
+    },
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "毛利率同比变化",
+      "value": "91.23%",
+      "change": "较2024Q3：-0.09个百分点"
+    },
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "毛利率同比变化",
+      "value": "91.23%",
+      "change": "较2024Q3：-0.09个百分点"
+    },
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "毛利率同比变化",
+      "value": "91.23%",
+      "change": "较2024Q3：-0.09个百分点"
+    },
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "毛利率同比变化",
+      "value": "91.23%",
+      "change": "较2024Q3：-0.09个百分点"
+    },
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "毛利率同比变化",
+      "value": "91.23%",
+      "change": "较2024Q3：-0.09个百分点"
+    },
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "毛利率同比变化",
+      "value": "91.23%",
+      "change": "较2024Q3：-0.09个百分点"
+    },
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "毛利率同比变化",
+      "value": "91.23%",
+      "change": "较2024Q3：-0.09个百分点"
+    },
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "毛利率同比变化",
+      "value": "91.23%",
+      "change": "较2024Q3：-0.09个百分点"
+    },
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "毛利率同比变化",
+      "value": "91.23%",
+      "change": "较2024Q3：-0.09个百分点"
+    },
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "毛利率同比变化",
+      "value": "91.23%",
+      "change": "较2024Q3：-0.09个百分点"
+    },
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "毛利率同比变化",
+      "value": "91.23%",
+      "change": "较2024Q3：-0.09个百分点"
+    },
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "毛利率同比变化",
+      "value": "91.23%",
+      "change": "较2024Q3：-0.09个百分点"
+    },
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "毛利率同比变化",
+      "value": "91.23%",
+      "change": "较2024Q3：-0.09个百分点"
+    },
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "毛利率同比变化",
+      "value": "91.23%",
+      "change": "较2024Q3：-0.09个百分点"
+    },
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "毛利率同比变化",
+      "value": "91.23%",
+      "change": "较2024Q3：-0.09个百分点"
+    },
+    {
+      "report_period": "2025Q3",
+      "company": "百普赛斯",
+      "metric_name": "毛利率同比变化",
+      "value": "91.23%",
+      "change": "较2024Q3：-0.09个百分点"
+    }
+  ],
+  "retrieved_evidence": [],
+  "reranked_evidence": [],
+  "rerank_preview": "{\"strategy\": \"skipped_fast_path\", \"kept_count\": 0}",
+  "fused_context": {
+    "question": "《百普赛斯2025三季报点评：业绩持续高增长，启动赴港上市》研报提及境外业务，请查询百普赛斯2025年第三季度的国内收入占比及毛利率变化",
+    "sql_row_count": 33,
+    "evidence_count": 0,
+    "sql_preview": [
+      {
+        "report_period": "2025Q3",
+        "company": "百普赛斯",
+        "metric_name": "国内收入占比",
+        "value": "无法计算，表中无境外/国内收入细分字段",
+        "change": "N/A"
+      },
+      {
+        "report_period": "2025Q3",
+        "company": "百普赛斯",
+        "metric_name": "毛利率",
+        "value": "91.23%",
+        "change": null
+      },
+      {
+        "report_period": "2025Q3",
+        "company": "百普赛斯",
+        "metric_name": "毛利率",
+        "value": "91.23%",
+        "change": null
+      },
+      {
+        "report_period": "2025Q3",
+        "company": "百普赛斯",
+        "metric_name": "毛利率",
+        "value": "91.23%",
+        "change": null
+      },
+      {
+        "report_period": "2025Q3",
+        "company": "百普赛斯",
+        "metric_name": "毛利率",
+        "value": "91.23%",
+        "change": null
+      }
+    ],
+    "evidence_preview": [],
+    "evidence_titles": [],
+    "source_breakdown": {}
+  },
+  "self_check": {
+    "pass": true,
+    "notes": [
+      "self_check_skipped_fast_path"
+    ]
+  },
+  "chart_plan": {},
+  "chart_spec": {},
+  "current_chart_paths": [],
+  "current_chart_specs": [],
+  "current_answer": "根据查询结果，当前结构化财务数据无法直接提供百普赛斯2025年第三季度的国内收入占比及毛利率环比变化。\n\n**直接结论：**\n1.  **国内收入占比**：无法计算。原因是当前财务数据视图中没有区分境内、境外收入的细分字段。\n2.  **毛利率变化**：\n    *   **2025年第三季度毛利率**：为**91.23%**。\n    *   **同比变化**：较2024年第三季度（同比）**下降0.09个百分点**。\n    *   **环比变化**：由于缺少2025年第二季度的可比数据，无法计算环比变化。\n\n**财务数据支撑：**\n*   数据来源于标准化财务视图，显示百普赛斯2025Q3的销售毛利率为91.23%。\n*   通过与2024Q3的毛利率对比，得出同比微降0.09个百分点的结论。\n\n**研报证据支撑：**\n未检索到直接研报证据。\n\n**综合判断：**\n基于现有数据，可以确认百普赛斯2025年第三季度保持了极高的毛利率水平（91.23%），但较上年同期略有下滑。关于研报中提及的境外业务及对应的国内收入占比，当前的结构化财务数据无法提供支持，需要查阅更详细的业务分地区报告或相关研报原文。",
+  "current_references": [],
+  "answer_rewritten": false,
+  "turn_answers": [
+    {
+      "Q": "《百普赛斯2025三季报点评：业绩持续高增长，启动赴港上市》研报提及境外业务，请查询百普赛斯2025年第三季度的国内收入占比及毛利率变化",
+      "A": {
+        "content": "根据查询结果，当前结构化财务数据无法直接提供百普赛斯2025年第三季度的国内收入占比及毛利率环比变化。\n\n**直接结论：**\n1.  **国内收入占比**：无法计算。原因是当前财务数据视图中没有区分境内、境外收入的细分字段。\n2.  **毛利率变化**：\n    *   **2025年第三季度毛利率**：为**91.23%**。\n    *   **同比变化**：较2024年第三季度（同比）**下降0.09个百分点**。\n    *   **环比变化**：由于缺少2025年第二季度的可比数据，无法计算环比变化。\n\n**财务数据支撑：**\n*   数据来源于标准化财务视图，显示百普赛斯2025Q3的销售毛利率为91.23%。\n*   通过与2024Q3的毛利率对比，得出同比微降0.09个百分点的结论。\n\n**研报证据支撑：**\n未检索到直接研报证据。\n\n**综合判断：**\n基于现有数据，可以确认百普赛斯2025年第三季度保持了极高的毛利率水平（91.23%），但较上年同期略有下滑。关于研报中提及的境外业务及对应的国内收入占比，当前的结构化财务数据无法提供支持，需要查阅更详细的业务分地区报告或相关研报原文。",
+        "image": [],
+        "references": []
+      }
+    }
+  ],
+  "answer_json": "[{\"Q\": \"《百普赛斯2025三季报点评：业绩持续高增长，启动赴港上市》研报提及境外业务，请查询百普赛斯2025年第三季度的国内收入占比及毛利率变化\", \"A\": {\"content\": \"根据查询结果，当前结构化财务数据无法直接提供百普赛斯2025年第三季度的国内收入占比及毛利率环比变化。\\n\\n**直接结论：**\\n1.  **国内收入占比**：无法计算。原因是当前财务数据视图中没有区分境内、境外收入的细分字段。\\n2.  **毛利率变化**：\\n    *   **2025年第三季度毛利率**：为**91.23%**。\\n    *   **同比变化**：较2024年第三季度（同比）**下降0.09个百分点**。\\n    *   **环比变化**：由于缺少2025年第二季度的可比数据，无法计算环比变化。\\n\\n**财务数据支撑：**\\n*   数据来源于标准化财务视图，显示百普赛斯2025Q3的销售毛利率为91.23%。\\n*   通过与2024Q3的毛利率对比，得出同比微降0.09个百分点的结论。\\n\\n**研报证据支撑：**\\n未检索到直接研报证据。\\n\\n**综合判断：**\\n基于现有数据，可以确认百普赛斯2025年第三季度保持了极高的毛利率水平（91.23%），但较上年同期略有下滑。关于研报中提及的境外业务及对应的国内收入占比，当前的结构化财务数据无法提供支持，需要查阅更详细的业务分地区报告或相关研报原文。\", \"image\": [], \"references\": []}}]",
+  "references_json": "[]",
+  "notes": [
+    "route=sql_only",
+    "1. 根据query_plan，公司为百普赛斯，期间为2025Q3，需要查询营业总收入和毛利率。\n2. 表中无境外/国内收入细分字段，无法计算国内收入占比，故返回提示信息。\n3. 毛利率变化需计算环比（较2025Q2）和同比（较2024Q3）。\n4. 使用WITH子句分别获取2025Q3数据和对比期数据。\n5. 通过UNION ALL合并结果，分别展示：国内收入占比（无法计算）、毛利率当前值及环比变化、毛利率当前值及同比变化。\n6. 毛利率变化以百分点表示，保留两位小数。\n7. 若对比期数据不存在，则显示相应提示。",
+    "retrieval_mode=hybrid",
+    "retrieval_hits=0",
+    "rerank_strategy=skipped_fast_path",
+    "rerank_kept=0",
+    "self_check={\"pass\": true, \"notes\": [\"self_check_skipped_fast_path\"]}"
+  ],
+  "final_status": "ok"
+}

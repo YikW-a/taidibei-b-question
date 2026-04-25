@@ -1,0 +1,16 @@
+﻿severity,rule_name,table_name,source_name,message,record_key
+warning,cash_flow_equation_precheck,cash_flow_sheet,603259_20230321_1G8R.pdf,"net_cash_flow mismatch: stored=-19143.17, derived=-1096809.42",603259|2022FY|2022
+warning,cash_flow_equation_precheck,cash_flow_sheet,603259_20231031_SBTX.pdf,"net_cash_flow mismatch: stored=146244.74, derived=123083.52",603259|2023Q3|2023
+warning,cash_flow_equation_precheck,cash_flow_sheet,603259_20240319_6UM6.pdf,"net_cash_flow mismatch: stored=201713.45, derived=-1150191.72",603259|2023FY|2023
+warning,cash_flow_equation_precheck,cash_flow_sheet,603259_20250729_Z1D5.pdf,"net_cash_flow mismatch: stored=410777.26, derived=-139759.82",603259|2025H1|2025
+warning,cash_flow_equation_precheck,cash_flow_sheet,凯莱英：2023年一季度报告.pdf,"net_cash_flow mismatch: stored=96102.03, derived=136014.86",002821|2023Q1|2023
+warning,gross_profit_margin_consistency_precheck,core_performance_indicators_sheet,凯莱英：2024年一季度报告.pdf,"gross_profit_margin mismatch: stored=29.30, derived=43.52",002821|2024Q1|2024
+warning,cash_flow_equation_precheck,cash_flow_sheet,百诚医药：2022年年度报告.pdf,"net_cash_flow mismatch: stored=-79793.36, derived=-141860.15",301096|2022FY|2022
+warning,cash_flow_equation_precheck,cash_flow_sheet,百诚医药：2023年半年度报告.pdf,"net_cash_flow mismatch: stored=-19424.23, derived=-34207.91",301096|2023H1|2023
+warning,cash_flow_equation_precheck,cash_flow_sheet,百诚医药：2023年年度报告.pdf,"net_cash_flow mismatch: stored=-43261.52, derived=-75192.39",301096|2023FY|2023
+warning,cash_flow_equation_precheck,cash_flow_sheet,百诚医药：2024年半年度报告.pdf,"net_cash_flow mismatch: stored=-21281.71, derived=-28077.77",301096|2024H1|2024
+warning,cash_flow_equation_precheck,cash_flow_sheet,百诚医药：2024年年度报告.pdf,"net_cash_flow mismatch: stored=-36229.14, derived=-48909.46",301096|2024FY|2024
+warning,cash_flow_equation_precheck,cash_flow_sheet,迪安诊断：2023年半年度报告.pdf,"net_cash_flow mismatch: stored=-129117.46, derived=-171233.18",300244|2023H1|2023
+warning,cash_flow_equation_precheck,cash_flow_sheet,迪安诊断：2024年半年度报告.pdf,"net_cash_flow mismatch: stored=-117226.83, derived=12830.26",300244|2024H1|2024
+warning,cash_flow_equation_precheck,cash_flow_sheet,迪安诊断：2024年年度报告.pdf,"net_cash_flow mismatch: stored=-115985.05, derived=47630.08",300244|2024FY|2024
+warning,cash_flow_equation_precheck,cash_flow_sheet,迪安诊断：2025年半年度报告.pdf,"net_cash_flow mismatch: stored=-34708.49, derived=14063.11",300244|2025H1|2025
